@@ -1,0 +1,113 @@
+Chromatogramme:
+    type: entity
+    table: chromatogramme
+    indexes:
+        ce_cle_etrangere96:
+            columns:
+                - primer_chromato_voc_fk
+        ce_cle_etrangere98:
+            columns:
+                - etablissement_fk
+        ce_cle_etrangere99:
+            columns:
+                - pcr_fk
+        ce_cle_etrangere97:
+            columns:
+                - qualite_chromato_voc_fk
+    uniqueConstraints:
+        cu_chromatogramme_cle_primaire:
+            columns:
+                - code_chromato
+    id:
+        id:
+            type: bigint
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: SEQUENCE
+    fields:
+        codeChromato:
+            type: string
+            nullable: false
+            length: 255
+            options:
+                fixed: false
+            column: code_chromato
+        numYas:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: num_yas
+        commentaireChromato:
+            type: text
+            nullable: true
+            length: null
+            options:
+                fixed: false
+            column: commentaire_chromato
+        dateCre:
+            type: datetime
+            nullable: true
+            column: date_cre
+        dateMaj:
+            type: datetime
+            nullable: true
+            column: date_maj
+        userCre:
+            type: bigint
+            nullable: true
+            options:
+                unsigned: false
+            column: user_cre
+        userMaj:
+            type: bigint
+            nullable: true
+            options:
+                unsigned: false
+            column: user_maj
+    manyToOne:
+        primerChromatoVocFk:
+            targetEntity: Voc
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                primer_chromato_voc_fk:
+                    referencedColumnName: id
+            orphanRemoval: false
+        qualiteChromatoVocFk:
+            targetEntity: Voc
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                qualite_chromato_voc_fk:
+                    referencedColumnName: id
+            orphanRemoval: false
+        etablissementFk:
+            targetEntity: Etablissement
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                etablissement_fk:
+                    referencedColumnName: id
+            orphanRemoval: false
+        pcrFk:
+            targetEntity: Pcr
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                pcr_fk:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

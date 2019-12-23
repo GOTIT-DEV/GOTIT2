@@ -1,0 +1,12 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: 127.0.0.1
+    database_port: 5432
+    database_name: gotit1-1-demo5
+    database_user: postgres
+    database_password: ratus007
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    secret: 162fa7302ffdfaafea6dd46a29d946b53c130b22

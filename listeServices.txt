@@ -1,0 +1,186 @@
+
+Autowirable Services
+====================
+
+ The following classes & interfaces can be used as type-hints when autowiring:
+
+ ------------------------------------------------------------------------------------ 
+  Bbees\E3sBundle\Controller\AdnController                                            
+  Bbees\E3sBundle\Controller\BoiteController                                          
+  Bbees\E3sBundle\Controller\ChromatogrammeController                                 
+  Bbees\E3sBundle\Controller\CollecteController                                       
+  Bbees\E3sBundle\Controller\CommuneController                                        
+  Bbees\E3sBundle\Controller\DefaultController                                        
+  Bbees\E3sBundle\Controller\EtablissementController                                  
+  Bbees\E3sBundle\Controller\ImportFileCommuneController                              
+  Bbees\E3sBundle\Controller\ImportFileEtablissementController                        
+  Bbees\E3sBundle\Controller\ImportFilePaysController                                 
+  Bbees\E3sBundle\Controller\ImportFilePersonneController                             
+  Bbees\E3sBundle\Controller\ImportFileProgrammeController                            
+  Bbees\E3sBundle\Controller\ImportFileReferentielTaxonController                     
+  Bbees\E3sBundle\Controller\ImportFileVocController                                  
+  Bbees\E3sBundle\Controller\ImportFilesAdnController                                 
+  Bbees\E3sBundle\Controller\ImportFilesAdnDeplaceController                          
+  Bbees\E3sBundle\Controller\ImportFilesAdnRangeController                            
+  Bbees\E3sBundle\Controller\ImportFilesChromatogrammeController                      
+  Bbees\E3sBundle\Controller\ImportFilesCollecteController                            
+  Bbees\E3sBundle\Controller\ImportFilesIndividuController                            
+  Bbees\E3sBundle\Controller\ImportFilesIndividuLameController                        
+  Bbees\E3sBundle\Controller\ImportFilesIndividuLameDeplaceController                 
+  Bbees\E3sBundle\Controller\ImportFilesIndividuLameRangeController                   
+  Bbees\E3sBundle\Controller\ImportFilesLotMaterielController                         
+  Bbees\E3sBundle\Controller\ImportFilesLotMaterielDeplaceController                  
+  Bbees\E3sBundle\Controller\ImportFilesLotMaterielExtController                      
+  Bbees\E3sBundle\Controller\ImportFilesLotMaterielPublieController                   
+  Bbees\E3sBundle\Controller\ImportFilesLotMaterielRangeController                    
+  Bbees\E3sBundle\Controller\ImportFilesMotuController                                
+  Bbees\E3sBundle\Controller\ImportFilesPcrController                                 
+  Bbees\E3sBundle\Controller\ImportFilesSequenceAssembleeController                   
+  Bbees\E3sBundle\Controller\ImportFilesSequenceAssembleeExtController                
+  Bbees\E3sBundle\Controller\ImportFilesSourceController                              
+  Bbees\E3sBundle\Controller\ImportFilesSqcAssembleePublieController                  
+  Bbees\E3sBundle\Controller\ImportFilesStationController                             
+  Bbees\E3sBundle\Controller\IndividuController                                       
+  Bbees\E3sBundle\Controller\IndividuLameController                                   
+  Bbees\E3sBundle\Controller\LotMaterielController                                    
+  Bbees\E3sBundle\Controller\LotMaterielExtController                                 
+  Bbees\E3sBundle\Controller\MotuController                                           
+  Bbees\E3sBundle\Controller\PaysController                                           
+  Bbees\E3sBundle\Controller\PcrController                                            
+  Bbees\E3sBundle\Controller\PersonneController                                       
+  Bbees\E3sBundle\Controller\ProgrammeController                                      
+  Bbees\E3sBundle\Controller\ReferentielTaxonController                               
+  Bbees\E3sBundle\Controller\SequenceAssembleeController                              
+  Bbees\E3sBundle\Controller\SequenceAssembleeExtController                           
+  Bbees\E3sBundle\Controller\SourceController                                         
+  Bbees\E3sBundle\Controller\StationController                                        
+  Bbees\E3sBundle\Controller\VocController                                            
+  Bbees\E3sBundle\Services\GenericFunctionE3s                                         
+  Bbees\E3sBundle\Services\ImportFileCsv                                              
+  Bbees\E3sBundle\Services\ImportFileE3s                                              
+  Bbees\UserBundle\Controller\SecurityController                                      
+  Bbees\UserBundle\Controller\UserController                                          
+  Doctrine\Common\Annotations\Reader                                                  
+      alias to annotations.cached_reader                                              
+  Doctrine\Common\Persistence\ManagerRegistry                                         
+      alias to doctrine                                                               
+  Doctrine\Common\Persistence\ObjectManager                                           
+      alias to doctrine.orm.default_entity_manager                                    
+  Doctrine\DBAL\Connection                                                            
+      alias to doctrine.dbal.default_connection                                       
+  Doctrine\DBAL\Driver\Connection                                                     
+      alias to doctrine.dbal.default_connection                                       
+  Doctrine\ORM\EntityManagerInterface                                                 
+      alias to doctrine.orm.default_entity_manager                                    
+  Lehna\SpeciesSearchBundle\Controller\AssignationMotuController                      
+  Lehna\SpeciesSearchBundle\Controller\CO1SamplingController                          
+  Lehna\SpeciesSearchBundle\Controller\CommonController                               
+  Lehna\SpeciesSearchBundle\Controller\MotuDistributionController                     
+  Lehna\SpeciesSearchBundle\Controller\SpeciesHypothesesController                    
+  Lehna\SpeciesSearchBundle\Controller\TaxonConsistencyController                     
+  Lehna\SpeciesSearchBundle\Services\QueryBuilderService                              
+  Lehna\SpeciesSearchBundle\Services\RearrangementsService                            
+  Psr\Cache\CacheItemPoolInterface                                                    
+      alias to cache.app                                                              
+  Psr\Container\ContainerInterface                                                    
+      alias to service_container                                                      
+  Psr\Log\LoggerInterface                                                             
+      alias to monolog.logger                                                         
+  SessionHandlerInterface                                                             
+      alias to session.handler.native_file                                            
+  Swift_Mailer                                                                        
+      alias to swiftmailer.mailer.default                                             
+  Swift_Spool                                                                         
+      alias to swiftmailer.mailer.default.spool.memory                                
+  Swift_Transport                                                                     
+      alias to swiftmailer.mailer.default.transport.spool                             
+  Symfony\Bridge\Doctrine\RegistryInterface                                           
+      alias to doctrine                                                               
+  Symfony\Bundle\FrameworkBundle\Controller\RedirectController                        
+  Symfony\Bundle\FrameworkBundle\Controller\TemplateController                        
+  Symfony\Component\Asset\Packages                                                    
+      alias to assets.packages                                                        
+  Symfony\Component\Cache\Adapter\AdapterInterface                                    
+      alias to cache.app                                                              
+  Symfony\Component\DependencyInjection\ContainerInterface                            
+      alias to service_container                                                      
+  Symfony\Component\EventDispatcher\EventDispatcherInterface                          
+      alias to debug.event_dispatcher                                                 
+  Symfony\Component\Filesystem\Filesystem                                             
+      alias to filesystem                                                             
+  Symfony\Component\Form\FormFactoryInterface                                         
+      alias to form.factory                                                           
+  Symfony\Component\Form\FormRegistryInterface                                        
+      alias to form.registry                                                          
+  Symfony\Component\Form\ResolvedFormTypeFactoryInterface                             
+      alias to form.resolved_type_factory                                             
+  Symfony\Component\HttpFoundation\RequestStack                                       
+      alias to request_stack                                                          
+  Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface                    
+      alias to session.flash_bag                                                      
+  Symfony\Component\HttpFoundation\Session\SessionInterface                           
+      alias to session                                                                
+  Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface            
+      alias to session.storage.native                                                 
+  Symfony\Component\HttpKernel\Config\FileLocator                                     
+      alias to file_locator                                                           
+  Symfony\Component\HttpKernel\Debug\FileLinkFormatter                                
+      alias to debug.file_link_formatter                                              
+  Symfony\Component\HttpKernel\HttpKernelInterface                                    
+      alias to http_kernel                                                            
+  Symfony\Component\HttpKernel\KernelInterface                                        
+      alias to kernel                                                                 
+  Symfony\Component\PropertyAccess\PropertyAccessorInterface                          
+      alias to property_accessor                                                      
+  Symfony\Component\Routing\Generator\UrlGeneratorInterface                           
+      alias to router.default                                                         
+  Symfony\Component\Routing\Matcher\UrlMatcherInterface                               
+      alias to router.default                                                         
+  Symfony\Component\Routing\RequestContext                                            
+      alias to router.request_context                                                 
+  Symfony\Component\Routing\RequestContextAwareInterface                              
+      alias to router.default                                                         
+  Symfony\Component\Routing\RouterInterface                                           
+      alias to router.default                                                         
+  Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface       
+      alias to security.authentication.manager                                        
+  Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface  
+      alias to security.token_storage                                                 
+  Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface        
+      alias to debug.security.access.decision_manager                                 
+  Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface         
+      alias to security.authorization_checker                                         
+  Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface                     
+      alias to security.encoder_factory.generic                                       
+  Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface                
+      alias to security.user_password_encoder.generic                                 
+  Symfony\Component\Security\Core\Security                                            
+      alias to security.helper                                                        
+  Symfony\Component\Security\Core\User\UserCheckerInterface                           
+      alias to security.user_checker                                                  
+  Symfony\Component\Security\Csrf\CsrfTokenManagerInterface                           
+      alias to security.csrf.token_manager                                            
+  Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface              
+      alias to security.csrf.token_generator                                          
+  Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface                  
+      alias to security.csrf.token_storage                                            
+  Symfony\Component\Security\Guard\GuardAuthenticatorHandler                          
+      alias to security.authentication.guard_handler                                  
+  Symfony\Component\Security\Http\Authentication\AuthenticationUtils                  
+      alias to security.authentication_utils                                          
+  Symfony\Component\Security\Http\Firewall                                            
+      alias to debug.security.firewall                                                
+  Symfony\Component\Security\Http\Session\SessionAuthenticationStrategyInterface      
+      alias to security.authentication.session_strategy                               
+  Symfony\Component\Stopwatch\Stopwatch                                               
+      alias to debug.stopwatch                                                        
+  Symfony\Component\Translation\TranslatorInterface                                   
+      alias to translator.data_collector                                              
+  Symfony\Component\Validator\Validator\ValidatorInterface                            
+      alias to debug.validator                                                        
+  Twig\Environment                                                                    
+      alias to twig                                                                   
+  Twig_Environment                                                                    
+      alias to twig                                                                   
+ ------------------------------------------------------------------------------------ 
+

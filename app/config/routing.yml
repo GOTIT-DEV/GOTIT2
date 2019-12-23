@@ -1,0 +1,39 @@
+root:
+    path: /
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: default_index
+        permanent: true
+
+bbees_user:
+    resource: "@BbeesUserBundle/Resources/config/routing.yml"
+    prefix:   /
+    
+bbees_user_user:
+    resource: "@BbeesUserBundle/Controller/UserController.php"
+    type:     annotation
+    prefix:   /{_locale}
+    requirements:
+        _locale: en|fr
+
+bbees_e3s:
+    resource: "@BbeesE3sBundle/Controller/"
+    type:     annotation
+    prefix:   /{_locale}
+    requirements:
+        _locale: en|fr
+
+# FOSJs : JS side routing
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+
+# Bazinga : JS side translations
+_bazinga_jstranslation:
+    resource: "@BazingaJsTranslationBundle/Resources/config/routing/routing.yml"
+
+lehna_species_search:
+    resource: "@LehnaSpeciesSearchBundle/Controller/"
+    type:     annotation
+    prefix:   /{_locale}/queries
+    requirements:
+        _locale: en|fr

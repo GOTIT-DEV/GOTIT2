@@ -1,0 +1,12 @@
+services:
+    bbees_e3s.import_file_csv:
+        class: Bbees\E3sBundle\Services\ImportFileCsv
+        arguments: ['@doctrine.orm.entity_manager']
+        
+    bbees_e3s.import_file_e3s:
+        class: Bbees\E3sBundle\Services\ImportFileE3s
+        arguments: ['@doctrine.orm.entity_manager','@bbees_e3s.import_file_csv', '@translator.default']
+        
+    bbees_e3s.generic_function_e3s:
+        class: Bbees\E3sBundle\Services\GenericFunctionE3s
+        arguments: ['@doctrine.orm.entity_manager']
