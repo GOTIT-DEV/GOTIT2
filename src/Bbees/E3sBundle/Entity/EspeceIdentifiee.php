@@ -23,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * EspeceIdentifiee
  *
- * @ORM\Table(name="espece_identifiee", indexes={@ORM\Index(name="IDX_49D19C8DFB5F790", columns={"critere_identification_voc_fk"}), @ORM\Index(name="IDX_49D19C8DA30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_49D19C8DCDD1F756", columns={"sequence_assemblee_ext_fk"}), @ORM\Index(name="IDX_49D19C8D40D80ECD", columns={"lot_materiel_ext_fk"}), @ORM\Index(name="IDX_49D19C8D54DBBD4D", columns={"lot_materiel_fk"}), @ORM\Index(name="IDX_49D19C8D7B09E3BC", columns={"referentiel_taxon_fk"}), @ORM\Index(name="IDX_49D19C8D5F2C6176", columns={"individu_fk"}), @ORM\Index(name="IDX_49D19C8D5BE90E48", columns={"sequence_assemblee_fk"})})
+ * @ORM\Table(name="espece_identifiee", indexes={@ORM\Index(name="IDX_49D19C8DFB5F790", columns={"critere_identification_voc_fk"}), @ORM\Index(name="IDX_49D19C8DA30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_49D19C8DCDD1F756", columns={"sequence_assemblee_ext_fk"}), @ORM\Index(name="IDX_49D19C8D40D80ECD", columns={"lot_materiel_ext_fk"}), @ORM\Index(name="IDX_49D19C8D54DBBD4D", columns={"lot_materiel_fk"}), @ORM\Index(name="IDX_49D19C8D7B09E3BC", columns={"taxon_fk"}), @ORM\Index(name="IDX_49D19C8D5F2C6176", columns={"specimen_fk"}), @ORM\Index(name="IDX_49D19C8D5BE90E48", columns={"sequence_assemblee_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -56,28 +56,28 @@ class EspeceIdentifiee
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_cre", type="datetime", nullable=true)
+     * @ORM\Column(name="date_of_creation", type="datetime", nullable=true)
      */
     private $dateCre;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_maj", type="datetime", nullable=true)
+     * @ORM\Column(name="date_of_update", type="datetime", nullable=true)
      */
     private $dateMaj;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="user_cre", type="bigint", nullable=true)
+     * @ORM\Column(name="creation_user_name", type="bigint", nullable=true)
      */
     private $userCre;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="user_maj", type="bigint", nullable=true)
+     * @ORM\Column(name="update_user_name", type="bigint", nullable=true)
      */
     private $userMaj;
 
@@ -136,7 +136,7 @@ class EspeceIdentifiee
      *
      * @ORM\ManyToOne(targetEntity="ReferentielTaxon")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="referentiel_taxon_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="taxon_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $referentielTaxonFk;
@@ -146,7 +146,7 @@ class EspeceIdentifiee
      *
      * @ORM\ManyToOne(targetEntity="Individu", inversedBy="especeIdentifiees")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="individu_fk", referencedColumnName="id", nullable=true, onDelete="CASCADE")
+     *   @ORM\JoinColumn(name="specimen_fk", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      * })
      */
     private $individuFk;

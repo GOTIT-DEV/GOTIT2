@@ -244,17 +244,17 @@ class RearrangementsService {
                 JOIN espece_identifiee Esp
                     ON Ass.sequence_assemblee_fk=Esp.sequence_assemblee_fk
                     OR Ass.sequence_assemblee_ext_fk=Esp.sequence_assemblee_ext_fk
-                JOIN referentiel_taxon R ON Esp.referentiel_taxon_fk=R.id
+                JOIN referentiel_taxon R ON Esp.taxon_fk=R.id
 
                 LEFT JOIN sequence_assemblee_ext sext ON Esp.sequence_assemblee_ext_fk=sext.id
                 LEFT JOIN sequence_assemblee seq ON Esp.sequence_assemblee_fk=seq.id
                 LEFT JOIN est_aligne_et_traite eat ON eat.sequence_assemblee_fk=seq.id
                 LEFT JOIN chromatogramme chr ON chr.id = eat.chromatogramme_fk
                 LEFT JOIN pcr ON chr.pcr_fk=pcr.id
-                LEFT JOIN adn ON pcr.adn_fk=adn.id
-                LEFT JOIN individu ind ON ind.id = adn.individu_fk
+                LEFT JOIN dna ON pcr.adn_fk=dna.id
+                LEFT JOIN individu ind ON ind.id = dna.specimen_fk
                 LEFT JOIN lot_materiel lm ON ind.lot_materiel_fk=lm.id
-                LEFT JOIN collecte co ON co.id = sext.collecte_fk OR co.id=lm.collecte_fk
+                LEFT JOIN collecte co ON co.id = sext.sampling_fk OR co.id=lm.sampling_fk
                 LEFT JOIN station sta ON co.station_fk = sta.id
 
                 WHERE voc.code != 'HAPLO'
@@ -305,10 +305,10 @@ class RearrangementsService {
                 LEFT JOIN est_aligne_et_traite eat ON eat.sequence_assemblee_fk=seq.id
                 LEFT JOIN chromatogramme chr ON chr.id = eat.chromatogramme_fk
                 LEFT JOIN pcr ON chr.pcr_fk=pcr.id
-                LEFT JOIN adn ON pcr.adn_fk=adn.id
-                LEFT JOIN individu ind ON ind.id = adn.individu_fk
+                LEFT JOIN dna ON pcr.adn_fk=dna.id
+                LEFT JOIN individu ind ON ind.id = dna.specimen_fk
                 LEFT JOIN lot_materiel lm ON ind.lot_materiel_fk=lm.id
-                LEFT JOIN collecte co ON co.id = sext.collecte_fk OR co.id=lm.collecte_fk
+                LEFT JOIN collecte co ON co.id = sext.sampling_fk OR co.id=lm.sampling_fk
                 LEFT JOIN station sta ON co.station_fk = sta.id
 
                 WHERE v1.code != 'HAPLO'

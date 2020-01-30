@@ -23,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * IndividuLame
  *
- * @ORM\Table(name="individu_lame", uniqueConstraints={@ORM\UniqueConstraint(name="cu_individu_lame_cle_primaire", columns={"code_lame_coll"})}, indexes={@ORM\Index(name="IDX_8DA827E2A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_8DA827E22B644673", columns={"boite_fk"}), @ORM\Index(name="IDX_8DA827E25F2C6176", columns={"individu_fk"})})
+ * @ORM\Table(name="individu_lame", uniqueConstraints={@ORM\UniqueConstraint(name="cu_individu_lame_cle_primaire", columns={"code_lame_coll"})}, indexes={@ORM\Index(name="IDX_8DA827E2A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_8DA827E22B644673", columns={"storage_box_fk"}), @ORM\Index(name="IDX_8DA827E25F2C6176", columns={"specimen_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -77,28 +77,28 @@ class IndividuLame
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_cre", type="datetime", nullable=true)
+     * @ORM\Column(name="date_of_creation", type="datetime", nullable=true)
      */
     private $dateCre;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_maj", type="datetime", nullable=true)
+     * @ORM\Column(name="date_of_update", type="datetime", nullable=true)
      */
     private $dateMaj;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="user_cre", type="bigint", nullable=true)
+     * @ORM\Column(name="creation_user_name", type="bigint", nullable=true)
      */
     private $userCre;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="user_maj", type="bigint", nullable=true)
+     * @ORM\Column(name="update_user_name", type="bigint", nullable=true)
      */
     private $userMaj;
 
@@ -117,7 +117,7 @@ class IndividuLame
      *
      * @ORM\ManyToOne(targetEntity="Boite", inversedBy="individuLames")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="boite_fk", referencedColumnName="id", nullable=true)
+     *   @ORM\JoinColumn(name="storage_box_fk", referencedColumnName="id", nullable=true)
      * })
      */
     private $boiteFk;
@@ -127,7 +127,7 @@ class IndividuLame
      *
      * @ORM\ManyToOne(targetEntity="Individu")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="individu_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="specimen_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $individuFk;

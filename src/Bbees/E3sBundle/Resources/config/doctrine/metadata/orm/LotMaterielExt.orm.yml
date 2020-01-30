@@ -4,7 +4,7 @@ LotMaterielExt:
     indexes:
         ce_cle_etrangere46:
             columns:
-                - collecte_fk
+                - sampling_fk
         ce_cle_etrangere49:
             columns:
                 - pigmentation_voc_fk
@@ -55,23 +55,23 @@ LotMaterielExt:
         dateCre:
             type: datetime
             nullable: true
-            column: date_cre
+            column: date_of_creation
         dateMaj:
             type: datetime
             nullable: true
-            column: date_maj
+            column: date_of_update
         userCre:
             type: bigint
             nullable: true
             options:
                 unsigned: false
-            column: user_cre
+            column: creation_user_name
         userMaj:
             type: bigint
             nullable: true
             options:
                 unsigned: false
-            column: user_maj
+            column: update_user_name
     manyToOne:
         collecteFk:
             targetEntity: Collecte
@@ -80,7 +80,7 @@ LotMaterielExt:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                collecte_fk:
+                sampling_fk:
                     referencedColumnName: id
             orphanRemoval: false
         datePrecisionVocFk:

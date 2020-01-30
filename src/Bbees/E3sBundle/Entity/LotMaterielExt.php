@@ -23,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * LotMaterielExt
  *
- * @ORM\Table(name="lot_materiel_ext", uniqueConstraints={@ORM\UniqueConstraint(name="cu_lot_materiel_ext_code_lot_materiel_ext", columns={"code_lot_materiel_ext"})}, indexes={@ORM\Index(name="IDX_EEFA43F3662D9B98", columns={"collecte_fk"}), @ORM\Index(name="IDX_EEFA43F3A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_EEFA43F382ACDC4", columns={"nb_individus_voc_fk"}), @ORM\Index(name="IDX_EEFA43F3B0B56B73", columns={"pigmentation_voc_fk"}), @ORM\Index(name="IDX_EEFA43F3A897CC9E", columns={"yeux_voc_fk"})})
+ * @ORM\Table(name="lot_materiel_ext", uniqueConstraints={@ORM\UniqueConstraint(name="cu_lot_materiel_ext_code_lot_materiel_ext", columns={"code_lot_materiel_ext"})}, indexes={@ORM\Index(name="IDX_EEFA43F3662D9B98", columns={"sampling_fk"}), @ORM\Index(name="IDX_EEFA43F3A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_EEFA43F382ACDC4", columns={"nb_individus_voc_fk"}), @ORM\Index(name="IDX_EEFA43F3B0B56B73", columns={"pigmentation_voc_fk"}), @ORM\Index(name="IDX_EEFA43F3A897CC9E", columns={"yeux_voc_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -70,28 +70,28 @@ class LotMaterielExt
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_cre", type="datetime", nullable=true)
+     * @ORM\Column(name="date_of_creation", type="datetime", nullable=true)
      */
     private $dateCre;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_maj", type="datetime", nullable=true)
+     * @ORM\Column(name="date_of_update", type="datetime", nullable=true)
      */
     private $dateMaj;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="user_cre", type="bigint", nullable=true)
+     * @ORM\Column(name="creation_user_name", type="bigint", nullable=true)
      */
     private $userCre;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="user_maj", type="bigint", nullable=true)
+     * @ORM\Column(name="update_user_name", type="bigint", nullable=true)
      */
     private $userMaj;
 
@@ -100,7 +100,7 @@ class LotMaterielExt
      *
      * @ORM\ManyToOne(targetEntity="Collecte")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="collecte_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="sampling_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $collecteFk;

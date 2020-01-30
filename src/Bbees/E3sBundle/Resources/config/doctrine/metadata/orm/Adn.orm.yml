@@ -1,29 +1,29 @@
 Adn:
     type: entity
-    table: adn
+    table: dna
     indexes:
         cle_etrangere:
             columns:
-                - methode_extraction_adn_voc_fk
+                - dna_extraction_method_voc_fk
         cle_etrangere1:
             columns:
                 - date_precision_voc_fk
         adn_code_adn:
             columns:
-                - code_adn
+                - dna_code
         cle_etrangere2:
             columns:
-                - boite_fk
+                - storage_box_fk
         cle_etrangere3:
             columns:
-                - individu_fk
+                - specimen_fk
         IDX_1DCF9AF9C53B46B:
             columns:
-                - qualite_adn_voc_fk
+                - dna_quality_voc_fk
     uniqueConstraints:
         cu_adn_cle_primaire:
             columns:
-                - code_adn
+                - dna_code
     id:
         id:
             type: bigint
@@ -40,44 +40,44 @@ Adn:
             length: 255
             options:
                 fixed: false
-            column: code_adn
+            column: dna_code
         dateAdn:
             type: date
             nullable: true
-            column: date_adn
+            column: dna_extraction_date
         concentrationNgMicrolitre:
             type: float
             nullable: true
             precision: 10
             scale: 0
-            column: concentration_ng_microlitre
+            column: dna_concentration
         commentaireAdn:
             type: text
             nullable: true
             length: null
             options:
                 fixed: false
-            column: commentaire_adn
+            column: dna_comments
         dateCre:
             type: datetime
             nullable: true
-            column: date_cre
+            column: date_of_creation
         dateMaj:
             type: datetime
             nullable: true
-            column: date_maj
+            column: date_of_update
         userCre:
             type: bigint
             nullable: true
             options:
                 unsigned: false
-            column: user_cre
+            column: creation_user_name
         userMaj:
             type: bigint
             nullable: true
             options:
                 unsigned: false
-            column: user_maj
+            column: update_user_name
     manyToOne:
         datePrecisionVocFk:
             targetEntity: Voc
@@ -96,7 +96,7 @@ Adn:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                methode_extraction_adn_voc_fk:
+                dna_extraction_method_voc_fk:
                     referencedColumnName: id
             orphanRemoval: false
         individuFk:
@@ -106,7 +106,7 @@ Adn:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                individu_fk:
+                specimen_fk:
                     referencedColumnName: id
             orphanRemoval: false
         qualiteAdnVocFk:
@@ -116,7 +116,7 @@ Adn:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                qualite_adn_voc_fk:
+                dna_quality_voc_fk:
                     referencedColumnName: id
             orphanRemoval: false
         boiteFk:
@@ -126,7 +126,7 @@ Adn:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                boite_fk:
+                storage_box_fk:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

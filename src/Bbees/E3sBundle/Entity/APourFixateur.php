@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * APourFixateur
  *
- * @ORM\Table(name="a_pour_fixateur", indexes={@ORM\Index(name="IDX_60129A315FD841AC", columns={"fixateur_voc_fk"}), @ORM\Index(name="IDX_60129A31662D9B98", columns={"collecte_fk"})})
+ * @ORM\Table(name="sample_is_fixed_with", indexes={@ORM\Index(name="IDX_60129A315FD841AC", columns={"fixative_voc_fk"}), @ORM\Index(name="IDX_60129A31662D9B98", columns={"sampling_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -34,35 +34,35 @@ class APourFixateur
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="a_pour_fixateur_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="sample_is_fixed_with_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_cre", type="datetime", nullable=true)
+     * @ORM\Column(name="date_of_creation", type="datetime", nullable=true)
      */
     private $dateCre;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_maj", type="datetime", nullable=true)
+     * @ORM\Column(name="date_of_update", type="datetime", nullable=true)
      */
     private $dateMaj;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="user_cre", type="bigint", nullable=true)
+     * @ORM\Column(name="creation_user_name", type="bigint", nullable=true)
      */
     private $userCre;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="user_maj", type="bigint", nullable=true)
+     * @ORM\Column(name="update_user_name", type="bigint", nullable=true)
      */
     private $userMaj;
 
@@ -71,7 +71,7 @@ class APourFixateur
      *
      * @ORM\ManyToOne(targetEntity="Voc")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="fixateur_voc_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="fixative_voc_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $fixateurVocFk;
@@ -81,7 +81,7 @@ class APourFixateur
      *
      * @ORM\ManyToOne(targetEntity="Collecte", inversedBy="aPourFixateurs")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="collecte_fk", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     *   @ORM\JoinColumn(name="sampling_fk", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * })
      */
     private $collecteFk;

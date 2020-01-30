@@ -61,13 +61,13 @@ class ImportFileE3s
         $message = '';
         $info = $this->translator->trans('importfileService.Date of data set import').' : '.$DateImport->format('Y-m-d H:i:s');
         foreach($csvDataAdnRange as $l => $data){ // 1- Line-to-line data processing ($ l)
-            $query_adn = $em->getRepository("BbeesE3sBundle:Adn")->createQueryBuilder('adn')
-            ->where('adn.codeAdn  LIKE :code_adn')
-            ->setParameter('code_adn', $data["code_adn"])
+            $query_adn = $em->getRepository("BbeesE3sBundle:Adn")->createQueryBuilder('dna')
+            ->where('dna.codeAdn  LIKE :dna_code')
+            ->setParameter('dna_code', $data["dna_code"])
             ->getQuery()
             ->getResult();
             $flagAdn = count($query_adn);
-            if ($flagAdn == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["code_adn"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
+            if ($flagAdn == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["dna_code"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             $flagBoite = 1;
             $flagBoiteAffecte = 0;
             if($data["code_boite"] != null || $data["code_boite"] != '') {
@@ -132,13 +132,13 @@ class ImportFileE3s
         $message = '';
         $info = $this->translator->trans('importfileService.Date of data set import').' : '.$DateImport->format('Y-m-d H:i:s');
         foreach($csvDataAdnRange as $l => $data){ // 1- Line-to-line data processing ($ l)
-            $query_adn = $em->getRepository("BbeesE3sBundle:Adn")->createQueryBuilder('adn')
-            ->where('adn.codeAdn  LIKE :code_adn')
-            ->setParameter('code_adn', $data["code_adn"])
+            $query_adn = $em->getRepository("BbeesE3sBundle:Adn")->createQueryBuilder('dna')
+            ->where('dna.codeAdn  LIKE :dna_code')
+            ->setParameter('dna_code', $data["dna_code"])
             ->getQuery()
             ->getResult();
             $flagAdn = count($query_adn);
-            if ($flagAdn == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["code_adn"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
+            if ($flagAdn == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["dna_code"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             $flagBoite = 1;
             $flagBoiteAffecte = 0;
             if($data["code_boite"] != null || $data["code_boite"] != '') {
@@ -154,7 +154,7 @@ class ImportFileE3s
             if ($flagBoiteAffecte && $flagBoite == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["code_boite"].'</b>  <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             if ($flagAdn && $flagBoite && $flagBoiteAffecte) { 
                 if ($query_adn[0]->getBoiteFk() != null) {
-                     $message .= $this->translator->trans('importfileService.ERROR adn already store').'<b> : '.$data["code_adn"].'</b> / '.$query_adn[0]->getBoiteFk()->getCodeBoite().' <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>";                                    
+                     $message .= $this->translator->trans('importfileService.ERROR dna already store').'<b> : '.$data["dna_code"].'</b> / '.$query_adn[0]->getBoiteFk()->getCodeBoite().' <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>";                                    
                 } else {
                     $query_adn[0]->setBoiteFk($query_boite[0]);
                     $query_adn[0]->setDateMaj($DateImport); 
@@ -1264,7 +1264,7 @@ class ImportFileE3s
             #
             $entity = new \Bbees\E3sBundle\Entity\Adn();    
             // 
-            foreach($columnByTable["adn"] as $ColCsv){  
+            foreach($columnByTable["dna"] as $ColCsv){  
                 $field = $importFileCsvService->TransformNameForSymfony($ColCsv,'field');   
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                 if ($dataColCsv !== $data[$ColCsv] ) {
@@ -1275,7 +1275,7 @@ class ImportFileE3s
                 if (!$flag_foreign) { 
                     $varfield = explode(".", $field)[1];
                     // var_dump($ColCsv); var_dump($field); exit;
-                    if($ColCsv == 'adn.code_adn') { 
+                    if($ColCsv == 'dna.dna_code') { 
                         $record_entity = $em->getRepository("BbeesE3sBundle:Adn")->findOneBy(array("codeAdn" => $dataColCsv)); 
                         if($record_entity !== NULL){ 
                            $message .= $this->translator->trans('importfileService.ERROR duplicate code').'<b> : '.$data[$ColCsv]."</b> <br>ligne ".(string)($l+2).": ".join(';', $data)."<br>"; 
@@ -1283,9 +1283,9 @@ class ImportFileE3s
                     }
                     
                     // control and standardization of field formats
-                    if ($ColCsv == 'adn.concentration_ng_microlitre' && !is_null($dataColCsv)) {$dataColCsv = floatval(str_replace(",", ".", $dataColCsv));}
+                    if ($ColCsv == 'dna.dna_concentration' && !is_null($dataColCsv)) {$dataColCsv = floatval(str_replace(",", ".", $dataColCsv));}
                     // test of the date format
-                    if ($ColCsv == 'adn.date_adn' ) {
+                    if ($ColCsv == 'dna.dna_extraction_date' ) {
                         // adjusts the incomplete date of type m/Y or Y in 01/m/Y or 01/01/ Y
                         if (!is_null($dataColCsv)){
                             if (count(explode("/",$dataColCsv))== 2) $dataColCsv = "01/".$dataColCsv;
@@ -1601,7 +1601,7 @@ class ImportFileE3s
             $em->persist($entity);
             
             # Record of ACibler                      
-             foreach($columnByTable["a_cibler"] as $ColCsv){   
+             foreach($columnByTable["has_targeted_taxa"] as $ColCsv){   
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                 if ($dataColCsv !== $data[$ColCsv] ) {
                     $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -1652,7 +1652,7 @@ class ImportFileE3s
              }
   
              # Record of APourFixateur                      
-             foreach($columnByTable["a_pour_fixateur"] as $ColCsv){
+             foreach($columnByTable["sample_is_fixed_with"] as $ColCsv){
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                 if ($dataColCsv !== $data[$ColCsv] ) {
                     $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -1696,7 +1696,7 @@ class ImportFileE3s
              }
             
             # Record of APourSamplingMethod                     
-             foreach($columnByTable["a_pour_sampling_method"] as $ColCsv){ 
+             foreach($columnByTable["sampling_is_done_with_method"] as $ColCsv){ 
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                 if ($dataColCsv !== $data[$ColCsv] ) {
                     $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -2101,7 +2101,7 @@ class ImportFileE3s
             $em->persist($entity);
             
             # Record of EspeceIdentifiee 
-            $key_taxname = array_keys($columnByTable["espece_identifiee"], "espece_identifiee.referentiel_taxon_fk(referentiel_taxon.taxname)")[0];
+            $key_taxname = array_keys($columnByTable["espece_identifiee"], "espece_identifiee.taxon_fk(referentiel_taxon.taxname)")[0];
             // var_dump($data[$columnByTable["espece_identifiee"][$key_taxname]]);
             $entityEspeceIdentifie = NULL;
             if ($data[$columnByTable["espece_identifiee"][$key_taxname]] != '') { 

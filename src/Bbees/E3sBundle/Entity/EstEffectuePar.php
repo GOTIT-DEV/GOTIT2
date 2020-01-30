@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EstEffectuePar
  *
- * @ORM\Table(name="est_effectue_par", indexes={@ORM\Index(name="IDX_EE2A88C9B53CD04C", columns={"personne_fk"}), @ORM\Index(name="IDX_EE2A88C9662D9B98", columns={"collecte_fk"})})
+ * @ORM\Table(name="est_effectue_par", indexes={@ORM\Index(name="IDX_EE2A88C9B53CD04C", columns={"personne_fk"}), @ORM\Index(name="IDX_EE2A88C9662D9B98", columns={"sampling_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -41,28 +41,28 @@ class EstEffectuePar
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_cre", type="datetime", nullable=true)
+     * @ORM\Column(name="date_of_creation", type="datetime", nullable=true)
      */
     private $dateCre;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_maj", type="datetime", nullable=true)
+     * @ORM\Column(name="date_of_update", type="datetime", nullable=true)
      */
     private $dateMaj;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="user_cre", type="bigint", nullable=true)
+     * @ORM\Column(name="creation_user_name", type="bigint", nullable=true)
      */
     private $userCre;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="user_maj", type="bigint", nullable=true)
+     * @ORM\Column(name="update_user_name", type="bigint", nullable=true)
      */
     private $userMaj;
 
@@ -81,7 +81,7 @@ class EstEffectuePar
      *
      * @ORM\ManyToOne(targetEntity="Collecte", inversedBy="estEffectuePars")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="collecte_fk", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     *   @ORM\JoinColumn(name="sampling_fk", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * })
      */
     private $collecteFk;

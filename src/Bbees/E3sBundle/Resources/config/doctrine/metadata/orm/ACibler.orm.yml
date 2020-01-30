@@ -1,13 +1,13 @@
 ACibler:
     type: entity
-    table: a_cibler
+    table: has_targeted_taxa
     indexes:
         ce_cle_etrangere17:
             columns:
-                - collecte_fk
+                - sampling_fk
         ce_cle_etrangere18:
             columns:
-                - referentiel_taxon_fk
+                - taxon_fk
     id:
         id:
             type: bigint
@@ -21,23 +21,23 @@ ACibler:
         dateCre:
             type: datetime
             nullable: true
-            column: date_cre
+            column: date_of_creation
         dateMaj:
             type: datetime
             nullable: true
-            column: date_maj
+            column: date_of_update
         userCre:
             type: bigint
             nullable: true
             options:
                 unsigned: false
-            column: user_cre
+            column: creation_user_name
         userMaj:
             type: bigint
             nullable: true
             options:
                 unsigned: false
-            column: user_maj
+            column: update_user_name
     manyToOne:
         collecteFk:
             targetEntity: Collecte
@@ -46,7 +46,7 @@ ACibler:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                collecte_fk:
+                sampling_fk:
                     referencedColumnName: id
             orphanRemoval: false
         referentielTaxonFk:
@@ -56,7 +56,7 @@ ACibler:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                referentiel_taxon_fk:
+                taxon_fk:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

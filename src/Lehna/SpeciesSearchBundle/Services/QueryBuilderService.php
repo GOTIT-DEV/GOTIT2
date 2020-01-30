@@ -86,8 +86,8 @@ class QueryBuilderService
 
   private function joinIndivSeq($query, $indivAlias, $seqAlias)
   {
-    return $query->join('BbeesE3sBundle:Adn', 'adn', 'WITH', "$indivAlias.id = adn.individuFk")
-      ->join('BbeesE3sBundle:Pcr', 'pcr', 'WITH', 'adn.id = pcr.adnFk')
+    return $query->join('BbeesE3sBundle:Adn', 'dna', 'WITH', "$indivAlias.id = dna.individuFk")
+      ->join('BbeesE3sBundle:Pcr', 'pcr', 'WITH', 'dna.id = pcr.adnFk')
       ->join('BbeesE3sBundle:Chromatogramme', 'ch', 'WITH', 'pcr.id = ch.pcrFk')
       ->join('BbeesE3sBundle:EstAligneEtTraite', 'at', 'WITH', 'at.chromatogrammeFk = ch.id')
       ->join('BbeesE3sBundle:Assigne', 'ass', 'WITH', 'ass.sequenceAssembleeFk = at.sequenceAssembleeFk')
@@ -97,8 +97,8 @@ class QueryBuilderService
 
   private function leftJoinIndivSeq($query, $indivAlias, $seqAlias)
   {
-    return $query->leftJoin('BbeesE3sBundle:Adn', 'adn', 'WITH', "$indivAlias.id = adn.individuFk")
-      ->leftJoin('BbeesE3sBundle:Pcr', 'pcr', 'WITH', 'adn.id = pcr.adnFk')
+    return $query->leftJoin('BbeesE3sBundle:Adn', 'dna', 'WITH', "$indivAlias.id = dna.individuFk")
+      ->leftJoin('BbeesE3sBundle:Pcr', 'pcr', 'WITH', 'dna.id = pcr.adnFk')
       ->leftJoin('BbeesE3sBundle:Chromatogramme', 'ch', 'WITH', 'pcr.id = ch.pcrFk')
       ->leftJoin('BbeesE3sBundle:EstAligneEtTraite', 'at', 'WITH', 'at.chromatogrammeFk = ch.id')
       ->leftJoin('BbeesE3sBundle:Assigne', 'ass', 'WITH', 'ass.sequenceAssembleeFk = at.sequenceAssembleeFk')
@@ -344,7 +344,7 @@ class QueryBuilderService
 
     if ($co1) {
       $station_subquery = "SELECT DISTINCT
-            eid.referentiel_taxon_fk, lm.id as lm_id,
+            eid.taxon_fk, lm.id as lm_id,
             sta.id as id_sta, sta.long_deg_dec as longitude, sta.lat_deg_dec as latitude
             FROM ESPECE_IDENTIFIEE eid
             LEFT JOIN sequence_assemblee_ext sext ON eid.sequence_assemblee_ext_fk=sext.id
@@ -355,21 +355,21 @@ class QueryBuilderService
             LEFT JOIN pcr ON chr.pcr_fk=pcr.id
             LEFT JOIN voc v2 ON pcr.gene_voc_fk=v2.id
             LEFT JOIN voc statut ON statut.id=seq.statut_sqc_ass_voc_fk
-            LEFT JOIN adn ON pcr.adn_fk=adn.id
-            LEFT JOIN individu ind ON ind.id = adn.individu_fk
+            LEFT JOIN dna ON pcr.adn_fk=dna.id
+            LEFT JOIN individu ind ON ind.id = dna.specimen_fk
             LEFT JOIN lot_materiel lm ON ind.lot_materiel_fk=lm.id
-            JOIN collecte co ON co.id = sext.collecte_fk OR co.id=lm.collecte_fk
+            JOIN collecte co ON co.id = sext.sampling_fk OR co.id=lm.sampling_fk
             JOIN station sta ON co.station_fk = sta.id
             WHERE v1.code='COI' OR v2.code='COI'
             AND statut.code IN ('SHORT', 'VALIDEE')";
     } else {
       $station_subquery = "SELECT DISTINCT
-             eid.referentiel_taxon_fk, lm.id as lm_id,
+             eid.taxon_fk, lm.id as lm_id,
              sta.id as id_sta, sta.long_deg_dec as longitude, sta.lat_deg_dec as latitude
             FROM ESPECE_IDENTIFIEE eid
             LEFT JOIN lot_materiel lm ON eid.lot_materiel_fk=lm.id
             LEFT JOIN lot_materiel_ext lmext ON eid.lot_materiel_ext_fk=lmext.id
-            JOIN collecte co ON co.id = lm.collecte_fk OR co.id=lmext.collecte_fk
+            JOIN collecte co ON co.id = lm.sampling_fk OR co.id=lmext.sampling_fk
             JOIN station sta ON co.station_fk = sta.id";
     }
 
@@ -386,7 +386,7 @@ class QueryBuilderService
                 c.nom_commune as municipality,
                 p.nom_pays as country
             FROM referentiel_taxon rt
-            JOIN esta ON esta.referentiel_taxon_fk = rt.id
+            JOIN esta ON esta.taxon_fk = rt.id
             JOIN station s ON s.id = esta.id_sta
             LEFT JOIN commune c ON c.id=s.commune_fk
             LEFT JOIN pays p ON s.pays_fk=p.id
@@ -408,7 +408,7 @@ class QueryBuilderService
 
     if ($co1) {
       $station_subquery = "SELECT DISTINCT
-            eid.referentiel_taxon_fk,
+            eid.taxon_fk,
             sta.id as id_sta, sta.long_deg_dec as longitude, sta.lat_deg_dec as latitude
             FROM ESPECE_IDENTIFIEE eid
             -- External sequences
@@ -421,11 +421,11 @@ class QueryBuilderService
             LEFT JOIN pcr ON chr.pcr_fk=pcr.id
             LEFT JOIN voc v2 ON pcr.gene_voc_fk=v2.id
             LEFT JOIN voc statut ON seq.statut_sqc_ass_voc_fk=statut.id
-            LEFT JOIN adn ON pcr.adn_fk=adn.id
-            LEFT JOIN individu ind ON ind.id = adn.individu_fk
+            LEFT JOIN dna ON pcr.adn_fk=dna.id
+            LEFT JOIN individu ind ON ind.id = dna.specimen_fk
             LEFT JOIN lot_materiel lm ON ind.lot_materiel_fk=lm.id
             -- Find all sampling events ('collecte') of internal or external seq
-            JOIN collecte co ON co.id = sext.collecte_fk OR co.id=lm.collecte_fk
+            JOIN collecte co ON co.id = sext.sampling_fk OR co.id=lm.sampling_fk
             -- Join to corresponding station
             JOIN station sta ON co.station_fk = sta.id
             -- COI constraint
@@ -433,22 +433,22 @@ class QueryBuilderService
             AND statut.code IN ('SHORT', 'VALIDEE')";
     } else {
       $station_subquery = "SELECT DISTINCT
-             eid.referentiel_taxon_fk,
+             eid.taxon_fk,
              sta.id as id_sta, sta.long_deg_dec as longitude, sta.lat_deg_dec as latitude
             FROM ESPECE_IDENTIFIEE eid
             LEFT JOIN lot_materiel lm ON eid.lot_materiel_fk=lm.id
             LEFT JOIN lot_materiel_ext lmext ON eid.lot_materiel_ext_fk=lmext.id
-            JOIN collecte co ON co.id = lm.collecte_fk OR co.id=lmext.collecte_fk
+            JOIN collecte co ON co.id = lm.sampling_fk OR co.id=lmext.sampling_fk
             JOIN station sta ON co.station_fk = sta.id";
     }
 
     // Compute maximum longitudinal extent (MLE) for each requested species
-    $mle_subquery = " SELECT sta1.referentiel_taxon_fk,
+    $mle_subquery = " SELECT sta1.taxon_fk,
             max((point(sta1.longitude,sta1.latitude) <@> point(sta2.longitude, sta2.latitude)) * 1.609344) as MLE
             FROM esta sta1
-            JOIN esta sta2 ON sta1.referentiel_taxon_fk = sta2.referentiel_taxon_fk
+            JOIN esta sta2 ON sta1.taxon_fk = sta2.taxon_fk
             WHERE sta1.id_sta < sta2.id_sta
-            GROUP BY sta1.referentiel_taxon_fk";
+            GROUP BY sta1.taxon_fk";
 
     $main_subquery = "SELECT
             rt.taxname,
@@ -456,8 +456,8 @@ class QueryBuilderService
             COUNT(distinct esta.id_sta) as nb_sta,
             (min(esta.latitude) + (max(esta.latitude)-min(esta.latitude))/2)  as LMP
             FROM referentiel_taxon rt
-            JOIN espece_identifiee e ON e.referentiel_taxon_fk = rt.id
-            JOIN esta ON esta.referentiel_taxon_fk=rt.id
+            JOIN espece_identifiee e ON e.taxon_fk = rt.id
+            JOIN esta ON esta.taxon_fk=rt.id
             JOIN voc ON voc.id = e.critere_identification_voc_fk
             --taxafilter.placeholder
             GROUP BY rt.id, rt.taxname
@@ -482,7 +482,7 @@ class QueryBuilderService
             LMP as LMP$FIELD_SUFFIX,
             mle.MLE as MLE$FIELD_SUFFIX
             FROM main
-            LEFT JOIN mle ON mle.referentiel_taxon_fk=main.id
+            LEFT JOIN mle ON mle.taxon_fk=main.id
             ORDER BY taxname;";
 
     $stmt = $this->entityManager->getConnection()->prepare($rawSql);
@@ -544,12 +544,12 @@ class QueryBuilderService
             pays.nom_pays as country
 
             FROM (SELECT id,code,  accession_number,
-                 collecte_fk, rt, delimitation, type_seq
+                 sampling_fk, rt, delimitation, type_seq
                 FROM (
                     SELECT  sequence_assemblee_ext.id,
                             sequence_assemblee_ext.code_sqc_ass_ext as code,
                             accession_number_sqc_ass_ext as accession_number,
-                            collecte_fk, ei.referentiel_taxon_fk as rt,
+                            sampling_fk, ei.taxon_fk as rt,
                             critere.code as delimitation,
                             1 as type_seq
                     FROM sequence_assemblee_ext
@@ -559,13 +559,13 @@ class QueryBuilderService
                     SELECT  seqas.id,
                             seqas.code_sqc_ass as code,
                             seqas.accession_number,
-                            lmat.collecte_fk, ei.referentiel_taxon_fk as rt,
+                            lmat.sampling_fk, ei.taxon_fk as rt,
                             critere.code as delimitation,
                             0 as type_seq
                     FROM lot_materiel lmat
                         JOIN individu I ON I.lot_materiel_fk=lmat.id
-                        JOIN adn ON adn.individu_fk=I.id
-                        JOIN pcr ON pcr.adn_fk=adn.id
+                        JOIN dna ON dna.specimen_fk=I.id
+                        JOIN pcr ON pcr.adn_fk=dna.id
                         JOIN chromatogramme ON chromatogramme.pcr_fk=pcr.id
                         JOIN est_aligne_et_traite eaet ON chromatogramme.id=eaet.chromatogramme_fk
                         JOIN sequence_assemblee seqas ON seqas.id=eaet.sequence_assemblee_fk
@@ -573,7 +573,7 @@ class QueryBuilderService
                         LEFT JOIN voc critere ON ei.critere_identification_voc_fk=critere.id
                     ) AS union_seq ) AS seq
             LEFT JOIN referentiel_taxon tax ON tax.id=seq.rt
-            JOIN collecte ON seq.collecte_fk=collecte.id
+            JOIN collecte ON seq.sampling_fk=collecte.id
             JOIN station ON collecte.station_fk=station.id
             JOIN commune ON station.commune_fk=commune.id
             JOIN pays ON station.pays_fk=pays.id

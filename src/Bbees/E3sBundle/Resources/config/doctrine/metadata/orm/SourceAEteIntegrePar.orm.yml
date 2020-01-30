@@ -21,23 +21,23 @@ SourceAEteIntegrePar:
         dateCre:
             type: datetime
             nullable: true
-            column: date_cre
+            column: date_of_creation
         dateMaj:
             type: datetime
             nullable: true
-            column: date_maj
+            column: date_of_update
         userCre:
             type: bigint
             nullable: true
             options:
                 unsigned: false
-            column: user_cre
+            column: creation_user_name
         userMaj:
             type: bigint
             nullable: true
             options:
                 unsigned: false
-            column: user_maj
+            column: update_user_name
     manyToOne:
         sourceFk:
             targetEntity: Source

@@ -4,10 +4,10 @@ IndividuLame:
     indexes:
         ce_cle_etrangere103:
             columns:
-                - boite_fk
+                - storage_box_fk
         ce_cle_etrangere104:
             columns:
-                - individu_fk
+                - specimen_fk
         ce_cle_etrangere102:
             columns:
                 - date_precision_voc_fk
@@ -60,23 +60,23 @@ IndividuLame:
         dateCre:
             type: datetime
             nullable: true
-            column: date_cre
+            column: date_of_creation
         dateMaj:
             type: datetime
             nullable: true
-            column: date_maj
+            column: date_of_update
         userCre:
             type: bigint
             nullable: true
             options:
                 unsigned: false
-            column: user_cre
+            column: creation_user_name
         userMaj:
             type: bigint
             nullable: true
             options:
                 unsigned: false
-            column: user_maj
+            column: update_user_name
     manyToOne:
         datePrecisionVocFk:
             targetEntity: Voc
@@ -95,7 +95,7 @@ IndividuLame:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                boite_fk:
+                storage_box_fk:
                     referencedColumnName: id
             orphanRemoval: false
         individuFk:
@@ -105,7 +105,7 @@ IndividuLame:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                individu_fk:
+                specimen_fk:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

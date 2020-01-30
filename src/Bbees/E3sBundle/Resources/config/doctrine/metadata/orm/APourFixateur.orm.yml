@@ -1,13 +1,13 @@
 APourFixateur:
     type: entity
-    table: a_pour_fixateur
+    table: sample_is_fixed_with
     indexes:
         ce_cle_etrangere43:
             columns:
-                - collecte_fk
+                - sampling_fk
         ce_cle_etrangere42:
             columns:
-                - fixateur_voc_fk
+                - fixative_voc_fk
     id:
         id:
             type: bigint
@@ -21,23 +21,23 @@ APourFixateur:
         dateCre:
             type: datetime
             nullable: true
-            column: date_cre
+            column: date_of_creation
         dateMaj:
             type: datetime
             nullable: true
-            column: date_maj
+            column: date_of_update
         userCre:
             type: bigint
             nullable: true
             options:
                 unsigned: false
-            column: user_cre
+            column: creation_user_name
         userMaj:
             type: bigint
             nullable: true
             options:
                 unsigned: false
-            column: user_maj
+            column: update_user_name
     manyToOne:
         fixateurVocFk:
             targetEntity: Voc
@@ -46,7 +46,7 @@ APourFixateur:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                fixateur_voc_fk:
+                fixative_voc_fk:
                     referencedColumnName: id
             orphanRemoval: false
         collecteFk:
@@ -56,7 +56,7 @@ APourFixateur:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                collecte_fk:
+                sampling_fk:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

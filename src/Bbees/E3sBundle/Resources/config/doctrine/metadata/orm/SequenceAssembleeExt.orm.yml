@@ -16,7 +16,7 @@ SequenceAssembleeExt:
                 - date_precision_voc_fk
         ce_cle_etrangere5:
             columns:
-                - collecte_fk
+                - sampling_fk
     uniqueConstraints:
         cu_sequence_assemblee_ext_cle_primaire:
             columns:
@@ -80,23 +80,23 @@ SequenceAssembleeExt:
         dateCre:
             type: datetime
             nullable: true
-            column: date_cre
+            column: date_of_creation
         dateMaj:
             type: datetime
             nullable: true
-            column: date_maj
+            column: date_of_update
         userCre:
             type: bigint
             nullable: true
             options:
                 unsigned: false
-            column: user_cre
+            column: creation_user_name
         userMaj:
             type: bigint
             nullable: true
             options:
                 unsigned: false
-            column: user_maj
+            column: update_user_name
     manyToOne:
         geneVocFk:
             targetEntity: Voc
@@ -135,7 +135,7 @@ SequenceAssembleeExt:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                collecte_fk:
+                sampling_fk:
                     referencedColumnName: id
             orphanRemoval: false
         statutSqcAssVocFk:

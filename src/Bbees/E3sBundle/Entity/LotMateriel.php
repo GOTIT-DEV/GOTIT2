@@ -23,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * LotMateriel
  *
- * @ORM\Table(name="lot_materiel", uniqueConstraints={@ORM\UniqueConstraint(name="cu_lot_materiel_cle_primaire", columns={"code_lot_materiel"})}, indexes={@ORM\Index(name="IDX_BA1841A5A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_BA1841A5B0B56B73", columns={"pigmentation_voc_fk"}), @ORM\Index(name="IDX_BA1841A5A897CC9E", columns={"yeux_voc_fk"}), @ORM\Index(name="IDX_BA1841A5662D9B98", columns={"collecte_fk"}), @ORM\Index(name="IDX_BA1841A52B644673", columns={"boite_fk"})})
+ * @ORM\Table(name="lot_materiel", uniqueConstraints={@ORM\UniqueConstraint(name="cu_lot_materiel_cle_primaire", columns={"code_lot_materiel"})}, indexes={@ORM\Index(name="IDX_BA1841A5A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_BA1841A5B0B56B73", columns={"pigmentation_voc_fk"}), @ORM\Index(name="IDX_BA1841A5A897CC9E", columns={"yeux_voc_fk"}), @ORM\Index(name="IDX_BA1841A5662D9B98", columns={"sampling_fk"}), @ORM\Index(name="IDX_BA1841A52B644673", columns={"storage_box_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */ 
@@ -77,28 +77,28 @@ class LotMateriel
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_cre", type="datetime", nullable=true)
+     * @ORM\Column(name="date_of_creation", type="datetime", nullable=true)
      */
     private $dateCre;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_maj", type="datetime", nullable=true)
+     * @ORM\Column(name="date_of_update", type="datetime", nullable=true)
      */
     private $dateMaj;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="user_cre", type="bigint", nullable=true)
+     * @ORM\Column(name="creation_user_name", type="bigint", nullable=true)
      */
     private $userCre;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="user_maj", type="bigint", nullable=true)
+     * @ORM\Column(name="update_user_name", type="bigint", nullable=true)
      */
     private $userMaj;
 
@@ -137,7 +137,7 @@ class LotMateriel
      *
      * @ORM\ManyToOne(targetEntity="Collecte")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="collecte_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="sampling_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $collecteFk;
@@ -147,7 +147,7 @@ class LotMateriel
      *
      * @ORM\ManyToOne(targetEntity="Boite", inversedBy="lotMateriels")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="boite_fk", referencedColumnName="id", nullable=true)
+     *   @ORM\JoinColumn(name="storage_box_fk", referencedColumnName="id", nullable=true)
      * })
      */
     private $boiteFk;

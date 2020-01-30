@@ -1,13 +1,13 @@
 APourSamplingMethod:
     type: entity
-    table: a_pour_sampling_method
+    table: sampling_is_done_with_method
     indexes:
         ce_cle_etrangere40:
             columns:
                 - sampling_method_voc_fk
         ce_cle_etrangere41:
             columns:
-                - collecte_fk
+                - sampling_fk
     id:
         id:
             type: bigint
@@ -21,23 +21,23 @@ APourSamplingMethod:
         dateCre:
             type: datetime
             nullable: true
-            column: date_cre
+            column: date_of_creation
         dateMaj:
             type: datetime
             nullable: true
-            column: date_maj
+            column: date_of_update
         userCre:
             type: bigint
             nullable: true
             options:
                 unsigned: false
-            column: user_cre
+            column: creation_user_name
         userMaj:
             type: bigint
             nullable: true
             options:
                 unsigned: false
-            column: user_maj
+            column: update_user_name
     manyToOne:
         samplingMethodVocFk:
             targetEntity: Voc
@@ -56,7 +56,7 @@ APourSamplingMethod:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                collecte_fk:
+                sampling_fk:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

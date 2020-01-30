@@ -113,8 +113,6 @@
     });
 </script>
 
-{% set wildcard =  "%QUERY" %}
-{# ================= #}
 
     <script>
     //// Typeahead 
@@ -123,8 +121,8 @@
             datumTokenizer: Bloodhound.tokenizers.whitespace,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             remote: {
-               // url : '{{path("individu_search", { 'q':wildcard|raw })}}',
-               url: 'http://datahost/e3s-www/e3s-GOTIT2-0-DEV/web/app_dev.php/fr/individu/search/%QUERY',
+               url : '{{ path("individu_search", { 'q':"QUERY"}) |replace({"QUERY": "%QUERY"}) }}',
+               // url: 'http://datahost/e3s-www/e3s-GOTIT2-0/web/app_dev.php/fr/individu/search/%QUERY',
                wildcard: '%QUERY'
             }
         });
