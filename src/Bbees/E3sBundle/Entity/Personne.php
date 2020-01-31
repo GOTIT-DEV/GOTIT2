@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Personne
  *
- * @ORM\Table(name="personne", uniqueConstraints={@ORM\UniqueConstraint(name="cu_personne_cle_primaire", columns={"nom_personne"})}, indexes={@ORM\Index(name="IDX_FCEC9EFE8441376", columns={"etablissement_fk"})})
+ * @ORM\Table(name="personne", uniqueConstraints={@ORM\UniqueConstraint(name="cu_personne_cle_primaire", columns={"nom_personne"})}, indexes={@ORM\Index(name="IDX_FCEC9EFE8441376", columns={"institution_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -99,7 +99,7 @@ class Personne
      *
      * @ORM\ManyToOne(targetEntity="Etablissement")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="etablissement_fk", referencedColumnName="id", nullable=true)
+     *   @ORM\JoinColumn(name="institution_fk", referencedColumnName="id", nullable=true)
      * })
      */
     private $etablissementFk;

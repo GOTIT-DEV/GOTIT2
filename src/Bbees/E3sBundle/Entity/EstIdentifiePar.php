@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EstIdentifiePar
  *
- * @ORM\Table(name="est_identifie_par", indexes={@ORM\Index(name="IDX_F8FCCF63B53CD04C", columns={"personne_fk"}), @ORM\Index(name="IDX_F8FCCF63B4AB6BA0", columns={"espece_identifiee_fk"})})
+ * @ORM\Table(name="est_identifie_par", indexes={@ORM\Index(name="IDX_F8FCCF63B53CD04C", columns={"person_fk"}), @ORM\Index(name="IDX_F8FCCF63B4AB6BA0", columns={"espece_identifiee_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -71,7 +71,7 @@ class EstIdentifiePar
      *
      * @ORM\ManyToOne(targetEntity="Personne")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="personne_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="person_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $personneFk;

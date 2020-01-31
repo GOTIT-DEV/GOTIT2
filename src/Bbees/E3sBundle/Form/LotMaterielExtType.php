@@ -40,7 +40,7 @@ class LotMaterielExtType extends AbstractType
                             return $er->createQueryBuilder('collecte')
                                     ->orderBy('collecte.codeCollecte', 'ASC');
                         },
-                    'placeholder' => 'Choose a Collecte', 'choice_label' => 'code_collecte', 'multiple' => false, 'expanded' => false))
+                    'placeholder' => 'Choose a Collecte', 'choice_label' => 'codeCollecte', 'multiple' => false, 'expanded' => false))
                 ->add('codeLotMaterielExt')
                 ->add('pigmentationVocFk', EntityType::class, array('class' => 'BbeesE3sBundle:Voc', 
                        'query_builder' => function (EntityRepository $er) {

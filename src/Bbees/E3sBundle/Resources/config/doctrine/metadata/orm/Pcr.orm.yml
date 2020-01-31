@@ -4,7 +4,7 @@ Pcr:
     indexes:
         ce_cle_etrangere95:
             columns:
-                - adn_fk
+                - dna_fk
         ce_cle_etrangere94:
             columns:
                 - date_precision_voc_fk
@@ -157,7 +157,7 @@ Pcr:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                adn_fk:
+                dna_fk:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

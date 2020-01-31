@@ -1,20 +1,20 @@
 Collecte:
     type: entity
-    table: collecte
+    table: sampling
     indexes:
         ce_cle_etrangere60:
             columns:
                 - date_precision_voc_fk
         ce_cle_etrangere61:
             columns:
-                - leg_voc_fk
+                - donation_voc_fk
         ce_cle_etrangere62:
             columns:
-                - station_fk
+                - site_fk
     uniqueConstraints:
         cu_collecte_cle_primaire:
             columns:
-                - code_collecte
+                - sample_code
     id:
         id:
             type: bigint
@@ -31,7 +31,7 @@ Collecte:
             length: 255
             options:
                 fixed: false
-            column: code_collecte
+            column: sample_code
         dateCollecte:
             type: date
             nullable: true
@@ -41,32 +41,32 @@ Collecte:
             nullable: true
             options:
                 unsigned: false
-            column: duree_echantillonnage_mn
+            column: sampling_duration
         temperatureC:
             type: float
             nullable: true
             precision: 10
             scale: 0
-            column: temperature_c
+            column: temperature
         conductiviteMicroSieCm:
             type: float
             nullable: true
             precision: 10
             scale: 0
-            column: conductivite_micro_sie_cm
+            column: specific_conductance
         aFaire:
             type: smallint
             nullable: true
             options:
                 unsigned: false
-            column: a_faire
+            column: sample_status
         commentaireCollecte:
             type: text
             nullable: true
             length: null
             options:
                 fixed: false
-            column: commentaire_collecte
+            column: sampling_comments
         dateCre:
             type: datetime
             nullable: true
@@ -105,7 +105,7 @@ Collecte:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                leg_voc_fk:
+                donation_voc_fk:
                     referencedColumnName: id
             orphanRemoval: false
         stationFk:
@@ -115,7 +115,7 @@ Collecte:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                station_fk:
+                site_fk:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

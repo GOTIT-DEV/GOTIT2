@@ -46,7 +46,7 @@ class StationType extends AbstractType
                             return $er->createQueryBuilder('commune')
                                     ->orderBy('commune.codeCommune', 'ASC');
                         },
-                    'choice_label' => 'code_commune', 'multiple' => false, 'expanded' => false,'placeholder' => 'Choose a Commune')) 
+                    'choice_label' => 'codeCommune', 'multiple' => false, 'expanded' => false,'placeholder' => 'Choose a Commune')) 
                 ->add('habitatTypeVocFk', EntityType::class, array('class' => 'BbeesE3sBundle:Voc', 'placeholder' => 'Choose an Habitat Type',
                         'query_builder' => function (EntityRepository $er) {
                             return $er->createQueryBuilder('voc')

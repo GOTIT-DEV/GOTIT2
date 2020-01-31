@@ -7,7 +7,7 @@ EstEffectuePar:
                 - sampling_fk
         ce_cle_etrangere64:
             columns:
-                - personne_fk
+                - person_fk
     id:
         id:
             type: bigint
@@ -46,7 +46,7 @@ EstEffectuePar:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                personne_fk:
+                person_fk:
                     referencedColumnName: id
             orphanRemoval: false
         collecteFk:

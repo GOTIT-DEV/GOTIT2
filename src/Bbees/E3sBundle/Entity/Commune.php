@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Commune
  *
- * @ORM\Table(name="commune", uniqueConstraints={@ORM\UniqueConstraint(name="cu_commune_cle_primaire", columns={"code_commune"})}, indexes={@ORM\Index(name="IDX_E2E2D1EEB1C3431A", columns={"pays_fk"})})
+ * @ORM\Table(name="municipality", uniqueConstraints={@ORM\UniqueConstraint(name="cu_commune_cle_primaire", columns={"municipality_code"})}, indexes={@ORM\Index(name="IDX_E2E2D1EEB1C3431A", columns={"country_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -34,28 +34,28 @@ class Commune
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="commune_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="municipality_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="code_commune", type="string", length=255, nullable=false)
+     * @ORM\Column(name="municipality_code", type="string", length=255, nullable=false)
      */
     private $codeCommune;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nom_commune", type="string", length=1024, nullable=false)
+     * @ORM\Column(name="municipality_name", type="string", length=1024, nullable=false)
      */
     private $nomCommune;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nom_region", type="string", length=1024, nullable=false)
+     * @ORM\Column(name="region_name", type="string", length=1024, nullable=false)
      */
     private $nomRegion;
 
@@ -92,7 +92,7 @@ class Commune
      *
      * @ORM\ManyToOne(targetEntity="Pays")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="pays_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="country_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $paysFk;

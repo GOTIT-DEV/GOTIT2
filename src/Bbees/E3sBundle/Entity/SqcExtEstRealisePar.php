@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * SqcExtEstRealisePar
  *
- * @ORM\Table(name="sqc_ext_est_realise_par", indexes={@ORM\Index(name="IDX_DC41E25ACDD1F756", columns={"sequence_assemblee_ext_fk"}), @ORM\Index(name="IDX_DC41E25AB53CD04C", columns={"personne_fk"})})
+ * @ORM\Table(name="sqc_ext_est_realise_par", indexes={@ORM\Index(name="IDX_DC41E25ACDD1F756", columns={"external_sequence_fk"}), @ORM\Index(name="IDX_DC41E25AB53CD04C", columns={"person_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -71,7 +71,7 @@ class SqcExtEstRealisePar
      *
      * @ORM\ManyToOne(targetEntity="SequenceAssembleeExt", inversedBy="sqcExtEstRealisePars")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="sequence_assemblee_ext_fk", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     *   @ORM\JoinColumn(name="external_sequence_fk", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * })
      */
     private $sequenceAssembleeExtFk;
@@ -81,7 +81,7 @@ class SqcExtEstRealisePar
      *
      * @ORM\ManyToOne(targetEntity="Personne")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="personne_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="person_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $personneFk;

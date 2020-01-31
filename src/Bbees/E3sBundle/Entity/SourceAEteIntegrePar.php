@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * SourceAEteIntegrePar
  *
- * @ORM\Table(name="source_a_ete_integre_par", indexes={@ORM\Index(name="IDX_16DC6005821B1D3F", columns={"source_fk"}), @ORM\Index(name="IDX_16DC6005B53CD04C", columns={"personne_fk"})})
+ * @ORM\Table(name="source_a_ete_integre_par", indexes={@ORM\Index(name="IDX_16DC6005821B1D3F", columns={"source_fk"}), @ORM\Index(name="IDX_16DC6005B53CD04C", columns={"person_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -81,7 +81,7 @@ class SourceAEteIntegrePar
      *
      * @ORM\ManyToOne(targetEntity="Personne")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="personne_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="person_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $personneFk;

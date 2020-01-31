@@ -1,23 +1,23 @@
 Chromatogramme:
     type: entity
-    table: chromatogramme
+    table: chromatogram
     indexes:
         ce_cle_etrangere96:
             columns:
-                - primer_chromato_voc_fk
+                - chromato_primer_voc_fk
         ce_cle_etrangere98:
             columns:
-                - etablissement_fk
+                - institution_fk
         ce_cle_etrangere99:
             columns:
                 - pcr_fk
         ce_cle_etrangere97:
             columns:
-                - qualite_chromato_voc_fk
+                - chromato_quality_voc_fk
     uniqueConstraints:
         cu_chromatogramme_cle_primaire:
             columns:
-                - code_chromato
+                - chromatogram_code
     id:
         id:
             type: bigint
@@ -34,21 +34,21 @@ Chromatogramme:
             length: 255
             options:
                 fixed: false
-            column: code_chromato
+            column: chromatogram_code
         numYas:
             type: string
             nullable: true
             length: 255
             options:
                 fixed: false
-            column: num_yas
+            column: chromatogram_number
         commentaireChromato:
             type: text
             nullable: true
             length: null
             options:
                 fixed: false
-            column: commentaire_chromato
+            column: chromatogram_comments
         dateCre:
             type: datetime
             nullable: true
@@ -77,7 +77,7 @@ Chromatogramme:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                primer_chromato_voc_fk:
+                chromato_primer_voc_fk:
                     referencedColumnName: id
             orphanRemoval: false
         qualiteChromatoVocFk:
@@ -87,7 +87,7 @@ Chromatogramme:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                qualite_chromato_voc_fk:
+                chromato_quality_voc_fk:
                     referencedColumnName: id
             orphanRemoval: false
         etablissementFk:
@@ -97,7 +97,7 @@ Chromatogramme:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                etablissement_fk:
+                institution_fk:
                     referencedColumnName: id
             orphanRemoval: false
         pcrFk:

@@ -16,7 +16,7 @@ EspeceIdentifiee:
                 - lot_materiel_fk
         ce_cle_etrangere76:
             columns:
-                - sequence_assemblee_ext_fk
+                - external_sequence_fk
         ce_cle_etrangere74:
             columns:
                 - critere_identification_voc_fk
@@ -25,7 +25,7 @@ EspeceIdentifiee:
                 - specimen_fk
         ce_cle_etrangere81:
             columns:
-                - sequence_assemblee_fk
+                - internal_sequence_fk
     id:
         id:
             type: bigint
@@ -105,7 +105,7 @@ EspeceIdentifiee:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                sequence_assemblee_ext_fk:
+                external_sequence_fk:
                     referencedColumnName: id
             orphanRemoval: false
         lotMaterielExtFk:
@@ -145,7 +145,7 @@ EspeceIdentifiee:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                sequence_assemblee_fk:
+                internal_sequence_fk:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

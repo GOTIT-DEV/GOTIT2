@@ -108,7 +108,7 @@ class RearrangementsService {
   public function simplify() {
     $this->rawResults = array_intersect_key($this->rawResults,
       array_unique(array_map(function ($row) {
-        return $row['num_motu'] . ":" . $row['id_ref'] . ":" . $row['id_dataset'] . ":" . $row['id_methode'];
+        return $row['motu_number'] . ":" . $row['id_ref'] . ":" . $row['id_dataset'] . ":" . $row['id_methode'];
       }, $this->rawResults)));
   }
 
@@ -145,7 +145,7 @@ class RearrangementsService {
         // référence a un seul row
         $reference = $ref_rows[0];
         // nombre de rows dans l'ensemble à comparer qui matchent la référence
-        $targetCnt = count($targetSet[$reference['num_motu']]);
+        $targetCnt = count($targetSet[$reference['motu_number']]);
         if ($targetCnt == 1) {
           // target a un seul row : match
           $fwd['match'] += 1;
@@ -154,7 +154,7 @@ class RearrangementsService {
           // target a plusieurs row : lump ou reshuffling
           $lump = true;
           // référence a plusieurs rows qui matchent avec target ?
-          foreach ($targetSet[$reference['num_motu']] as $rev_row) {
+          foreach ($targetSet[$reference['motu_number']] as $rev_row) {
             $nb_motus = count($refSet[$rev_row['id_ref']]);
             if ($nb_motus > 1) {
               $lump = false;
@@ -169,7 +169,7 @@ class RearrangementsService {
         $lump = true;
         foreach ($ref_rows as $ref_row) {
           // chaque réf est un split ou un reshuffling
-          $targetCnt = count($targetSet[$ref_row['num_motu']]);
+          $targetCnt = count($targetSet[$ref_row['motu_number']]);
           if ($targetCnt == 1) {
             // un seul row dans target : split
             $fwd['split'] += 1;
@@ -223,7 +223,7 @@ class RearrangementsService {
 
     if ($this->reference < 2) {
       // morpho
-      $rawSql = "SELECT distinct Ass.num_motu,
+      $rawSql = "SELECT distinct Ass.motu_number,
                 voc.code AS methode,
                 voc.id AS id_methode,
                 motu.id AS id_dataset,
@@ -234,28 +234,28 @@ class RearrangementsService {
                 R.species,
                 R.taxname,
 
-                Ass.sequence_assemblee_fk as seq,
-                Ass.sequence_assemblee_ext_fk as seq_ext,
+                Ass.internal_sequence_fk as seq,
+                Ass.external_sequence_fk as seq_ext,
                 sta.id as id_sta
 
                 FROM Assigne Ass
                 JOIN motu ON Ass.motu_fk=motu.id
-                JOIN voc ON Ass.methode_motu_voc_fk=voc.id
+                JOIN voc ON Ass.delimitation_method_voc_fk=voc.id
                 JOIN espece_identifiee Esp
-                    ON Ass.sequence_assemblee_fk=Esp.sequence_assemblee_fk
-                    OR Ass.sequence_assemblee_ext_fk=Esp.sequence_assemblee_ext_fk
+                    ON Ass.internal_sequence_fk=Esp.internal_sequence_fk
+                    OR Ass.external_sequence_fk=Esp.external_sequence_fk
                 JOIN referentiel_taxon R ON Esp.taxon_fk=R.id
 
-                LEFT JOIN sequence_assemblee_ext sext ON Esp.sequence_assemblee_ext_fk=sext.id
-                LEFT JOIN sequence_assemblee seq ON Esp.sequence_assemblee_fk=seq.id
-                LEFT JOIN est_aligne_et_traite eat ON eat.sequence_assemblee_fk=seq.id
-                LEFT JOIN chromatogramme chr ON chr.id = eat.chromatogramme_fk
+                LEFT JOIN sequence_assemblee_ext sext ON Esp.external_sequence_fk=sext.id
+                LEFT JOIN sequence_assemblee seq ON Esp.internal_sequence_fk=seq.id
+                LEFT JOIN est_aligne_et_traite eat ON eat.internal_sequence_fk=seq.id
+                LEFT JOIN chromatogram chr ON chr.id = eat.chromatogramme_fk
                 LEFT JOIN pcr ON chr.pcr_fk=pcr.id
-                LEFT JOIN dna ON pcr.adn_fk=dna.id
+                LEFT JOIN dna ON pcr.dna_fk=dna.id
                 LEFT JOIN individu ind ON ind.id = dna.specimen_fk
                 LEFT JOIN lot_materiel lm ON ind.lot_materiel_fk=lm.id
-                LEFT JOIN collecte co ON co.id = sext.sampling_fk OR co.id=lm.sampling_fk
-                LEFT JOIN station sta ON co.station_fk = sta.id
+                LEFT JOIN sampling co ON co.id = sext.sampling_fk OR co.id=lm.sampling_fk
+                LEFT JOIN station sta ON co.site_fk = sta.id
 
                 WHERE voc.code != 'HAPLO'
                 AND motu.id = :target_dataset";
@@ -279,37 +279,37 @@ class RearrangementsService {
       $id_dataset = $this->parameters->get('dataset');
       $id_methode = $this->parameters->get('methode');
       $rawSql     = "SELECT distinct
-                a1.num_motu as id_ref,
-                a2.num_motu as num_motu,
+                a1.motu_number as id_ref,
+                a2.motu_number as motu_number,
                 v2.code AS methode,
                 v2.id AS id_methode,
                 m2.id AS id_dataset,
                 m2.libelle_motu AS libelle_motu,
                 m2.date_motu AS date_motu,
 
-                a1.sequence_assemblee_fk as seq,
-                a1.sequence_assemblee_ext_fk as seq_ext,
+                a1.internal_sequence_fk as seq,
+                a1.external_sequence_fk as seq_ext,
                 sta.id as id_sta
 
-                FROM assigne a1
+                FROM motu_number a1
                 JOIN motu m1 ON a1.motu_fk=m1.id
-                JOIN voc v1 ON a1.methode_motu_voc_fk=v1.id
-                JOIN assigne a2
-                    ON a1.sequence_assemblee_fk=a2.sequence_assemblee_fk
-                    OR a1.sequence_assemblee_ext_fk=a2.sequence_assemblee_ext_fk
-                JOIN voc v2 ON a2.methode_motu_voc_fk=v2.id
+                JOIN voc v1 ON a1.delimitation_method_voc_fk=v1.id
+                JOIN motu_number a2
+                    ON a1.internal_sequence_fk=a2.internal_sequence_fk
+                    OR a1.external_sequence_fk=a2.external_sequence_fk
+                JOIN voc v2 ON a2.delimitation_method_voc_fk=v2.id
                 JOIN motu m2 ON m2.id=a2.motu_fk
 
-                LEFT JOIN sequence_assemblee_ext sext ON a1.sequence_assemblee_ext_fk=sext.id
-                LEFT JOIN sequence_assemblee seq ON a1.sequence_assemblee_fk=seq.id
-                LEFT JOIN est_aligne_et_traite eat ON eat.sequence_assemblee_fk=seq.id
-                LEFT JOIN chromatogramme chr ON chr.id = eat.chromatogramme_fk
+                LEFT JOIN sequence_assemblee_ext sext ON a1.external_sequence_fk=sext.id
+                LEFT JOIN sequence_assemblee seq ON a1.internal_sequence_fk=seq.id
+                LEFT JOIN est_aligne_et_traite eat ON eat.internal_sequence_fk=seq.id
+                LEFT JOIN chromatogram chr ON chr.id = eat.chromatogramme_fk
                 LEFT JOIN pcr ON chr.pcr_fk=pcr.id
-                LEFT JOIN dna ON pcr.adn_fk=dna.id
+                LEFT JOIN dna ON pcr.dna_fk=dna.id
                 LEFT JOIN individu ind ON ind.id = dna.specimen_fk
                 LEFT JOIN lot_materiel lm ON ind.lot_materiel_fk=lm.id
-                LEFT JOIN collecte co ON co.id = sext.sampling_fk OR co.id=lm.sampling_fk
-                LEFT JOIN station sta ON co.station_fk = sta.id
+                LEFT JOIN sampling co ON co.id = sext.sampling_fk OR co.id=lm.sampling_fk
+                LEFT JOIN station sta ON co.site_fk = sta.id
 
                 WHERE v1.code != 'HAPLO'
                 AND v2.code !='HAPLO'
@@ -336,7 +336,7 @@ class RearrangementsService {
   public function indexResults() {
     foreach ($this->rawResults as $row) {
       $this->refIndex[$row['id_dataset']][$row['id_methode']][$row['id_ref']][]       = $row;
-      $this->compareIndex[$row['id_dataset']][$row['id_methode']][$row['num_motu']][] = $row;
+      $this->compareIndex[$row['id_dataset']][$row['id_methode']][$row['motu_number']][] = $row;
     }
   }
 }

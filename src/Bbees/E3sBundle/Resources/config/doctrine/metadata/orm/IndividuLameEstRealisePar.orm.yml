@@ -4,7 +4,7 @@ IndividuLameEstRealisePar:
     indexes:
         ce_cle_etrangere26:
             columns:
-                - personne_fk
+                - person_fk
         ce_cle_etrangere25:
             columns:
                 - individu_lame_fk
@@ -56,7 +56,7 @@ IndividuLameEstRealisePar:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                personne_fk:
+                person_fk:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

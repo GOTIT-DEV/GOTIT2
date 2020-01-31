@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EstAligneEtTraite
  *
- * @ORM\Table(name="est_aligne_et_traite", indexes={@ORM\Index(name="IDX_BD45639EEFCFD332", columns={"chromatogramme_fk"}), @ORM\Index(name="IDX_BD45639E5BE90E48", columns={"sequence_assemblee_fk"})})
+ * @ORM\Table(name="est_aligne_et_traite", indexes={@ORM\Index(name="IDX_BD45639EEFCFD332", columns={"chromatogramme_fk"}), @ORM\Index(name="IDX_BD45639E5BE90E48", columns={"internal_sequence_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -81,7 +81,7 @@ class EstAligneEtTraite
      *
      * @ORM\ManyToOne(targetEntity="SequenceAssemblee", inversedBy="estAligneEtTraites")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="sequence_assemblee_fk", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     *   @ORM\JoinColumn(name="internal_sequence_fk", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * })
      */
     private $sequenceAssembleeFk;

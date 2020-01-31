@@ -4,7 +4,7 @@ Station:
     indexes:
         ce_cle_etrangere56:
             columns:
-                - pays_fk
+                - country_fk
         ce_cle_etrangere58:
             columns:
                 - habitat_type_voc_fk
@@ -122,7 +122,7 @@ Station:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                pays_fk:
+                country_fk:
                     referencedColumnName: id
             orphanRemoval: false
         pointAccesVocFk:

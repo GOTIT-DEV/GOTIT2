@@ -4,10 +4,10 @@ SqcExtEstRealisePar:
     indexes:
         ce_cle_etrangere32:
             columns:
-                - personne_fk
+                - person_fk
         ce_cle_etrangere31:
             columns:
-                - sequence_assemblee_ext_fk
+                - external_sequence_fk
     id:
         id:
             type: bigint
@@ -46,7 +46,7 @@ SqcExtEstRealisePar:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                sequence_assemblee_ext_fk:
+                external_sequence_fk:
                     referencedColumnName: id
             orphanRemoval: false
         personneFk:
@@ -56,7 +56,7 @@ SqcExtEstRealisePar:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                personne_fk:
+                person_fk:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

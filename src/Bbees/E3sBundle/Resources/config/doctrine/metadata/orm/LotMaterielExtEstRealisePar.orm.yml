@@ -4,7 +4,7 @@ LotMaterielExtEstRealisePar:
     indexes:
         ce_cle_etrangere51:
             columns:
-                - personne_fk
+                - person_fk
         ce_cle_etrangere52:
             columns:
                 - lot_materiel_ext_fk
@@ -46,7 +46,7 @@ LotMaterielExtEstRealisePar:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                personne_fk:
+                person_fk:
                     referencedColumnName: id
             orphanRemoval: false
         lotMaterielExtFk:

@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Chromatogramme
  *
- * @ORM\Table(name="chromatogramme", uniqueConstraints={@ORM\UniqueConstraint(name="cu_chromatogramme_cle_primaire", columns={"code_chromato"})}, indexes={@ORM\Index(name="IDX_FCB2DAB7286BBCA9", columns={"primer_chromato_voc_fk"}), @ORM\Index(name="IDX_FCB2DAB7206FE5C0", columns={"qualite_chromato_voc_fk"}), @ORM\Index(name="IDX_FCB2DAB7E8441376", columns={"etablissement_fk"}), @ORM\Index(name="IDX_FCB2DAB72B63D494", columns={"pcr_fk"})})
+ * @ORM\Table(name="chromatogram", uniqueConstraints={@ORM\UniqueConstraint(name="cu_chromatogramme_cle_primaire", columns={"chromatogram_code"})}, indexes={@ORM\Index(name="IDX_FCB2DAB7286BBCA9", columns={"chromato_primer_voc_fk"}), @ORM\Index(name="IDX_FCB2DAB7206FE5C0", columns={"chromato_quality_voc_fk"}), @ORM\Index(name="IDX_FCB2DAB7E8441376", columns={"institution_fk"}), @ORM\Index(name="IDX_FCB2DAB72B63D494", columns={"pcr_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -34,28 +34,28 @@ class Chromatogramme
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="chromatogramme_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="chromatogram_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="code_chromato", type="string", length=255, nullable=false)
+     * @ORM\Column(name="chromatogram_code", type="string", length=255, nullable=false)
      */
     private $codeChromato;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="num_yas", type="string", length=255, nullable=false)
+     * @ORM\Column(name="chromatogram_number", type="string", length=255, nullable=false)
      */
     private $numYas;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="commentaire_chromato", type="text", nullable=true)
+     * @ORM\Column(name="chromatogram_comments", type="text", nullable=true)
      */
     private $commentaireChromato;
 
@@ -92,7 +92,7 @@ class Chromatogramme
      *
      * @ORM\ManyToOne(targetEntity="Voc")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="primer_chromato_voc_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="chromato_primer_voc_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $primerChromatoVocFk;
@@ -102,7 +102,7 @@ class Chromatogramme
      *
      * @ORM\ManyToOne(targetEntity="Voc")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="qualite_chromato_voc_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="chromato_quality_voc_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $qualiteChromatoVocFk;
@@ -112,7 +112,7 @@ class Chromatogramme
      *
      * @ORM\ManyToOne(targetEntity="Etablissement")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="etablissement_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="institution_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $etablissementFk;

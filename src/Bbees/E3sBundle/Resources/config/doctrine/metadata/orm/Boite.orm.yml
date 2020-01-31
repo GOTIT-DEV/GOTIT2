@@ -1,20 +1,20 @@
 Boite:
     type: entity
-    table: boite
+    table: storage_box
     indexes:
         ce_cle_etrangere67:
             columns:
-                - code_collection_voc_fk
+                - collection_code_voc_fk
         ce_cle_etrangere68:
             columns:
-                - type_boite_voc_fk
+                - box_type_voc_fk
         ce_cle_etrangere66:
             columns:
-                - type_collection_voc_fk
+                - collection_type_voc_fk
     uniqueConstraints:
         cu_boite_cle_primaire:
             columns:
-                - code_boite
+                - box_code
     id:
         id:
             type: bigint
@@ -31,14 +31,14 @@ Boite:
             length: 255
             options:
                 fixed: false
-            column: code_boite
+            column: box_code
         libelleBoite:
             type: string
             nullable: true
             length: 1024
             options:
                 fixed: false
-            column: libelle_boite
+            column: box_title
         libelleCollection:
             type: string
             nullable: true
@@ -52,7 +52,7 @@ Boite:
             length: null
             options:
                 fixed: false
-            column: commentaire_boite
+            column: box_comments
         dateCre:
             type: datetime
             nullable: true
@@ -81,7 +81,7 @@ Boite:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                type_collection_voc_fk:
+                collection_type_voc_fk:
                     referencedColumnName: id
             orphanRemoval: false
         codeCollectionVocFk:
@@ -91,7 +91,7 @@ Boite:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                code_collection_voc_fk:
+                collection_code_voc_fk:
                     referencedColumnName: id
             orphanRemoval: false
         typeBoiteVocFk:
@@ -101,7 +101,7 @@ Boite:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                type_boite_voc_fk:
+                box_type_voc_fk:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

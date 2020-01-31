@@ -1,19 +1,19 @@
 Assigne:
     type: entity
-    table: assigne
+    table: motu_number
     indexes:
         ce_cle_etrangere12:
             columns:
-                - methode_motu_voc_fk
+                - delimitation_method_voc_fk
         ce_cle_etrangere13:
             columns:
-                - sequence_assemblee_fk
+                - internal_sequence_fk
         ce_cle_etrangere14:
             columns:
                 - motu_fk
         ce_cle_etrangere11:
             columns:
-                - sequence_assemblee_ext_fk
+                - external_sequence_fk
     id:
         id:
             type: bigint
@@ -29,7 +29,7 @@ Assigne:
             nullable: false
             options:
                 unsigned: false
-            column: num_motu
+            column: motu_number
         dateCre:
             type: datetime
             nullable: true
@@ -58,7 +58,7 @@ Assigne:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                sequence_assemblee_ext_fk:
+                external_sequence_fk:
                     referencedColumnName: id
             orphanRemoval: false
         methodeMotuVocFk:
@@ -68,7 +68,7 @@ Assigne:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                methode_motu_voc_fk:
+                delimitation_method_voc_fk:
                     referencedColumnName: id
             orphanRemoval: false
         sequenceAssembleeFk:
@@ -78,7 +78,7 @@ Assigne:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                sequence_assemblee_fk:
+                internal_sequence_fk:
                     referencedColumnName: id
             orphanRemoval: false
         motuFk:

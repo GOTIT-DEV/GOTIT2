@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Assigne
  *
- * @ORM\Table(name="assigne", indexes={@ORM\Index(name="IDX_4E79CB8DCDD1F756", columns={"sequence_assemblee_ext_fk"}), @ORM\Index(name="IDX_4E79CB8D40E7E0B3", columns={"methode_motu_voc_fk"}), @ORM\Index(name="IDX_4E79CB8D5BE90E48", columns={"sequence_assemblee_fk"}), @ORM\Index(name="IDX_4E79CB8D503B4409", columns={"motu_fk"})})
+ * @ORM\Table(name="motu_number", indexes={@ORM\Index(name="IDX_4E79CB8DCDD1F756", columns={"external_sequence_fk"}), @ORM\Index(name="IDX_4E79CB8D40E7E0B3", columns={"delimitation_method_voc_fk"}), @ORM\Index(name="IDX_4E79CB8D5BE90E48", columns={"internal_sequence_fk"}), @ORM\Index(name="IDX_4E79CB8D503B4409", columns={"motu_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -34,14 +34,14 @@ class Assigne
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="assigne_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="motu_number_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="num_motu", type="bigint", nullable=false)
+     * @ORM\Column(name="motu_number", type="bigint", nullable=false)
      */
     private $numMotu;
 
@@ -78,7 +78,7 @@ class Assigne
      *
      * @ORM\ManyToOne(targetEntity="SequenceAssembleeExt")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="sequence_assemblee_ext_fk", referencedColumnName="id", nullable=true)
+     *   @ORM\JoinColumn(name="external_sequence_fk", referencedColumnName="id", nullable=true)
      * })
      */
     private $sequenceAssembleeExtFk;
@@ -88,7 +88,7 @@ class Assigne
      *
      * @ORM\ManyToOne(targetEntity="Voc")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="methode_motu_voc_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="delimitation_method_voc_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $methodeMotuVocFk;
@@ -98,7 +98,7 @@ class Assigne
      *
      * @ORM\ManyToOne(targetEntity="SequenceAssemblee")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="sequence_assemblee_fk", referencedColumnName="id", nullable=true)
+     *   @ORM\JoinColumn(name="internal_sequence_fk", referencedColumnName="id", nullable=true)
      * })
      */
     private $sequenceAssembleeFk;

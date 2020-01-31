@@ -4,7 +4,7 @@ EstIdentifiePar:
     indexes:
         ce_cle_etrangere10:
             columns:
-                - personne_fk
+                - person_fk
         ce_cle_etrangere9:
             columns:
                 - espece_identifiee_fk
@@ -46,7 +46,7 @@ EstIdentifiePar:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                personne_fk:
+                person_fk:
                     referencedColumnName: id
             orphanRemoval: false
         especeentifieeFk:

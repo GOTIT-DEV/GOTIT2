@@ -23,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Boite
  *
- * @ORM\Table(name="boite", uniqueConstraints={@ORM\UniqueConstraint(name="cu_boite_cle_primaire", columns={"code_boite"})}, indexes={@ORM\Index(name="IDX_7718EDEF9E7B0E1F", columns={"type_collection_voc_fk"}), @ORM\Index(name="IDX_7718EDEF41A72D48", columns={"code_collection_voc_fk"}), @ORM\Index(name="IDX_7718EDEF57552D30", columns={"type_boite_voc_fk"})})
+ * @ORM\Table(name="storage_box", uniqueConstraints={@ORM\UniqueConstraint(name="cu_boite_cle_primaire", columns={"box_code"})}, indexes={@ORM\Index(name="IDX_7718EDEF9E7B0E1F", columns={"collection_type_voc_fk"}), @ORM\Index(name="IDX_7718EDEF41A72D48", columns={"collection_code_voc_fk"}), @ORM\Index(name="IDX_7718EDEF57552D30", columns={"box_type_voc_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -35,28 +35,28 @@ class Boite
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="boite_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="storage_box_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="code_boite", type="string", length=255, nullable=false)
+     * @ORM\Column(name="box_code", type="string", length=255, nullable=false)
      */
     private $codeBoite;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="libelle_boite", type="string", length=1024, nullable=false)
+     * @ORM\Column(name="box_title", type="string", length=1024, nullable=false)
      */
     private $libelleBoite;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="commentaire_boite", type="text", nullable=true)
+     * @ORM\Column(name="box_comments", type="text", nullable=true)
      */
     private $commentaireBoite;
 
@@ -93,7 +93,7 @@ class Boite
      *
      * @ORM\ManyToOne(targetEntity="Voc")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="type_collection_voc_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="collection_type_voc_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $typeCollectionVocFk;
@@ -103,7 +103,7 @@ class Boite
      *
      * @ORM\ManyToOne(targetEntity="Voc")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="code_collection_voc_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="collection_code_voc_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $codeCollectionVocFk;
@@ -113,7 +113,7 @@ class Boite
      *
      * @ORM\ManyToOne(targetEntity="Voc")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="type_boite_voc_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="box_type_voc_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $typeBoiteVocFk;

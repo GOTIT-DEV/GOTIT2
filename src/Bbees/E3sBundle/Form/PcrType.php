@@ -41,7 +41,7 @@ class PcrType extends AbstractType
                             return $er->createQueryBuilder('adn')
                                     ->where('adn.id = :id')
                                     ->setParameter('id', $id);
-                       }, 'placeholder' => 'CodeAdn :'.$id , 'choice_label' => 'dna_code', 'multiple' => false, 'expanded' => false,  'disabled'=> false))  
+                       }, 'placeholder' => 'CodeAdn :'.$id , 'choice_label' => 'codeAdn', 'multiple' => false, 'expanded' => false,  'disabled'=> false))  
                 ->add('adn', null, ['mapped' => false, 'attr' => ['class' => 'typeahead typeahead-adn', 'data-target_id' => "bbees_e3sbundle_pcr_adnId", 'name' => "where", 'placeholder' => "Where...",  "maxlength" => "255"], ])
                 ->add('adnId', HiddenType::class, array( 'mapped' => false, 'required' => true, ))
                 ->add('codePcr')

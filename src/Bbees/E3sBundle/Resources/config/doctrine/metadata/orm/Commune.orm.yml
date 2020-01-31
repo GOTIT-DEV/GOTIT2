@@ -1,14 +1,14 @@
 Commune:
     type: entity
-    table: commune
+    table: municipality
     indexes:
         ce_cle_etrangere39:
             columns:
-                - pays_fk
+                - country_fk
     uniqueConstraints:
         cu_commune_cle_primaire:
             columns:
-                - code_commune
+                - municipality_code
     id:
         id:
             type: bigint
@@ -25,21 +25,21 @@ Commune:
             length: 255
             options:
                 fixed: false
-            column: code_commune
+            column: municipality_code
         nomCommune:
             type: string
             nullable: false
             length: 1024
             options:
                 fixed: false
-            column: nom_commune
+            column: municipality_name
         nomRegion:
             type: string
             nullable: false
             length: 1024
             options:
                 fixed: false
-            column: nom_region
+            column: region_name
         dateCre:
             type: datetime
             nullable: true
@@ -68,7 +68,7 @@ Commune:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                pays_fk:
+                country_fk:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

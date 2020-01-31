@@ -76,7 +76,7 @@ class AdnType extends AbstractType
                                ->setParameter('codetype', 'ADN')
                                ->orderBy('LOWER(boite.codeBoite)', 'ASC');
                         }, 
-                    'placeholder' => 'Choose a Box', 'choice_label' => 'code_boite', 'multiple' => false, 'expanded' => false, 'required' => false,))
+                    'placeholder' => 'Choose a Box', 'choice_label' => 'codeBoite', 'multiple' => false, 'expanded' => false, 'required' => false,))
                 ->add('adnEstRealisePars', CollectionType::class , array(
         		'entry_type' => AdnEstRealiseParEmbedType::class,
         		'allow_add' => true,

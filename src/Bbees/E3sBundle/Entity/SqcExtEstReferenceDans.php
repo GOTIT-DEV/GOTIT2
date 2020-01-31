@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * SqcExtEstReferenceDans
  *
- * @ORM\Table(name="sqc_ext_est_reference_dans", indexes={@ORM\Index(name="IDX_8D0E8D6A821B1D3F", columns={"source_fk"}), @ORM\Index(name="IDX_8D0E8D6ACDD1F756", columns={"sequence_assemblee_ext_fk"})})
+ * @ORM\Table(name="sqc_ext_est_reference_dans", indexes={@ORM\Index(name="IDX_8D0E8D6A821B1D3F", columns={"source_fk"}), @ORM\Index(name="IDX_8D0E8D6ACDD1F756", columns={"external_sequence_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -81,7 +81,7 @@ class SqcExtEstReferenceDans
      *
      * @ORM\ManyToOne(targetEntity="SequenceAssembleeExt", inversedBy="sqcExtEstReferenceDanss")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="sequence_assemblee_ext_fk", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     *   @ORM\JoinColumn(name="external_sequence_fk", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * })
      */
     private $sequenceAssembleeExtFk;

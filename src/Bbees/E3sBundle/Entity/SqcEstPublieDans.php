@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * SqcEstPublieDans
  *
- * @ORM\Table(name="sqc_est_publie_dans", indexes={@ORM\Index(name="IDX_BA97B9C4821B1D3F", columns={"source_fk"}), @ORM\Index(name="IDX_BA97B9C45BE90E48", columns={"sequence_assemblee_fk"})})
+ * @ORM\Table(name="sqc_est_publie_dans", indexes={@ORM\Index(name="IDX_BA97B9C4821B1D3F", columns={"source_fk"}), @ORM\Index(name="IDX_BA97B9C45BE90E48", columns={"internal_sequence_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -81,7 +81,7 @@ class SqcEstPublieDans
      *
      * @ORM\ManyToOne(targetEntity="SequenceAssemblee", inversedBy="sqcEstPublieDanss")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="sequence_assemblee_fk", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     *   @ORM\JoinColumn(name="internal_sequence_fk", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * })
      */
     private $sequenceAssembleeFk;

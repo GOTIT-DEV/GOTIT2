@@ -1,13 +1,13 @@
 AdnEstRealisePar:
     type: entity
-    table: adn_est_realise_par
+    table: dna_is_extracted_by
     indexes:
         ce_cle_etrangere23:
             columns:
-                - adn_fk
+                - dna_fk
         ce_cle_etrangere24:
             columns:
-                - personne_fk
+                - person_fk
     id:
         id:
             type: bigint
@@ -46,7 +46,7 @@ AdnEstRealisePar:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                adn_fk:
+                dna_fk:
                     referencedColumnName: id
             orphanRemoval: false
         personneFk:
@@ -56,7 +56,7 @@ AdnEstRealisePar:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                personne_fk:
+                person_fk:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

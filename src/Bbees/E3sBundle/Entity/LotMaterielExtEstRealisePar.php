@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * LotMaterielExtEstRealisePar
  *
- * @ORM\Table(name="lot_materiel_ext_est_realise_par", indexes={@ORM\Index(name="IDX_7D78636FB53CD04C", columns={"personne_fk"}), @ORM\Index(name="IDX_7D78636F40D80ECD", columns={"lot_materiel_ext_fk"})})
+ * @ORM\Table(name="lot_materiel_ext_est_realise_par", indexes={@ORM\Index(name="IDX_7D78636FB53CD04C", columns={"person_fk"}), @ORM\Index(name="IDX_7D78636F40D80ECD", columns={"lot_materiel_ext_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -71,7 +71,7 @@ class LotMaterielExtEstRealisePar
      *
      * @ORM\ManyToOne(targetEntity="Personne")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="personne_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="person_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $personneFk;

@@ -40,7 +40,7 @@ class LotMaterielType extends AbstractType
                             return $er->createQueryBuilder('collecte')
                                     ->orderBy('collecte.codeCollecte', 'ASC');
                         },
-                    'placeholder' => 'Choose a Collecte', 'choice_label' => 'code_collecte', 'multiple' => false, 'expanded' => false))
+                    'placeholder' => 'Choose a Collecte', 'choice_label' => 'codeCollecte', 'multiple' => false, 'expanded' => false))
                 ->add('codeLotMateriel')
                 ->add('dateLotMateriel', DateType::class, array('widget' => 'text','format' => 'dd-MM-yyyy', 'required' => false, ))
                 ->add('datePrecisionVocFk', EntityType::class, array('class' => 'BbeesE3sBundle:Voc', 
@@ -98,7 +98,7 @@ class LotMaterielType extends AbstractType
                                ->setParameter('codetype', 'LOT')
                                ->orderBy('LOWER(boite.codeBoite)', 'ASC');
                         }, 
-                    'placeholder' => 'Choose a Box', 'choice_label' => 'code_boite', 'multiple' => false, 'expanded' => false, 'required' => false,))
+                    'placeholder' => 'Choose a Box', 'choice_label' => 'codeBoite', 'multiple' => false, 'expanded' => false, 'required' => false,))
                 ->add('compositionLotMateriels', CollectionType::class , array(
         		'entry_type' => CompositionLotMaterielEmbedType::class,
         		'allow_add' => true,

@@ -23,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Collecte
  *
- * @ORM\Table(name="collecte", uniqueConstraints={@ORM\UniqueConstraint(name="cu_collecte_cle_primaire", columns={"code_collecte"})}, indexes={@ORM\Index(name="IDX_55AE4A3DA30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_55AE4A3D50BB334E", columns={"leg_voc_fk"}), @ORM\Index(name="IDX_55AE4A3D369AB36B", columns={"station_fk"})})
+ * @ORM\Table(name="sampling", uniqueConstraints={@ORM\UniqueConstraint(name="cu_collecte_cle_primaire", columns={"sample_code"})}, indexes={@ORM\Index(name="IDX_55AE4A3DA30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_55AE4A3D50BB334E", columns={"donation_voc_fk"}), @ORM\Index(name="IDX_55AE4A3D369AB36B", columns={"site_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -35,14 +35,14 @@ class Collecte
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="collecte_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="sampling_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="code_collecte", type="string", length=255, nullable=false)
+     * @ORM\Column(name="sample_code", type="string", length=255, nullable=false)
      */
     private $codeCollecte;
 
@@ -56,35 +56,35 @@ class Collecte
     /**
      * @var integer
      *
-     * @ORM\Column(name="duree_echantillonnage_mn", type="bigint", nullable=true)
+     * @ORM\Column(name="sampling_duration", type="bigint", nullable=true)
      */
     private $dureeEchantillonnageMn;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="temperature_c", type="float", precision=10, scale=0, nullable=true)
+     * @ORM\Column(name="temperature", type="float", precision=10, scale=0, nullable=true)
      */
     private $temperatureC;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="conductivite_micro_sie_cm", type="float", precision=10, scale=0, nullable=true)
+     * @ORM\Column(name="specific_conductance", type="float", precision=10, scale=0, nullable=true)
      */
     private $conductiviteMicroSieCm;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="a_faire", type="smallint", nullable=false)
+     * @ORM\Column(name="sample_status", type="smallint", nullable=false)
      */
     private $aFaire;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="commentaire_collecte", type="text", nullable=true)
+     * @ORM\Column(name="sampling_comments", type="text", nullable=true)
      */
     private $commentaireCollecte;
 
@@ -131,7 +131,7 @@ class Collecte
      *
      * @ORM\ManyToOne(targetEntity="Voc")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="leg_voc_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="donation_voc_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $legVocFk;
@@ -141,7 +141,7 @@ class Collecte
      *
      * @ORM\ManyToOne(targetEntity="Station")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="station_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="site_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $stationFk;

@@ -7,7 +7,7 @@ LotMaterielEstRealisePar:
                 - lot_materiel_fk
         ce_cle_etrangere28:
             columns:
-                - personne_fk
+                - person_fk
     id:
         id:
             type: bigint
@@ -46,7 +46,7 @@ LotMaterielEstRealisePar:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                personne_fk:
+                person_fk:
                     referencedColumnName: id
             orphanRemoval: false
         lotMaterielFk:

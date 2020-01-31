@@ -70,16 +70,16 @@ class ImportFileE3s
             if ($flagAdn == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["dna_code"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             $flagBoite = 1;
             $flagBoiteAffecte = 0;
-            if($data["code_boite"] != null || $data["code_boite"] != '') {
+            if($data["box_code"] != null || $data["box_code"] != '') {
                 $flagBoiteAffecte = 1;
-                $query_boite = $em->getRepository("BbeesE3sBundle:Boite")->createQueryBuilder('boite')
-                ->where('boite.codeBoite LIKE :code_boite')
-                ->setParameter('code_boite', $data["code_boite"])
+                $query_boite = $em->getRepository("BbeesE3sBundle:Boite")->createQueryBuilder('storage_box')
+                ->where('storage_box.codeBoite LIKE :box_code')
+                ->setParameter('box_code', $data["box_code"])
                 ->getQuery()
                 ->getResult(); 
                 $flagBoite = count($query_boite);
             }               
-            if ($flagBoiteAffecte && $flagBoite == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["code_boite"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
+            if ($flagBoiteAffecte && $flagBoite == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["box_code"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             if ($flagAdn && $flagBoite) { 
                 if ( $flagBoiteAffecte ) { 
                     $query_adn[0]->setBoiteFk($query_boite[0]);
@@ -141,17 +141,17 @@ class ImportFileE3s
             if ($flagAdn == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["dna_code"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             $flagBoite = 1;
             $flagBoiteAffecte = 0;
-            if($data["code_boite"] != null || $data["code_boite"] != '') {
+            if($data["box_code"] != null || $data["box_code"] != '') {
                 $flagBoiteAffecte = 1;
-                $query_boite = $em->getRepository("BbeesE3sBundle:Boite")->createQueryBuilder('boite')
-                ->where('boite.codeBoite LIKE :code_boite')
-                ->setParameter('code_boite', $data["code_boite"])
+                $query_boite = $em->getRepository("BbeesE3sBundle:Boite")->createQueryBuilder('storage_box')
+                ->where('storage_box.codeBoite LIKE :box_code')
+                ->setParameter('box_code', $data["box_code"])
                 ->getQuery()
                 ->getResult(); 
                 $flagBoite = count($query_boite);
             }     
             if ($flagBoiteAffecte == 0) $message .= $this->translator->trans("importfileService.ERROR no box code").'<b> : '.$data["code_lame_coll"]." </b> <br>ligne ".(string)($l+2).": ".join(';', $data)."<br>"; 
-            if ($flagBoiteAffecte && $flagBoite == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["code_boite"].'</b>  <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
+            if ($flagBoiteAffecte && $flagBoite == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["box_code"].'</b>  <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             if ($flagAdn && $flagBoite && $flagBoiteAffecte) { 
                 if ($query_adn[0]->getBoiteFk() != null) {
                      $message .= $this->translator->trans('importfileService.ERROR dna already store').'<b> : '.$data["dna_code"].'</b> / '.$query_adn[0]->getBoiteFk()->getCodeBoite().' <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>";                                    
@@ -210,16 +210,16 @@ class ImportFileE3s
             if ($flagLame == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["code_lame_coll"].'</b>  <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             $flagBoite = 1;
             $flagBoiteAffecte = 0;
-            if($data["code_boite"] != null || $data["code_boite"] != '') {
+            if($data["box_code"] != null || $data["box_code"] != '') {
                 $flagBoiteAffecte = 1;
-                $query_boite = $em->getRepository("BbeesE3sBundle:Boite")->createQueryBuilder('boite')
-                ->where('boite.codeBoite LIKE :code_boite')
-                ->setParameter('code_boite', $data["code_boite"])
+                $query_boite = $em->getRepository("BbeesE3sBundle:Boite")->createQueryBuilder('storage_box')
+                ->where('storage_box.codeBoite LIKE :box_code')
+                ->setParameter('box_code', $data["box_code"])
                 ->getQuery()
                 ->getResult(); 
                 $flagBoite = count($query_boite);
             }               
-            if ($flagBoiteAffecte && $flagBoite == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["code_boite"].'</b>  <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
+            if ($flagBoiteAffecte && $flagBoite == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["box_code"].'</b>  <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             if ($flagLame && $flagBoite) { 
                 if ( $flagBoiteAffecte ) { 
                     $query_lame[0]->setBoiteFk($query_boite[0]);
@@ -280,17 +280,17 @@ class ImportFileE3s
             if ($flagLame == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["code_lame_coll"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             $flagBoite = 1;
             $flagBoiteAffecte = 0;
-            if($data["code_boite"] != null || $data["code_boite"] != '') {
+            if($data["box_code"] != null || $data["box_code"] != '') {
                 $flagBoiteAffecte = 1;
-                $query_boite = $em->getRepository("BbeesE3sBundle:Boite")->createQueryBuilder('boite')
-                ->where('boite.codeBoite LIKE :code_boite')
-                ->setParameter('code_boite', $data["code_boite"])
+                $query_boite = $em->getRepository("BbeesE3sBundle:Boite")->createQueryBuilder('storage_box')
+                ->where('storage_box.codeBoite LIKE :box_code')
+                ->setParameter('box_code', $data["box_code"])
                 ->getQuery()
                 ->getResult(); 
                 $flagBoite = count($query_boite);
             }     
             if ($flagBoiteAffecte == 0) $message .= $this->translator->trans("importfileService.ERROR no box code").'<b> : '.$data["code_lame_coll"]." </b> <br>ligne ".(string)($l+2).": ".join(';', $data)."<br>"; 
-            if ($flagBoiteAffecte && $flagBoite == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["code_boite"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
+            if ($flagBoiteAffecte && $flagBoite == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["box_code"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             if ($flagLame && $flagBoite && $flagBoiteAffecte) { 
                 if ($query_lame[0]->getBoiteFk() != null) {
                      $message .= $this->translator->trans('importfileService.ERROR slide already store').'<b> : '.$data["code_lame_coll"].'</b> / '.$query_lame[0]->getBoiteFk()->getCodeBoite().' <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>";                                    
@@ -349,16 +349,16 @@ class ImportFileE3s
             if ($flagLot == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["code_lot_materiel"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             $flagBoite = 1;
             $flagBoiteAffecte = 0;
-            if($data["code_boite"] != null || $data["code_boite"] != '') {
+            if($data["box_code"] != null || $data["box_code"] != '') {
                 $flagBoiteAffecte = 1;
-                $query_boite = $em->getRepository("BbeesE3sBundle:Boite")->createQueryBuilder('boite')
-                ->where('boite.codeBoite LIKE :code_boite')
-                ->setParameter('code_boite', $data["code_boite"])
+                $query_boite = $em->getRepository("BbeesE3sBundle:Boite")->createQueryBuilder('storage_box')
+                ->where('storage_box.codeBoite LIKE :box_code')
+                ->setParameter('box_code', $data["box_code"])
                 ->getQuery()
                 ->getResult(); 
                 $flagBoite = count($query_boite);
             }               
-            if ($flagBoiteAffecte && $flagBoite == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["code_boite"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
+            if ($flagBoiteAffecte && $flagBoite == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["box_code"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             if ($flagLot && $flagBoite) { 
                 if ( $flagBoiteAffecte ) { 
                     $query_lot[0]->setBoiteFk($query_boite[0]);
@@ -419,17 +419,17 @@ class ImportFileE3s
             if ($flagLot == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["code_lot_materiel"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             $flagBoite = 1;
             $flagBoiteAffecte = 0;
-            if($data["code_boite"] != null || $data["code_boite"] != '') {
+            if($data["box_code"] != null || $data["box_code"] != '') {
                 $flagBoiteAffecte = 1;
-                $query_boite = $em->getRepository("BbeesE3sBundle:Boite")->createQueryBuilder('boite')
-                ->where('boite.codeBoite LIKE :code_boite')
-                ->setParameter('code_boite', $data["code_boite"])
+                $query_boite = $em->getRepository("BbeesE3sBundle:Boite")->createQueryBuilder('storage_box')
+                ->where('storage_box.codeBoite LIKE :box_code')
+                ->setParameter('box_code', $data["box_code"])
                 ->getQuery()
                 ->getResult(); 
                 $flagBoite = count($query_boite);
             }     
             if ($flagBoiteAffecte == 0) $message .= $this->translator->trans("importfileService.ERROR no box code for material").'<b> : '.$data["code_lot_materiel"]."</b> <br>ligne ".(string)($l+2).": ".join(';', $data)."<br>"; 
-            if ($flagBoiteAffecte && $flagBoite == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["code_boite"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
+            if ($flagBoiteAffecte && $flagBoite == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["box_code"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             if ($flagLot && $flagBoite && $flagBoiteAffecte) { 
                 if ($query_lot[0]->getBoiteFk() != null) {
                      $message .= $this->translator->trans('importfileService.ERROR lot already store').'<b> : '.$data["code_lot_materiel"].'</b> / '.$query_lot[0]->getBoiteFk()->getCodeBoite().' <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>";                                    
@@ -915,11 +915,11 @@ class ImportFileE3s
                 }  
             }
 
-            # Record of chromatogramme   
+            # Record of chromatogram   
             $entityRel = new \Bbees\E3sBundle\Entity\Chromatogramme();
             $method = "setPcrFk";
             $entityRel->$method($entity);             
-            foreach($columnByTable["chromatogramme"] as $ColCsv){  
+            foreach($columnByTable["chromatogram"] as $ColCsv){  
                 $field = $importFileCsvService->TransformNameForSymfony($ColCsv,'field');   
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                 if ($dataColCsv !== $data[$ColCsv] ) {
@@ -928,7 +928,7 @@ class ImportFileE3s
                 $flag_foreign = preg_match('(\((.*?)\))', $ColCsv, $foreign_content);  // flag to know if 1) it is a foreign key 
                 if (!$flag_foreign) { 
                     $varfield = explode(".", $field)[1];
-                    if($ColCsv == 'chromatogramme.code_chromato') { // On teste pour savoir si le chromatogramme.code_chromato a déja été créé. 
+                    if($ColCsv == 'chromatogram.chromatogram_code') { // On teste pour savoir si le chromatogram.chromatogram_code a déja été créé. 
                         $record_entity = $em->getRepository("BbeesE3sBundle:Chromatogramme")->findOneBy(array("codeChromato" => $dataColCsv)); 
                         if($record_entity !== NULL){ 
                            $message .= $this->translator->trans('importfileService.ERROR duplicate code').'<b> : '.$data[$ColCsv]."</b> <br>ligne ".(string)($l+2).": ".join(';', $data)."<br>"; 
@@ -939,7 +939,7 @@ class ImportFileE3s
                     $method =  $importFileCsvService->TransformNameForSymfony($varfield,'set');
                     $entityRel->$method($dataColCsv);                     
                 }
-                if($flag_foreign && $ColCsv != 'chromatogramme.pcr_fk(pcr.code_pcr)'){ // case of a foreign key (where there are parentheses in the field name) 
+                if($flag_foreign && $ColCsv != 'chromatogram.pcr_fk(pcr.code_pcr)'){ // case of a foreign key (where there are parentheses in the field name) 
                    $varfield = explode(".", strstr($field, '(', true))[1];
                    $linker = explode('.', trim($foreign_content[0],"()"));  
                    $foreign_table = $importFileCsvService->TransformNameForSymfony($linker[0],'table'); 
@@ -1171,7 +1171,7 @@ class ImportFileE3s
             $compt++;   
             # Record of the chromatogram   
             $entity = new \Bbees\E3sBundle\Entity\Chromatogramme();            
-            foreach($columnByTable["chromatogramme"] as $ColCsv){  
+            foreach($columnByTable["chromatogram"] as $ColCsv){  
                 $field = $importFileCsvService->TransformNameForSymfony($ColCsv,'field');   
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                 if ($dataColCsv !== $data[$ColCsv] ) {
@@ -1181,7 +1181,7 @@ class ImportFileE3s
                 if (!$flag_foreign) { 
                     $varfield = explode(".", $field)[1];
                     // var_dump($ColCsv); var_dump($field); exit;
-                    if($ColCsv == 'chromatogramme.code_chromato') {  
+                    if($ColCsv == 'chromatogram.chromatogram_code') {  
                         $record_entity = $em->getRepository("BbeesE3sBundle:Chromatogramme")->findOneBy(array("codeChromato" => $dataColCsv)); 
                         if($record_entity !== NULL){ 
                            $message .= $this->translator->trans('importfileService.ERROR duplicate code').'<b> : '.$data[$ColCsv]."</b> <br>ligne ".(string)($l+2).": ".join(';', $data)."<br>"; 
@@ -1349,7 +1349,7 @@ class ImportFileE3s
             $em->persist($entity);
             
             # Record of AdnEstRealisePar                     
-             foreach($columnByTable["adn_est_realise_par"] as $ColCsv){   
+             foreach($columnByTable["dna_is_extracted_by"] as $ColCsv){   
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                 if ($dataColCsv !== $data[$ColCsv] ) {
                     $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -1495,7 +1495,7 @@ class ImportFileE3s
         foreach($csvData as $l => $data){ // 1- Line-to-line data processing ($ l)
             $compt++;
             $entity = new \Bbees\E3sBundle\Entity\Collecte();   
-            foreach($columnByTable["collecte"] as $ColCsv){  
+            foreach($columnByTable["sampling"] as $ColCsv){  
                 $field = $importFileCsvService->TransformNameForSymfony($ColCsv,'field');                 
                 $flag_foreign = preg_match('(\((.*?)\))', $ColCsv, $foreign_content);  // flag to know if 1) it is a foreign key 
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
@@ -1505,14 +1505,14 @@ class ImportFileE3s
                 if (!$flag_foreign) { 
                     $varfield = explode(".", $field)[1];
                     // var_dump($ColCsv); var_dump($field); exit;
-                    if($field == 'collecte.codeCollecte') { 
+                    if($field == 'sampling.codeCollecte') { 
                         $record_entity = $em->getRepository("BbeesE3sBundle:Collecte")->findOneBy(array("codeCollecte" => $dataColCsv)); 
                         if($record_entity !== NULL){ 
                            $message .= $this->translator->trans('importfileService.ERROR duplicate code').'<b> : '.$dataColCsv."</b> <br>ligne ".(string)($l+2).": ".join(';', $data)."<br>"; 
                         }
                     }
                     // control and standardization of field formats 
-                    if ($ColCsv == 'collecte.conductivite_micro_sie_cm' || $ColCsv == 'collecte.temperature_c') {
+                    if ($ColCsv == 'sampling.specific_conductance' || $ColCsv == 'sampling.temperature') {
                         if ($dataColCsv != '') {
                             $dataColCsv = floatval(str_replace(",", ".", $dataColCsv));
                             if ($dataColCsv == '') $message .= $this->translator->trans('importfileService.ERROR bad float format').'<b> : '.$data[$ColCsv]."</b>  <br>ligne ".(string)($l+2).": ".join(';', $data)."<br>"; 
@@ -1520,14 +1520,14 @@ class ImportFileE3s
                             $dataColCsv = NULL; 
                         }
                     }
-                    if ($ColCsv == 'collecte.duree_echantillonnage_mn' ) { 
+                    if ($ColCsv == 'sampling.sampling_duration' ) { 
                          if ($dataColCsv != '') {
                             $dataColCsv = intval(str_replace(",", ".", $dataColCsv)); 
                          } else {
                             $dataColCsv = NULL; 
                         }
                     }
-                    if ($ColCsv == 'collecte.a_faire') { 
+                    if ($ColCsv == 'sampling.sample_status') { 
                         if ($dataColCsv != '') {
                             if ($dataColCsv == 'OUI' || $dataColCsv == 'YES' || $dataColCsv == '1') {$dataColCsv = 1 ;}
                             if ($dataColCsv == 'NON' || $dataColCsv == 'NO' || $dataColCsv == '0') {$dataColCsv = 0 ;}
@@ -1538,7 +1538,7 @@ class ImportFileE3s
                             $dataColCsv = NULL; 
                         }
                     }
-                    if ($ColCsv == 'collecte.date_collecte' ) {
+                    if ($ColCsv == 'sampling.date_collecte' ) {
                         if ($dataColCsv != ''){
                             $eventDate = date_create_from_format('d/m/Y', $dataColCsv);
                             if (!$eventDate) {
@@ -1563,7 +1563,7 @@ class ImportFileE3s
                     $method =  $importFileCsvService->TransformNameForSymfony($varfield,'set');
                     $entity->$method($dataColCsv);                     
                 }
-                if($flag_foreign){ // case of a foreign key (where there are parentheses in the field name) ex. : station.commune(commune.nom_commune)
+                if($flag_foreign){ // case of a foreign key (where there are parentheses in the field name) ex. : station.municipality(municipality.municipality_name)
                    $varfield = explode(".", strstr($field, '(', true))[1];
                    $linker = explode('.', trim($foreign_content[0],"()"));  
                    $foreign_table = $importFileCsvService->TransformNameForSymfony($linker[0],'table'); 
@@ -2276,8 +2276,8 @@ class ImportFileE3s
         foreach($csvData as $l => $data){ // 1- Line-to-line data processing ($ l)
             $compt++;
             $entity = new \Bbees\E3sBundle\Entity\Boite();
-            if (array_key_exists("boite" ,$columnByTable)) {
-               foreach($columnByTable["boite"] as $ColCsv){  
+            if (array_key_exists("storage_box" ,$columnByTable)) {
+               foreach($columnByTable["storage_box"] as $ColCsv){  
                    $field = $importFileCsvService->TransformNameForSymfony($ColCsv,'field');                 
                    $flag_foreign = preg_match('(\((.*?)\))', $ColCsv, $foreign_content);  // flag to know if 1) it is a foreign key  
                    $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
@@ -2286,7 +2286,7 @@ class ImportFileE3s
                    } 
                    if (!$flag_foreign) { 
                       $varfield = explode(".", $field)[1];
-                      if($field == 'boite.codeBoite') { 
+                      if($field == 'storage_box.codeBoite') { 
                           $record_entity = $em->getRepository("BbeesE3sBundle:Boite")->findOneBy(array("codeBoite" => $dataColCsv)); 
                           if($record_entity !== NULL){ 
                              $message .= $this->translator->trans('importfileService.ERROR duplicate code').'<b> : '.$data[$ColCsv]." / ".$ColCsv.'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
@@ -2785,7 +2785,7 @@ class ImportFileE3s
                     $method = "setSequenceAssembleeFk";
                     $entityRel->$method($record_entity_sqc_ass);
                     $method = "setNumMotu";
-                    $entityRel->$method($data2["num_motu"]);
+                    $entityRel->$method($data2["motu_number"]);
                     $foreign_record = $em->getRepository("BbeesE3sBundle:Voc")->findOneBy(array("code" => $data2["code_methode_motu"], "parent" => "methodeMotu"));
                     if($foreign_record === NULL) $message .= $this->translator->trans('importfileService.ERROR unknown record').' : '. $data2["code_methode_motu"]. '</b>  <br> ligne '. (string)($l2+2) . ": " . join(';', $data2). "<br>";
                     $method = "setMethodeMotuVocFk";
@@ -2800,7 +2800,7 @@ class ImportFileE3s
                     $method = "setSequenceAssembleeExtFk";
                     $entityRel->$method($record_entity_sqc_ass_ext);
                     $method = "setNumMotu";
-                    $entityRel->$method($data2["num_motu"]);
+                    $entityRel->$method($data2["motu_number"]);
                     $foreign_record = $em->getRepository("BbeesE3sBundle:Voc")->findOneBy(array("code" => $data2["code_methode_motu"], "parent" => "methodeMotu")); 
                     if($foreign_record === NULL) $message .= $this->translator->trans('importfileService.ERROR unknown record').' : '. $data2["code_methode_motu"]. '</b>  <br> ligne '. (string)($l2+2) . ": " . join(';', $data2). "<br>";
                     $method = "setMethodeMotuVocFk";
@@ -2983,7 +2983,7 @@ class ImportFileE3s
             }   
             
             # Process of file motus
-            if (array_key_exists("code_seq_ass", $csvDataMotu[0]) && array_key_exists("num_motu", $csvDataMotu[0]) && array_key_exists("code_methode_motu", $csvDataMotu[0])) {
+            if (array_key_exists("code_seq_ass", $csvDataMotu[0]) && array_key_exists("motu_number", $csvDataMotu[0]) && array_key_exists("code_methode_motu", $csvDataMotu[0])) {
                 foreach($csvDataMotu as $l2 => $data2){ // 1- Line-to-line data processing ($ l)
                     $flagSeq = 0 ;
                     $flagSeqExt = 0 ;
@@ -2996,7 +2996,7 @@ class ImportFileE3s
                         $method = "setSequenceAssembleeFk";
                         $entityRel->$method($record_entity_sqc_ass);
                         $method = "setNumMotu";
-                        $entityRel->$method($data2["num_motu"]);
+                        $entityRel->$method($data2["motu_number"]);
                         $foreign_record = $em->getRepository("BbeesE3sBundle:Voc")->findOneBy(array("code" => $data2["code_methode_motu"], "parent" => "methodeMotu"));
                         if($foreign_record === NULL) $message .= $this->translator->trans('importfileService.ERROR unknown record').' : '.$data2["code_methode_motu"]. '</b>  <br> ligne '. (string)($l2+2) . ": " . join(';', $data2). "<br>";
                         $method = "setMethodeMotuVocFk";
@@ -3011,7 +3011,7 @@ class ImportFileE3s
                         $method = "setSequenceAssembleeExtFk";
                         $entityRel->$method($record_entity_sqc_ass_ext);
                         $method = "setNumMotu";
-                        $entityRel->$method($data2["num_motu"]);
+                        $entityRel->$method($data2["motu_number"]);
                         $foreign_record = $em->getRepository("BbeesE3sBundle:Voc")->findOneBy(array("code" => $data2["code_methode_motu"], "parent" => "methodeMotu")); 
                         if($foreign_record === NULL) $message .= $this->translator->trans('importfileService.ERROR unknown record').' : '.$data2["code_methode_motu"]. '</b> INCONNU <br> ligne '. (string)($l2+2) . ": " . join(';', $data2). "<br>";
                         $method = "setMethodeMotuVocFk";
@@ -3940,28 +3940,28 @@ class ImportFileE3s
                                if ($dataColCsv != '') {
                                    $CodeCommune = $dataColCsv ;
                                    if (array_key_exists($CodeCommune,$list_new_commune)) {  
-                                       $commune = $list_new_commune[$CodeCommune];
-                                   } else { // if CodeCommune is null create a new commune with a codeCommune as Nom_Commune|Nom_Region|Nom_Pays and field site_name = "Nom Commune" and municipality_name = "Nom Region"
-                                       $commune = new \Bbees\E3sBundle\Entity\Commune();      
-                                       $commune->setCodeCommune($CodeCommune);
+                                       $municipality = $list_new_commune[$CodeCommune];
+                                   } else { // if CodeCommune is null create a new municipality with a codeCommune as Nom_Commune|Nom_Region|Nom_Pays and field site_name = "Nom Commune" and municipality_name = "Nom Region"
+                                       $municipality = new \Bbees\E3sBundle\Entity\Commune();      
+                                       $municipality->setCodeCommune($CodeCommune);
                                        $list_field_commune = explode("|", $dataColCsv);
-                                       $commune->setNomCommune(str_replace("_"," ",$list_field_commune[0]));
-                                       $commune->setNomRegion(str_replace("_"," ",$list_field_commune[1]));
-                                       $commune->setDateCre($DateImport);
-                                       $commune->setDateMaj($DateImport);
-                                       $commune->setUserCre($userId);
-                                       $commune->setUserMaj($userId);
-                                       $pays_fk = $em->getRepository("BbeesE3sBundle:Pays")->findOneBy(array("codePays" => $list_field_commune[2])); 
-                                       if($pays_fk === NULL){ 
+                                       $municipality->setNomCommune(str_replace("_"," ",$list_field_commune[0]));
+                                       $municipality->setNomRegion(str_replace("_"," ",$list_field_commune[1]));
+                                       $municipality->setDateCre($DateImport);
+                                       $municipality->setDateMaj($DateImport);
+                                       $municipality->setUserCre($userId);
+                                       $municipality->setUserMaj($userId);
+                                       $country_fk = $em->getRepository("BbeesE3sBundle:Pays")->findOneBy(array("codePays" => $list_field_commune[2])); 
+                                       if($country_fk === NULL){ 
                                             $message .= $this->translator->trans('importfileService.ERROR bad code').' : '.$list_field_commune[2]. '</b>  <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
                                        }
-                                       $commune->setPaysFk($pays_fk);
-                                       $em->persist($commune);                                       
-                                       $list_new_commune[$CodeCommune] = $commune; // we keep in memory the communes created
+                                       $municipality->setPaysFk($country_fk);
+                                       $em->persist($municipality);                                       
+                                       $list_new_commune[$CodeCommune] = $municipality; // we keep in memory the communes created
                                    }
                                    $foreign_fieldName = $foreign_table."Fk";
                                    $method =  $importFileCsvService->TransformNameForSymfony($foreign_fieldName,'set');
-                                   $entity->$method($commune); 
+                                   $entity->$method($municipality); 
                                }
                                break;
                         case "Voc":
@@ -3990,7 +3990,7 @@ class ImportFileE3s
             $entity->setUserMaj($userId);
             $em->persist($entity);                
        }      
-       // A FAIRE : ajouter les champ commune.nom_commune +commune.nom_region
+       // A FAIRE : ajouter les champ municipality.municipality_name +municipality.region_name
 
        if ($message ==''){
            try {
@@ -4211,7 +4211,7 @@ class ImportFileE3s
                } 
             }  
             
-            # Enregistrement de EstAligneEtTraite    (liaison aux chromatogramme)                
+            # Enregistrement de EstAligneEtTraite    (liaison aux chromatogram)                
             foreach($columnByTable["est_aligne_et_traite"] as $ColCsv){   
                $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                if ($dataColCsv !== $data[$ColCsv] ) {
@@ -4666,8 +4666,8 @@ class ImportFileE3s
             # Enregistrement des données de Personne
             $entity = new \Bbees\E3sBundle\Entity\Commune();    
             // 
-            if (array_key_exists("commune" ,$columnByTable)) {
-                foreach($columnByTable["commune"] as $ColCsv){  
+            if (array_key_exists("municipality" ,$columnByTable)) {
+                foreach($columnByTable["municipality"] as $ColCsv){  
                     $field = $importFileCsvService->TransformNameForSymfony($ColCsv,'field');   
                     $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                     if ($dataColCsv !== $data[$ColCsv] ) {
@@ -4677,7 +4677,7 @@ class ImportFileE3s
                     $flag_foreign = preg_match('(\((.*?)\))', $ColCsv, $foreign_content);  // flag to know if 1) it is a foreign key  
                     if (!$flag_foreign) { 
                         $varfield = explode(".", $field)[1];
-                        if($ColCsv  == 'commune.code_commune') { 
+                        if($ColCsv  == 'municipality.municipality_code') { 
                             $record_entity = $em->getRepository("BbeesE3sBundle:Commune")->findOneBy(array("codeCommune" => $dataColCsv)); 
                             if($record_entity !== NULL){ 
                                $message .= $this->translator->trans('importfileService.ERROR duplicate code').'<b> : '.$data[$ColCsv]." / ".$ColCsv.'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 

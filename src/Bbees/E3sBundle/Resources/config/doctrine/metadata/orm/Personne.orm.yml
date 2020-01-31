@@ -4,7 +4,7 @@ Personne:
     indexes:
         ce_cle_etrangere63:
             columns:
-                - etablissement_fk
+                - institution_fk
     uniqueConstraints:
         cu_personne_cle_primaire:
             columns:
@@ -75,7 +75,7 @@ Personne:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                etablissement_fk:
+                institution_fk:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }
