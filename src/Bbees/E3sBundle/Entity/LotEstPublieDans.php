@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * LotEstPublieDans
  *
- * @ORM\Table(name="lot_est_publie_dans", indexes={@ORM\Index(name="IDX_EA07BFA754DBBD4D", columns={"lot_materiel_fk"}), @ORM\Index(name="IDX_EA07BFA7821B1D3F", columns={"source_fk"})})
+ * @ORM\Table(name="internal_biological_material_is_published_in", indexes={@ORM\Index(name="IDX_EA07BFA754DBBD4D", columns={"internal_biological_material_fk"}), @ORM\Index(name="IDX_EA07BFA7821B1D3F", columns={"source_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -34,7 +34,7 @@ class LotEstPublieDans
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="lot_est_publie_dans_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="internal_biological_material_is_published_in_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
@@ -71,7 +71,7 @@ class LotEstPublieDans
      *
      * @ORM\ManyToOne(targetEntity="LotMateriel", inversedBy="lotEstPublieDanss")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="lot_materiel_fk", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     *   @ORM\JoinColumn(name="internal_biological_material_fk", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * })
      */
     private $lotMaterielFk;

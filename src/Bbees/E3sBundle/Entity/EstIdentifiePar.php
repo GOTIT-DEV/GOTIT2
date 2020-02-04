@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EstIdentifiePar
  *
- * @ORM\Table(name="est_identifie_par", indexes={@ORM\Index(name="IDX_F8FCCF63B53CD04C", columns={"person_fk"}), @ORM\Index(name="IDX_F8FCCF63B4AB6BA0", columns={"espece_identifiee_fk"})})
+ * @ORM\Table(name="species_is_identified_by", indexes={@ORM\Index(name="IDX_F8FCCF63B53CD04C", columns={"person_fk"}), @ORM\Index(name="IDX_F8FCCF63B4AB6BA0", columns={"identified_species_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -34,7 +34,7 @@ class EstIdentifiePar
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="est_identifie_par_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="species_is_identified_by_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
@@ -81,7 +81,7 @@ class EstIdentifiePar
      *
      * @ORM\ManyToOne(targetEntity="EspeceIdentifiee", inversedBy="estIdentifiePars")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="espece_identifiee_fk", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     *   @ORM\JoinColumn(name="identified_species_fk", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * })
      */
     private $especeIdentifieeFk;

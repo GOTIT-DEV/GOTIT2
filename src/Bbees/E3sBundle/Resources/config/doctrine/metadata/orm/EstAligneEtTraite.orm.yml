@@ -1,10 +1,10 @@
 EstAligneEtTraite:
     type: entity
-    table: est_aligne_et_traite
+    table: chromatogram_is_processed_to
     indexes:
         ce_cle_etrangere37:
             columns:
-                - chromatogramme_fk
+                - chromatogram_fk
         ce_cle_etrangere38:
             columns:
                 - internal_sequence_fk
@@ -46,7 +46,7 @@ EstAligneEtTraite:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                chromatogramme_fk:
+                chromatogram_fk:
                     referencedColumnName: id
             orphanRemoval: false
         sequenceAssembleeFk:

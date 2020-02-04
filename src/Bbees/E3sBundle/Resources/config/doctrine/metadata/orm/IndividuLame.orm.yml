@@ -1,6 +1,6 @@
 IndividuLame:
     type: entity
-    table: individu_lame
+    table: specimen_slide
     indexes:
         ce_cle_etrangere103:
             columns:
@@ -14,7 +14,7 @@ IndividuLame:
     uniqueConstraints:
         cu_individu_lame_cle_primaire:
             columns:
-                - code_lame_coll
+                - collection_slide_code
     id:
         id:
             type: bigint
@@ -31,32 +31,32 @@ IndividuLame:
             length: 255
             options:
                 fixed: false
-            column: code_lame_coll
+            column: collection_slide_code
         libelleLame:
             type: string
             nullable: true
             length: 1024
             options:
                 fixed: false
-            column: libelle_lame
+            column: slide_title
         dateLame:
             type: date
             nullable: true
-            column: date_lame
+            column: slide_date
         nomDossierPhotos:
             type: string
             nullable: true
             length: 1024
             options:
                 fixed: false
-            column: nom_dossier_photos
+            column: photo_folder_name
         commentaireLame:
             type: text
             nullable: true
             length: null
             options:
                 fixed: false
-            column: commentaire_lame
+            column: slide_comments
         dateCre:
             type: datetime
             nullable: true

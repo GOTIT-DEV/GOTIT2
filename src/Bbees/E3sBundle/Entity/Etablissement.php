@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Etablissement
  *
- * @ORM\Table(name="etablissement", uniqueConstraints={@ORM\UniqueConstraint(name="cu_etablissement_cle_primaire", columns={"nom_etablissement"})})
+ * @ORM\Table(name="institution", uniqueConstraints={@ORM\UniqueConstraint(name="cu_etablissement_cle_primaire", columns={"institution_name"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -34,21 +34,21 @@ class Etablissement
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="etablissement_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="institution_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nom_etablissement", type="string", length=1024, nullable=false)
+     * @ORM\Column(name="institution_name", type="string", length=1024, nullable=false)
      */
     private $nomEtablissement;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="commentaire_etablissement", type="text", nullable=true)
+     * @ORM\Column(name="institution_comments", type="text", nullable=true)
      */
     private $commentaireEtablissement;
 

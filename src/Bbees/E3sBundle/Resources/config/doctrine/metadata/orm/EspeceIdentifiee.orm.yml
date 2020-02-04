@@ -1,6 +1,6 @@
 EspeceIdentifiee:
     type: entity
-    table: espece_identifiee
+    table: identified_species
     indexes:
         ce_cle_etrangere79:
             columns:
@@ -10,16 +10,16 @@ EspeceIdentifiee:
                 - date_precision_voc_fk
         ce_cle_etrangere77:
             columns:
-                - lot_materiel_ext_fk
+                - external_biological_material_fk
         ce_cle_etrangere78:
             columns:
-                - lot_materiel_fk
+                - internal_biological_material_fk
         ce_cle_etrangere76:
             columns:
                 - external_sequence_fk
         ce_cle_etrangere74:
             columns:
-                - critere_identification_voc_fk
+                - identification_criterion_voc_fk
         ce_cle_etrangere80:
             columns:
                 - specimen_fk
@@ -39,14 +39,14 @@ EspeceIdentifiee:
         dateIdentification:
             type: date
             nullable: true
-            column: date_identification
+            column: identification_date
         commentaireEspId:
             type: text
             nullable: true
             length: null
             options:
                 fixed: false
-            column: commentaire_esp_id
+            column: identified_species_comments
         dateCre:
             type: datetime
             nullable: true
@@ -75,7 +75,7 @@ EspeceIdentifiee:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                critere_identification_voc_fk:
+                identification_criterion_voc_fk:
                     referencedColumnName: id
             orphanRemoval: false
         datePrecisionVocFk:
@@ -115,7 +115,7 @@ EspeceIdentifiee:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                lot_materiel_ext_fk:
+                external_biological_material_fk:
                     referencedColumnName: id
             orphanRemoval: false
         lotMaterielFk:
@@ -125,7 +125,7 @@ EspeceIdentifiee:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                lot_materiel_fk:
+                internal_biological_material_fk:
                     referencedColumnName: id
             orphanRemoval: false
         individuFk:

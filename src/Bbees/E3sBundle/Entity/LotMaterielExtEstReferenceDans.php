@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * LotMaterielExtEstReferenceDans
  *
- * @ORM\Table(name="lot_materiel_ext_est_reference_dans", indexes={@ORM\Index(name="IDX_D2338BB240D80ECD", columns={"lot_materiel_ext_fk"}), @ORM\Index(name="IDX_D2338BB2821B1D3F", columns={"source_fk"})})
+ * @ORM\Table(name="external_biological_material_is_published_in", indexes={@ORM\Index(name="IDX_D2338BB240D80ECD", columns={"external_biological_material_fk"}), @ORM\Index(name="IDX_D2338BB2821B1D3F", columns={"source_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -34,7 +34,7 @@ class LotMaterielExtEstReferenceDans
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="lot_materiel_ext_est_reference_dans_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="external_biological_material_is_published_in_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
@@ -71,7 +71,7 @@ class LotMaterielExtEstReferenceDans
      *
      * @ORM\ManyToOne(targetEntity="LotMaterielExt", inversedBy="lotMaterielExtEstReferenceDanss")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="lot_materiel_ext_fk", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     *   @ORM\JoinColumn(name="external_biological_material_fk", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * })
      */
     private $lotMaterielExtFk;

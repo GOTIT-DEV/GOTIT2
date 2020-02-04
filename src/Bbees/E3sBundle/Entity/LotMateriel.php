@@ -23,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * LotMateriel
  *
- * @ORM\Table(name="lot_materiel", uniqueConstraints={@ORM\UniqueConstraint(name="cu_lot_materiel_cle_primaire", columns={"code_lot_materiel"})}, indexes={@ORM\Index(name="IDX_BA1841A5A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_BA1841A5B0B56B73", columns={"pigmentation_voc_fk"}), @ORM\Index(name="IDX_BA1841A5A897CC9E", columns={"yeux_voc_fk"}), @ORM\Index(name="IDX_BA1841A5662D9B98", columns={"sampling_fk"}), @ORM\Index(name="IDX_BA1841A52B644673", columns={"storage_box_fk"})})
+ * @ORM\Table(name="internal_biological_material", uniqueConstraints={@ORM\UniqueConstraint(name="cu_lot_materiel_cle_primaire", columns={"internal_biological_material_code"})}, indexes={@ORM\Index(name="IDX_BA1841A5A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_BA1841A5B0B56B73", columns={"pigmentation_voc_fk"}), @ORM\Index(name="IDX_BA1841A5A897CC9E", columns={"eyes_voc_fk"}), @ORM\Index(name="IDX_BA1841A5662D9B98", columns={"sampling_fk"}), @ORM\Index(name="IDX_BA1841A52B644673", columns={"storage_box_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */ 
@@ -35,21 +35,21 @@ class LotMateriel
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="lot_materiel_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="internal_biological_material_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="code_lot_materiel", type="string", length=255, nullable=false)
+     * @ORM\Column(name="internal_biological_material_code", type="string", length=255, nullable=false)
      */
     private $codeLotMateriel;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_lot_materiel", type="date", nullable=true)
+     * @ORM\Column(name="internal_biological_material_date", type="date", nullable=true)
      */
     private $dateLotMateriel;
 
@@ -63,14 +63,14 @@ class LotMateriel
     /**
      * @var string
      *
-     * @ORM\Column(name="commentaire_lot_materiel", type="text", nullable=true)
+     * @ORM\Column(name="internal_biological_material_comments", type="text", nullable=true)
      */
     private $commentaireLotMateriel;
     
     /**
      * @var integer
      *
-     * @ORM\Column(name="a_faire", type="smallint", nullable=false)
+     * @ORM\Column(name="internal_biological_material_status", type="smallint", nullable=false)
      */
     private $aFaire;
 
@@ -127,7 +127,7 @@ class LotMateriel
      *
      * @ORM\ManyToOne(targetEntity="Voc")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="yeux_voc_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="eyes_voc_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $yeuxVocFk;

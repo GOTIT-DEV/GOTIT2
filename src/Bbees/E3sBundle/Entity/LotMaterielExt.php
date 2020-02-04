@@ -23,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * LotMaterielExt
  *
- * @ORM\Table(name="lot_materiel_ext", uniqueConstraints={@ORM\UniqueConstraint(name="cu_lot_materiel_ext_code_lot_materiel_ext", columns={"code_lot_materiel_ext"})}, indexes={@ORM\Index(name="IDX_EEFA43F3662D9B98", columns={"sampling_fk"}), @ORM\Index(name="IDX_EEFA43F3A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_EEFA43F382ACDC4", columns={"nb_individus_voc_fk"}), @ORM\Index(name="IDX_EEFA43F3B0B56B73", columns={"pigmentation_voc_fk"}), @ORM\Index(name="IDX_EEFA43F3A897CC9E", columns={"yeux_voc_fk"})})
+ * @ORM\Table(name="external_biological_material", uniqueConstraints={@ORM\UniqueConstraint(name="cu_lot_materiel_ext_code_lot_materiel_ext", columns={"external_biological_material_code"})}, indexes={@ORM\Index(name="IDX_EEFA43F3662D9B98", columns={"sampling_fk"}), @ORM\Index(name="IDX_EEFA43F3A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_EEFA43F382ACDC4", columns={"number_of_specimens_voc_fk"}), @ORM\Index(name="IDX_EEFA43F3B0B56B73", columns={"pigmentation_voc_fk"}), @ORM\Index(name="IDX_EEFA43F3A897CC9E", columns={"eyes_voc_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -35,35 +35,35 @@ class LotMaterielExt
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="lot_materiel_ext_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="external_biological_material_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="code_lot_materiel_ext", type="string", length=255, nullable=false, unique=true)
+     * @ORM\Column(name="external_biological_material_code", type="string", length=255, nullable=false, unique=true)
      */
     private $codeLotMaterielExt;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_creation_lot_materiel_ext", type="date", nullable=true)
+     * @ORM\Column(name="external_biological_material_creation_date", type="date", nullable=true)
      */
     private $dateCreationLotMaterielExt;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="commentaire_lot_materiel_ext", type="text", nullable=true)
+     * @ORM\Column(name="external_biological_material_comments", type="text", nullable=true)
      */
     private $commentaireLotMaterielExt;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="commentaire_nb_individus", type="text", nullable=true)
+     * @ORM\Column(name="number_of_specimens_comments", type="text", nullable=true)
      */
     private $commentaireNbIndividus;
 
@@ -120,7 +120,7 @@ class LotMaterielExt
      *
      * @ORM\ManyToOne(targetEntity="Voc")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="nb_individus_voc_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="number_of_specimens_voc_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $nbIndividusVocFk;
@@ -140,7 +140,7 @@ class LotMaterielExt
      *
      * @ORM\ManyToOne(targetEntity="Voc")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="yeux_voc_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="eyes_voc_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $yeuxVocFk;

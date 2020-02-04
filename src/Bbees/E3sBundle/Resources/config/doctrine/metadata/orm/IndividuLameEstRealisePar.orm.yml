@@ -1,13 +1,13 @@
 IndividuLameEstRealisePar:
     type: entity
-    table: individu_lame_est_realise_par
+    table: slide_is_mounted_by
     indexes:
         ce_cle_etrangere26:
             columns:
                 - person_fk
         ce_cle_etrangere25:
             columns:
-                - individu_lame_fk
+                - specimen_slide_fk
     id:
         id:
             type: bigint
@@ -46,7 +46,7 @@ IndividuLameEstRealisePar:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                individu_lame_fk:
+                specimen_slide_fk:
                     referencedColumnName: id
             orphanRemoval: false
         personneFk:

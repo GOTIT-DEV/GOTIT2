@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * LotMaterielExtEstRealisePar
  *
- * @ORM\Table(name="lot_materiel_ext_est_realise_par", indexes={@ORM\Index(name="IDX_7D78636FB53CD04C", columns={"person_fk"}), @ORM\Index(name="IDX_7D78636F40D80ECD", columns={"lot_materiel_ext_fk"})})
+ * @ORM\Table(name="external_biological_material_is_processed_by", indexes={@ORM\Index(name="IDX_7D78636FB53CD04C", columns={"person_fk"}), @ORM\Index(name="IDX_7D78636F40D80ECD", columns={"external_biological_material_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -34,7 +34,7 @@ class LotMaterielExtEstRealisePar
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="lot_materiel_ext_est_realise_par_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="external_biological_material_is_processed_by_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
@@ -81,7 +81,7 @@ class LotMaterielExtEstRealisePar
      *
      * @ORM\ManyToOne(targetEntity="LotMaterielExt", inversedBy="lotMaterielExtEstRealisePars")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="lot_materiel_ext_fk", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     *   @ORM\JoinColumn(name="external_biological_material_fk", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * })
      */
     private $lotMaterielExtFk;

@@ -1,13 +1,13 @@
 EstIdentifiePar:
     type: entity
-    table: est_identifie_par
+    table: species_is_identified_by
     indexes:
         ce_cle_etrangere10:
             columns:
                 - person_fk
         ce_cle_etrangere9:
             columns:
-                - espece_identifiee_fk
+                - identified_species_fk
     id:
         id:
             type: bigint
@@ -56,7 +56,7 @@ EstIdentifiePar:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                espece_identifiee_fk:
+                identified_species_fk:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

@@ -346,18 +346,18 @@ class QueryBuilderService
       $station_subquery = "SELECT DISTINCT
             eid.taxon_fk, lm.id as lm_id,
             sta.id as id_sta, sta.long_deg_dec as longitude, sta.lat_deg_dec as latitude
-            FROM ESPECE_IDENTIFIEE eid
+            FROM identified_species eid
             LEFT JOIN sequence_assemblee_ext sext ON eid.external_sequence_fk=sext.id
             LEFT JOIN voc v1 ON v1.id=sext.gene_voc_fk
             LEFT JOIN sequence_assemblee seq ON eid.internal_sequence_fk=seq.id
-            LEFT JOIN est_aligne_et_traite eat ON eat.internal_sequence_fk=seq.id
-            LEFT JOIN chromatogram chr ON chr.id = eat.chromatogramme_fk
+            LEFT JOIN chromatogram_is_processed_to eat ON eat.internal_sequence_fk=seq.id
+            LEFT JOIN chromatogram chr ON chr.id = eat.chromatogram_fk
             LEFT JOIN pcr ON chr.pcr_fk=pcr.id
             LEFT JOIN voc v2 ON pcr.gene_voc_fk=v2.id
             LEFT JOIN voc statut ON statut.id=seq.statut_sqc_ass_voc_fk
             LEFT JOIN dna ON pcr.dna_fk=dna.id
-            LEFT JOIN individu ind ON ind.id = dna.specimen_fk
-            LEFT JOIN lot_materiel lm ON ind.lot_materiel_fk=lm.id
+            LEFT JOIN specimen ind ON ind.id = dna.specimen_fk
+            LEFT JOIN internal_biological_material lm ON ind.internal_biological_material_fk=lm.id
             JOIN sampling co ON co.id = sext.sampling_fk OR co.id=lm.sampling_fk
             JOIN station sta ON co.site_fk = sta.id
             WHERE v1.code='COI' OR v2.code='COI'
@@ -366,9 +366,9 @@ class QueryBuilderService
       $station_subquery = "SELECT DISTINCT
              eid.taxon_fk, lm.id as lm_id,
              sta.id as id_sta, sta.long_deg_dec as longitude, sta.lat_deg_dec as latitude
-            FROM ESPECE_IDENTIFIEE eid
-            LEFT JOIN lot_materiel lm ON eid.lot_materiel_fk=lm.id
-            LEFT JOIN lot_materiel_ext lmext ON eid.lot_materiel_ext_fk=lmext.id
+            FROM identified_species eid
+            LEFT JOIN internal_biological_material lm ON eid.internal_biological_material_fk=lm.id
+            LEFT JOIN external_biological_material lmext ON eid.external_biological_material_fk=lmext.id
             JOIN sampling co ON co.id = lm.sampling_fk OR co.id=lmext.sampling_fk
             JOIN station sta ON co.site_fk = sta.id";
     }
@@ -410,20 +410,20 @@ class QueryBuilderService
       $station_subquery = "SELECT DISTINCT
             eid.taxon_fk,
             sta.id as id_sta, sta.long_deg_dec as longitude, sta.lat_deg_dec as latitude
-            FROM ESPECE_IDENTIFIEE eid
+            FROM identified_species eid
             -- External sequences
             LEFT JOIN sequence_assemblee_ext sext ON eid.external_sequence_fk=sext.id
             LEFT JOIN voc v1 ON v1.id=sext.gene_voc_fk
             -- Internal sequences
             LEFT JOIN sequence_assemblee seq ON eid.internal_sequence_fk=seq.id
-            LEFT JOIN est_aligne_et_traite eat ON eat.internal_sequence_fk=seq.id
-            LEFT JOIN chromatogram chr ON chr.id = eat.chromatogramme_fk
+            LEFT JOIN chromatogram_is_processed_to eat ON eat.internal_sequence_fk=seq.id
+            LEFT JOIN chromatogram chr ON chr.id = eat.chromatogram_fk
             LEFT JOIN pcr ON chr.pcr_fk=pcr.id
             LEFT JOIN voc v2 ON pcr.gene_voc_fk=v2.id
             LEFT JOIN voc statut ON seq.statut_sqc_ass_voc_fk=statut.id
             LEFT JOIN dna ON pcr.dna_fk=dna.id
-            LEFT JOIN individu ind ON ind.id = dna.specimen_fk
-            LEFT JOIN lot_materiel lm ON ind.lot_materiel_fk=lm.id
+            LEFT JOIN specimen ind ON ind.id = dna.specimen_fk
+            LEFT JOIN internal_biological_material lm ON ind.internal_biological_material_fk=lm.id
             -- Find all sampling events ('sampling') of internal or external seq
             JOIN sampling co ON co.id = sext.sampling_fk OR co.id=lm.sampling_fk
             -- Join to corresponding station
@@ -435,9 +435,9 @@ class QueryBuilderService
       $station_subquery = "SELECT DISTINCT
              eid.taxon_fk,
              sta.id as id_sta, sta.long_deg_dec as longitude, sta.lat_deg_dec as latitude
-            FROM ESPECE_IDENTIFIEE eid
-            LEFT JOIN lot_materiel lm ON eid.lot_materiel_fk=lm.id
-            LEFT JOIN lot_materiel_ext lmext ON eid.lot_materiel_ext_fk=lmext.id
+            FROM identified_species eid
+            LEFT JOIN internal_biological_material lm ON eid.internal_biological_material_fk=lm.id
+            LEFT JOIN external_biological_material lmext ON eid.external_biological_material_fk=lmext.id
             JOIN sampling co ON co.id = lm.sampling_fk OR co.id=lmext.sampling_fk
             JOIN station sta ON co.site_fk = sta.id";
     }
@@ -456,9 +456,9 @@ class QueryBuilderService
             COUNT(distinct esta.id_sta) as nb_sta,
             (min(esta.latitude) + (max(esta.latitude)-min(esta.latitude))/2)  as LMP
             FROM referentiel_taxon rt
-            JOIN espece_identifiee e ON e.taxon_fk = rt.id
+            JOIN identified_species e ON e.taxon_fk = rt.id
             JOIN esta ON esta.taxon_fk=rt.id
-            JOIN voc ON voc.id = e.critere_identification_voc_fk
+            JOIN voc ON voc.id = e.identification_criterion_voc_fk
             --taxafilter.placeholder
             GROUP BY rt.id, rt.taxname
             ORDER BY nb_sta DESC";
@@ -553,8 +553,8 @@ class QueryBuilderService
                             critere.code as delimitation,
                             1 as type_seq
                     FROM sequence_assemblee_ext
-                        LEFT JOIN espece_identifiee ei on ei.external_sequence_fk=sequence_assemblee_ext.id
-                        LEFT JOIN voc critere ON ei.critere_identification_voc_fk=critere.id
+                        LEFT JOIN identified_species ei on ei.external_sequence_fk=sequence_assemblee_ext.id
+                        LEFT JOIN voc critere ON ei.identification_criterion_voc_fk=critere.id
                 UNION
                     SELECT  seqas.id,
                             seqas.code_sqc_ass as code,
@@ -562,15 +562,15 @@ class QueryBuilderService
                             lmat.sampling_fk, ei.taxon_fk as rt,
                             critere.code as delimitation,
                             0 as type_seq
-                    FROM lot_materiel lmat
-                        JOIN individu I ON I.lot_materiel_fk=lmat.id
+                    FROM internal_biological_material lmat
+                        JOIN specimen I ON I.internal_biological_material_fk=lmat.id
                         JOIN dna ON dna.specimen_fk=I.id
                         JOIN pcr ON pcr.dna_fk=dna.id
                         JOIN chromatogram ON chromatogram.pcr_fk=pcr.id
-                        JOIN est_aligne_et_traite eaet ON chromatogram.id=eaet.chromatogramme_fk
+                        JOIN chromatogram_is_processed_to eaet ON chromatogram.id=eaet.chromatogram_fk
                         JOIN sequence_assemblee seqas ON seqas.id=eaet.internal_sequence_fk
-                        LEFT JOIN espece_identifiee ei on ei.internal_sequence_fk=seqas.id
-                        LEFT JOIN voc critere ON ei.critere_identification_voc_fk=critere.id
+                        LEFT JOIN identified_species ei on ei.internal_sequence_fk=seqas.id
+                        LEFT JOIN voc critere ON ei.identification_criterion_voc_fk=critere.id
                     ) AS union_seq ) AS seq
             LEFT JOIN referentiel_taxon tax ON tax.id=seq.rt
             JOIN sampling ON seq.sampling_fk=sampling.id

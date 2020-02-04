@@ -1,6 +1,6 @@
 LotMaterielExt:
     type: entity
-    table: lot_materiel_ext
+    table: external_biological_material
     indexes:
         ce_cle_etrangere46:
             columns:
@@ -10,13 +10,13 @@ LotMaterielExt:
                 - pigmentation_voc_fk
         ce_cle_etrangere50:
             columns:
-                - yeux_voc_fk
+                - eyes_voc_fk
         ce_cle_etrangere47:
             columns:
                 - date_precision_voc_fk
         ce_cle_etrangere48:
             columns:
-                - nb_individus_voc_fk
+                - number_of_specimens_voc_fk
     id:
         id:
             type: bigint
@@ -33,25 +33,25 @@ LotMaterielExt:
             length: 255
             options:
                 fixed: false
-            column: code_lot_materiel_ext
+            column: external_biological_material_code
         dateCreationLotMaterielExt:
             type: date
             nullable: true
-            column: date_creation_lot_materiel_ext
+            column: external_biological_material_creation_date
         commentaireLotMaterielExt:
             type: text
             nullable: true
             length: null
             options:
                 fixed: false
-            column: commentaire_lot_materiel_ext
+            column: external_biological_material_comments
         commentaireNbIndividus:
             type: text
             nullable: true
             length: null
             options:
                 fixed: false
-            column: commentaire_nb_individus
+            column: number_of_specimens_comments
         dateCre:
             type: datetime
             nullable: true
@@ -100,7 +100,7 @@ LotMaterielExt:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                nb_individus_voc_fk:
+                number_of_specimens_voc_fk:
                     referencedColumnName: id
             orphanRemoval: false
         pigmentationVocFk:
@@ -120,7 +120,7 @@ LotMaterielExt:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                yeux_voc_fk:
+                eyes_voc_fk:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

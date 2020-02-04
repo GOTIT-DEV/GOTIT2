@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EstAligneEtTraite
  *
- * @ORM\Table(name="est_aligne_et_traite", indexes={@ORM\Index(name="IDX_BD45639EEFCFD332", columns={"chromatogramme_fk"}), @ORM\Index(name="IDX_BD45639E5BE90E48", columns={"internal_sequence_fk"})})
+ * @ORM\Table(name="chromatogram_is_processed_to", indexes={@ORM\Index(name="IDX_BD45639EEFCFD332", columns={"chromatogram_fk"}), @ORM\Index(name="IDX_BD45639E5BE90E48", columns={"internal_sequence_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -34,7 +34,7 @@ class EstAligneEtTraite
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="est_aligne_et_traite_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="chromatogram_is_processed_to_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
@@ -71,7 +71,7 @@ class EstAligneEtTraite
      *
      * @ORM\ManyToOne(targetEntity="Chromatogramme")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="chromatogramme_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="chromatogram_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $chromatogrammeFk;

@@ -23,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * IndividuLame
  *
- * @ORM\Table(name="individu_lame", uniqueConstraints={@ORM\UniqueConstraint(name="cu_individu_lame_cle_primaire", columns={"code_lame_coll"})}, indexes={@ORM\Index(name="IDX_8DA827E2A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_8DA827E22B644673", columns={"storage_box_fk"}), @ORM\Index(name="IDX_8DA827E25F2C6176", columns={"specimen_fk"})})
+ * @ORM\Table(name="specimen_slide", uniqueConstraints={@ORM\UniqueConstraint(name="cu_individu_lame_cle_primaire", columns={"collection_slide_code"})}, indexes={@ORM\Index(name="IDX_8DA827E2A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_8DA827E22B644673", columns={"storage_box_fk"}), @ORM\Index(name="IDX_8DA827E25F2C6176", columns={"specimen_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -35,42 +35,42 @@ class IndividuLame
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="individu_lame_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="specimen_slide_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="code_lame_coll", type="string", length=255, nullable=false)
+     * @ORM\Column(name="collection_slide_code", type="string", length=255, nullable=false)
      */
     private $codeLameColl;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="libelle_lame", type="string", length=1024, nullable=false)
+     * @ORM\Column(name="slide_title", type="string", length=1024, nullable=false)
      */
     private $libelleLame;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_lame", type="date", nullable=true)
+     * @ORM\Column(name="slide_date", type="date", nullable=true)
      */
     private $dateLame;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nom_dossier_photos", type="string", length=1024, nullable=true)
+     * @ORM\Column(name="photo_folder_name", type="string", length=1024, nullable=true)
      */
     private $nomDossierPhotos;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="commentaire_lame", type="text", nullable=true)
+     * @ORM\Column(name="slide_comments", type="text", nullable=true)
      */
     private $commentaireLame;
 

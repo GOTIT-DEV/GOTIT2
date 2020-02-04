@@ -1,10 +1,10 @@
 Etablissement:
     type: entity
-    table: etablissement
+    table: institution
     uniqueConstraints:
         cu_etablissement_cle_primaire:
             columns:
-                - nom_etablissement
+                - institution_name
     id:
         id:
             type: bigint
@@ -21,14 +21,14 @@ Etablissement:
             length: 1024
             options:
                 fixed: false
-            column: nom_etablissement
+            column: institution_name
         commentaireEtablissement:
             type: text
             nullable: true
             length: null
             options:
                 fixed: false
-            column: commentaire_etablissement
+            column: institution_comments
         dateCre:
             type: datetime
             nullable: true

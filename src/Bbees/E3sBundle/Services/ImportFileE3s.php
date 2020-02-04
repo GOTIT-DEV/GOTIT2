@@ -150,7 +150,7 @@ class ImportFileE3s
                 ->getResult(); 
                 $flagBoite = count($query_boite);
             }     
-            if ($flagBoiteAffecte == 0) $message .= $this->translator->trans("importfileService.ERROR no box code").'<b> : '.$data["code_lame_coll"]." </b> <br>ligne ".(string)($l+2).": ".join(';', $data)."<br>"; 
+            if ($flagBoiteAffecte == 0) $message .= $this->translator->trans("importfileService.ERROR no box code").'<b> : '.$data["collection_slide_code"]." </b> <br>ligne ".(string)($l+2).": ".join(';', $data)."<br>"; 
             if ($flagBoiteAffecte && $flagBoite == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["box_code"].'</b>  <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             if ($flagAdn && $flagBoite && $flagBoiteAffecte) { 
                 if ($query_adn[0]->getBoiteFk() != null) {
@@ -202,12 +202,12 @@ class ImportFileE3s
         $info = $this->translator->trans('importfileService.Date of data set import').' : '.$DateImport->format('Y-m-d H:i:s');
         foreach($csvDataIndividuLamelRange as $l => $data){ // 1- Line-to-line data processing ($ l)
             $query_lame = $em->getRepository("BbeesE3sBundle:IndividuLame")->createQueryBuilder('lame')
-            ->where('lame.codeLameColl  LIKE :code_lame_coll')
-            ->setParameter('code_lame_coll', $data["code_lame_coll"])
+            ->where('lame.codeLameColl  LIKE :collection_slide_code')
+            ->setParameter('collection_slide_code', $data["collection_slide_code"])
             ->getQuery()
             ->getResult();
             $flagLame = count($query_lame);
-            if ($flagLame == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["code_lame_coll"].'</b>  <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
+            if ($flagLame == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["collection_slide_code"].'</b>  <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             $flagBoite = 1;
             $flagBoiteAffecte = 0;
             if($data["box_code"] != null || $data["box_code"] != '') {
@@ -272,12 +272,12 @@ class ImportFileE3s
         $info = $this->translator->trans('importfileService.Date of data set import').' : '.$DateImport->format('Y-m-d H:i:s');
         foreach($csvDataIndividuLamelRange as $l => $data){ // 1- Line-to-line data processing ($ l)
             $query_lame = $em->getRepository("BbeesE3sBundle:IndividuLame")->createQueryBuilder('lame')
-            ->where('lame.codeLameColl  LIKE :code_lame_coll')
-            ->setParameter('code_lame_coll', $data["code_lame_coll"])
+            ->where('lame.codeLameColl  LIKE :collection_slide_code')
+            ->setParameter('collection_slide_code', $data["collection_slide_code"])
             ->getQuery()
             ->getResult();
             $flagLame = count($query_lame);
-            if ($flagLame == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["code_lame_coll"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
+            if ($flagLame == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["collection_slide_code"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             $flagBoite = 1;
             $flagBoiteAffecte = 0;
             if($data["box_code"] != null || $data["box_code"] != '') {
@@ -289,11 +289,11 @@ class ImportFileE3s
                 ->getResult(); 
                 $flagBoite = count($query_boite);
             }     
-            if ($flagBoiteAffecte == 0) $message .= $this->translator->trans("importfileService.ERROR no box code").'<b> : '.$data["code_lame_coll"]." </b> <br>ligne ".(string)($l+2).": ".join(';', $data)."<br>"; 
+            if ($flagBoiteAffecte == 0) $message .= $this->translator->trans("importfileService.ERROR no box code").'<b> : '.$data["collection_slide_code"]." </b> <br>ligne ".(string)($l+2).": ".join(';', $data)."<br>"; 
             if ($flagBoiteAffecte && $flagBoite == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["box_code"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             if ($flagLame && $flagBoite && $flagBoiteAffecte) { 
                 if ($query_lame[0]->getBoiteFk() != null) {
-                     $message .= $this->translator->trans('importfileService.ERROR slide already store').'<b> : '.$data["code_lame_coll"].'</b> / '.$query_lame[0]->getBoiteFk()->getCodeBoite().' <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>";                                    
+                     $message .= $this->translator->trans('importfileService.ERROR slide already store').'<b> : '.$data["collection_slide_code"].'</b> / '.$query_lame[0]->getBoiteFk()->getCodeBoite().' <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>";                                    
                 } else {
                     $query_lame[0]->setBoiteFk($query_boite[0]);
                     $query_lame[0]->setDateMaj($DateImport); 
@@ -341,12 +341,12 @@ class ImportFileE3s
         $info = $this->translator->trans('importfileService.Date of data set import').' : '.$DateImport->format('Y-m-d H:i:s');
         foreach($csvDataLotMaterielRange as $l => $data){ // 1- Line-to-line data processing ($ l)
             $query_lot = $em->getRepository("BbeesE3sBundle:LotMateriel")->createQueryBuilder('lot')
-            ->where('lot.codeLotMateriel LIKE :code_lot_materiel')
-            ->setParameter('code_lot_materiel', $data["code_lot_materiel"])
+            ->where('lot.codeLotMateriel LIKE :internal_biological_material_code')
+            ->setParameter('internal_biological_material_code', $data["internal_biological_material_code"])
             ->getQuery()
             ->getResult();
             $flagLot = count($query_lot);
-            if ($flagLot == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["code_lot_materiel"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
+            if ($flagLot == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["internal_biological_material_code"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             $flagBoite = 1;
             $flagBoiteAffecte = 0;
             if($data["box_code"] != null || $data["box_code"] != '') {
@@ -411,12 +411,12 @@ class ImportFileE3s
         $info = $this->translator->trans('importfileService.Date of data set import').' : '.$DateImport->format('Y-m-d H:i:s');
         foreach($csvDataLotMaterielRange as $l => $data){ // 1- Line-to-line data processing ($ l)
             $query_lot = $em->getRepository("BbeesE3sBundle:LotMateriel")->createQueryBuilder('lot')
-            ->where('lot.codeLotMateriel LIKE :code_lot_materiel')
-            ->setParameter('code_lot_materiel', $data["code_lot_materiel"])
+            ->where('lot.codeLotMateriel LIKE :internal_biological_material_code')
+            ->setParameter('internal_biological_material_code', $data["internal_biological_material_code"])
             ->getQuery()
             ->getResult();
             $flagLot = count($query_lot);
-            if ($flagLot == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["code_lot_materiel"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
+            if ($flagLot == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["internal_biological_material_code"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             $flagBoite = 1;
             $flagBoiteAffecte = 0;
             if($data["box_code"] != null || $data["box_code"] != '') {
@@ -428,11 +428,11 @@ class ImportFileE3s
                 ->getResult(); 
                 $flagBoite = count($query_boite);
             }     
-            if ($flagBoiteAffecte == 0) $message .= $this->translator->trans("importfileService.ERROR no box code for material").'<b> : '.$data["code_lot_materiel"]."</b> <br>ligne ".(string)($l+2).": ".join(';', $data)."<br>"; 
+            if ($flagBoiteAffecte == 0) $message .= $this->translator->trans("importfileService.ERROR no box code for material").'<b> : '.$data["internal_biological_material_code"]."</b> <br>ligne ".(string)($l+2).": ".join(';', $data)."<br>"; 
             if ($flagBoiteAffecte && $flagBoite == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["box_code"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             if ($flagLot && $flagBoite && $flagBoiteAffecte) { 
                 if ($query_lot[0]->getBoiteFk() != null) {
-                     $message .= $this->translator->trans('importfileService.ERROR lot already store').'<b> : '.$data["code_lot_materiel"].'</b> / '.$query_lot[0]->getBoiteFk()->getCodeBoite().' <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>";                                    
+                     $message .= $this->translator->trans('importfileService.ERROR lot already store').'<b> : '.$data["internal_biological_material_code"].'</b> / '.$query_lot[0]->getBoiteFk()->getCodeBoite().' <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>";                                    
                 } else {
                     $query_lot[0]->setBoiteFk($query_boite[0]);
                     $query_lot[0]->setDateMaj($DateImport); 
@@ -479,8 +479,8 @@ class ImportFileE3s
         $info = $this->translator->trans('importfileService.Date of data set import').' : '.$DateImport->format('Y-m-d H:i:s');
         foreach($csvDataLotMaterielPublie as $l => $data){ // 1- Line-to-line data processing ($ l)
             $query_lot = $em->getRepository("BbeesE3sBundle:LotMateriel")->createQueryBuilder('lot')
-            ->where('lot.codeLotMateriel LIKE :code_lot_materiel')
-            ->setParameter('code_lot_materiel', $data["code_lot_materiel"])
+            ->where('lot.codeLotMateriel LIKE :internal_biological_material_code')
+            ->setParameter('internal_biological_material_code', $data["internal_biological_material_code"])
             ->getQuery()
             ->getResult();
             $query_source = $em->getRepository("BbeesE3sBundle:Source")->createQueryBuilder('source')
@@ -489,7 +489,7 @@ class ImportFileE3s
             ->getQuery()
             ->getResult();                
             if (count($query_lot) == 0 || count($query_source) == 0) {
-                if (count($query_lot) == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["code_lot_materiel"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
+                if (count($query_lot) == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["internal_biological_material_code"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
                 if (count($query_source) == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["source.code_source"].'</b>  <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             } else {
                 $query_lepd = $em->getRepository("BbeesE3sBundle:LotEstPublieDans")->createQueryBuilder('lepd')
@@ -501,7 +501,7 @@ class ImportFileE3s
                         ->getQuery()
                         ->getResult();              
                 if (count($query_lepd) != 0 ) {
-                    $message .= $this->translator->trans('importfileService.ERROR lot already publish').'<b> : '.$data["source.code_source"].' / '.$data["code_lot_materiel"].' </b><br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
+                    $message .= $this->translator->trans('importfileService.ERROR lot already publish').'<b> : '.$data["source.code_source"].' / '.$data["internal_biological_material_code"].' </b><br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
                 } else {
                     $entityRel = new \Bbees\E3sBundle\Entity\LotEstPublieDans();
                     $method = "setSourceFk";
@@ -1740,7 +1740,7 @@ class ImportFileE3s
              }    
              
             # Record of EstEffectuePar                     
-             foreach($columnByTable["est_effectue_par"] as $ColCsv){ 
+             foreach($columnByTable["sampling_is_performed_by"] as $ColCsv){ 
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                 if ($dataColCsv !== $data[$ColCsv] ) {
                     $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -1784,7 +1784,7 @@ class ImportFileE3s
              }  
              
             # Record of EstFinancePar                     
-             foreach($columnByTable["est_finance_par"] as $ColCsv){ 
+             foreach($columnByTable["sampling_is_funded_by"] as $ColCsv){ 
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                 if ($dataColCsv !== $data[$ColCsv] ) {
                     $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -1863,7 +1863,7 @@ class ImportFileE3s
             # Enregistrement des données de lame
             $entity = new \Bbees\E3sBundle\Entity\IndividuLame();    
             // 
-            foreach($columnByTable["individu_lame"] as $ColCsv){  
+            foreach($columnByTable["specimen_slide"] as $ColCsv){  
                 $field = $importFileCsvService->TransformNameForSymfony($ColCsv,'field');   
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                 if ($dataColCsv !== $data[$ColCsv] ) {
@@ -1874,14 +1874,14 @@ class ImportFileE3s
                 if (!$flag_foreign) { 
                     $varfield = explode(".", $field)[1];
                     // var_dump($field); var_dump($ColCsv); 
-                    if($ColCsv == 'individu_lame.code_lame_coll') { 
+                    if($ColCsv == 'specimen_slide.collection_slide_code') { 
                         $record_entity = $em->getRepository("BbeesE3sBundle:IndividuLame")->findOneBy(array("codeLameColl" => $dataColCsv)); 
                         if($record_entity !== NULL){ 
                            $message .= $this->translator->trans('importfileService.ERROR duplicate code').'<b> : '.$data[$ColCsv]."</b> <br>ligne ".(string)($l+2).": ".join(';', $data)."<br>"; 
                         }
                     }
                     // control and standardization of field formats
-                    if ($ColCsv == 'individu_lame.date_lame' ) {
+                    if ($ColCsv == 'specimen_slide.slide_date' ) {
                         // adjusts the incomplete date of type m/Y or Y in 01/m/Y or 01/01/ Y
                         if ($dataColCsv != ''){
                             if (count(explode("/",$dataColCsv))== 2) $dataColCsv = "01/".$dataColCsv;
@@ -1947,7 +1947,7 @@ class ImportFileE3s
             $em->persist($entity);
             
             # Record of IndividuLameEstRealisePar                     
-            foreach($columnByTable["individu_lame_est_realise_par"] as $ColCsv){   
+            foreach($columnByTable["slide_is_mounted_by"] as $ColCsv){   
                $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                if ($dataColCsv !== $data[$ColCsv] ) {
                    $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -2035,7 +2035,7 @@ class ImportFileE3s
             # Enregistrement des données de Individu
             $entity = new \Bbees\E3sBundle\Entity\Individu();    
             // 
-            foreach($columnByTable["individu"] as $ColCsv){  
+            foreach($columnByTable["specimen"] as $ColCsv){  
                 $field = $importFileCsvService->TransformNameForSymfony($ColCsv,'field');   
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                 if ($dataColCsv !== $data[$ColCsv] ) {
@@ -2046,13 +2046,13 @@ class ImportFileE3s
                 if (!$flag_foreign) { 
                     $varfield = explode(".", $field)[1];
                     // var_dump($ColCsv); var_dump($field); exit;
-                    if($ColCsv == 'individu.code_ind_biomol' && !is_null($dataColCsv)) { 
+                    if($ColCsv == 'specimen.specimen_molecular_code' && !is_null($dataColCsv)) { 
                         $record_entity = $em->getRepository("BbeesE3sBundle:Individu")->findOneBy(array("codeIndBiomol" => $dataColCsv)); 
                         if($record_entity !== NULL){ 
                            $message .= $this->translator->trans('importfileService.ERROR duplicate code').'<b> : '.$data[$ColCsv]."</b> <br>ligne ".(string)($l+2).": ".join(';', $data)."<br>"; 
                         }
                     }
-                    if($ColCsv == 'code_ind_tri_morpho' && !is_null($dataColCsv)) { 
+                    if($ColCsv == 'specimen_morphological_code' && !is_null($dataColCsv)) { 
                         $record_entity = $em->getRepository("BbeesE3sBundle:Individu")->findOneBy(array("codeIndTriMorpho" => $dataColCsv)); 
                         if($record_entity !== NULL){ 
                            $message .= $this->translator->trans('importfileService.ERROR duplicate code').'<b> : '.$data[$ColCsv]."</b> <br>ligne ".(string)($l+2).": ".join(';', $data)."<br>"; 
@@ -2101,15 +2101,15 @@ class ImportFileE3s
             $em->persist($entity);
             
             # Record of EspeceIdentifiee 
-            $key_taxname = array_keys($columnByTable["espece_identifiee"], "espece_identifiee.taxon_fk(referentiel_taxon.taxname)")[0];
-            // var_dump($data[$columnByTable["espece_identifiee"][$key_taxname]]);
+            $key_taxname = array_keys($columnByTable["identified_species"], "identified_species.taxon_fk(referentiel_taxon.taxname)")[0];
+            // var_dump($data[$columnByTable["identified_species"][$key_taxname]]);
             $entityEspeceIdentifie = NULL;
-            if ($data[$columnByTable["espece_identifiee"][$key_taxname]] != '') { 
+            if ($data[$columnByTable["identified_species"][$key_taxname]] != '') { 
                 $entityRel = new \Bbees\E3sBundle\Entity\EspeceIdentifiee();
                 $entityEspeceIdentifie = $entityRel;
                 $method = "setIndividuFk";
                 $entityRel->$method($entity);
-                foreach($columnByTable["espece_identifiee"] as $ColCsv){ 
+                foreach($columnByTable["identified_species"] as $ColCsv){ 
                    $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                    if ($dataColCsv !== $data[$ColCsv] ) {
                        $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -2120,7 +2120,7 @@ class ImportFileE3s
                    if (!$flag_foreign) { 
                        $varfield = explode(".", $field)[1];
                        // control and standardization of field formats
-                       if ($ColCsv == 'espece_identifiee.date_identification' ) {
+                       if ($ColCsv == 'identified_species.identification_date' ) {
                            // adjusts the incomplete date of type m/Y or Y in 01/m/Y or 01/01/ Y
                            if (!is_null($dataColCsv)){
                                if (count(explode("/",$dataColCsv))== 2) $dataColCsv = "01/".$dataColCsv;
@@ -2187,7 +2187,7 @@ class ImportFileE3s
             
             # Record of EstIdentifiePar    
             if (!is_null($entityEspeceIdentifie)) { 
-                foreach($columnByTable["est_identifie_par"] as $ColCsv){  
+                foreach($columnByTable["species_is_identified_by"] as $ColCsv){  
                    $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                    if ($dataColCsv !== $data[$ColCsv] ) {
                        $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -2368,7 +2368,7 @@ class ImportFileE3s
             #
             $entity = new \Bbees\E3sBundle\Entity\LotMateriel();    
             // 
-            foreach($columnByTable["lot_materiel"] as $ColCsv){  
+            foreach($columnByTable["internal_biological_material"] as $ColCsv){  
                 $field = $importFileCsvService->TransformNameForSymfony($ColCsv,'field');   
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                 if ($dataColCsv !== $data[$ColCsv] ) {
@@ -2378,14 +2378,14 @@ class ImportFileE3s
                 if (!$flag_foreign) { 
                     $varfield = explode(".", $field)[1];
                     // var_dump($ColCsv); var_dump($field); exit;
-                    if($ColCsv == 'lot_materiel.code_lot_materiel') { 
+                    if($ColCsv == 'internal_biological_material.internal_biological_material_code') { 
                         $record_entity = $em->getRepository("BbeesE3sBundle:LotMateriel")->findOneBy(array("codeLotMateriel" => $dataColCsv)); 
                         if($record_entity !== NULL){ 
                            $message .= $this->translator->trans('importfileService.ERROR duplicate code').'<b> : '.$data[$ColCsv]."</b> <br>ligne ".(string)($l+2).": ".join(';', $data)."<br>"; 
                         }
                     }
                     // control and standardization of field formats
-                    if ($ColCsv == 'lot_materiel.date_lot_materiel' ) {
+                    if ($ColCsv == 'internal_biological_material.internal_biological_material_date' ) {
                         // adjusts the incomplete date of type m/Y or Y in 01/m/Y or 01/01/ Y
                         if ($dataColCsv != ''){
                             if (count(explode("/",$dataColCsv))== 2) $dataColCsv = "01/".$dataColCsv;
@@ -2409,7 +2409,7 @@ class ImportFileE3s
                           $dataColCsv = NULL;  
                         }
                     }
-                    if ($ColCsv == 'lot_materiel.a_faire') { 
+                    if ($ColCsv == 'internal_biological_material.internal_biological_material_status') { 
                         if ($dataColCsv != '') {
                             if ($dataColCsv == 'OUI' || $dataColCsv == 'YES' || $dataColCsv == '1') {$dataColCsv = 1 ;}
                             if ($dataColCsv == 'NON' || $dataColCsv == 'NO' || $dataColCsv == '0') {$dataColCsv = 0 ;}
@@ -2464,7 +2464,7 @@ class ImportFileE3s
             $em->persist($entity);
             
             # Record of LotMaterielEstRealisePar                     
-             foreach($columnByTable["lot_materiel_est_realise_par"] as $ColCsv){   
+             foreach($columnByTable["Internal_biological_material_is_treated_by"] as $ColCsv){   
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                 if ($dataColCsv !== $data[$ColCsv] ) {
                     $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -2515,7 +2515,7 @@ class ImportFileE3s
              }  
              
             # Record of LotEstPublieDans                     
-             foreach($columnByTable["lot_est_publie_dans"] as $ColCsv){   
+             foreach($columnByTable["internal_biological_material_is_published_in"] as $ColCsv){   
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                 if ($dataColCsv !== $data[$ColCsv] ) {
                     $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -2566,16 +2566,16 @@ class ImportFileE3s
              }  
              
             # Record of CompositionLotMateriel                      
-             foreach($columnByTable["composition_lot_materiel"] as $ColCsv){  
+             foreach($columnByTable["composition_of_internal_biological_material"] as $ColCsv){  
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                 if ($dataColCsv !== $data[$ColCsv] ) {
                     $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
                 }              
-                if ($ColCsv == 'composition_lot_materiel.commentaire_compo_lot_materiel' ) {
+                if ($ColCsv == 'composition_of_internal_biological_material.internal_biological_material_composition_comments' ) {
                     $commentaireCompoLotMateriel = $dataColCsv;
                 }
                 
-                if ($ColCsv == 'composition_lot_materiel.nb_individus+type_individu_voc_fk(voc.code)' ) {
+                if ($ColCsv == 'composition_of_internal_biological_material.number_of_specimens+specimen_type_voc_fk(voc.code)' ) {
                     $tab_foreign_field = explode("$",$dataColCsv); // We transform the contents of the field into a table 
                     foreach($tab_foreign_field as $val_foreign_field){ 
                         $val_foreign_field = trim($val_foreign_field);
@@ -2583,7 +2583,7 @@ class ImportFileE3s
                         $method = "setLotMaterielFk";
                         $entityRel->$method($entity);
                         $entityRel->setCommentaireCompoLotMateriel($commentaireCompoLotMateriel);
-                        // We split the information into two variable $nb_individus & $type_individu
+                        // We split the information into two variable $number_of_specimens & $type_individu
                         $nb_individu = (int) preg_replace('/[^0-9]/','',$val_foreign_field); 
                         $type_individu =  preg_replace('/[0-9]/','',$val_foreign_field); 
                         $type_individu = trim($type_individu);
@@ -2613,7 +2613,7 @@ class ImportFileE3s
             $entityEspeceIdentifie = $entityRel;
             $method = "setLotMaterielFk";
             $entityRel->$method($entity);
-             foreach($columnByTable["espece_identifiee"] as $ColCsv){ 
+             foreach($columnByTable["identified_species"] as $ColCsv){ 
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                 if ($dataColCsv !== $data[$ColCsv] ) {
                     $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -2623,7 +2623,7 @@ class ImportFileE3s
                 if (!$flag_foreign) { 
                     $varfield = explode(".", $field)[1];
                     // control and standardization of field formats
-                    if ($ColCsv == 'espece_identifiee.date_identification' ) {
+                    if ($ColCsv == 'identified_species.identification_date' ) {
                         // adjusts the incomplete date of type m/Y or Y in 01/m/Y or 01/01/ Y
                         if ($dataColCsv != ''){
                             if (count(explode("/",$dataColCsv))== 2) $dataColCsv = "01/".$dataColCsv;
@@ -2689,7 +2689,7 @@ class ImportFileE3s
              $em->persist($entityRel);
             
             # Record of EstIdentifiePar                     
-             foreach($columnByTable["est_identifie_par"] as $ColCsv){ 
+             foreach($columnByTable["species_is_identified_by"] as $ColCsv){ 
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                 if ($dataColCsv !== $data[$ColCsv] ) {
                     $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -3065,8 +3065,8 @@ class ImportFileE3s
             $compt++;         
             $entity = new \Bbees\E3sBundle\Entity\Etablissement();    
             // 
-            if (array_key_exists("etablissement" ,$columnByTable)) {
-                foreach($columnByTable["etablissement"] as $ColCsv){  
+            if (array_key_exists("institution" ,$columnByTable)) {
+                foreach($columnByTable["institution"] as $ColCsv){  
                     $field = $importFileCsvService->TransformNameForSymfony($ColCsv,'field');   
                     $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                     if ($dataColCsv !== $data[$ColCsv] ) {
@@ -3076,7 +3076,7 @@ class ImportFileE3s
                     $flag_foreign = preg_match('(\((.*?)\))', $ColCsv, $foreign_content);  // flag to know if 1) it is a foreign key 
                     if (!$flag_foreign) { 
                         $varfield = explode(".", $field)[1];
-                        if($ColCsv  == 'etablissement.nom_etablissement') { 
+                        if($ColCsv  == 'institution.institution_name') { 
                             $record_entity = $em->getRepository("BbeesE3sBundle:Etablissement")->findOneBy(array("nomEtablissement" => $dataColCsv)); 
                             if($record_entity !== NULL){ 
                                $message .= $this->translator->trans('importfileService.ERROR duplicate code').'<b> : '.$data[$ColCsv]." / ".$ColCsv.'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
@@ -3387,7 +3387,7 @@ class ImportFileE3s
             $entityEspeceIdentifie = $entityRel;
             $method = "setSequenceAssembleeExtFk";
             $entityRel->$method($entity);
-             foreach($columnByTable["espece_identifiee"] as $ColCsv){ 
+             foreach($columnByTable["identified_species"] as $ColCsv){ 
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                 if ($dataColCsv !== $data[$ColCsv] ) {
                     $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -3397,7 +3397,7 @@ class ImportFileE3s
                 if (!$flag_foreign) { 
                     $varfield = explode(".", $field)[1];
                     // control and standardization of field formats
-                    if ($ColCsv == 'espece_identifiee.date_identification' ) {
+                    if ($ColCsv == 'identified_species.identification_date' ) {
                         // adjusts the incomplete date of type m/Y or Y in 01/m/Y or 01/01/ Y
                         if ($dataColCsv != ''){
                             if (count(explode("/",$dataColCsv))== 2) $dataColCsv = "01/".$dataColCsv;
@@ -3463,7 +3463,7 @@ class ImportFileE3s
              $em->persist($entityRel);
             
             # Record of EstIdentifiePar                     
-            foreach($columnByTable["est_identifie_par"] as $ColCsv){ 
+            foreach($columnByTable["species_is_identified_by"] as $ColCsv){ 
                $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                if ($dataColCsv !== $data[$ColCsv] ) {
                    $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -3550,7 +3550,7 @@ class ImportFileE3s
             #
             $entity = new \Bbees\E3sBundle\Entity\LotMaterielExt();    
             // 
-            foreach($columnByTable["lot_materiel_ext"] as $ColCsv){  
+            foreach($columnByTable["external_biological_material"] as $ColCsv){  
                 $field = $importFileCsvService->TransformNameForSymfony($ColCsv,'field');   
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                 if ($dataColCsv !== $data[$ColCsv] ) {
@@ -3560,14 +3560,14 @@ class ImportFileE3s
                 if (!$flag_foreign) { 
                     $varfield = explode(".", $field)[1];
                     // var_dump($ColCsv); var_dump($field); exit;
-                    if($ColCsv == 'lot_materiel_ext.code_lot_materiel_ext') {  
+                    if($ColCsv == 'external_biological_material.external_biological_material_code') {  
                         $record_entity = $em->getRepository("BbeesE3sBundle:LotMaterielExt")->findOneBy(array("codeLotMaterielExt" => $dataColCsv)); 
                         if($record_entity !== NULL){ 
                            $message .= $this->translator->trans('importfileService.ERROR duplicate code').'<b> : '.$data[$ColCsv]."</b> <br>ligne ".(string)($l+2).": ".join(';', $data)."<br>"; 
                         }
                     }
                     // control and standardization of field formats
-                    if ($ColCsv == 'lot_materiel_ext.date_creation_lot_materiel_ext' ) {
+                    if ($ColCsv == 'external_biological_material.external_biological_material_creation_date' ) {
                         // adjusts the incomplete date of type m/Y or Y in 01/m/Y or 01/01/ Y
                         if ($dataColCsv != ''){
                             if (count(explode("/",$dataColCsv))== 2) $dataColCsv = "01/".$dataColCsv;
@@ -3631,8 +3631,8 @@ class ImportFileE3s
             $entity->setUserMaj($userId);
             $em->persist($entity);
             
-            # Record of lot_materiel_ext_est_realise_par                    
-            foreach($columnByTable["lot_materiel_ext_est_realise_par"] as $ColCsv){   
+            # Record of external_biological_material_is_processed_by                    
+            foreach($columnByTable["external_biological_material_is_processed_by"] as $ColCsv){   
                $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                if ($dataColCsv !== $data[$ColCsv] ) {
                    $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -3683,7 +3683,7 @@ class ImportFileE3s
             }  
     
             # Enregistrement de LotMaterielExtEstReferenceDans                    
-            foreach($columnByTable["lot_materiel_ext_est_reference_dans"] as $ColCsv){   
+            foreach($columnByTable["external_biological_material_is_published_in"] as $ColCsv){   
                $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                if ($dataColCsv !== $data[$ColCsv] ) {
                    $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -3738,7 +3738,7 @@ class ImportFileE3s
             $entityEspeceIdentifie = $entityRel;
             $method = "setLotMaterielExtFk";
             $entityRel->$method($entity);
-             foreach($columnByTable["espece_identifiee"] as $ColCsv){ 
+             foreach($columnByTable["identified_species"] as $ColCsv){ 
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                 if ($dataColCsv !== $data[$ColCsv] ) {
                     $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -3748,7 +3748,7 @@ class ImportFileE3s
                 if (!$flag_foreign) { 
                     $varfield = explode(".", $field)[1];
                     // control and standardization of field formats
-                    if ($ColCsv == 'espece_identifiee.date_identification' ) {
+                    if ($ColCsv == 'identified_species.identification_date' ) {
                         // adjusts the incomplete date of type m/Y or Y in 01/m/Y or 01/01/ Y
                         if ($dataColCsv != ''){
                             if (count(explode("/",$dataColCsv))== 2) $dataColCsv = "01/".$dataColCsv;
@@ -3814,7 +3814,7 @@ class ImportFileE3s
              $em->persist($entityRel);
             
             # Record of EstIdentifiePar                     
-            foreach($columnByTable["est_identifie_par"] as $ColCsv){ 
+            foreach($columnByTable["species_is_identified_by"] as $ColCsv){ 
                $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                if ($dataColCsv !== $data[$ColCsv] ) {
                    $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -4212,7 +4212,7 @@ class ImportFileE3s
             }  
             
             # Enregistrement de EstAligneEtTraite    (liaison aux chromatogram)                
-            foreach($columnByTable["est_aligne_et_traite"] as $ColCsv){   
+            foreach($columnByTable["chromatogram_is_processed_to"] as $ColCsv){   
                $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                if ($dataColCsv !== $data[$ColCsv] ) {
                    $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -4267,7 +4267,7 @@ class ImportFileE3s
             $entityEspeceIdentifie = $entityRel;
             $method = "setSequenceAssembleeFk";
             $entityRel->$method($entity);
-             foreach($columnByTable["espece_identifiee"] as $ColCsv){ 
+             foreach($columnByTable["identified_species"] as $ColCsv){ 
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                 if ($dataColCsv !== $data[$ColCsv] ) {
                     $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -4277,7 +4277,7 @@ class ImportFileE3s
                 if (!$flag_foreign) { 
                     $varfield = explode(".", $field)[1];
                     // control and standardization of field formats
-                    if ($ColCsv == 'espece_identifiee.date_identification' ) {
+                    if ($ColCsv == 'identified_species.identification_date' ) {
                         // adjusts the incomplete date of type m/Y or Y in 01/m/Y or 01/01/ Y
                         if ($dataColCsv != ''){
                             if (count(explode("/",$dataColCsv))== 2) $dataColCsv = "01/".$dataColCsv;
@@ -4343,7 +4343,7 @@ class ImportFileE3s
              $em->persist($entityRel);
             
             # Record of EstIdentifiePar                     
-            foreach($columnByTable["est_identifie_par"] as $ColCsv){ 
+            foreach($columnByTable["species_is_identified_by"] as $ColCsv){ 
                $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                if ($dataColCsv !== $data[$ColCsv] ) {
                    $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";

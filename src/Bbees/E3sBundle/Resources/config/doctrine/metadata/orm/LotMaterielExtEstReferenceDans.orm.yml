@@ -1,10 +1,10 @@
 LotMaterielExtEstReferenceDans:
     type: entity
-    table: lot_materiel_ext_est_reference_dans
+    table: external_biological_material_is_published_in
     indexes:
         ce_cle_etrangere53:
             columns:
-                - lot_materiel_ext_fk
+                - external_biological_material_fk
         ce_cle_etrangere54:
             columns:
                 - source_fk
@@ -56,7 +56,7 @@ LotMaterielExtEstReferenceDans:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                lot_materiel_ext_fk:
+                external_biological_material_fk:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

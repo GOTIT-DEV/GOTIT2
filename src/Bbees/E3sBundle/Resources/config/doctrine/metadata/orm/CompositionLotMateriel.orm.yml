@@ -1,13 +1,13 @@
 CompositionLotMateriel:
     type: entity
-    table: composition_lot_materiel
+    table: composition_of_internal_biological_material
     indexes:
         ce_cle_etrangere15:
             columns:
-                - type_individu_voc_fk
+                - specimen_type_voc_fk
         ce_cle_etrangere16:
             columns:
-                - lot_materiel_fk
+                - internal_biological_material_fk
     id:
         id:
             type: bigint
@@ -23,14 +23,14 @@ CompositionLotMateriel:
             nullable: true
             options:
                 unsigned: false
-            column: nb_individus
+            column: number_of_specimens
         commentaireCompoLotMateriel:
             type: text
             nullable: true
             length: null
             options:
                 fixed: false
-            column: commentaire_compo_lot_materiel
+            column: internal_biological_material_composition_comments
         dateCre:
             type: datetime
             nullable: true
@@ -59,7 +59,7 @@ CompositionLotMateriel:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                type_individu_voc_fk:
+                specimen_type_voc_fk:
                     referencedColumnName: id
             orphanRemoval: false
         lotMaterielFk:
@@ -69,7 +69,7 @@ CompositionLotMateriel:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                lot_materiel_fk:
+                internal_biological_material_fk:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

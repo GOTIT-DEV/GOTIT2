@@ -241,19 +241,19 @@ class RearrangementsService {
                 FROM Assigne Ass
                 JOIN motu ON Ass.motu_fk=motu.id
                 JOIN voc ON Ass.delimitation_method_voc_fk=voc.id
-                JOIN espece_identifiee Esp
+                JOIN identified_species Esp
                     ON Ass.internal_sequence_fk=Esp.internal_sequence_fk
                     OR Ass.external_sequence_fk=Esp.external_sequence_fk
                 JOIN referentiel_taxon R ON Esp.taxon_fk=R.id
 
                 LEFT JOIN sequence_assemblee_ext sext ON Esp.external_sequence_fk=sext.id
                 LEFT JOIN sequence_assemblee seq ON Esp.internal_sequence_fk=seq.id
-                LEFT JOIN est_aligne_et_traite eat ON eat.internal_sequence_fk=seq.id
-                LEFT JOIN chromatogram chr ON chr.id = eat.chromatogramme_fk
+                LEFT JOIN chromatogram_is_processed_to eat ON eat.internal_sequence_fk=seq.id
+                LEFT JOIN chromatogram chr ON chr.id = eat.chromatogram_fk
                 LEFT JOIN pcr ON chr.pcr_fk=pcr.id
                 LEFT JOIN dna ON pcr.dna_fk=dna.id
-                LEFT JOIN individu ind ON ind.id = dna.specimen_fk
-                LEFT JOIN lot_materiel lm ON ind.lot_materiel_fk=lm.id
+                LEFT JOIN specimen ind ON ind.id = dna.specimen_fk
+                LEFT JOIN internal_biological_material lm ON ind.internal_biological_material_fk=lm.id
                 LEFT JOIN sampling co ON co.id = sext.sampling_fk OR co.id=lm.sampling_fk
                 LEFT JOIN station sta ON co.site_fk = sta.id
 
@@ -302,12 +302,12 @@ class RearrangementsService {
 
                 LEFT JOIN sequence_assemblee_ext sext ON a1.external_sequence_fk=sext.id
                 LEFT JOIN sequence_assemblee seq ON a1.internal_sequence_fk=seq.id
-                LEFT JOIN est_aligne_et_traite eat ON eat.internal_sequence_fk=seq.id
-                LEFT JOIN chromatogram chr ON chr.id = eat.chromatogramme_fk
+                LEFT JOIN chromatogram_is_processed_to eat ON eat.internal_sequence_fk=seq.id
+                LEFT JOIN chromatogram chr ON chr.id = eat.chromatogram_fk
                 LEFT JOIN pcr ON chr.pcr_fk=pcr.id
                 LEFT JOIN dna ON pcr.dna_fk=dna.id
-                LEFT JOIN individu ind ON ind.id = dna.specimen_fk
-                LEFT JOIN lot_materiel lm ON ind.lot_materiel_fk=lm.id
+                LEFT JOIN specimen ind ON ind.id = dna.specimen_fk
+                LEFT JOIN internal_biological_material lm ON ind.internal_biological_material_fk=lm.id
                 LEFT JOIN sampling co ON co.id = sext.sampling_fk OR co.id=lm.sampling_fk
                 LEFT JOIN station sta ON co.site_fk = sta.id
 

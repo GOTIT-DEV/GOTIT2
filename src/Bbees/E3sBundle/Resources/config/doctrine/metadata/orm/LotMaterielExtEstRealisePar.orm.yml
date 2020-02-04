@@ -1,13 +1,13 @@
 LotMaterielExtEstRealisePar:
     type: entity
-    table: lot_materiel_ext_est_realise_par
+    table: external_biological_material_is_processed_by
     indexes:
         ce_cle_etrangere51:
             columns:
                 - person_fk
         ce_cle_etrangere52:
             columns:
-                - lot_materiel_ext_fk
+                - external_biological_material_fk
     id:
         id:
             type: bigint
@@ -56,7 +56,7 @@ LotMaterielExtEstRealisePar:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                lot_materiel_ext_fk:
+                external_biological_material_fk:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

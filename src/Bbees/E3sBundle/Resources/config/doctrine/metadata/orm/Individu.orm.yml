@@ -1,13 +1,13 @@
 Individu:
     type: entity
-    table: individu
+    table: specimen
     indexes:
         ce_cle_etrangere83:
             columns:
-                - lot_materiel_fk
+                - internal_biological_material_fk
         ce_cle_etrangere82:
             columns:
-                - type_individu_voc_fk
+                - specimen_type_voc_fk
     id:
         id:
             type: bigint
@@ -24,35 +24,35 @@ Individu:
             length: 255
             options:
                 fixed: false
-            column: code_ind_biomol
+            column: specimen_molecular_code
         codeIndTriMorpho:
             type: string
             nullable: false
             length: 255
             options:
                 fixed: false
-            column: code_ind_tri_morpho
+            column: specimen_morphological_code
         codeTube:
             type: string
             nullable: false
             length: 255
             options:
                 fixed: false
-            column: code_tube
+            column: tube_code
         numIndBiomol:
             type: string
             nullable: true
             length: 255
             options:
                 fixed: false
-            column: num_ind_biomol
+            column: specimen_molecular_number
         commentaireInd:
             type: text
             nullable: true
             length: null
             options:
                 fixed: false
-            column: commentaire_ind
+            column: specimen_comments
         dateCre:
             type: datetime
             nullable: true
@@ -81,7 +81,7 @@ Individu:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                type_individu_voc_fk:
+                specimen_type_voc_fk:
                     referencedColumnName: id
             orphanRemoval: false
         lotMaterielFk:
@@ -91,7 +91,7 @@ Individu:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                lot_materiel_fk:
+                internal_biological_material_fk:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

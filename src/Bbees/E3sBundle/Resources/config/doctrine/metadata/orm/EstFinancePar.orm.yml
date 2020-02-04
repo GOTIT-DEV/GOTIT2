@@ -1,10 +1,10 @@
 EstFinancePar:
     type: entity
-    table: est_finance_par
+    table: sampling_is_funded_by
     indexes:
         ce_cle_etrangere100:
             columns:
-                - programme_fk
+                - program_fk
         ce_cle_etrangere101:
             columns:
                 - sampling_fk
@@ -46,7 +46,7 @@ EstFinancePar:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                programme_fk:
+                program_fk:
                     referencedColumnName: id
             orphanRemoval: false
         collecteFk:

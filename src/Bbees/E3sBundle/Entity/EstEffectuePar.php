@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EstEffectuePar
  *
- * @ORM\Table(name="est_effectue_par", indexes={@ORM\Index(name="IDX_EE2A88C9B53CD04C", columns={"person_fk"}), @ORM\Index(name="IDX_EE2A88C9662D9B98", columns={"sampling_fk"})})
+ * @ORM\Table(name="sampling_is_performed_by", indexes={@ORM\Index(name="IDX_EE2A88C9B53CD04C", columns={"person_fk"}), @ORM\Index(name="IDX_EE2A88C9662D9B98", columns={"sampling_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -34,7 +34,7 @@ class EstEffectuePar
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="est_effectue_par_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="sampling_is_performed_by_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 

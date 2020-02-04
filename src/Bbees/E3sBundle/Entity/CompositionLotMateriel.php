@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CompositionLotMateriel
  *
- * @ORM\Table(name="composition_lot_materiel", indexes={@ORM\Index(name="IDX_10A697444236D33E", columns={"type_individu_voc_fk"}), @ORM\Index(name="IDX_10A6974454DBBD4D", columns={"lot_materiel_fk"})})
+ * @ORM\Table(name="composition_of_internal_biological_material", indexes={@ORM\Index(name="IDX_10A697444236D33E", columns={"specimen_type_voc_fk"}), @ORM\Index(name="IDX_10A6974454DBBD4D", columns={"internal_biological_material_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -34,21 +34,21 @@ class CompositionLotMateriel
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="composition_lot_materiel_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="composition_of_internal_biological_material_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="nb_individus", type="bigint", nullable=true)
+     * @ORM\Column(name="number_of_specimens", type="bigint", nullable=true)
      */
     private $nbIndividus;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="commentaire_compo_lot_materiel", type="text", nullable=true)
+     * @ORM\Column(name="internal_biological_material_composition_comments", type="text", nullable=true)
      */
     private $commentaireCompoLotMateriel;
 
@@ -85,7 +85,7 @@ class CompositionLotMateriel
      *
      * @ORM\ManyToOne(targetEntity="Voc")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="type_individu_voc_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="specimen_type_voc_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $typeIndividuVocFk;
@@ -95,7 +95,7 @@ class CompositionLotMateriel
      *
      * @ORM\ManyToOne(targetEntity="LotMateriel", inversedBy="compositionLotMateriels")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="lot_materiel_fk", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     *   @ORM\JoinColumn(name="internal_biological_material_fk", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * })
      */
     private $lotMaterielFk;

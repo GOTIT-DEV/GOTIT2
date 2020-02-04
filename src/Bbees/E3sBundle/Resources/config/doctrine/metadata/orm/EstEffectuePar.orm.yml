@@ -1,6 +1,6 @@
 EstEffectuePar:
     type: entity
-    table: est_effectue_par
+    table: sampling_is_performed_by
     indexes:
         ce_cle_etrangere65:
             columns:

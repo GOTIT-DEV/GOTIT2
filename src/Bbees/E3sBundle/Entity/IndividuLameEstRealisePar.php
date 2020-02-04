@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * IndividuLameEstRealisePar
  *
- * @ORM\Table(name="individu_lame_est_realise_par", indexes={@ORM\Index(name="IDX_88295540D9C85992", columns={"individu_lame_fk"}), @ORM\Index(name="IDX_88295540B53CD04C", columns={"person_fk"})})
+ * @ORM\Table(name="slide_is_mounted_by", indexes={@ORM\Index(name="IDX_88295540D9C85992", columns={"specimen_slide_fk"}), @ORM\Index(name="IDX_88295540B53CD04C", columns={"person_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -34,7 +34,7 @@ class IndividuLameEstRealisePar
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="individu_lame_est_realise_par_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="slide_is_mounted_by_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
@@ -71,7 +71,7 @@ class IndividuLameEstRealisePar
      *
      * @ORM\ManyToOne(targetEntity="IndividuLame", inversedBy="individuLameEstRealisePars")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="individu_lame_fk", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     *   @ORM\JoinColumn(name="specimen_slide_fk", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * })
      */
     private $individuLameFk;

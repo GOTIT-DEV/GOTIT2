@@ -1,13 +1,13 @@
 LotMateriel:
     type: entity
-    table: lot_materiel
+    table: internal_biological_material
     indexes:
         ce_cle_etrangere69:
             columns:
                 - date_precision_voc_fk
         ce_cle_etrangere71:
             columns:
-                - yeux_voc_fk
+                - eyes_voc_fk
         ce_cle_etrangere72:
             columns:
                 - sampling_fk
@@ -20,7 +20,7 @@ LotMateriel:
     uniqueConstraints:
         cu_lot_materiel_cle_primaire:
             columns:
-                - code_lot_materiel
+                - internal_biological_material_code
     id:
         id:
             type: bigint
@@ -37,11 +37,11 @@ LotMateriel:
             length: 255
             options:
                 fixed: false
-            column: code_lot_materiel
+            column: internal_biological_material_code
         dateLotMateriel:
             type: date
             nullable: true
-            column: date_lot_materiel
+            column: internal_biological_material_date
         commentaireConseilSqc:
             type: text
             nullable: true
@@ -55,13 +55,13 @@ LotMateriel:
             length: null
             options:
                 fixed: false
-            column: commentaire_lot_materiel
+            column: internal_biological_material_comments
         aFaire:
             type: smallint
             nullable: true
             options:
                 unsigned: false
-            column: a_faire
+            column: internal_biological_material_status
         dateCre:
             type: datetime
             nullable: true
@@ -110,7 +110,7 @@ LotMateriel:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                yeux_voc_fk:
+                eyes_voc_fk:
                     referencedColumnName: id
             orphanRemoval: false
         collecteFk:
