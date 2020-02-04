@@ -17,18 +17,18 @@ Motu:
             length: 1024
             options:
                 fixed: false
-            column: nom_fichier_csv
+            column: csv_file_name
         dateMotu:
             type: date
             nullable: false
-            column: date_motu
+            column: motu_date
         commentaireMotu:
             type: text
             nullable: true
             length: null
             options:
                 fixed: false
-            column: commentaire_motu
+            column: motu_comments
         dateCre:
             type: datetime
             nullable: true
@@ -55,5 +55,5 @@ Motu:
             length: 255
             options:
                 fixed: false
-            column: libelle_motu
+            column: motu_title
     lifecycleCallbacks: {  }

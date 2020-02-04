@@ -1,6 +1,6 @@
 PcrEstRealisePar:
     type: entity
-    table: pcr_est_realise_par
+    table: pcr_is_done_by
     indexes:
         ce_cle_etrangere21:
             columns:

@@ -1,6 +1,6 @@
 MotuEstGenerePar:
     type: entity
-    table: motu_est_genere_par
+    table: motu_is_generated_by
     indexes:
         ce_cle_etrangere33:
             columns:

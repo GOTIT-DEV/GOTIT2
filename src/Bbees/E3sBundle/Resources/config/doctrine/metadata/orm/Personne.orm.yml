@@ -1,6 +1,6 @@
 Personne:
     type: entity
-    table: personne
+    table: person
     indexes:
         ce_cle_etrangere63:
             columns:
@@ -8,7 +8,7 @@ Personne:
     uniqueConstraints:
         cu_personne_cle_primaire:
             columns:
-                - nom_personne
+                - person_name
     id:
         id:
             type: bigint
@@ -25,28 +25,28 @@ Personne:
             length: 255
             options:
                 fixed: false
-            column: nom_personne
+            column: person_name
         nomComplet:
             type: string
             nullable: true
             length: 1024
             options:
                 fixed: false
-            column: nom_complet
+            column: person_full_name
         nomPersonneRef:
             type: string
             nullable: true
             length: 255
             options:
                 fixed: false
-            column: nom_personne_ref
+            column: person_name_bis
         commentairePersonne:
             type: text
             nullable: true
             length: null
             options:
                 fixed: false
-            column: commentaire_personne
+            column: person_comments
         dateCre:
             type: datetime
             nullable: true

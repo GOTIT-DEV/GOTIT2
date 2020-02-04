@@ -42,28 +42,28 @@ class Motu
     /**
      * @var string
      *
-     * @ORM\Column(name="libelle_motu", type="string", length=255, nullable=false)
+     * @ORM\Column(name="motu_title", type="string", length=255, nullable=false)
      */
     private $libelleMotu;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nom_fichier_csv", type="string", length=1024, nullable=false)
+     * @ORM\Column(name="csv_file_name", type="string", length=1024, nullable=false)
      */
     private $nomFichierCsv;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_motu", type="date", nullable=false)
+     * @ORM\Column(name="motu_date", type="date", nullable=false)
      */
     private $dateMotu;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="commentaire_motu", type="text", nullable=true)
+     * @ORM\Column(name="motu_comments", type="text", nullable=true)
      */
     private $commentaireMotu;
 

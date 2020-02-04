@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PcrEstRealisePar
  *
- * @ORM\Table(name="pcr_est_realise_par", indexes={@ORM\Index(name="IDX_1041853B2B63D494", columns={"pcr_fk"}), @ORM\Index(name="IDX_1041853BB53CD04C", columns={"person_fk"})})
+ * @ORM\Table(name="pcr_is_done_by", indexes={@ORM\Index(name="IDX_1041853B2B63D494", columns={"pcr_fk"}), @ORM\Index(name="IDX_1041853BB53CD04C", columns={"person_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -34,7 +34,7 @@ class PcrEstRealisePar
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="pcr_est_realise_par_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="pcr_is_done_by_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 

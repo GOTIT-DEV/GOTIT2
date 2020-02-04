@@ -67,7 +67,7 @@ class RearrangementsService {
       $counter[$m['id_dataset']][$m['id']] = array_fill_keys($keys, 0); // stocke les comptages
       // Ajout d'infos sur la méthode
       $counter[$m['id_dataset']][$m['id']]['methode']      = $m['code'];
-      $counter[$m['id_dataset']][$m['id']]['libelle_motu'] = $m['libelle_motu'];
+      $counter[$m['id_dataset']][$m['id']]['motu_title'] = $m['motu_title'];
       // Liste des séquences et stations à compter
       $counter[$m['id_dataset']][$m['id']]['seq']     = [];
       $counter[$m['id_dataset']][$m['id']]['seq_ext'] = [];
@@ -227,12 +227,12 @@ class RearrangementsService {
                 voc.code AS methode,
                 voc.id AS id_methode,
                 motu.id AS id_dataset,
-                motu.date_motu,
-                motu.libelle_motu AS libelle_motu,
+                motu.motu_date,
+                motu.motu_title AS motu_title,
                 R.id AS id_ref,
                 R.genus,
                 R.species,
-                R.taxname,
+                R.taxon_name,
 
                 Ass.internal_sequence_fk as seq,
                 Ass.external_sequence_fk as seq_ext,
@@ -244,7 +244,7 @@ class RearrangementsService {
                 JOIN identified_species Esp
                     ON Ass.internal_sequence_fk=Esp.internal_sequence_fk
                     OR Ass.external_sequence_fk=Esp.external_sequence_fk
-                JOIN referentiel_taxon R ON Esp.taxon_fk=R.id
+                JOIN taxon R ON Esp.taxon_fk=R.id
 
                 LEFT JOIN sequence_assemblee_ext sext ON Esp.external_sequence_fk=sext.id
                 LEFT JOIN sequence_assemblee seq ON Esp.internal_sequence_fk=seq.id
@@ -264,7 +264,7 @@ class RearrangementsService {
         $rawSql .= " AND R.id = :tax_id";
         $stmt = $pdo->prepare($rawSql);
         $stmt->execute(array(
-          'tax_id'         => $this->parameters->get('taxname'),
+          'tax_id'         => $this->parameters->get('taxon_name'),
           'target_dataset' => $this->target,
         ));
       } else {
@@ -284,8 +284,8 @@ class RearrangementsService {
                 v2.code AS methode,
                 v2.id AS id_methode,
                 m2.id AS id_dataset,
-                m2.libelle_motu AS libelle_motu,
-                m2.date_motu AS date_motu,
+                m2.motu_title AS motu_title,
+                m2.motu_date AS motu_date,
 
                 a1.internal_sequence_fk as seq,
                 a1.external_sequence_fk as seq_ext,

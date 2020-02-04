@@ -1,10 +1,10 @@
 Pays:
     type: entity
-    table: pays
+    table: country
     uniqueConstraints:
         cu_pays_cle_primaire:
             columns:
-                - code_pays
+                - country_code
     id:
         id:
             type: bigint
@@ -21,14 +21,14 @@ Pays:
             length: 255
             options:
                 fixed: false
-            column: code_pays
+            column: country_code
         nomPays:
             type: string
             nullable: false
             length: 1024
             options:
                 fixed: false
-            column: nom_pays
+            column: country_name
         dateCre:
             type: datetime
             nullable: true

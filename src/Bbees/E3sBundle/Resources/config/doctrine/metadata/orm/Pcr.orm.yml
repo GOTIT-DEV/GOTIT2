@@ -13,20 +13,20 @@ Pcr:
                 - gene_voc_fk
         ce_cle_etrangere92:
             columns:
-                - primer_pcr_start_voc_fk
+                - forward_primer_voc_fk
         ce_cle_etrangere93:
             columns:
-                - primer_pcr_end_voc_fk
+                - reverse_primer_voc_fk
         ce_cle_etrangere90:
             columns:
-                - qualite_pcr_voc_fk
+                - pcr_quality_voc_fk
         ce_cle_etrangere91:
             columns:
-                - specificite_voc_fk
+                - pcr_specificity_voc_fk
     uniqueConstraints:
         cu_pcr_cle_primaire:
             columns:
-                - code_pcr
+                - pcr_code
     id:
         id:
             type: bigint
@@ -43,32 +43,32 @@ Pcr:
             length: 255
             options:
                 fixed: false
-            column: code_pcr
+            column: pcr_code
         numPcr:
             type: string
             nullable: false
             length: 255
             options:
                 fixed: false
-            column: num_pcr
+            column: pcr_number
         datePcr:
             type: date
             nullable: true
-            column: date_pcr
+            column: pcr_date
         detailPcr:
             type: text
             nullable: true
             length: null
             options:
                 fixed: false
-            column: detail_pcr
+            column: pcr_details
         remarquePcr:
             type: text
             nullable: true
             length: null
             options:
                 fixed: false
-            column: remarque_pcr
+            column: pcr_comments
         dateCre:
             type: datetime
             nullable: true
@@ -107,7 +107,7 @@ Pcr:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                qualite_pcr_voc_fk:
+                pcr_quality_voc_fk:
                     referencedColumnName: id
             orphanRemoval: false
         specificiteVocFk:
@@ -117,7 +117,7 @@ Pcr:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                specificite_voc_fk:
+                pcr_specificity_voc_fk:
                     referencedColumnName: id
             orphanRemoval: false
         primerPcrStartVocFk:
@@ -127,7 +127,7 @@ Pcr:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                primer_pcr_start_voc_fk:
+                forward_primer_voc_fk:
                     referencedColumnName: id
             orphanRemoval: false
         primerPcrEndVocFk:
@@ -137,7 +137,7 @@ Pcr:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                primer_pcr_end_voc_fk:
+                reverse_primer_voc_fk:
                     referencedColumnName: id
             orphanRemoval: false
         datePrecisionVocFk:

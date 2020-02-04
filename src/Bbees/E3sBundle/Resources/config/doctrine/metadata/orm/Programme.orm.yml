@@ -1,10 +1,10 @@
 Programme:
     type: entity
-    table: programme
+    table: program
     uniqueConstraints:
         cu_programme_cle_primaire:
             columns:
-                - code_programme
+                - program_code
     id:
         id:
             type: bigint
@@ -21,47 +21,47 @@ Programme:
             length: 255
             options:
                 fixed: false
-            column: code_programme
+            column: program_code
         nomProgramme:
             type: string
             nullable: false
             length: 1024
             options:
                 fixed: false
-            column: nom_programme
+            column: program_name
         nomsResponsables:
             type: text
             nullable: false
             length: null
             options:
                 fixed: false
-            column: noms_responsables
+            column: coordinator_names
         typeFinanceur:
             type: string
             nullable: true
             length: 1024
             options:
                 fixed: false
-            column: type_financeur
+            column: funding_agency
         anneeDebut:
             type: bigint
             nullable: true
             options:
                 unsigned: false
-            column: annee_debut
+            column: starting_year
         anneeFin:
             type: bigint
             nullable: true
             options:
                 unsigned: false
-            column: annee_fin
+            column: ending_year
         commentaireProgramme:
             type: text
             nullable: true
             length: null
             options:
                 fixed: false
-            column: commentaire_programme
+            column: program_comments
         dateCre:
             type: datetime
             nullable: true

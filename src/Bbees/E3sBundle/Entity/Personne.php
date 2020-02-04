@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Personne
  *
- * @ORM\Table(name="personne", uniqueConstraints={@ORM\UniqueConstraint(name="cu_personne_cle_primaire", columns={"nom_personne"})}, indexes={@ORM\Index(name="IDX_FCEC9EFE8441376", columns={"institution_fk"})})
+ * @ORM\Table(name="person", uniqueConstraints={@ORM\UniqueConstraint(name="cu_personne_cle_primaire", columns={"person_name"})}, indexes={@ORM\Index(name="IDX_FCEC9EFE8441376", columns={"institution_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -34,35 +34,35 @@ class Personne
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="personne_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="person_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nom_personne", type="string", length=255, nullable=false)
+     * @ORM\Column(name="person_name", type="string", length=255, nullable=false)
      */
     private $nomPersonne;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nom_complet", type="string", length=1024, nullable=true)
+     * @ORM\Column(name="person_full_name", type="string", length=1024, nullable=true)
      */
     private $nomComplet;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nom_personne_ref", type="string", length=255, nullable=true)
+     * @ORM\Column(name="person_name_bis", type="string", length=255, nullable=true)
      */
     private $nomPersonneRef;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="commentaire_personne", type="text", nullable=true)
+     * @ORM\Column(name="person_comments", type="text", nullable=true)
      */
     private $commentairePersonne;
 

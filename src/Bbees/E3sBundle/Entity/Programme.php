@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Programme
  *
- * @ORM\Table(name="programme", uniqueConstraints={@ORM\UniqueConstraint(name="cu_programme_cle_primaire", columns={"code_programme"})})
+ * @ORM\Table(name="program", uniqueConstraints={@ORM\UniqueConstraint(name="cu_programme_cle_primaire", columns={"program_code"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -34,56 +34,56 @@ class Programme
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="programme_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="program_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="code_programme", type="string", length=255, nullable=false)
+     * @ORM\Column(name="program_code", type="string", length=255, nullable=false)
      */
     private $codeProgramme;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nom_programme", type="string", length=1024, nullable=false)
+     * @ORM\Column(name="program_name", type="string", length=1024, nullable=false)
      */
     private $nomProgramme;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="noms_responsables", type="text", nullable=false)
+     * @ORM\Column(name="coordinator_names", type="text", nullable=false)
      */
     private $nomsResponsables;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="type_financeur", type="string", length=1024, nullable=true)
+     * @ORM\Column(name="funding_agency", type="string", length=1024, nullable=true)
      */
     private $typeFinanceur;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="annee_debut", type="bigint", nullable=true)
+     * @ORM\Column(name="starting_year", type="bigint", nullable=true)
      */
     private $anneeDebut;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="annee_fin", type="bigint", nullable=true)
+     * @ORM\Column(name="ending_year", type="bigint", nullable=true)
      */
     private $anneeFin;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="commentaire_programme", type="text", nullable=true)
+     * @ORM\Column(name="program_comments", type="text", nullable=true)
      */
     private $commentaireProgramme;
 

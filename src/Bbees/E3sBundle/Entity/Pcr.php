@@ -23,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Pcr
  *
- * @ORM\Table(name="pcr", uniqueConstraints={@ORM\UniqueConstraint(name="cu_pcr_cle_primaire", columns={"code_pcr"})}, indexes={@ORM\Index(name="IDX_5B6B99369D3CDB05", columns={"gene_voc_fk"}), @ORM\Index(name="IDX_5B6B99368B4A1710", columns={"qualite_pcr_voc_fk"}), @ORM\Index(name="IDX_5B6B99366CCC2566", columns={"specificite_voc_fk"}), @ORM\Index(name="IDX_5B6B99362C5B04A7", columns={"primer_pcr_start_voc_fk"}), @ORM\Index(name="IDX_5B6B9936F1694267", columns={"primer_pcr_end_voc_fk"}), @ORM\Index(name="IDX_5B6B9936A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_5B6B99364B06319D", columns={"dna_fk"})})
+ * @ORM\Table(name="pcr", uniqueConstraints={@ORM\UniqueConstraint(name="cu_pcr_cle_primaire", columns={"pcr_code"})}, indexes={@ORM\Index(name="IDX_5B6B99369D3CDB05", columns={"gene_voc_fk"}), @ORM\Index(name="IDX_5B6B99368B4A1710", columns={"pcr_quality_voc_fk"}), @ORM\Index(name="IDX_5B6B99366CCC2566", columns={"pcr_specificity_voc_fk"}), @ORM\Index(name="IDX_5B6B99362C5B04A7", columns={"forward_primer_voc_fk"}), @ORM\Index(name="IDX_5B6B9936F1694267", columns={"reverse_primer_voc_fk"}), @ORM\Index(name="IDX_5B6B9936A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_5B6B99364B06319D", columns={"dna_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -42,35 +42,35 @@ class Pcr
     /**
      * @var string
      *
-     * @ORM\Column(name="code_pcr", type="string", length=255, nullable=false)
+     * @ORM\Column(name="pcr_code", type="string", length=255, nullable=false)
      */
     private $codePcr;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="num_pcr", type="string", length=255, nullable=false)
+     * @ORM\Column(name="pcr_number", type="string", length=255, nullable=false)
      */
     private $numPcr;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_pcr", type="date", nullable=true)
+     * @ORM\Column(name="pcr_date", type="date", nullable=true)
      */
     private $datePcr;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="detail_pcr", type="text", nullable=true)
+     * @ORM\Column(name="pcr_details", type="text", nullable=true)
      */
     private $detailPcr;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="remarque_pcr", type="text", nullable=true)
+     * @ORM\Column(name="pcr_comments", type="text", nullable=true)
      */
     private $remarquePcr;
 
@@ -117,7 +117,7 @@ class Pcr
      *
      * @ORM\ManyToOne(targetEntity="Voc")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="qualite_pcr_voc_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="pcr_quality_voc_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $qualitePcrVocFk;
@@ -127,7 +127,7 @@ class Pcr
      *
      * @ORM\ManyToOne(targetEntity="Voc")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="specificite_voc_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="pcr_specificity_voc_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $specificiteVocFk;
@@ -137,7 +137,7 @@ class Pcr
      *
      * @ORM\ManyToOne(targetEntity="Voc")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="primer_pcr_start_voc_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="forward_primer_voc_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $primerPcrStartVocFk;
@@ -147,7 +147,7 @@ class Pcr
      *
      * @ORM\ManyToOne(targetEntity="Voc")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="primer_pcr_end_voc_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="reverse_primer_voc_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $primerPcrEndVocFk;

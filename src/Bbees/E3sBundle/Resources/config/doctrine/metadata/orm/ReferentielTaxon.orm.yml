@@ -1,10 +1,10 @@
 ReferentielTaxon:
     type: entity
-    table: referentiel_taxon
+    table: taxon
     uniqueConstraints:
         cu_referentiel_taxon_cle_primaire:
             columns:
-                - taxname
+                - taxon_name
     id:
         id:
             type: bigint
@@ -15,13 +15,13 @@ ReferentielTaxon:
             generator:
                 strategy: SEQUENCE
     fields:
-        taxname:
+        taxon_name:
             type: string
             nullable: false
             length: 255
             options:
                 fixed: false
-        rank:
+        taxon_rank:
             type: string
             nullable: false
             length: 255
@@ -33,7 +33,7 @@ ReferentielTaxon:
             length: 255
             options:
                 fixed: false
-        ordre:
+        taxon_order:
             type: string
             nullable: true
             length: 255
@@ -63,7 +63,7 @@ ReferentielTaxon:
             length: 255
             options:
                 fixed: false
-        validity:
+        taxon_validity:
             type: smallint
             nullable: false
             options:
@@ -74,14 +74,14 @@ ReferentielTaxon:
             length: 255
             options:
                 fixed: false
-            column: code_taxon
+            column: taxon_code
         commentaireRef:
             type: text
             nullable: true
             length: null
             options:
                 fixed: false
-            column: commentaire_ref
+            column: taxon_comments
         objectif:
             type: string
             nullable: true
@@ -100,7 +100,7 @@ ReferentielTaxon:
             length: 255
             options:
                 fixed: false
-            column: taxname_ref
+            column: taxon_synonym
         dateCre:
             type: datetime
             nullable: true

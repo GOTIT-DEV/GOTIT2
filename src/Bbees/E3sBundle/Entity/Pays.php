@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Pays
  *
- * @ORM\Table(name="pays", uniqueConstraints={@ORM\UniqueConstraint(name="cu_pays_cle_primaire", columns={"code_pays"})})
+ * @ORM\Table(name="country", uniqueConstraints={@ORM\UniqueConstraint(name="cu_pays_cle_primaire", columns={"country_code"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -34,21 +34,21 @@ class Pays
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="pays_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="country_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="code_pays", type="string", length=255, nullable=false)
+     * @ORM\Column(name="country_code", type="string", length=255, nullable=false)
      */
     private $codePays;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nom_pays", type="string", length=1024, nullable=false)
+     * @ORM\Column(name="country_name", type="string", length=1024, nullable=false)
      */
     private $nomPays;
 

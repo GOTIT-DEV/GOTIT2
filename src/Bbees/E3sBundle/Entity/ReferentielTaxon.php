@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ReferentielTaxon
  *
- * @ORM\Table(name="referentiel_taxon", uniqueConstraints={ @ORM\UniqueConstraint(name="cu_referentiel_taxon_cle_primaire", columns={"taxname"}), @ORM\UniqueConstraint(name="cu_referentiel_taxon_code_taxon", columns={"code_taxon"}) } )
+ * @ORM\Table(name="taxon", uniqueConstraints={ @ORM\UniqueConstraint(name="cu_referentiel_taxon_cle_primaire", columns={"taxon_name"}), @ORM\UniqueConstraint(name="cu_referentiel_taxon_code_taxon", columns={"taxon_code"}) } )
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -34,21 +34,21 @@ class ReferentielTaxon
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="referentiel_taxon_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="taxon_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="taxname", type="string", length=255, nullable=false)
+     * @ORM\Column(name="taxon_name", type="string", length=255, nullable=false)
      */
     private $taxname;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="rank", type="string", length=255, nullable=false)
+     * @ORM\Column(name="taxon_rank", type="string", length=255, nullable=false)
      */
     private $rank;
 
@@ -62,7 +62,7 @@ class ReferentielTaxon
     /**
      * @var string
      *
-     * @ORM\Column(name="ordre", type="string", length=255, nullable=true)
+     * @ORM\Column(name="taxon_order", type="string", length=255, nullable=true)
      */
     private $ordre;
 
@@ -97,21 +97,21 @@ class ReferentielTaxon
     /**
      * @var integer
      *
-     * @ORM\Column(name="validity", type="smallint", nullable=false)
+     * @ORM\Column(name="taxon_validity", type="smallint", nullable=false)
      */
     private $validity;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="code_taxon", type="string", length=255, nullable=false)
+     * @ORM\Column(name="taxon_code", type="string", length=255, nullable=false)
      */
     private $codeTaxon;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="commentaire_ref", type="text", nullable=true)
+     * @ORM\Column(name="taxon_comments", type="text", nullable=true)
      */
     private $commentaireRef;
 
@@ -125,7 +125,7 @@ class ReferentielTaxon
     /**
      * @var string
      *
-     * @ORM\Column(name="taxname_ref", type="string", length=255, nullable=true)
+     * @ORM\Column(name="taxon_synonym", type="string", length=255, nullable=true)
      */
     private $taxnameRef;
 

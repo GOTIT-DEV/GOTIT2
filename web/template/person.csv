@@ -1,1 +1,1 @@
-personne.nom_personne;personne.nom_complet;personne.nom_personne_ref;personne.institution_fk(institution.institution_name);personne.commentaire_personne
+person.person_name;person.person_full_name;person.person_name_bis;person.institution_fk(institution.institution_name);person.person_comments

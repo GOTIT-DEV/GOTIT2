@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * MotuEstGenerePar
  *
- * @ORM\Table(name="motu_est_genere_par", indexes={@ORM\Index(name="IDX_17A90EA3503B4409", columns={"motu_fk"}), @ORM\Index(name="IDX_17A90EA3B53CD04C", columns={"person_fk"})})
+ * @ORM\Table(name="motu_is_generated_by", indexes={@ORM\Index(name="IDX_17A90EA3503B4409", columns={"motu_fk"}), @ORM\Index(name="IDX_17A90EA3B53CD04C", columns={"person_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -34,7 +34,7 @@ class MotuEstGenerePar
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="motu_est_genere_par_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="motu_is_generated_by_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 

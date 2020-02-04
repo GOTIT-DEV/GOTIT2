@@ -35,7 +35,7 @@ class QueryBuilderService
   public function getMethodsByDate($id_dataset)
   {
     $qb    = $this->entityManager->createQueryBuilder();
-    $query = $qb->select('v.id, v.code, m.id as id_dataset, m.libelleMotu as libelle_motu')
+    $query = $qb->select('v.id, v.code, m.id as id_dataset, m.libelleMotu as motu_title')
       ->from('BbeesE3sBundle:Motu', 'm')
       ->join('BbeesE3sBundle:Assigne', 'a', 'WITH', 'a.motuFk=m')
       ->join('BbeesE3sBundle:Voc', 'v', 'WITH', "a.methodeMotuVocFk=v AND v.code != 'HAPLO'")
@@ -51,7 +51,7 @@ class QueryBuilderService
   {
     $qb    = $this->entityManager->createQueryBuilder();
     $query = $qb->select('v.id as id_methode, v.code')
-      ->addSelect('m.id as id_dataset, m.dateMotu as date_dataset, m.libelleMotu as libelle_motu')
+      ->addSelect('m.id as id_dataset, m.dateMotu as date_dataset, m.libelleMotu as motu_title')
       ->from('BbeesE3sBundle:Motu', 'm')
       ->join('BbeesE3sBundle:Assigne', 'a', 'WITH', 'a.motuFk=m')
       ->join('BbeesE3sBundle:Voc', 'v', 'WITH', "a.methodeMotuVocFk=v AND v.code != 'HAPLO'")
@@ -69,7 +69,7 @@ class QueryBuilderService
   public function listMethodsByDate()
   {
     $qb    = $this->entityManager->createQueryBuilder();
-    $query = $qb->select('v.id, v.code, m.id as id_dataset, m.dateMotu as date_dataset, m.libelleMotu as libelle_motu')
+    $query = $qb->select('v.id, v.code, m.id as id_dataset, m.dateMotu as date_dataset, m.libelleMotu as motu_title')
       ->from('BbeesE3sBundle:Motu', 'm')
       ->join('BbeesE3sBundle:Assigne', 'a', 'WITH', 'a.motuFk=m')
       ->join('BbeesE3sBundle:Voc', 'v', 'WITH', "a.methodeMotuVocFk=v AND v.code != 'HAPLO'")
@@ -139,9 +139,9 @@ class QueryBuilderService
     $criteres = $data->get('criteres');
 
     $qb    = $this->entityManager->createQueryBuilder();
-    $query = $qb->select('rt.taxname, rt.id')
+    $query = $qb->select('rt.taxon_name, rt.id')
       ->addSelect('voc.id as id_methode, voc.code as methode')
-      ->addSelect('motu.id as id_dataset, motu.dateMotu as date_motu, motu.libelleMotu as libelle_motu')
+      ->addSelect('motu.id as id_dataset, motu.dateMotu as motu_date, motu.libelleMotu as motu_title')
       ->addSelect('COUNT(DISTINCT ass.numMotu ) as nb_motus')
       ->from('BbeesE3sBundle:ReferentielTaxon', 'rt')
       ->join('BbeesE3sBundle:EspeceIdentifiee', 'e', 'WITH', 'rt.id = e.referentielTaxonFk');
@@ -190,7 +190,7 @@ class QueryBuilderService
     $query = $query->andWHere("voc.code != 'HAPLO'")
       ->andWhere('motu.id = :id_dataset')
       ->setParameter('id_dataset', $dataset)
-      ->groupBy('rt.id, rt.taxname, voc.id, voc.code, motu.id')
+      ->groupBy('rt.id, rt.taxon_name, voc.id, voc.code, motu.id')
       ->orderBy('rt.id')
       ->getQuery();
 
@@ -217,13 +217,13 @@ class QueryBuilderService
 
     $qb    = $this->entityManager->createQueryBuilder();
     $query = $qb->select('lm.id as id_lm, lm.codeLotMateriel as code_lm') // lot matériel
-      ->addSelect('lmrt.id as idtax_lm, lmrt.taxname as taxname_lm') // taxon lot matériel
+      ->addSelect('lmrt.id as idtax_lm, lmrt.taxon_name as taxname_lm') // taxon lot matériel
       ->addSelect('lmvoc.code as critere_lm') // critere lot matériel
       ->addSelect('indiv.id as id_indiv, indiv.codeIndBiomol as code_biomol, indiv.codeIndTriMorpho as code_tri_morpho') // individu
-      ->addSelect('indivrt.id as idtax_indiv, indivrt.taxname as taxname_indiv') // taxon individu
+      ->addSelect('indivrt.id as idtax_indiv, indivrt.taxon_name as taxname_indiv') // taxon individu
       ->addSelect('ivoc.code as critere_indiv') // critere individu
       ->addSelect('seq.id as id_seq, seq.codeSqcAss as code_seq') // séquence
-      ->addSelect('seqrt.id as idtax_seq, seqrt.taxname as taxname_seq') // taxon séquence
+      ->addSelect('seqrt.id as idtax_seq, seqrt.taxon_name as taxname_seq') // taxon séquence
       ->addSelect('seqvoc.code as critere_seq') // critere sequence
       // JOIN lot matériel
       ->from('BbeesE3sBundle:LotMateriel', 'lm')
@@ -270,14 +270,14 @@ class QueryBuilderService
   {
     $id_taxon   = $data->get('taxon');
     $id_methode = $data->get('methode');
-    $dataset    = $data->get('date_motu');
+    $dataset    = $data->get('motu_date');
     $niveau     = $data->get('niveau');
     $criteres   = $data->get('criteres');
 
     $qb    = $this->entityManager->createQueryBuilder();
-    $query = $qb->select('rt.id as idesp, rt.taxname')
+    $query = $qb->select('rt.id as idesp, rt.taxon_name')
       ->addSelect('voc.code as methode')
-      ->addSelect('m.dateMotu as date_motu')
+      ->addSelect('m.dateMotu as motu_date')
       ->addSelect('seq.id, seq.codeSqcAss as code, seq.accessionNumber as acc')
       ->addSelect('ass.numMotu as motu')
       ->addSelect('v.code as critere')
@@ -313,11 +313,11 @@ class QueryBuilderService
       ->join('BbeesE3sBundle:Voc', 'voc', 'WITH', 'ass.methodeMotuVocFk = voc.id')
       ->andWhere('rt.id = :id_taxon')
       ->andWhere('voc.id = :methode')
-      ->andWhere('m.id = :date_motu')
+      ->andWhere('m.id = :motu_date')
       ->setParameters([
         'id_taxon'  => $id_taxon,
         'methode'   => $id_methode,
-        'date_motu' => $dataset,
+        'motu_date' => $dataset,
       ]);
 
     if ($criteres) {
@@ -376,7 +376,7 @@ class QueryBuilderService
     $rawSql = "WITH esta AS ($station_subquery)";
     $rawSql .= "SELECT DISTINCT
                 rt.id as taxon_id,
-                rt.taxname as taxon_name,
+                rt.taxon_name as taxon_name,
                 esta.lm_id as bio_mat_id,
                 s.id as station_id,
                 s.code_station as station_code,
@@ -384,12 +384,12 @@ class QueryBuilderService
                 s.long_deg_dec as longitude,
                 s.altitude_m as altitude,
                 c.municipality_name as municipality,
-                p.nom_pays as country
-            FROM referentiel_taxon rt
+                p.country_name as country
+            FROM taxon rt
             JOIN esta ON esta.taxon_fk = rt.id
             JOIN station s ON s.id = esta.id_sta
             LEFT JOIN municipality c ON c.id=s.commune_fk
-            LEFT JOIN pays p ON s.country_fk=p.id
+            LEFT JOIN country p ON s.country_fk=p.id
             WHERE rt.id=:id";
 
     $stmt = $this->entityManager->getConnection()->prepare($rawSql);
@@ -451,16 +451,16 @@ class QueryBuilderService
             GROUP BY sta1.taxon_fk";
 
     $main_subquery = "SELECT
-            rt.taxname,
+            rt.taxon_name,
             rt.id,
             COUNT(distinct esta.id_sta) as nb_sta,
             (min(esta.latitude) + (max(esta.latitude)-min(esta.latitude))/2)  as LMP
-            FROM referentiel_taxon rt
+            FROM taxon rt
             JOIN identified_species e ON e.taxon_fk = rt.id
             JOIN esta ON esta.taxon_fk=rt.id
             JOIN voc ON voc.id = e.identification_criterion_voc_fk
             --taxafilter.placeholder
-            GROUP BY rt.id, rt.taxname
+            GROUP BY rt.id, rt.taxon_name
             ORDER BY nb_sta DESC";
     if ($data->get('taxaFilter')) {
       // Additional filter to query only for a target species
@@ -477,13 +477,13 @@ class QueryBuilderService
     $rawSql .= " SELECT
             main.id as arrkey,
             main.id,
-            main.taxname,
+            main.taxon_name,
             nb_sta as nb_sta$FIELD_SUFFIX,
             LMP as LMP$FIELD_SUFFIX,
             mle.MLE as MLE$FIELD_SUFFIX
             FROM main
             LEFT JOIN mle ON mle.taxon_fk=main.id
-            ORDER BY taxname;";
+            ORDER BY taxon_name;";
 
     $stmt = $this->entityManager->getConnection()->prepare($rawSql);
     if ($data->get('taxaFilter')) {
@@ -500,11 +500,11 @@ class QueryBuilderService
   public function getMotuGeoLocation($data)
   {
 
-    $taxid    = $data->get('taxname');
+    $taxid    = $data->get('taxon_name');
     $subquery = "SELECT
             seq.id, type_seq,
             voc.id as id_methode, voc.code as methode,
-            motu.id as id_dataset, motu.date_motu, motu.libelle_motu, motu_number as motu
+            motu.id as id_dataset, motu.motu_date, motu.motu_title, motu_number as motu
         FROM (
             SELECT sequence_assemblee.id as id,
                     0 as type_seq,
@@ -531,17 +531,17 @@ class QueryBuilderService
             liste_motus.id_methode,
             liste_motus.methode,
             liste_motus.id_dataset,
-            liste_motus.libelle_motu,
+            liste_motus.motu_title,
             liste_motus.motu,
             tax.id as taxon_id,
-            tax.taxname,
+            tax.taxon_name,
             station.id as id_sta,
             station.altitude_m as altitude,
             station.lat_deg_dec as latitude,
             station.long_deg_dec as longitude,
             station.code_station as station_code,
             municipality.municipality_name as municipality,
-            pays.nom_pays as country
+            country.country_name as country
 
             FROM (SELECT id,code,  accession_number,
                  sampling_fk, rt, delimitation, type_seq
@@ -572,17 +572,17 @@ class QueryBuilderService
                         LEFT JOIN identified_species ei on ei.internal_sequence_fk=seqas.id
                         LEFT JOIN voc critere ON ei.identification_criterion_voc_fk=critere.id
                     ) AS union_seq ) AS seq
-            LEFT JOIN referentiel_taxon tax ON tax.id=seq.rt
+            LEFT JOIN taxon tax ON tax.id=seq.rt
             JOIN sampling ON seq.sampling_fk=sampling.id
             JOIN station ON sampling.site_fk=station.id
             JOIN municipality ON station.commune_fk=municipality.id
-            JOIN pays ON station.country_fk=pays.id
+            JOIN country ON station.country_fk=country.id
             JOIN liste_motus ON seq.id=liste_motus.id AND liste_motus.type_seq = seq.type_seq";
     if ($taxid) {
       $rawSql .= " WHERE tax.id = :taxid";
     }
 
-    $rawSql .= " ORDER BY taxname, seq.code";
+    $rawSql .= " ORDER BY taxon_name, seq.code";
 
     $stmt = $this->entityManager->getConnection()->prepare($rawSql);
     if ($taxid) {
