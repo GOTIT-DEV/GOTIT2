@@ -48,7 +48,7 @@ LotMateriel:
             length: null
             options:
                 fixed: false
-            column: commentaire_conseil_sqc
+            column: sequencing_advice
         commentaireLotMateriel:
             type: text
             nullable: true

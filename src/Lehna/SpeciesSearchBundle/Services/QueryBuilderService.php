@@ -140,7 +140,7 @@ class QueryBuilderService
 
     $qb    = $this->entityManager->createQueryBuilder();
     $query = $qb->select('rt.taxon_name, rt.id')
-      ->addSelect('voc.id as id_methode, voc.code as methode')
+      ->addSelect('vocabulary.id as id_methode, vocabulary.code as methode')
       ->addSelect('motu.id as id_dataset, motu.dateMotu as motu_date, motu.libelleMotu as motu_title')
       ->addSelect('COUNT(DISTINCT ass.numMotu ) as nb_motus')
       ->from('BbeesE3sBundle:ReferentielTaxon', 'rt')
@@ -166,7 +166,7 @@ class QueryBuilderService
     }
 
     $query = $query->join('BbeesE3sBundle:Motu', 'motu', 'WITH', 'ass.motuFk = motu.id')
-      ->join('BbeesE3sBundle:Voc', 'voc', 'WITH', 'ass.methodeMotuVocFk = voc.id');
+      ->join('BbeesE3sBundle:Voc', 'vocabulary', 'WITH', 'ass.methodeMotuVocFk = vocabulary.id');
 
     if ($data->get('taxaFilter')) {
       $query = $query->andWhere('rt.species = :species')
@@ -187,10 +187,10 @@ class QueryBuilderService
         ->setParameter('methodes', $methodes);
     }
 
-    $query = $query->andWHere("voc.code != 'HAPLO'")
+    $query = $query->andWHere("vocabulary.code != 'HAPLO'")
       ->andWhere('motu.id = :id_dataset')
       ->setParameter('id_dataset', $dataset)
-      ->groupBy('rt.id, rt.taxon_name, voc.id, voc.code, motu.id')
+      ->groupBy('rt.id, rt.taxon_name, vocabulary.id, vocabulary.code, motu.id')
       ->orderBy('rt.id')
       ->getQuery();
 
@@ -276,7 +276,7 @@ class QueryBuilderService
 
     $qb    = $this->entityManager->createQueryBuilder();
     $query = $qb->select('rt.id as idesp, rt.taxon_name')
-      ->addSelect('voc.code as methode')
+      ->addSelect('vocabulary.code as methode')
       ->addSelect('m.dateMotu as motu_date')
       ->addSelect('seq.id, seq.codeSqcAss as code, seq.accessionNumber as acc')
       ->addSelect('ass.numMotu as motu')
@@ -310,9 +310,9 @@ class QueryBuilderService
     }
 
     $query = $query->join('BbeesE3sBundle:Motu', 'm', 'WITH', 'ass.motuFk = m.id')
-      ->join('BbeesE3sBundle:Voc', 'voc', 'WITH', 'ass.methodeMotuVocFk = voc.id')
+      ->join('BbeesE3sBundle:Voc', 'vocabulary', 'WITH', 'ass.methodeMotuVocFk = vocabulary.id')
       ->andWhere('rt.id = :id_taxon')
-      ->andWhere('voc.id = :methode')
+      ->andWhere('vocabulary.id = :methode')
       ->andWhere('m.id = :motu_date')
       ->setParameters([
         'id_taxon'  => $id_taxon,
@@ -345,32 +345,32 @@ class QueryBuilderService
     if ($co1) {
       $station_subquery = "SELECT DISTINCT
             eid.taxon_fk, lm.id as lm_id,
-            sta.id as id_sta, sta.long_deg_dec as longitude, sta.lat_deg_dec as latitude
+            sta.id as id_sta, sta.longitude as longitude, sta.latitude as latitude
             FROM identified_species eid
-            LEFT JOIN sequence_assemblee_ext sext ON eid.external_sequence_fk=sext.id
-            LEFT JOIN voc v1 ON v1.id=sext.gene_voc_fk
-            LEFT JOIN sequence_assemblee seq ON eid.internal_sequence_fk=seq.id
+            LEFT JOIN external_sequence sext ON eid.external_sequence_fk=sext.id
+            LEFT JOIN vocabulary v1 ON v1.id=sext.gene_voc_fk
+            LEFT JOIN internal_sequence seq ON eid.internal_sequence_fk=seq.id
             LEFT JOIN chromatogram_is_processed_to eat ON eat.internal_sequence_fk=seq.id
             LEFT JOIN chromatogram chr ON chr.id = eat.chromatogram_fk
             LEFT JOIN pcr ON chr.pcr_fk=pcr.id
-            LEFT JOIN voc v2 ON pcr.gene_voc_fk=v2.id
-            LEFT JOIN voc statut ON statut.id=seq.statut_sqc_ass_voc_fk
+            LEFT JOIN vocabulary v2 ON pcr.gene_voc_fk=v2.id
+            LEFT JOIN vocabulary statut ON statut.id=seq.internal_sequence_status_voc_fk
             LEFT JOIN dna ON pcr.dna_fk=dna.id
             LEFT JOIN specimen ind ON ind.id = dna.specimen_fk
             LEFT JOIN internal_biological_material lm ON ind.internal_biological_material_fk=lm.id
             JOIN sampling co ON co.id = sext.sampling_fk OR co.id=lm.sampling_fk
-            JOIN station sta ON co.site_fk = sta.id
+            JOIN site sta ON co.site_fk = sta.id
             WHERE v1.code='COI' OR v2.code='COI'
             AND statut.code IN ('SHORT', 'VALIDEE')";
     } else {
       $station_subquery = "SELECT DISTINCT
              eid.taxon_fk, lm.id as lm_id,
-             sta.id as id_sta, sta.long_deg_dec as longitude, sta.lat_deg_dec as latitude
+             sta.id as id_sta, sta.longitude as longitude, sta.latitude as latitude
             FROM identified_species eid
             LEFT JOIN internal_biological_material lm ON eid.internal_biological_material_fk=lm.id
             LEFT JOIN external_biological_material lmext ON eid.external_biological_material_fk=lmext.id
             JOIN sampling co ON co.id = lm.sampling_fk OR co.id=lmext.sampling_fk
-            JOIN station sta ON co.site_fk = sta.id";
+            JOIN site sta ON co.site_fk = sta.id";
     }
 
     $rawSql = "WITH esta AS ($station_subquery)";
@@ -379,16 +379,16 @@ class QueryBuilderService
                 rt.taxon_name as taxon_name,
                 esta.lm_id as bio_mat_id,
                 s.id as station_id,
-                s.code_station as station_code,
-                s.lat_deg_dec as latitude,
-                s.long_deg_dec as longitude,
-                s.altitude_m as altitude,
+                s.site_code as station_code,
+                s.latitude as latitude,
+                s.longitude as longitude,
+                s.elevation as altitude,
                 c.municipality_name as municipality,
                 p.country_name as country
             FROM taxon rt
             JOIN esta ON esta.taxon_fk = rt.id
-            JOIN station s ON s.id = esta.id_sta
-            LEFT JOIN municipality c ON c.id=s.commune_fk
+            JOIN site s ON s.id = esta.id_sta
+            LEFT JOIN municipality c ON c.id=s.municipality_fk
             LEFT JOIN country p ON s.country_fk=p.id
             WHERE rt.id=:id";
 
@@ -409,37 +409,37 @@ class QueryBuilderService
     if ($co1) {
       $station_subquery = "SELECT DISTINCT
             eid.taxon_fk,
-            sta.id as id_sta, sta.long_deg_dec as longitude, sta.lat_deg_dec as latitude
+            sta.id as id_sta, sta.longitude as longitude, sta.latitude as latitude
             FROM identified_species eid
             -- External sequences
-            LEFT JOIN sequence_assemblee_ext sext ON eid.external_sequence_fk=sext.id
-            LEFT JOIN voc v1 ON v1.id=sext.gene_voc_fk
+            LEFT JOIN external_sequence sext ON eid.external_sequence_fk=sext.id
+            LEFT JOIN vocabulary v1 ON v1.id=sext.gene_voc_fk
             -- Internal sequences
-            LEFT JOIN sequence_assemblee seq ON eid.internal_sequence_fk=seq.id
+            LEFT JOIN internal_sequence seq ON eid.internal_sequence_fk=seq.id
             LEFT JOIN chromatogram_is_processed_to eat ON eat.internal_sequence_fk=seq.id
             LEFT JOIN chromatogram chr ON chr.id = eat.chromatogram_fk
             LEFT JOIN pcr ON chr.pcr_fk=pcr.id
-            LEFT JOIN voc v2 ON pcr.gene_voc_fk=v2.id
-            LEFT JOIN voc statut ON seq.statut_sqc_ass_voc_fk=statut.id
+            LEFT JOIN vocabulary v2 ON pcr.gene_voc_fk=v2.id
+            LEFT JOIN vocabulary statut ON seq.internal_sequence_status_voc_fk=statut.id
             LEFT JOIN dna ON pcr.dna_fk=dna.id
             LEFT JOIN specimen ind ON ind.id = dna.specimen_fk
             LEFT JOIN internal_biological_material lm ON ind.internal_biological_material_fk=lm.id
             -- Find all sampling events ('sampling') of internal or external seq
             JOIN sampling co ON co.id = sext.sampling_fk OR co.id=lm.sampling_fk
-            -- Join to corresponding station
-            JOIN station sta ON co.site_fk = sta.id
+            -- Join to corresponding site
+            JOIN site sta ON co.site_fk = sta.id
             -- COI constraint
             WHERE v1.code='COI' OR v2.code='COI'
             AND statut.code IN ('SHORT', 'VALIDEE')";
     } else {
       $station_subquery = "SELECT DISTINCT
              eid.taxon_fk,
-             sta.id as id_sta, sta.long_deg_dec as longitude, sta.lat_deg_dec as latitude
+             sta.id as id_sta, sta.longitude as longitude, sta.latitude as latitude
             FROM identified_species eid
             LEFT JOIN internal_biological_material lm ON eid.internal_biological_material_fk=lm.id
             LEFT JOIN external_biological_material lmext ON eid.external_biological_material_fk=lmext.id
             JOIN sampling co ON co.id = lm.sampling_fk OR co.id=lmext.sampling_fk
-            JOIN station sta ON co.site_fk = sta.id";
+            JOIN site sta ON co.site_fk = sta.id";
     }
 
     // Compute maximum longitudinal extent (MLE) for each requested species
@@ -458,7 +458,7 @@ class QueryBuilderService
             FROM taxon rt
             JOIN identified_species e ON e.taxon_fk = rt.id
             JOIN esta ON esta.taxon_fk=rt.id
-            JOIN voc ON voc.id = e.identification_criterion_voc_fk
+            JOIN vocabulary ON vocabulary.id = e.identification_criterion_voc_fk
             --taxafilter.placeholder
             GROUP BY rt.id, rt.taxon_name
             ORDER BY nb_sta DESC";
@@ -503,29 +503,29 @@ class QueryBuilderService
     $taxid    = $data->get('taxon_name');
     $subquery = "SELECT
             seq.id, type_seq,
-            voc.id as id_methode, voc.code as methode,
+            vocabulary.id as id_methode, vocabulary.code as methode,
             motu.id as id_dataset, motu.motu_date, motu.motu_title, motu_number as motu
         FROM (
-            SELECT sequence_assemblee.id as id,
+            SELECT internal_sequence.id as id,
                     0 as type_seq,
                     motu_number.delimitation_method_voc_fk as methode_voc,
                     motu_number.motu_number,
                     motu_number.motu_fk
-            FROM motu_number JOIN sequence_assemblee ON motu_number.internal_sequence_fk=sequence_assemblee.id
+            FROM motu_number JOIN internal_sequence ON motu_number.internal_sequence_fk=internal_sequence.id
             UNION
-            SELECT sequence_assemblee_ext.id as id,
+            SELECT external_sequence.id as id,
                     1 as type_seq,
                     motu_number.delimitation_method_voc_fk as methode_voc,
                     motu_number.motu_number,
                     motu_number.motu_fk
-            FROM motu_number JOIN sequence_assemblee_ext ON motu_number.external_sequence_fk=sequence_assemblee_ext.id
+            FROM motu_number JOIN external_sequence ON motu_number.external_sequence_fk=external_sequence.id
             ) as seq
-            JOIN voc ON voc.id=seq.methode_voc
+            JOIN vocabulary ON vocabulary.id=seq.methode_voc
             JOIN motu ON motu.id=seq.motu_fk
-            WHERE motu.id = :id_dataset AND voc.id=:id_methode ";
+            WHERE motu.id = :id_dataset AND vocabulary.id=:id_methode ";
 
     $rawSql = "WITH liste_motus AS ($subquery)";
-    $rawSql .= "SELECT DISTINCT seq.id, seq.code, seq.accession_number,
+    $rawSql .= "SELECT DISTINCT seq.id, seq.code, seq.internal_sequence_accession_number,
             seq.delimitation,
             seq.type_seq as seq_type,
             liste_motus.id_methode,
@@ -535,30 +535,30 @@ class QueryBuilderService
             liste_motus.motu,
             tax.id as taxon_id,
             tax.taxon_name,
-            station.id as id_sta,
-            station.altitude_m as altitude,
-            station.lat_deg_dec as latitude,
-            station.long_deg_dec as longitude,
-            station.code_station as station_code,
+            site.id as id_sta,
+            site.elevation as altitude,
+            site.latitude as latitude,
+            site.longitude as longitude,
+            site.site_code as station_code,
             municipality.municipality_name as municipality,
             country.country_name as country
 
-            FROM (SELECT id,code,  accession_number,
+            FROM (SELECT id,code,  internal_sequence_accession_number,
                  sampling_fk, rt, delimitation, type_seq
                 FROM (
-                    SELECT  sequence_assemblee_ext.id,
-                            sequence_assemblee_ext.code_sqc_ass_ext as code,
-                            accession_number_sqc_ass_ext as accession_number,
+                    SELECT  external_sequence.id,
+                            external_sequence.external_sequence_code as code,
+                            external_sequence_accession_number as internal_sequence_accession_number,
                             sampling_fk, ei.taxon_fk as rt,
                             critere.code as delimitation,
                             1 as type_seq
-                    FROM sequence_assemblee_ext
-                        LEFT JOIN identified_species ei on ei.external_sequence_fk=sequence_assemblee_ext.id
-                        LEFT JOIN voc critere ON ei.identification_criterion_voc_fk=critere.id
+                    FROM external_sequence
+                        LEFT JOIN identified_species ei on ei.external_sequence_fk=external_sequence.id
+                        LEFT JOIN vocabulary critere ON ei.identification_criterion_voc_fk=critere.id
                 UNION
                     SELECT  seqas.id,
-                            seqas.code_sqc_ass as code,
-                            seqas.accession_number,
+                            seqas.internal_sequence_code as code,
+                            seqas.internal_sequence_accession_number,
                             lmat.sampling_fk, ei.taxon_fk as rt,
                             critere.code as delimitation,
                             0 as type_seq
@@ -568,15 +568,15 @@ class QueryBuilderService
                         JOIN pcr ON pcr.dna_fk=dna.id
                         JOIN chromatogram ON chromatogram.pcr_fk=pcr.id
                         JOIN chromatogram_is_processed_to eaet ON chromatogram.id=eaet.chromatogram_fk
-                        JOIN sequence_assemblee seqas ON seqas.id=eaet.internal_sequence_fk
+                        JOIN internal_sequence seqas ON seqas.id=eaet.internal_sequence_fk
                         LEFT JOIN identified_species ei on ei.internal_sequence_fk=seqas.id
-                        LEFT JOIN voc critere ON ei.identification_criterion_voc_fk=critere.id
+                        LEFT JOIN vocabulary critere ON ei.identification_criterion_voc_fk=critere.id
                     ) AS union_seq ) AS seq
             LEFT JOIN taxon tax ON tax.id=seq.rt
             JOIN sampling ON seq.sampling_fk=sampling.id
-            JOIN station ON sampling.site_fk=station.id
-            JOIN municipality ON station.commune_fk=municipality.id
-            JOIN country ON station.country_fk=country.id
+            JOIN site ON sampling.site_fk=site.id
+            JOIN municipality ON site.municipality_fk=municipality.id
+            JOIN country ON site.country_fk=country.id
             JOIN liste_motus ON seq.id=liste_motus.id AND liste_motus.type_seq = seq.type_seq";
     if ($taxid) {
       $rawSql .= " WHERE tax.id = :taxid";

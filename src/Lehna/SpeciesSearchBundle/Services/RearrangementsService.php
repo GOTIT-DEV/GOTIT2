@@ -224,8 +224,8 @@ class RearrangementsService {
     if ($this->reference < 2) {
       // morpho
       $rawSql = "SELECT distinct Ass.motu_number,
-                voc.code AS methode,
-                voc.id AS id_methode,
+                vocabulary.code AS methode,
+                vocabulary.id AS id_methode,
                 motu.id AS id_dataset,
                 motu.motu_date,
                 motu.motu_title AS motu_title,
@@ -240,14 +240,14 @@ class RearrangementsService {
 
                 FROM Assigne Ass
                 JOIN motu ON Ass.motu_fk=motu.id
-                JOIN voc ON Ass.delimitation_method_voc_fk=voc.id
+                JOIN vocabulary ON Ass.delimitation_method_voc_fk=vocabulary.id
                 JOIN identified_species Esp
                     ON Ass.internal_sequence_fk=Esp.internal_sequence_fk
                     OR Ass.external_sequence_fk=Esp.external_sequence_fk
                 JOIN taxon R ON Esp.taxon_fk=R.id
 
-                LEFT JOIN sequence_assemblee_ext sext ON Esp.external_sequence_fk=sext.id
-                LEFT JOIN sequence_assemblee seq ON Esp.internal_sequence_fk=seq.id
+                LEFT JOIN external_sequence sext ON Esp.external_sequence_fk=sext.id
+                LEFT JOIN internal_sequence seq ON Esp.internal_sequence_fk=seq.id
                 LEFT JOIN chromatogram_is_processed_to eat ON eat.internal_sequence_fk=seq.id
                 LEFT JOIN chromatogram chr ON chr.id = eat.chromatogram_fk
                 LEFT JOIN pcr ON chr.pcr_fk=pcr.id
@@ -255,9 +255,9 @@ class RearrangementsService {
                 LEFT JOIN specimen ind ON ind.id = dna.specimen_fk
                 LEFT JOIN internal_biological_material lm ON ind.internal_biological_material_fk=lm.id
                 LEFT JOIN sampling co ON co.id = sext.sampling_fk OR co.id=lm.sampling_fk
-                LEFT JOIN station sta ON co.site_fk = sta.id
+                LEFT JOIN site sta ON co.site_fk = sta.id
 
-                WHERE voc.code != 'HAPLO'
+                WHERE vocabulary.code != 'HAPLO'
                 AND motu.id = :target_dataset";
       if ($this->reference == 1) {
         // taxa filter
@@ -293,15 +293,15 @@ class RearrangementsService {
 
                 FROM motu_number a1
                 JOIN motu m1 ON a1.motu_fk=m1.id
-                JOIN voc v1 ON a1.delimitation_method_voc_fk=v1.id
+                JOIN vocabulary v1 ON a1.delimitation_method_voc_fk=v1.id
                 JOIN motu_number a2
                     ON a1.internal_sequence_fk=a2.internal_sequence_fk
                     OR a1.external_sequence_fk=a2.external_sequence_fk
-                JOIN voc v2 ON a2.delimitation_method_voc_fk=v2.id
+                JOIN vocabulary v2 ON a2.delimitation_method_voc_fk=v2.id
                 JOIN motu m2 ON m2.id=a2.motu_fk
 
-                LEFT JOIN sequence_assemblee_ext sext ON a1.external_sequence_fk=sext.id
-                LEFT JOIN sequence_assemblee seq ON a1.internal_sequence_fk=seq.id
+                LEFT JOIN external_sequence sext ON a1.external_sequence_fk=sext.id
+                LEFT JOIN internal_sequence seq ON a1.internal_sequence_fk=seq.id
                 LEFT JOIN chromatogram_is_processed_to eat ON eat.internal_sequence_fk=seq.id
                 LEFT JOIN chromatogram chr ON chr.id = eat.chromatogram_fk
                 LEFT JOIN pcr ON chr.pcr_fk=pcr.id
@@ -309,7 +309,7 @@ class RearrangementsService {
                 LEFT JOIN specimen ind ON ind.id = dna.specimen_fk
                 LEFT JOIN internal_biological_material lm ON ind.internal_biological_material_fk=lm.id
                 LEFT JOIN sampling co ON co.id = sext.sampling_fk OR co.id=lm.sampling_fk
-                LEFT JOIN station sta ON co.site_fk = sta.id
+                LEFT JOIN site sta ON co.site_fk = sta.id
 
                 WHERE v1.code != 'HAPLO'
                 AND v2.code !='HAPLO'

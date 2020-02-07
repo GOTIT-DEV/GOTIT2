@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * SourceAEteIntegrePar
  *
- * @ORM\Table(name="source_a_ete_integre_par", indexes={@ORM\Index(name="IDX_16DC6005821B1D3F", columns={"source_fk"}), @ORM\Index(name="IDX_16DC6005B53CD04C", columns={"person_fk"})})
+ * @ORM\Table(name="source_is_entered_by", indexes={@ORM\Index(name="IDX_16DC6005821B1D3F", columns={"source_fk"}), @ORM\Index(name="IDX_16DC6005B53CD04C", columns={"person_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -34,7 +34,7 @@ class SourceAEteIntegrePar
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="source_a_ete_integre_par_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="source_is_entered_by_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 

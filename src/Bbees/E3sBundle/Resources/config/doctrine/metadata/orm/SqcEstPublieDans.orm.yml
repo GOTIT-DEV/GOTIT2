@@ -1,6 +1,6 @@
 SqcEstPublieDans:
     type: entity
-    table: sqc_est_publie_dans
+    table: internal_sequence_is_published_in
     indexes:
         ce_cle_etrangere:
             columns:

@@ -1,1 +1,1 @@
-chromatogram.pcr_fk(pcr.pcr_code);chromatogram.chromatogram_code;chromatogram.chromatogram_number;chromatogram.chromato_primer_voc_fk(voc.code);chromatogram.chromato_quality_voc_fk(voc.code);chromatogram.chromatogram_comments;chromatogram.institution_fk(institution.institution_name)
+chromatogram.pcr_fk(pcr.pcr_code);chromatogram.chromatogram_code;chromatogram.chromatogram_number;chromatogram.chromato_primer_voc_fk(vocabulary.code);chromatogram.chromato_quality_voc_fk(vocabulary.code);chromatogram.chromatogram_comments;chromatogram.institution_fk(institution.institution_name)

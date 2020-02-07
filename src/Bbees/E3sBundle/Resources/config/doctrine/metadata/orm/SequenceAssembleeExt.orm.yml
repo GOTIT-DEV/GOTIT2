@@ -1,13 +1,13 @@
 SequenceAssembleeExt:
     type: entity
-    table: sequence_assemblee_ext
+    table: external_sequence
     indexes:
         ce_cle_etrangere4:
             columns:
-                - origine_sqc_ass_ext_voc_fk
+                - external_sequence_origin_voc_fk
         ce_cle_etrangere6:
             columns:
-                - statut_sqc_ass_voc_fk
+                - external_sequence_status_voc_fk
         ce_cle_etrangere2:
             columns:
                 - gene_voc_fk
@@ -20,7 +20,7 @@ SequenceAssembleeExt:
     uniqueConstraints:
         cu_sequence_assemblee_ext_cle_primaire:
             columns:
-                - code_sqc_ass_ext
+                - external_sequence_code
     id:
         id:
             type: bigint
@@ -37,46 +37,46 @@ SequenceAssembleeExt:
             length: 1024
             options:
                 fixed: false
-            column: code_sqc_ass_ext
+            column: external_sequence_code
         dateCreationSqcAssExt:
             type: date
             nullable: true
-            column: date_creation_sqc_ass_ext
+            column: external_sequence_creation_date
         accessionNumberSqcAssExt:
             type: string
             nullable: false
             length: null
             options:
                 fixed: false
-            column: accession_number_sqc_ass_ext
+            column: external_sequence_accession_number
         codeSqcAssExtAlignement:
             type: string
             nullable: true
             length: 1024
             options:
                 fixed: false
-            column: code_sqc_ass_ext_alignement
+            column: external_sequence_alignment_code
         numIndividuSqcAssExt:
             type: string
             nullable: false
             length: 255
             options:
                 fixed: false
-            column: num_individu_sqc_ass_ext
+            column: external_sequence_specimen_number
         taxonOrigineSqcAssExt:
             type: string
             nullable: true
             length: 255
             options:
                 fixed: false
-            column: taxon_origine_sqc_ass_ext
+            column: external_sequence_primary_taxon
         commentaireSqcAssExt:
             type: text
             nullable: true
             length: null
             options:
                 fixed: false
-            column: commentaire_sqc_ass_ext
+            column: external_sequence_comments
         dateCre:
             type: datetime
             nullable: true
@@ -125,7 +125,7 @@ SequenceAssembleeExt:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                origine_sqc_ass_ext_voc_fk:
+                external_sequence_origin_voc_fk:
                     referencedColumnName: id
             orphanRemoval: false
         collecteFk:
@@ -145,7 +145,7 @@ SequenceAssembleeExt:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                statut_sqc_ass_voc_fk:
+                external_sequence_status_voc_fk:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

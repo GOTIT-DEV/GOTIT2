@@ -1,6 +1,6 @@
 SequenceAssembleeEstRealisePar:
     type: entity
-    table: sequence_assemblee_est_realise_par
+    table: internal_sequence_is_assembled_by
     indexes:
         ce_cle_etrangere19:
             columns:

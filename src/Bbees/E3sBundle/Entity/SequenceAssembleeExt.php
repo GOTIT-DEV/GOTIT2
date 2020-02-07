@@ -23,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * SequenceAssembleeExt
  *
- * @ORM\Table(name="sequence_assemblee_ext", uniqueConstraints={@ORM\UniqueConstraint(name="cu_sequence_assemblee_ext_cle_primaire", columns={"code_sqc_ass_ext"}), @ORM\UniqueConstraint(name="cu_sequence_assemblee_ext_code_sqc_ass_ext_alignement", columns={"code_sqc_ass_ext_alignement"})}, indexes={@ORM\Index(name="IDX_9E9F85CF9D3CDB05", columns={"gene_voc_fk"}), @ORM\Index(name="IDX_9E9F85CFA30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_9E9F85CF514D78E0", columns={"origine_sqc_ass_ext_voc_fk"}), @ORM\Index(name="IDX_9E9F85CF662D9B98", columns={"sampling_fk"}), @ORM\Index(name="IDX_9E9F85CF88085E0F", columns={"statut_sqc_ass_voc_fk"})})
+ * @ORM\Table(name="external_sequence", uniqueConstraints={@ORM\UniqueConstraint(name="cu_sequence_assemblee_ext_cle_primaire", columns={"external_sequence_code"}), @ORM\UniqueConstraint(name="cu_sequence_assemblee_ext_external_sequence_alignment_code", columns={"external_sequence_alignment_code"})}, indexes={@ORM\Index(name="IDX_9E9F85CF9D3CDB05", columns={"gene_voc_fk"}), @ORM\Index(name="IDX_9E9F85CFA30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_9E9F85CF514D78E0", columns={"external_sequence_origin_voc_fk"}), @ORM\Index(name="IDX_9E9F85CF662D9B98", columns={"sampling_fk"}), @ORM\Index(name="IDX_9E9F85CF88085E0F", columns={"external_sequence_status_voc_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -35,56 +35,56 @@ class SequenceAssembleeExt
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="sequence_assemblee_ext_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="external_sequence_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="code_sqc_ass_ext", type="string", length=1024, nullable=false, unique=true)
+     * @ORM\Column(name="external_sequence_code", type="string", length=1024, nullable=false, unique=true)
      */
     private $codeSqcAssExt;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_creation_sqc_ass_ext", type="date", nullable=true)
+     * @ORM\Column(name="external_sequence_creation_date", type="date", nullable=true)
      */
     private $dateCreationSqcAssExt;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="accession_number_sqc_ass_ext", type="string", length=255, nullable=false)
+     * @ORM\Column(name="external_sequence_accession_number", type="string", length=255, nullable=false)
      */
     private $accessionNumberSqcAssExt;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="code_sqc_ass_ext_alignement", type="string", length=1024, nullable=true)
+     * @ORM\Column(name="external_sequence_alignment_code", type="string", length=1024, nullable=true)
      */
     private $codeSqcAssExtAlignement;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="num_individu_sqc_ass_ext", type="string", length=255, nullable=false)
+     * @ORM\Column(name="external_sequence_specimen_number", type="string", length=255, nullable=false)
      */
     private $numIndividuSqcAssExt;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="taxon_origine_sqc_ass_ext", type="string", length=255, nullable=true)
+     * @ORM\Column(name="external_sequence_primary_taxon", type="string", length=255, nullable=true)
      */
     private $taxonOrigineSqcAssExt;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="commentaire_sqc_ass_ext", type="text", nullable=true)
+     * @ORM\Column(name="external_sequence_comments", type="text", nullable=true)
      */
     private $commentaireSqcAssExt;
 
@@ -141,7 +141,7 @@ class SequenceAssembleeExt
      *
      * @ORM\ManyToOne(targetEntity="Voc")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="origine_sqc_ass_ext_voc_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="external_sequence_origin_voc_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $origineSqcAssExtVocFk;
@@ -161,7 +161,7 @@ class SequenceAssembleeExt
      *
      * @ORM\ManyToOne(targetEntity="Voc")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="statut_sqc_ass_voc_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="external_sequence_status_voc_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $statutSqcAssVocFk;

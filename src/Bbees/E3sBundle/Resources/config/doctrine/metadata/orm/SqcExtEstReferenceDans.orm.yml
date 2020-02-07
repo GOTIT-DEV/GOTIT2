@@ -1,6 +1,6 @@
 SqcExtEstReferenceDans:
     type: entity
-    table: sqc_ext_est_reference_dans
+    table: external_sequence_is_published_in
     indexes:
         ce_cle_etrangere7:
             columns:

@@ -56,7 +56,7 @@ class LotMateriel
     /**
      * @var string
      *
-     * @ORM\Column(name="commentaire_conseil_sqc", type="text", nullable=true)
+     * @ORM\Column(name="sequencing_advice", type="text", nullable=true)
      */
     private $commentaireConseilSqc;
 

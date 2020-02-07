@@ -1,6 +1,6 @@
 SourceAEteIntegrePar:
     type: entity
-    table: source_a_ete_integre_par
+    table: source_is_entered_by
     indexes:
         ce_cle_etrangere29:
             columns:

@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * SequenceAssembleeEstRealisePar
  *
- * @ORM\Table(name="sequence_assemblee_est_realise_par", indexes={@ORM\Index(name="IDX_F6971BA85BE90E48", columns={"internal_sequence_fk"}), @ORM\Index(name="IDX_F6971BA8B53CD04C", columns={"person_fk"})})
+ * @ORM\Table(name="internal_sequence_is_assembled_by", indexes={@ORM\Index(name="IDX_F6971BA85BE90E48", columns={"internal_sequence_fk"}), @ORM\Index(name="IDX_F6971BA8B53CD04C", columns={"person_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -34,7 +34,7 @@ class SequenceAssembleeEstRealisePar
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="sequence_assemblee_est_realise_par_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="internal_sequence_is_assembled_by_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 

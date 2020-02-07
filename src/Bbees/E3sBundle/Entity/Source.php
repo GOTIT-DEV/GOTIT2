@@ -23,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Source
  *
- * @ORM\Table(name="source", uniqueConstraints={@ORM\UniqueConstraint(name="cu_source_cle_primaire", columns={"code_source"})})
+ * @ORM\Table(name="source", uniqueConstraints={@ORM\UniqueConstraint(name="cu_source_cle_primaire", columns={"source_code"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -42,28 +42,28 @@ class Source
     /**
      * @var string
      *
-     * @ORM\Column(name="code_source", type="string", length=255, nullable=false)
+     * @ORM\Column(name="source_code", type="string", length=255, nullable=false)
      */
     private $codeSource;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="annee_source", type="bigint", nullable=true)
+     * @ORM\Column(name="source_year", type="bigint", nullable=true)
      */
     private $anneeSource;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="libelle_source", type="string", length=2048, nullable=false)
+     * @ORM\Column(name="source_title", type="string", length=2048, nullable=false)
      */
     private $libelleSource;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="commentaire_source", type="text", nullable=true)
+     * @ORM\Column(name="source_comments", type="text", nullable=true)
      */
     private $commentaireSource;
 

@@ -1,6 +1,6 @@
 SqcExtEstRealisePar:
     type: entity
-    table: sqc_ext_est_realise_par
+    table: external_sequence_is_entered_by
     indexes:
         ce_cle_etrangere32:
             columns:

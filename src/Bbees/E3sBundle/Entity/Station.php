@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Station
  *
- * @ORM\Table(name="station", uniqueConstraints={@ORM\UniqueConstraint(name="cu_station_cle_primaire", columns={"code_station"})}, indexes={@ORM\Index(name="IDX_9F39F8B143D4E2C", columns={"commune_fk"}), @ORM\Index(name="IDX_9F39F8B1B1C3431A", columns={"country_fk"}), @ORM\Index(name="IDX_9F39F8B14D50D031", columns={"point_acces_voc_fk"}), @ORM\Index(name="IDX_9F39F8B1C23046AE", columns={"habitat_type_voc_fk"}), @ORM\Index(name="IDX_9F39F8B1E86DBD90", columns={"precision_lat_long_voc_fk"})})
+ * @ORM\Table(name="site", uniqueConstraints={@ORM\UniqueConstraint(name="cu_station_cle_primaire", columns={"site_code"})}, indexes={@ORM\Index(name="IDX_9F39F8B143D4E2C", columns={"municipality_fk"}), @ORM\Index(name="IDX_9F39F8B1B1C3431A", columns={"country_fk"}), @ORM\Index(name="IDX_9F39F8B14D50D031", columns={"access_point_voc_fk"}), @ORM\Index(name="IDX_9F39F8B1C23046AE", columns={"habitat_type_voc_fk"}), @ORM\Index(name="IDX_9F39F8B1E86DBD90", columns={"coordinate_precision_voc_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -34,63 +34,63 @@ class Station
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="station_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="site_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="code_station", type="string", length=255, nullable=false)
+     * @ORM\Column(name="site_code", type="string", length=255, nullable=false)
      */
     private $codeStation;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nom_station", type="string", length=1024, nullable=false)
+     * @ORM\Column(name="site_name", type="string", length=1024, nullable=false)
      */
     private $nomStation;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="lat_deg_dec", type="float", precision=10, scale=0, nullable=false)
+     * @ORM\Column(name="latitude", type="float", precision=10, scale=0, nullable=false)
      */
     private $latDegDec;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="long_deg_dec", type="float", precision=10, scale=0, nullable=false)
+     * @ORM\Column(name="longitude", type="float", precision=10, scale=0, nullable=false)
      */
     private $longDegDec;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="altitude_m", type="bigint", nullable=true)
+     * @ORM\Column(name="elevation", type="bigint", nullable=true)
      */
     private $altitudeM;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="info_localisation", type="text", nullable=true)
+     * @ORM\Column(name="location_info", type="text", nullable=true)
      */
     private $infoLocalisation;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="info_description", type="text", nullable=true)
+     * @ORM\Column(name="site_description", type="text", nullable=true)
      */
     private $infoDescription;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="commentaire_station", type="text", nullable=true)
+     * @ORM\Column(name="site_comments", type="text", nullable=true)
      */
     private $commentaireStation;
 
@@ -127,7 +127,7 @@ class Station
      *
      * @ORM\ManyToOne(targetEntity="Commune")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="commune_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="municipality_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $communeFk;
@@ -147,7 +147,7 @@ class Station
      *
      * @ORM\ManyToOne(targetEntity="Voc")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="point_acces_voc_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="access_point_voc_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $pointAccesVocFk;
@@ -167,7 +167,7 @@ class Station
      *
      * @ORM\ManyToOne(targetEntity="Voc")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="precision_lat_long_voc_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="coordinate_precision_voc_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $precisionLatLongVocFk;

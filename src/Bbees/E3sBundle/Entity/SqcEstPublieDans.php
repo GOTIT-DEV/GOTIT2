@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * SqcEstPublieDans
  *
- * @ORM\Table(name="sqc_est_publie_dans", indexes={@ORM\Index(name="IDX_BA97B9C4821B1D3F", columns={"source_fk"}), @ORM\Index(name="IDX_BA97B9C45BE90E48", columns={"internal_sequence_fk"})})
+ * @ORM\Table(name="internal_sequence_is_published_in", indexes={@ORM\Index(name="IDX_BA97B9C4821B1D3F", columns={"source_fk"}), @ORM\Index(name="IDX_BA97B9C45BE90E48", columns={"internal_sequence_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -34,7 +34,7 @@ class SqcEstPublieDans
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="sqc_est_publie_dans_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="internal_sequence_is_published_in_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 

@@ -23,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * SequenceAssemblee
  *
- * @ORM\Table(name="sequence_assemblee", uniqueConstraints={@ORM\UniqueConstraint(name="cu_sequence_assemblee_cle_primaire", columns={"code_sqc_ass"}), @ORM\UniqueConstraint(name="cu_sequence_assemblee_code_sqc_alignement", columns={"code_sqc_alignement"})}, indexes={@ORM\Index(name="IDX_353CF669A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_353CF66988085E0F", columns={"statut_sqc_ass_voc_fk"})})
+ * @ORM\Table(name="internal_sequence", uniqueConstraints={@ORM\UniqueConstraint(name="cu_sequence_assemblee_cle_primaire", columns={"internal_sequence_code"}), @ORM\UniqueConstraint(name="cu_sequence_assemblee_code_sqc_alignement", columns={"internal_sequence_alignment_code"})}, indexes={@ORM\Index(name="IDX_353CF669A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_353CF66988085E0F", columns={"internal_sequence_status_voc_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -35,42 +35,42 @@ class SequenceAssemblee
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="sequence_assemblee_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="internal_sequence_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="code_sqc_ass", type="string", length=1024, nullable=false)
+     * @ORM\Column(name="internal_sequence_code", type="string", length=1024, nullable=false)
      */
     private $codeSqcAss;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_creation_sqc_ass", type="date", nullable=true)
+     * @ORM\Column(name="internal_sequence_creation_date", type="date", nullable=true)
      */
     private $dateCreationSqcAss;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="accession_number", type="string", length=255, nullable=true)
+     * @ORM\Column(name="internal_sequence_accession_number", type="string", length=255, nullable=true)
      */
     private $accessionNumber;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="code_sqc_alignement", type="string", length=1024, nullable=true)
+     * @ORM\Column(name="internal_sequence_alignment_code", type="string", length=1024, nullable=true)
      */
     private $codeSqcAlignement;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="commentaire_sqc_ass", type="text", nullable=true)
+     * @ORM\Column(name="internal_sequence_comments", type="text", nullable=true)
      */
     private $commentaireSqcAss;
 
@@ -128,7 +128,7 @@ class SequenceAssemblee
      *
      * @ORM\ManyToOne(targetEntity="Voc")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="statut_sqc_ass_voc_fk", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="internal_sequence_status_voc_fk", referencedColumnName="id", nullable=false)
      * })
      */
     private $statutSqcAssVocFk;

@@ -1,6 +1,6 @@
 Station:
     type: entity
-    table: station
+    table: site
     indexes:
         ce_cle_etrangere56:
             columns:
@@ -10,17 +10,17 @@ Station:
                 - habitat_type_voc_fk
         ce_cle_etrangere59:
             columns:
-                - precision_lat_long_voc_fk
+                - coordinate_precision_voc_fk
         ce_cle_etrangere57:
             columns:
-                - point_acces_voc_fk
+                - access_point_voc_fk
         ce_cle_etrangere55:
             columns:
-                - commune_fk
+                - municipality_fk
     uniqueConstraints:
         cu_station_cle_primaire:
             columns:
-                - code_station
+                - site_code
     id:
         id:
             type: bigint
@@ -37,53 +37,53 @@ Station:
             length: 255
             options:
                 fixed: false
-            column: code_station
+            column: site_code
         nomStation:
             type: string
             nullable: false
             length: 1024
             options:
                 fixed: false
-            column: nom_station
+            column: site_name
         latDegDec:
             type: float
             nullable: false
             precision: 10
             scale: 0
-            column: lat_deg_dec
+            column: latitude
         longDegDec:
             type: float
             nullable: false
             precision: 10
             scale: 0
-            column: long_deg_dec
+            column: longitude
         altitudeM:
             type: bigint
             nullable: true
             options:
                 unsigned: false
-            column: altitude_m
+            column: elevation
         infoLocalisation:
             type: text
             nullable: true
             length: null
             options:
                 fixed: false
-            column: info_localisation
+            column: location_info
         infoDescription:
             type: text
             nullable: true
             length: null
             options:
                 fixed: false
-            column: info_description
+            column: site_description
         commentaireStation:
             type: text
             nullable: true
             length: null
             options:
                 fixed: false
-            column: commentaire_station
+            column: site_comments
         dateCre:
             type: datetime
             nullable: true
@@ -112,7 +112,7 @@ Station:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                commune_fk:
+                municipality_fk:
                     referencedColumnName: id
             orphanRemoval: false
         paysFk:
@@ -132,7 +132,7 @@ Station:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                point_acces_voc_fk:
+                access_point_voc_fk:
                     referencedColumnName: id
             orphanRemoval: false
         habitatTypeVocFk:
@@ -152,7 +152,7 @@ Station:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                precision_lat_long_voc_fk:
+                coordinate_precision_voc_fk:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

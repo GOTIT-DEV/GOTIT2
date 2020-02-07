@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Voc
  *
- * @ORM\Table(name="voc", uniqueConstraints={@ORM\UniqueConstraint(name="cu_voc_cle_primaire", columns={"code", "parent"})})
+ * @ORM\Table(name="vocabulary", uniqueConstraints={@ORM\UniqueConstraint(name="cu_voc_cle_primaire", columns={"code", "parent"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
@@ -34,7 +34,7 @@ class Voc
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="voc_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="vocabulary_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
@@ -48,7 +48,7 @@ class Voc
     /**
      * @var string
      *
-     * @ORM\Column(name="libelle", type="string", length=1024, nullable=false)
+     * @ORM\Column(name="vocabulary_title", type="string", length=1024, nullable=false)
      */
     private $libelle;
 
@@ -62,7 +62,7 @@ class Voc
     /**
      * @var string
      *
-     * @ORM\Column(name="commentaire", type="text", nullable=true)
+     * @ORM\Column(name="voc_comments", type="text", nullable=true)
      */
     private $commentaire;
 

@@ -4,7 +4,7 @@ Source:
     uniqueConstraints:
         cu_source_cle_primaire:
             columns:
-                - code_source
+                - source_code
     id:
         id:
             type: bigint
@@ -21,27 +21,27 @@ Source:
             length: 255
             options:
                 fixed: false
-            column: code_source
+            column: source_code
         anneeSource:
             type: bigint
             nullable: true
             options:
                 unsigned: false
-            column: annee_source
+            column: source_year
         libelleSource:
             type: string
             nullable: false
             length: 2048
             options:
                 fixed: false
-            column: libelle_source
+            column: source_title
         commentaireSource:
             type: text
             nullable: true
             length: null
             options:
                 fixed: false
-            column: commentaire_source
+            column: source_comments
         dateCre:
             type: datetime
             nullable: true

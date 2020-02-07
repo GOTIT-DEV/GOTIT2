@@ -1,6 +1,6 @@
 Voc:
     type: entity
-    table: voc
+    table: vocabulary
     uniqueConstraints:
         cu_voc_cle_primaire:
             columns:
@@ -22,7 +22,7 @@ Voc:
             length: 255
             options:
                 fixed: false
-        libelle:
+        vocabulary_title:
             type: string
             nullable: false
             length: 1024
@@ -34,7 +34,7 @@ Voc:
             length: 255
             options:
                 fixed: false
-        commentaire:
+        voc_comments:
             type: text
             nullable: true
             length: null

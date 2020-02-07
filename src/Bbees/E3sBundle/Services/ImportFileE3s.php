@@ -484,24 +484,24 @@ class ImportFileE3s
             ->getQuery()
             ->getResult();
             $query_source = $em->getRepository("BbeesE3sBundle:Source")->createQueryBuilder('source')
-            ->where('source.codeSource LIKE :code_source')
-            ->setParameter('code_source', $data["source.code_source"])
+            ->where('source.codeSource LIKE :source_code')
+            ->setParameter('source_code', $data["source.source_code"])
             ->getQuery()
             ->getResult();                
             if (count($query_lot) == 0 || count($query_source) == 0) {
                 if (count($query_lot) == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["internal_biological_material_code"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
-                if (count($query_source) == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["source.code_source"].'</b>  <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
+                if (count($query_source) == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["source.source_code"].'</b>  <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             } else {
                 $query_lepd = $em->getRepository("BbeesE3sBundle:LotEstPublieDans")->createQueryBuilder('lepd')
                         ->where('lepd.lotMaterielFk = :id_lot')
                         ->setParameter('id_lot', $query_lot[0]->getId())
-                        ->andwhere('source.codeSource = :code_source')
-                        ->setParameter('code_source', $data["source.code_source"])
+                        ->andwhere('source.codeSource = :source_code')
+                        ->setParameter('source_code', $data["source.source_code"])
                         ->leftJoin('BbeesE3sBundle:Source', 'source', 'WITH', 'lepd.sourceFk = source.id')
                         ->getQuery()
                         ->getResult();              
                 if (count($query_lepd) != 0 ) {
-                    $message .= $this->translator->trans('importfileService.ERROR lot already publish').'<b> : '.$data["source.code_source"].' / '.$data["internal_biological_material_code"].' </b><br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
+                    $message .= $this->translator->trans('importfileService.ERROR lot already publish').'<b> : '.$data["source.source_code"].' / '.$data["internal_biological_material_code"].' </b><br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
                 } else {
                     $entityRel = new \Bbees\E3sBundle\Entity\LotEstPublieDans();
                     $method = "setSourceFk";
@@ -554,18 +554,18 @@ class ImportFileE3s
         $info = $this->translator->trans('importfileService.Date of data set import').' : '.$DateImport->format('Y-m-d H:i:s'); 
         foreach($csvDataSqcAssembleePublie as $l => $data){ // 1- Line-to-line data processing ($ l)
             $query_sa = $em->getRepository("BbeesE3sBundle:SequenceAssemblee")->createQueryBuilder('sa')
-            ->where('sa.codeSqcAss LIKE :code_sqc_ass')
-            ->setParameter('code_sqc_ass', $data["code_sqc_ass"])
+            ->where('sa.codeSqcAss LIKE :internal_sequence_code')
+            ->setParameter('internal_sequence_code', $data["internal_sequence_code"])
             ->getQuery()
             ->getResult();
             $query_source = $em->getRepository("BbeesE3sBundle:Source")->createQueryBuilder('source')
-            ->where('source.codeSource LIKE :code_source')
-            ->setParameter('code_source', $data["source.code_source"])
+            ->where('source.codeSource LIKE :source_code')
+            ->setParameter('source_code', $data["source.source_code"])
             ->getQuery()
             ->getResult();                
             if (count($query_sa) == 0 || count($query_source) == 0) {
-                if (count($query_sa) == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["code_sqc_ass"].'</b>  <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
-                if (count($query_source) == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["source.code_source"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
+                if (count($query_sa) == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["internal_sequence_code"].'</b>  <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
+                if (count($query_source) == 0) $message .= $this->translator->trans('importfileService.ERROR bad code').'<b> : '.$data["source.source_code"].'</b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
             } else {
                 $query_lepd = $em->getRepository("BbeesE3sBundle:SqcEstPublieDans")->createQueryBuilder('sepd')
                         ->where('sepd.sequenceAssembleeFk = :id_sa')
@@ -573,11 +573,11 @@ class ImportFileE3s
                         ->getQuery()
                         ->getResult();              
                 if (count($query_lepd) != 0 ||  $query_sa[0]->getAccessionNumber() != '') {
-                    if (count($query_lepd) != 0) $message .= $this->translator->trans('importfileService.ERROR sqc already publish').'<b> : '.$data["source.code_source"].' / '.$data["code_sqc_ass"].' </b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
-                    if ( $query_sa[0]->getAccessionNumber() != '')  $message .= $this->translator->trans('importfileService.ERROR assession number already assign').'<b> : '.$query_sa[0]->getAccessionNumber().' / '.$data["code_sqc_ass"].' </b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>";    
+                    if (count($query_lepd) != 0) $message .= $this->translator->trans('importfileService.ERROR sqc already publish').'<b> : '.$data["source.source_code"].' / '.$data["internal_sequence_code"].' </b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
+                    if ( $query_sa[0]->getAccessionNumber() != '')  $message .= $this->translator->trans('importfileService.ERROR assession number already assign').'<b> : '.$query_sa[0]->getAccessionNumber().' / '.$data["internal_sequence_code"].' </b> <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>";    
                 } else {
                     $method = "setAccessionNumber";
-                    $query_sa[0]->$method($data["accession_number"]);
+                    $query_sa[0]->$method($data["internal_sequence_accession_number"]);
                     $query_sa[0]->setDateMaj($DateImport); 
                     $query_sa[0]->setUserMaj($userId); 
                     $em->persist($query_sa[0]);
@@ -639,7 +639,7 @@ class ImportFileE3s
                 $flag_foreign = preg_match('(\((.*?)\))', $ColCsv, $foreign_content);  // flag to know if 1) it is a foreign key 
                 if (!$flag_foreign) { 
                     $varfield = explode(".", $field)[1];
-                    if($ColCsv == 'source.code_source') {  
+                    if($ColCsv == 'source.source_code') {  
                         $record_entity = $em->getRepository("BbeesE3sBundle:Source")->findOneBy(array("codeSource" => $dataColCsv)); 
                         if($record_entity !== NULL){ 
                            $message .= $this->translator->trans('importfileService.ERROR duplicate code').'<b> : '.$data[$ColCsv]."</b> <br>ligne ".(string)($l+2).": ".join(';', $data)."<br>"; 
@@ -647,7 +647,7 @@ class ImportFileE3s
                     }
                     
                     // control and standardization of field formats
-                    if ($ColCsv == 'source.annee_source' && !is_null($dataColCsv)) {$dataColCsv = intval(str_replace(",", ".", $dataColCsv));}
+                    if ($ColCsv == 'source.source_year' && !is_null($dataColCsv)) {$dataColCsv = intval(str_replace(",", ".", $dataColCsv));}
                     $method =  $importFileCsvService->TransformNameForSymfony($varfield,'set');
                     $entity->$method($dataColCsv);                     
                 }
@@ -691,7 +691,7 @@ class ImportFileE3s
             $em->persist($entity);
             
             # Record of  SourceAEteIntegrePar                    
-             foreach($columnByTable["source_a_ete_integre_par"] as $ColCsv){   
+             foreach($columnByTable["source_is_entered_by"] as $ColCsv){   
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                 if ($dataColCsv !== $data[$ColCsv] ) {
                     $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -1563,7 +1563,7 @@ class ImportFileE3s
                     $method =  $importFileCsvService->TransformNameForSymfony($varfield,'set');
                     $entity->$method($dataColCsv);                     
                 }
-                if($flag_foreign){ // case of a foreign key (where there are parentheses in the field name) ex. : station.municipality(municipality.municipality_name)
+                if($flag_foreign){ // case of a foreign key (where there are parentheses in the field name) ex. : site.municipality(municipality.municipality_name)
                    $varfield = explode(".", strstr($field, '(', true))[1];
                    $linker = explode('.', trim($foreign_content[0],"()"));  
                    $foreign_table = $importFileCsvService->TransformNameForSymfony($linker[0],'table'); 
@@ -2575,7 +2575,7 @@ class ImportFileE3s
                     $commentaireCompoLotMateriel = $dataColCsv;
                 }
                 
-                if ($ColCsv == 'composition_of_internal_biological_material.number_of_specimens+specimen_type_voc_fk(voc.code)' ) {
+                if ($ColCsv == 'composition_of_internal_biological_material.number_of_specimens+specimen_type_voc_fk(vocabulary.code)' ) {
                     $tab_foreign_field = explode("$",$dataColCsv); // We transform the contents of the field into a table 
                     foreach($tab_foreign_field as $val_foreign_field){ 
                         $val_foreign_field = trim($val_foreign_field);
@@ -3199,7 +3199,7 @@ class ImportFileE3s
             #
             $entity = new \Bbees\E3sBundle\Entity\SequenceAssembleeExt();    
             // 
-            foreach($columnByTable["sequence_assemblee_ext"] as $ColCsv){  
+            foreach($columnByTable["external_sequence"] as $ColCsv){  
                 $field = $importFileCsvService->TransformNameForSymfony($ColCsv,'field'); 
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                 if ($dataColCsv !== $data[$ColCsv] ) {
@@ -3209,14 +3209,14 @@ class ImportFileE3s
                 if (!$flag_foreign) { 
                     $varfield = explode(".", $field)[1];
                     // var_dump($ColCsv); var_dump($field); exit;
-                    if($ColCsv == 'sequence_assemblee_ext.code_sqc_ass_ext') { 
+                    if($ColCsv == 'external_sequence.external_sequence_code') { 
                         $record_entity = $em->getRepository("BbeesE3sBundle:SequenceAssembleeExt")->findOneBy(array("codeSqcAssExt" => $dataColCsv)); 
                         if($record_entity !== NULL){ 
                            $message .= $this->translator->trans('importfileService.ERROR duplicate code').'<b> : '.$data[$ColCsv]."</b> <br>ligne ".(string)($l+2).": ".join(';', $data)."<br>"; 
                         }
                     }
                     // control and standardization of field formats
-                    if ($ColCsv == 'sequence_assemblee_ext.date_creation_sqc_ass_ext' ) {
+                    if ($ColCsv == 'external_sequence.external_sequence_creation_date' ) {
                         // adjusts the incomplete date of type m/Y or Y in 01/m/Y or 01/01/ Y
                         if ($dataColCsv != ''){
                             if (count(explode("/",$dataColCsv))== 2) $dataColCsv = "01/".$dataColCsv;
@@ -3281,7 +3281,7 @@ class ImportFileE3s
             $em->persist($entity);
             
             # Record of seq_ass_ext_est_realise_par                    
-            foreach($columnByTable["sqc_ext_est_realise_par"] as $ColCsv){   
+            foreach($columnByTable["external_sequence_is_entered_by"] as $ColCsv){   
                $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                if ($dataColCsv !== $data[$ColCsv] ) {
                    $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -3332,7 +3332,7 @@ class ImportFileE3s
             }  
     
             # Enregistrement de SqcExtEstReferenceDans                    
-            foreach($columnByTable["sqc_ext_est_reference_dans"] as $ColCsv){   
+            foreach($columnByTable["external_sequence_is_published_in"] as $ColCsv){   
                $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                if ($dataColCsv !== $data[$ColCsv] ) {
                    $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -3899,7 +3899,7 @@ class ImportFileE3s
         foreach($csvData as $l => $data){ // 1- Line-to-line data processing ($ l)
             $compt++;
             $entity = new \Bbees\E3sBundle\Entity\Station();
-            foreach($columnByTable["station"] as $ColCsv){  
+            foreach($columnByTable["site"] as $ColCsv){  
                $field = $importFileCsvService->TransformNameForSymfony($ColCsv,'field');                 
                $flag_foreign = preg_match('(\((.*?)\))', $ColCsv, $foreign_content);  // flag to know if 1) it is a foreign key   
                $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
@@ -3909,15 +3909,15 @@ class ImportFileE3s
                if (!$flag_foreign) { 
                    $varfield = explode(".", $field)[1];
                    // var_dump($ColCsv); var_dump($field); exit;
-                   if($field == 'station.codeStation') { // On teste pour savoir si le code_station a déja été créé. 
+                   if($field == 'site.codeStation') { // On teste pour savoir si le site_code a déja été créé. 
                        $record_station = $em->getRepository("BbeesE3sBundle:Station")->findOneBy(array("codeStation" => $dataColCsv)); 
                        if($record_station !== NULL){ 
                           $message .= $this->translator->trans('importfileService.ERROR duplicate code').'<b> : '.$data[$ColCsv]." / ".$ColCsv.'</b> <br>ligne '.(string)($l+1).": ".join(';', $data)."<br>"; 
                        }
                    }
                    // we adapt the format of long and lat
-                   if ($field == 'station.latDegDec' || $field == 'station.longDegDec') {$dataColCsv = ($dataColCsv != '') ?  floatval(str_replace(",", ".", $dataColCsv)): null;}
-                   if ($field == 'station.altitudeM') {$dataColCsv = ($dataColCsv != '') ?  intval(str_replace(",", ".", $dataColCsv)) : null; }
+                   if ($field == 'site.latDegDec' || $field == 'site.longDegDec') {$dataColCsv = ($dataColCsv != '') ?  floatval(str_replace(",", ".", $dataColCsv)): null;}
+                   if ($field == 'site.altitudeM') {$dataColCsv = ($dataColCsv != '') ?  intval(str_replace(",", ".", $dataColCsv)) : null; }
                    // save the values ​​of the field
                    $method =  $importFileCsvService->TransformNameForSymfony($varfield,'set');
                    $entity->$method($dataColCsv);                     
@@ -4029,7 +4029,7 @@ class ImportFileE3s
             #
             $entity = new \Bbees\E3sBundle\Entity\SequenceAssemblee();    
             // 
-            foreach($columnByTable["sequence_assemblee"] as $ColCsv){  
+            foreach($columnByTable["internal_sequence"] as $ColCsv){  
                 $field = $importFileCsvService->TransformNameForSymfony($ColCsv,'field');   
                 $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                 if ($dataColCsv !== $data[$ColCsv] ) {
@@ -4039,14 +4039,14 @@ class ImportFileE3s
                 if (!$flag_foreign) { 
                     $varfield = explode(".", $field)[1];
                     // var_dump($ColCsv); var_dump($field); exit;
-                    if($ColCsv == 'sequence_assemblee.code_sqc_ass') { 
+                    if($ColCsv == 'internal_sequence.internal_sequence_code') { 
                         $record_entity = $em->getRepository("BbeesE3sBundle:SequenceAssemblee")->findOneBy(array("codeSqcAss" => $dataColCsv)); 
                         if($record_entity !== NULL){ 
                            $message .= $this->translator->trans('importfileService.ERROR duplicate code').'<b> : '.$dataColCsv."</b> <br>ligne ".(string)($l+2).": ".join(';', $data)."<br>"; 
                         }
                     }
                     // control and standardization of field formats
-                    if ($ColCsv == 'sequence_assemblee.date_creation_sqc_ass' ) {
+                    if ($ColCsv == 'internal_sequence.internal_sequence_creation_date' ) {
                         // adjusts the incomplete date of type m/Y or Y in 01/m/Y or 01/01/ Y
                         if ($dataColCsv != ''){
                             if (count(explode("/",$dataColCsv))== 2) $dataColCsv = "01/".$dataColCsv;
@@ -4109,8 +4109,8 @@ class ImportFileE3s
             $entity->setUserMaj($userId);
             $em->persist($entity);
             
-            # Record of sequence_assemblee_est_realise_par                     
-            foreach($columnByTable["sequence_assemblee_est_realise_par"] as $ColCsv){   
+            # Record of internal_sequence_is_assembled_by                     
+            foreach($columnByTable["internal_sequence_is_assembled_by"] as $ColCsv){   
                $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                if ($dataColCsv !== $data[$ColCsv] ) {
                    $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -4161,7 +4161,7 @@ class ImportFileE3s
             }  
     
             # Enregistrement de SqcEstPublieDans                    
-            foreach($columnByTable["sqc_est_publie_dans"] as $ColCsv){   
+            foreach($columnByTable["internal_sequence_is_published_in"] as $ColCsv){   
                $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
                if ($dataColCsv !== $data[$ColCsv] ) {
                    $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
@@ -4499,8 +4499,8 @@ class ImportFileE3s
         foreach($csvData as $l => $data){ // 1- Line-to-line data processing ($ l)
             $compt++;
             $entity = new \Bbees\E3sBundle\Entity\Voc();
-            if (array_key_exists("voc" ,$columnByTable)) {
-               foreach($columnByTable["voc"] as $ColCsv){  
+            if (array_key_exists("vocabulary" ,$columnByTable)) {
+               foreach($columnByTable["vocabulary"] as $ColCsv){  
                    $field = $importFileCsvService->TransformNameForSymfony($ColCsv,'field');                 
                    $varfield = explode(".", $field)[1];
                    $dataColCsv = $importFileCsvService->suppCharSpeciaux($data[$ColCsv],'tnrOx');
@@ -4508,7 +4508,7 @@ class ImportFileE3s
                        $message .=  $this->translator->trans('importfileService.ERROR bad character').'<b> : ' .$data[$ColCsv]. '</b> <br> ligne '. (string)($l+2) . ": " . join(';', $data). "<br>";
                    } 
                   // On teste pour savoir si le code_voc n existe pas deja pour ce parent 
-                  if ($ColCsv == 'voc.parent') {
+                  if ($ColCsv == 'vocabulary.parent') {
                       $record_voc = $em->getRepository("BbeesE3sBundle:Voc")->findOneBy(array("parent" => $dataColCsv, "code" => $code));  
                       if($record_voc !== NULL){ 
                           $message .= $this->translator->trans('importfileService.ERROR duplicate code').'<b> : '.$data[$ColCsv]." / ".$ColCsv.'</b>  <br>ligne '.(string)($l+2).": ".join(';', $data)."<br>"; 
@@ -4516,7 +4516,7 @@ class ImportFileE3s
                    } 
                   $method =  $importFileCsvService->TransformNameForSymfony($varfield,'set');
                   $entity->$method($dataColCsv);   
-                  if ($ColCsv == 'voc.code' ) {$code = $dataColCsv;}
+                  if ($ColCsv == 'vocabulary.code' ) {$code = $dataColCsv;}
                }
                $entity->setDateCre($DateImport);
                $entity->setDateMaj($DateImport);
