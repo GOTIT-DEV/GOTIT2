@@ -2,10 +2,10 @@ APourSamplingMethod:
     type: entity
     table: sampling_is_done_with_method
     indexes:
-        ce_cle_etrangere40:
+        fk_40:
             columns:
                 - sampling_method_voc_fk
-        ce_cle_etrangere41:
+        fk_41:
             columns:
                 - sampling_fk
     id:

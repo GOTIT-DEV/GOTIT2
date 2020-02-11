@@ -23,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Boite
  *
- * @ORM\Table(name="storage_box", uniqueConstraints={@ORM\UniqueConstraint(name="cu_boite_cle_primaire", columns={"box_code"})}, indexes={@ORM\Index(name="IDX_7718EDEF9E7B0E1F", columns={"collection_type_voc_fk"}), @ORM\Index(name="IDX_7718EDEF41A72D48", columns={"collection_code_voc_fk"}), @ORM\Index(name="IDX_7718EDEF57552D30", columns={"box_type_voc_fk"})})
+ * @ORM\Table(name="storage_box", uniqueConstraints={@ORM\UniqueConstraint(name="uk_storage_box__box_code", columns={"box_code"})}, indexes={@ORM\Index(name="IDX_7718EDEF9E7B0E1F", columns={"collection_type_voc_fk"}), @ORM\Index(name="IDX_7718EDEF41A72D48", columns={"collection_code_voc_fk"}), @ORM\Index(name="IDX_7718EDEF57552D30", columns={"box_type_voc_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */

@@ -2,7 +2,7 @@ Etablissement:
     type: entity
     table: institution
     uniqueConstraints:
-        cu_etablissement_cle_primaire:
+        uk_institution__institution_name:
             columns:
                 - institution_name
     id:

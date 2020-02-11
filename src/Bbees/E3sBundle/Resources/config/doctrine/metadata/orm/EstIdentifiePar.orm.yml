@@ -2,10 +2,10 @@ EstIdentifiePar:
     type: entity
     table: species_is_identified_by
     indexes:
-        ce_cle_etrangere10:
+        fk_10:
             columns:
                 - person_fk
-        ce_cle_etrangere9:
+        fk_9:
             columns:
                 - identified_species_fk
     id:

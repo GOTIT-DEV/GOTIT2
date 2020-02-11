@@ -23,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * IndividuLame
  *
- * @ORM\Table(name="specimen_slide", uniqueConstraints={@ORM\UniqueConstraint(name="cu_individu_lame_cle_primaire", columns={"collection_slide_code"})}, indexes={@ORM\Index(name="IDX_8DA827E2A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_8DA827E22B644673", columns={"storage_box_fk"}), @ORM\Index(name="IDX_8DA827E25F2C6176", columns={"specimen_fk"})})
+ * @ORM\Table(name="specimen_slide", uniqueConstraints={@ORM\UniqueConstraint(name="uk_specimen_slide__collection_slide_code", columns={"collection_slide_code"})}, indexes={@ORM\Index(name="IDX_8DA827E2A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_8DA827E22B644673", columns={"storage_box_fk"}), @ORM\Index(name="IDX_8DA827E25F2C6176", columns={"specimen_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */

@@ -2,10 +2,10 @@ EstAligneEtTraite:
     type: entity
     table: chromatogram_is_processed_to
     indexes:
-        ce_cle_etrangere37:
+        fk_37:
             columns:
                 - chromatogram_fk
-        ce_cle_etrangere38:
+        fk_38:
             columns:
                 - internal_sequence_fk
     id:

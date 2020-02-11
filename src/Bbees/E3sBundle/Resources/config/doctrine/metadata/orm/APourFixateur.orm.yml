@@ -2,10 +2,10 @@ APourFixateur:
     type: entity
     table: sample_is_fixed_with
     indexes:
-        ce_cle_etrangere43:
+        fk_43:
             columns:
                 - sampling_fk
-        ce_cle_etrangere42:
+        fk_42:
             columns:
                 - fixative_voc_fk
     id:

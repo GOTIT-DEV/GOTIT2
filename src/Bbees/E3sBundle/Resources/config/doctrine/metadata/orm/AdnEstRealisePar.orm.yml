@@ -2,10 +2,10 @@ AdnEstRealisePar:
     type: entity
     table: dna_is_extracted_by
     indexes:
-        ce_cle_etrangere23:
+        fk_23:
             columns:
                 - dna_fk
-        ce_cle_etrangere24:
+        fk_24:
             columns:
                 - person_fk
     id:

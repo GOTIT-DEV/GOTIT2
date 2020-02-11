@@ -2,10 +2,10 @@ SqcExtEstRealisePar:
     type: entity
     table: external_sequence_is_entered_by
     indexes:
-        ce_cle_etrangere32:
+        fk_32:
             columns:
                 - person_fk
-        ce_cle_etrangere31:
+        fk_31:
             columns:
                 - external_sequence_fk
     id:

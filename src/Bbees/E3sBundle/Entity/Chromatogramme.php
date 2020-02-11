@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Chromatogramme
  *
- * @ORM\Table(name="chromatogram", uniqueConstraints={@ORM\UniqueConstraint(name="cu_chromatogramme_cle_primaire", columns={"chromatogram_code"})}, indexes={@ORM\Index(name="IDX_FCB2DAB7286BBCA9", columns={"chromato_primer_voc_fk"}), @ORM\Index(name="IDX_FCB2DAB7206FE5C0", columns={"chromato_quality_voc_fk"}), @ORM\Index(name="IDX_FCB2DAB7E8441376", columns={"institution_fk"}), @ORM\Index(name="IDX_FCB2DAB72B63D494", columns={"pcr_fk"})})
+ * @ORM\Table(name="chromatogram", uniqueConstraints={@ORM\UniqueConstraint(name="uk_chromatogram__chromatogram_code", columns={"chromatogram_code"})}, indexes={@ORM\Index(name="IDX_FCB2DAB7286BBCA9", columns={"chromato_primer_voc_fk"}), @ORM\Index(name="IDX_FCB2DAB7206FE5C0", columns={"chromato_quality_voc_fk"}), @ORM\Index(name="IDX_FCB2DAB7E8441376", columns={"institution_fk"}), @ORM\Index(name="IDX_FCB2DAB72B63D494", columns={"pcr_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */

@@ -2,10 +2,10 @@ SourceAEteIntegrePar:
     type: entity
     table: source_is_entered_by
     indexes:
-        ce_cle_etrangere29:
+        fk_29:
             columns:
                 - source_fk
-        ce_cle_etrangere30:
+        fk_30:
             columns:
                 - person_fk
     id:

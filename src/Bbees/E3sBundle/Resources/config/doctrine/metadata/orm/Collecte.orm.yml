@@ -2,17 +2,17 @@ Collecte:
     type: entity
     table: sampling
     indexes:
-        ce_cle_etrangere60:
+        fk_60:
             columns:
                 - date_precision_voc_fk
-        ce_cle_etrangere61:
+        fk_61:
             columns:
                 - donation_voc_fk
-        ce_cle_etrangere62:
+        fk_62:
             columns:
                 - site_fk
     uniqueConstraints:
-        cu_collecte_cle_primaire:
+        uk_sampling__sample_code:
             columns:
                 - sample_code
     id:

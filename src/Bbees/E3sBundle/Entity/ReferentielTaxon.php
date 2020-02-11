@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ReferentielTaxon
  *
- * @ORM\Table(name="taxon", uniqueConstraints={ @ORM\UniqueConstraint(name="cu_referentiel_taxon_cle_primaire", columns={"taxon_name"}), @ORM\UniqueConstraint(name="cu_referentiel_taxon_code_taxon", columns={"taxon_code"}) } )
+ * @ORM\Table(name="taxon", uniqueConstraints={ @ORM\UniqueConstraint(name="uk_taxon__taxon_name", columns={"taxon_name"}), @ORM\UniqueConstraint(name="uk_taxon__taxon_code", columns={"taxon_code"}) } )
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */

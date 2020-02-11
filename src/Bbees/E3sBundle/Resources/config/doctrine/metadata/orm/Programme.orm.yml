@@ -2,7 +2,7 @@ Programme:
     type: entity
     table: program
     uniqueConstraints:
-        cu_programme_cle_primaire:
+        uk_program__program_code:
             columns:
                 - program_code
     id:

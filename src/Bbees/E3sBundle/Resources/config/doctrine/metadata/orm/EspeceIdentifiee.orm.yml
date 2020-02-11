@@ -2,28 +2,28 @@ EspeceIdentifiee:
     type: entity
     table: identified_species
     indexes:
-        ce_cle_etrangere79:
+        fk_79:
             columns:
                 - taxon_fk
-        ce_cle_etrangere75:
+        fk_75:
             columns:
                 - date_precision_voc_fk
-        ce_cle_etrangere77:
+        fk_77:
             columns:
                 - external_biological_material_fk
-        ce_cle_etrangere78:
+        fk_78:
             columns:
                 - internal_biological_material_fk
-        ce_cle_etrangere76:
+        fk_76:
             columns:
                 - external_sequence_fk
-        ce_cle_etrangere74:
+        fk_74:
             columns:
                 - identification_criterion_voc_fk
-        ce_cle_etrangere80:
+        fk_80:
             columns:
                 - specimen_fk
-        ce_cle_etrangere81:
+        fk_81:
             columns:
                 - internal_sequence_fk
     id:

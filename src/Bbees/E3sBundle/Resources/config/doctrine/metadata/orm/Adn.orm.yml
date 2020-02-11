@@ -2,26 +2,26 @@ Adn:
     type: entity
     table: dna
     indexes:
-        cle_etrangere:
+        idx_dna__dna_extraction_method_voc_fk:
             columns:
                 - dna_extraction_method_voc_fk
-        cle_etrangere1:
+        idx_dna__date_precision_voc_fk:
             columns:
                 - date_precision_voc_fk
         adn_code_adn:
             columns:
                 - dna_code
-        cle_etrangere2:
+        idx_dna__storage_box_fk:
             columns:
                 - storage_box_fk
-        cle_etrangere3:
+        idx_dna__specimen_fk:
             columns:
                 - specimen_fk
         IDX_1DCF9AF9C53B46B:
             columns:
                 - dna_quality_voc_fk
     uniqueConstraints:
-        cu_adn_cle_primaire:
+        uk_dna__dna_code:
             columns:
                 - dna_code
     id:

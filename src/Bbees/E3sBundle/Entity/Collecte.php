@@ -23,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Collecte
  *
- * @ORM\Table(name="sampling", uniqueConstraints={@ORM\UniqueConstraint(name="cu_collecte_cle_primaire", columns={"sample_code"})}, indexes={@ORM\Index(name="IDX_55AE4A3DA30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_55AE4A3D50BB334E", columns={"donation_voc_fk"}), @ORM\Index(name="IDX_55AE4A3D369AB36B", columns={"site_fk"})})
+ * @ORM\Table(name="sampling", uniqueConstraints={@ORM\UniqueConstraint(name="uk_sampling__sample_code", columns={"sample_code"})}, indexes={@ORM\Index(name="IDX_55AE4A3DA30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_55AE4A3D50BB334E", columns={"donation_voc_fk"}), @ORM\Index(name="IDX_55AE4A3D369AB36B", columns={"site_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */

@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * User
  *
- * @ORM\Table(name="user_db", uniqueConstraints={@ORM\UniqueConstraint(name="cu_user_db_username", columns={"username"})})
+ * @ORM\Table(name="user_db", uniqueConstraints={@ORM\UniqueConstraint(name="uk_user_db__username", columns={"username"})})
  * @ORM\Entity(repositoryClass="Bbees\UserBundle\Repository\UserRepository")
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */

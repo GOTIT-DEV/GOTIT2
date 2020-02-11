@@ -2,10 +2,10 @@ LotMaterielExtEstReferenceDans:
     type: entity
     table: external_biological_material_is_published_in
     indexes:
-        ce_cle_etrangere53:
+        fk_53:
             columns:
                 - external_biological_material_fk
-        ce_cle_etrangere54:
+        fk_54:
             columns:
                 - source_fk
     id:

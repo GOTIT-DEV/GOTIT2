@@ -2,23 +2,23 @@ LotMateriel:
     type: entity
     table: internal_biological_material
     indexes:
-        ce_cle_etrangere69:
+        fk_69:
             columns:
                 - date_precision_voc_fk
-        ce_cle_etrangere71:
+        fk_71:
             columns:
                 - eyes_voc_fk
-        ce_cle_etrangere72:
+        fk_72:
             columns:
                 - sampling_fk
-        ce_cle_etrangere73:
+        fk_73:
             columns:
                 - storage_box_fk
-        ce_cle_etrangere70:
+        fk_70:
             columns:
                 - pigmentation_voc_fk
     uniqueConstraints:
-        cu_lot_materiel_cle_primaire:
+        uk_internal_biological_material__internal_biological_material_c:
             columns:
                 - internal_biological_material_code
     id:

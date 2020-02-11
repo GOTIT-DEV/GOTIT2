@@ -23,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Source
  *
- * @ORM\Table(name="source", uniqueConstraints={@ORM\UniqueConstraint(name="cu_source_cle_primaire", columns={"source_code"})})
+ * @ORM\Table(name="source", uniqueConstraints={@ORM\UniqueConstraint(name="uk_source__source_code", columns={"source_code"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */

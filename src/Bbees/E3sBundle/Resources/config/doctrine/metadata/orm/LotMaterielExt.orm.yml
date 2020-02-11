@@ -2,19 +2,19 @@ LotMaterielExt:
     type: entity
     table: external_biological_material
     indexes:
-        ce_cle_etrangere46:
+        fk_46:
             columns:
                 - sampling_fk
-        ce_cle_etrangere49:
+        fk_49:
             columns:
                 - pigmentation_voc_fk
-        ce_cle_etrangere50:
+        fk_50:
             columns:
                 - eyes_voc_fk
-        ce_cle_etrangere47:
+        fk_47:
             columns:
                 - date_precision_voc_fk
-        ce_cle_etrangere48:
+        fk_48:
             columns:
                 - number_of_specimens_voc_fk
     id:

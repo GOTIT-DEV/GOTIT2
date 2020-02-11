@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Voc
  *
- * @ORM\Table(name="vocabulary", uniqueConstraints={@ORM\UniqueConstraint(name="cu_voc_cle_primaire", columns={"code", "parent"})})
+ * @ORM\Table(name="vocabulary", uniqueConstraints={@ORM\UniqueConstraint(name="uk_vocabulary__parent__code", columns={"code", "parent"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */

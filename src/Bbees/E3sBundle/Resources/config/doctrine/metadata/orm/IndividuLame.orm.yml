@@ -2,17 +2,17 @@ IndividuLame:
     type: entity
     table: specimen_slide
     indexes:
-        ce_cle_etrangere103:
+        fk_103:
             columns:
                 - storage_box_fk
-        ce_cle_etrangere104:
+        fk_104:
             columns:
                 - specimen_fk
-        ce_cle_etrangere102:
+        fk_102:
             columns:
                 - date_precision_voc_fk
     uniqueConstraints:
-        cu_individu_lame_cle_primaire:
+        uk_specimen_slide__collection_slide_code:
             columns:
                 - collection_slide_code
     id:

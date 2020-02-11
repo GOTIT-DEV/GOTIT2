@@ -2,20 +2,20 @@ Chromatogramme:
     type: entity
     table: chromatogram
     indexes:
-        ce_cle_etrangere96:
+        fk_96:
             columns:
                 - chromato_primer_voc_fk
-        ce_cle_etrangere98:
+        fk_98:
             columns:
                 - institution_fk
-        ce_cle_etrangere99:
+        fk_99:
             columns:
                 - pcr_fk
-        ce_cle_etrangere97:
+        fk_97:
             columns:
                 - chromato_quality_voc_fk
     uniqueConstraints:
-        cu_chromatogramme_cle_primaire:
+        uk_chromatogram__chromatogram_code:
             columns:
                 - chromatogram_code
     id:

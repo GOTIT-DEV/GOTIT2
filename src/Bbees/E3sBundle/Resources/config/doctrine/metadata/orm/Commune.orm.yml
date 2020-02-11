@@ -2,11 +2,11 @@ Commune:
     type: entity
     table: municipality
     indexes:
-        ce_cle_etrangere39:
+        fk_39:
             columns:
                 - country_fk
     uniqueConstraints:
-        cu_commune_cle_primaire:
+        uk_municipality__municipality_code:
             columns:
                 - municipality_code
     id:

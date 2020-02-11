@@ -23,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * LotMateriel
  *
- * @ORM\Table(name="internal_biological_material", uniqueConstraints={@ORM\UniqueConstraint(name="cu_lot_materiel_cle_primaire", columns={"internal_biological_material_code"})}, indexes={@ORM\Index(name="IDX_BA1841A5A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_BA1841A5B0B56B73", columns={"pigmentation_voc_fk"}), @ORM\Index(name="IDX_BA1841A5A897CC9E", columns={"eyes_voc_fk"}), @ORM\Index(name="IDX_BA1841A5662D9B98", columns={"sampling_fk"}), @ORM\Index(name="IDX_BA1841A52B644673", columns={"storage_box_fk"})})
+ * @ORM\Table(name="internal_biological_material", uniqueConstraints={@ORM\UniqueConstraint(name="uk_internal_biological_material__internal_biological_material_c", columns={"internal_biological_material_code"})}, indexes={@ORM\Index(name="IDX_BA1841A5A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_BA1841A5B0B56B73", columns={"pigmentation_voc_fk"}), @ORM\Index(name="IDX_BA1841A5A897CC9E", columns={"eyes_voc_fk"}), @ORM\Index(name="IDX_BA1841A5662D9B98", columns={"sampling_fk"}), @ORM\Index(name="IDX_BA1841A52B644673", columns={"storage_box_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */ 

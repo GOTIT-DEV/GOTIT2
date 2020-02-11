@@ -2,10 +2,10 @@ SqcExtEstReferenceDans:
     type: entity
     table: external_sequence_is_published_in
     indexes:
-        ce_cle_etrangere7:
+        fk_7:
             columns:
                 - source_fk
-        ce_cle_etrangere8:
+        fk_8:
             columns:
                 - external_sequence_fk
     id:

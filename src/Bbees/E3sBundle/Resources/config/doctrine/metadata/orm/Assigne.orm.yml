@@ -2,16 +2,16 @@ Assigne:
     type: entity
     table: motu_number
     indexes:
-        ce_cle_etrangere12:
+        fk_12:
             columns:
                 - delimitation_method_voc_fk
-        ce_cle_etrangere13:
+        fk_13:
             columns:
                 - internal_sequence_fk
-        ce_cle_etrangere14:
+        fk_14:
             columns:
                 - motu_fk
-        ce_cle_etrangere11:
+        fk_11:
             columns:
                 - external_sequence_fk
     id:

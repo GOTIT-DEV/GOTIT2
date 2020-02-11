@@ -2,10 +2,10 @@ EstFinancePar:
     type: entity
     table: sampling_is_funded_by
     indexes:
-        ce_cle_etrangere100:
+        fk_100:
             columns:
                 - program_fk
-        ce_cle_etrangere101:
+        fk_101:
             columns:
                 - sampling_fk
     id:

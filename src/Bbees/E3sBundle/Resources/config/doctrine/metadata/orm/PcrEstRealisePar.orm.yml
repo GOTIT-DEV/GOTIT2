@@ -2,10 +2,10 @@ PcrEstRealisePar:
     type: entity
     table: pcr_is_done_by
     indexes:
-        ce_cle_etrangere21:
+        fk_21:
             columns:
                 - pcr_fk
-        ce_cle_etrangere22:
+        fk_22:
             columns:
                 - person_fk
     id:

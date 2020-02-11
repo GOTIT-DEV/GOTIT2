@@ -2,11 +2,11 @@ Personne:
     type: entity
     table: person
     indexes:
-        ce_cle_etrangere63:
+        fk_63:
             columns:
                 - institution_fk
     uniqueConstraints:
-        cu_personne_cle_primaire:
+        uk_person__person_name:
             columns:
                 - person_name
     id:

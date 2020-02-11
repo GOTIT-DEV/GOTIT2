@@ -23,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * SequenceAssembleeExt
  *
- * @ORM\Table(name="external_sequence", uniqueConstraints={@ORM\UniqueConstraint(name="cu_sequence_assemblee_ext_cle_primaire", columns={"external_sequence_code"}), @ORM\UniqueConstraint(name="cu_sequence_assemblee_ext_external_sequence_alignment_code", columns={"external_sequence_alignment_code"})}, indexes={@ORM\Index(name="IDX_9E9F85CF9D3CDB05", columns={"gene_voc_fk"}), @ORM\Index(name="IDX_9E9F85CFA30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_9E9F85CF514D78E0", columns={"external_sequence_origin_voc_fk"}), @ORM\Index(name="IDX_9E9F85CF662D9B98", columns={"sampling_fk"}), @ORM\Index(name="IDX_9E9F85CF88085E0F", columns={"external_sequence_status_voc_fk"})})
+ * @ORM\Table(name="external_sequence", uniqueConstraints={@ORM\UniqueConstraint(name="uk_external_sequence__external_sequence_code", columns={"external_sequence_code"}), @ORM\UniqueConstraint(name="uk_external_sequence__external_sequence_alignment_code", columns={"external_sequence_alignment_code"})}, indexes={@ORM\Index(name="IDX_9E9F85CF9D3CDB05", columns={"gene_voc_fk"}), @ORM\Index(name="IDX_9E9F85CFA30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_9E9F85CF514D78E0", columns={"external_sequence_origin_voc_fk"}), @ORM\Index(name="IDX_9E9F85CF662D9B98", columns={"sampling_fk"}), @ORM\Index(name="IDX_9E9F85CF88085E0F", columns={"external_sequence_status_voc_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */

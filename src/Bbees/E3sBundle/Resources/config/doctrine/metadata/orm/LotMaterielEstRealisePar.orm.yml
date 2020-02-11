@@ -2,10 +2,10 @@ LotMaterielEstRealisePar:
     type: entity
     table: Internal_biological_material_is_treated_by
     indexes:
-        ce_cle_etrangere27:
+        fk_27:
             columns:
                 - internal_biological_material_fk
-        ce_cle_etrangere28:
+        fk_28:
             columns:
                 - person_fk
     id:

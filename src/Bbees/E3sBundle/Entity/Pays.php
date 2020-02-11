@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Pays
  *
- * @ORM\Table(name="country", uniqueConstraints={@ORM\UniqueConstraint(name="cu_pays_cle_primaire", columns={"country_code"})})
+ * @ORM\Table(name="country", uniqueConstraints={@ORM\UniqueConstraint(name="uk_country__country_code", columns={"country_code"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */

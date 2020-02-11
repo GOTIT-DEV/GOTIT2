@@ -23,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Pcr
  *
- * @ORM\Table(name="pcr", uniqueConstraints={@ORM\UniqueConstraint(name="cu_pcr_cle_primaire", columns={"pcr_code"})}, indexes={@ORM\Index(name="IDX_5B6B99369D3CDB05", columns={"gene_voc_fk"}), @ORM\Index(name="IDX_5B6B99368B4A1710", columns={"pcr_quality_voc_fk"}), @ORM\Index(name="IDX_5B6B99366CCC2566", columns={"pcr_specificity_voc_fk"}), @ORM\Index(name="IDX_5B6B99362C5B04A7", columns={"forward_primer_voc_fk"}), @ORM\Index(name="IDX_5B6B9936F1694267", columns={"reverse_primer_voc_fk"}), @ORM\Index(name="IDX_5B6B9936A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_5B6B99364B06319D", columns={"dna_fk"})})
+ * @ORM\Table(name="pcr", uniqueConstraints={@ORM\UniqueConstraint(name="uk_pcr__pcr_code", columns={"pcr_code"})}, indexes={@ORM\Index(name="IDX_5B6B99369D3CDB05", columns={"gene_voc_fk"}), @ORM\Index(name="IDX_5B6B99368B4A1710", columns={"pcr_quality_voc_fk"}), @ORM\Index(name="IDX_5B6B99366CCC2566", columns={"pcr_specificity_voc_fk"}), @ORM\Index(name="IDX_5B6B99362C5B04A7", columns={"forward_primer_voc_fk"}), @ORM\Index(name="IDX_5B6B9936F1694267", columns={"reverse_primer_voc_fk"}), @ORM\Index(name="IDX_5B6B9936A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_5B6B99364B06319D", columns={"dna_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */

@@ -2,23 +2,23 @@ Station:
     type: entity
     table: site
     indexes:
-        ce_cle_etrangere56:
+        fk_56:
             columns:
                 - country_fk
-        ce_cle_etrangere58:
+        fk_58:
             columns:
                 - habitat_type_voc_fk
-        ce_cle_etrangere59:
+        fk_59:
             columns:
                 - coordinate_precision_voc_fk
-        ce_cle_etrangere57:
+        fk_57:
             columns:
                 - access_point_voc_fk
-        ce_cle_etrangere55:
+        fk_55:
             columns:
                 - municipality_fk
     uniqueConstraints:
-        cu_station_cle_primaire:
+        uk_site__site_code:
             columns:
                 - site_code
     id:

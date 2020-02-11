@@ -2,23 +2,23 @@ SequenceAssembleeExt:
     type: entity
     table: external_sequence
     indexes:
-        ce_cle_etrangere4:
+        fk_4:
             columns:
                 - external_sequence_origin_voc_fk
-        ce_cle_etrangere6:
+        fk_6:
             columns:
                 - external_sequence_status_voc_fk
-        ce_cle_etrangere2:
+        fk_2:
             columns:
                 - gene_voc_fk
-        ce_cle_etrangere3:
+        fk_3:
             columns:
                 - date_precision_voc_fk
-        ce_cle_etrangere5:
+        fk_5:
             columns:
                 - sampling_fk
     uniqueConstraints:
-        cu_sequence_assemblee_ext_cle_primaire:
+        uk_external_sequence__external_sequence_code:
             columns:
                 - external_sequence_code
     id:

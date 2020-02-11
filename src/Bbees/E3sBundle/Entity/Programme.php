@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Programme
  *
- * @ORM\Table(name="program", uniqueConstraints={@ORM\UniqueConstraint(name="cu_programme_cle_primaire", columns={"program_code"})})
+ * @ORM\Table(name="program", uniqueConstraints={@ORM\UniqueConstraint(name="uk_program__program_code", columns={"program_code"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */

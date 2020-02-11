@@ -2,7 +2,7 @@ ReferentielTaxon:
     type: entity
     table: taxon
     uniqueConstraints:
-        cu_referentiel_taxon_cle_primaire:
+        uk_taxon__taxon_name:
             columns:
                 - taxon_name
     id:

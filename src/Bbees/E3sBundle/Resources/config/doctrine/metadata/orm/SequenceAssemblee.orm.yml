@@ -2,14 +2,14 @@ SequenceAssemblee:
     type: entity
     table: internal_sequence
     indexes:
-        ce_cle_etrangere35:
+        fk_35:
             columns:
                 - date_precision_voc_fk
-        ce_cle_etrangere36:
+        fk_36:
             columns:
                 - internal_sequence_status_voc_fk
     uniqueConstraints:
-        cu_sequence_assemblee_cle_primaire:
+        uk_internal_sequence__internal_sequence_code:
             columns:
                 - internal_sequence_code
     id:

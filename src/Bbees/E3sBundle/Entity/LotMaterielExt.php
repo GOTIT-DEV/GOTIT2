@@ -23,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * LotMaterielExt
  *
- * @ORM\Table(name="external_biological_material", uniqueConstraints={@ORM\UniqueConstraint(name="cu_lot_materiel_ext_code_lot_materiel_ext", columns={"external_biological_material_code"})}, indexes={@ORM\Index(name="IDX_EEFA43F3662D9B98", columns={"sampling_fk"}), @ORM\Index(name="IDX_EEFA43F3A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_EEFA43F382ACDC4", columns={"number_of_specimens_voc_fk"}), @ORM\Index(name="IDX_EEFA43F3B0B56B73", columns={"pigmentation_voc_fk"}), @ORM\Index(name="IDX_EEFA43F3A897CC9E", columns={"eyes_voc_fk"})})
+ * @ORM\Table(name="external_biological_material", uniqueConstraints={@ORM\UniqueConstraint(name="uk_external_biological_material__external_biological_material_c", columns={"external_biological_material_code"})}, indexes={@ORM\Index(name="IDX_EEFA43F3662D9B98", columns={"sampling_fk"}), @ORM\Index(name="IDX_EEFA43F3A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_EEFA43F382ACDC4", columns={"number_of_specimens_voc_fk"}), @ORM\Index(name="IDX_EEFA43F3B0B56B73", columns={"pigmentation_voc_fk"}), @ORM\Index(name="IDX_EEFA43F3A897CC9E", columns={"eyes_voc_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */

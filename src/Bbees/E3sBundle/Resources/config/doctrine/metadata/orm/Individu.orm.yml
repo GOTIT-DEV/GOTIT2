@@ -2,10 +2,10 @@ Individu:
     type: entity
     table: specimen
     indexes:
-        ce_cle_etrangere83:
+        fk_83:
             columns:
                 - internal_biological_material_fk
-        ce_cle_etrangere82:
+        fk_82:
             columns:
                 - specimen_type_voc_fk
     id:

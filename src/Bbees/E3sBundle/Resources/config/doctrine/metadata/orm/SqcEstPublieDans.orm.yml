@@ -2,10 +2,10 @@ SqcEstPublieDans:
     type: entity
     table: internal_sequence_is_published_in
     indexes:
-        ce_cle_etrangere:
+        fk_:
             columns:
                 - source_fk
-        ce_cle_etrangere1:
+        fk_1:
             columns:
                 - internal_sequence_fk
     id:

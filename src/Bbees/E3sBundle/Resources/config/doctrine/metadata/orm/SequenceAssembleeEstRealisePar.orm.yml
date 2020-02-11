@@ -2,10 +2,10 @@ SequenceAssembleeEstRealisePar:
     type: entity
     table: internal_sequence_is_assembled_by
     indexes:
-        ce_cle_etrangere19:
+        fk_19:
             columns:
                 - internal_sequence_fk
-        ce_cle_etrangere20:
+        fk_20:
             columns:
                 - person_fk
     id:

@@ -2,10 +2,10 @@ ACibler:
     type: entity
     table: has_targeted_taxa
     indexes:
-        ce_cle_etrangere17:
+        fk_17:
             columns:
                 - sampling_fk
-        ce_cle_etrangere18:
+        fk_18:
             columns:
                 - taxon_fk
     id:

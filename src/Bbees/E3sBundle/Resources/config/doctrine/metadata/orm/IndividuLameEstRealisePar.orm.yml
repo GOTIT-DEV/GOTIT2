@@ -2,10 +2,10 @@ IndividuLameEstRealisePar:
     type: entity
     table: slide_is_mounted_by
     indexes:
-        ce_cle_etrangere26:
+        fk_26:
             columns:
                 - person_fk
-        ce_cle_etrangere25:
+        fk_25:
             columns:
                 - specimen_slide_fk
     id:

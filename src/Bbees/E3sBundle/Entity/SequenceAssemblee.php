@@ -23,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * SequenceAssemblee
  *
- * @ORM\Table(name="internal_sequence", uniqueConstraints={@ORM\UniqueConstraint(name="cu_sequence_assemblee_cle_primaire", columns={"internal_sequence_code"}), @ORM\UniqueConstraint(name="cu_sequence_assemblee_code_sqc_alignement", columns={"internal_sequence_alignment_code"})}, indexes={@ORM\Index(name="IDX_353CF669A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_353CF66988085E0F", columns={"internal_sequence_status_voc_fk"})})
+ * @ORM\Table(name="internal_sequence", uniqueConstraints={@ORM\UniqueConstraint(name="uk_internal_sequence__internal_sequence_code", columns={"internal_sequence_code"}), @ORM\UniqueConstraint(name="uk_internal_sequence__internal_sequence_alignment_code", columns={"internal_sequence_alignment_code"})}, indexes={@ORM\Index(name="IDX_353CF669A30C442F", columns={"date_precision_voc_fk"}), @ORM\Index(name="IDX_353CF66988085E0F", columns={"internal_sequence_status_voc_fk"})})
  * @ORM\Entity
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */

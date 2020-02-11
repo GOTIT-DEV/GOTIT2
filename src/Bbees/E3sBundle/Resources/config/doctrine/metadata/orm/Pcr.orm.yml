@@ -2,29 +2,29 @@ Pcr:
     type: entity
     table: pcr
     indexes:
-        ce_cle_etrangere95:
+        fk_95:
             columns:
                 - dna_fk
-        ce_cle_etrangere94:
+        fk_94:
             columns:
                 - date_precision_voc_fk
-        ce_cle_etrangere89:
+        fk_89:
             columns:
                 - gene_voc_fk
-        ce_cle_etrangere92:
+        fk_92:
             columns:
                 - forward_primer_voc_fk
-        ce_cle_etrangere93:
+        fk_93:
             columns:
                 - reverse_primer_voc_fk
-        ce_cle_etrangere90:
+        fk_90:
             columns:
                 - pcr_quality_voc_fk
-        ce_cle_etrangere91:
+        fk_91:
             columns:
                 - pcr_specificity_voc_fk
     uniqueConstraints:
-        cu_pcr_cle_primaire:
+        uk_pcr__pcr_code:
             columns:
                 - pcr_code
     id:

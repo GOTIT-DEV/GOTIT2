@@ -2,10 +2,10 @@ MotuEstGenerePar:
     type: entity
     table: motu_is_generated_by
     indexes:
-        ce_cle_etrangere33:
+        fk_33:
             columns:
                 - motu_fk
-        ce_cle_etrangere34:
+        fk_34:
             columns:
                 - person_fk
     id:

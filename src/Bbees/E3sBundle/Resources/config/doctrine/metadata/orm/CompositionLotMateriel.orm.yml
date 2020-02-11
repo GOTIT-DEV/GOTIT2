@@ -2,10 +2,10 @@ CompositionLotMateriel:
     type: entity
     table: composition_of_internal_biological_material
     indexes:
-        ce_cle_etrangere15:
+        fk_15:
             columns:
                 - specimen_type_voc_fk
-        ce_cle_etrangere16:
+        fk_16:
             columns:
                 - internal_biological_material_fk
     id:

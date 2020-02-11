@@ -2,17 +2,17 @@ Boite:
     type: entity
     table: storage_box
     indexes:
-        ce_cle_etrangere67:
+        fk_67:
             columns:
                 - collection_code_voc_fk
-        ce_cle_etrangere68:
+        fk_68:
             columns:
                 - box_type_voc_fk
-        ce_cle_etrangere66:
+        fk_66:
             columns:
                 - collection_type_voc_fk
     uniqueConstraints:
-        cu_boite_cle_primaire:
+        uk_storage_box__box_code:
             columns:
                 - box_code
     id:

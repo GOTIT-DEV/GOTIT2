@@ -2,7 +2,7 @@ Pays:
     type: entity
     table: country
     uniqueConstraints:
-        cu_pays_cle_primaire:
+        uk_country__country_code:
             columns:
                 - country_code
     id:
