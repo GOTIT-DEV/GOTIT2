@@ -6,6 +6,7 @@ Individu typeahead placeholder: Taper les première lettres du Code Ind Biomol
 
 
 # class of vocabulary (table = Voc , field = parent)
+vocParent.typeMaterial: type Materiel
 vocParent.codeCollection: code Collection
 vocParent.critereIdentification: critère Identification
 vocParent.datePrecision: date Precision
@@ -363,6 +364,10 @@ alert.BadFormatDate:  mauvais format de date (JJ-MM-AAAA) ou mauvaise valeur (JJ
 
 # GOTIT DATABASE  ##############################################################
 # GOTIT Database Field Titles
+# db v2
+Type materiel voc fk: Type materiel
+Taxon full name: Nom Taxon de référence
+# db v1
 A faire: Etat
 Accession number: Numero d ordre
 Accession number sqc ass ext: Numero d ordre

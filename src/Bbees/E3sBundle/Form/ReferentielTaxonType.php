@@ -32,7 +32,7 @@ class ReferentielTaxonType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('taxname')->add('rank')->add('subclass')->add('ordre')->add('family')->add('genus')->add('species')->add('subspecies')->add('codeTaxon')->add('clade')->add('taxnameRef')
+        $builder->add('taxname')->add('taxon_full_name')->add('rank')->add('subclass')->add('ordre')->add('family')->add('genus')->add('species')->add('subspecies')->add('codeTaxon')->add('clade')->add('taxnameRef')
                  ->add('validity', ChoiceType::class, array('choices'  => array('No' => 0, 'Yes' => 1,), 'required' => true,
                        'multiple' => false, 'expanded' => true, 'label_attr' => array('class' => 'radio-inline'), 
                     ))

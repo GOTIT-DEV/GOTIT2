@@ -60,7 +60,8 @@ class VocType extends AbstractType
                     'vocParent.typeBoite' => 'typeBoite',
                     'vocParent.typeCollection' => 'typeCollection',
                     'vocParent.typeIndividu' => 'typeIndividu',
-                    'vocParent.yeux' => 'yeux'
+                    'vocParent.typeMaterial' => 'typeMaterial',
+                    'vocParent.yeux' => 'yeux',
                     ] , 
                     'placeholder' => 'Choose a Parent', 'required' => true, 'choice_translation_domain' => true, 'multiple' => false, 'expanded' => false,                    
                     ))

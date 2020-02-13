@@ -1,1 +1,1 @@
-program.program_code;program.program_name;program.coordinator_names;program.funding_agency;program.starting_year;program.ending_year
+programme.code_programme;programme.nom_programme;programme.noms_responsables;programme.type_financeur;programme.annee_debut;programme.annee_fin

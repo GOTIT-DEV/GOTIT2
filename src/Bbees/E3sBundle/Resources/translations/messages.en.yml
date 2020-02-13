@@ -176,6 +176,7 @@ Individu typeahead: Specimen [af]
 Individu typeahead placeholder: Type the first letter of the Code Ind Biomol
 
 # Class of vocabulary (table = Voc , field = parent)
+vocParent.typeMaterial: Material type
 vocParent.codeCollection: Code collection
 vocParent.critereIdentification:  Identification criteria
 vocParent.datePrecision: Date Precision
@@ -530,6 +531,10 @@ alert.BadFormatDate: Bad date format (DD-MM-YYYY) or bad value (DD=[1,31] MM=[1,
 
 # GOTIT DATABASE  ##############################################################
 # GOTIT Database Field Titles
+# db v2
+Type materiel voc fk: Type material
+Taxon full name: Taxon full name
+# db v1
 A faire: Status
 Accession number: Sequence accession number
 Accession number sqc ass ext: External sequence accession number

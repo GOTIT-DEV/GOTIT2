@@ -1,1 +1,1 @@
-storage_box.box_code;storage_box.box_type_voc_fk(vocabulary.code);storage_box.box_title;storage_box.collection_code_voc_fk(vocabulary.code);storage_box.collection_type_voc_fk(vocabulary.code);storage_box.box_comments
+boite.code_boite;boite.type_boite_voc_fk(voc.code);boite.libelle_boite;boite.code_collection_voc_fk(voc.code);boite.type_collection_voc_fk(voc.code);boite.commentaire_boite

@@ -61,6 +61,15 @@ class EspeceIdentifieeEmbedType extends AbstractType
                         }, 
                     'choice_translation_domain' => true, 'choice_label' => 'libelle', 'multiple' => false, 'expanded' => true, 'label_attr' => array('class' => 'radio-inline'), 'required' => true,)
                     )
+                ->add('typeMaterielVocFk', EntityType::class, array('class' => 'BbeesE3sBundle:Voc', 
+                   'query_builder' => function (EntityRepository $er) {
+                        return $er->createQueryBuilder('voc')
+                                ->where('voc.parent LIKE :parent')
+                                ->setParameter('parent', 'typeMaterial')
+                                ->orderBy('voc.id', 'ASC');
+                        }, 
+                    'choice_translation_domain' => true, 'choice_label' => 'libelle', 'multiple' => false, 'expanded' => true, 'label_attr' => array('class' => 'radio-inline'), 'required' => true,)
+                    )
                 ->add('commentaireEspId')
                 ->add('estIdentifiePars', CollectionType::class , array(
         		'entry_type' => EstIdentifieParEmbedType::class,

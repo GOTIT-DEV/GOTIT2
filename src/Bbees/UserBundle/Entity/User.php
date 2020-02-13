@@ -139,7 +139,7 @@ class User implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="commentaire_user", type="text", nullable=true)
+     * @ORM\Column(name="user_comments", type="text", nullable=true)
      */
     private $commentaireUser;
 

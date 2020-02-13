@@ -44,6 +44,13 @@ class ReferentielTaxon
      * @ORM\Column(name="taxon_name", type="string", length=255, nullable=false)
      */
     private $taxname;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="taxon_full_name", type="string", length=255, nullable=true)
+     */
+    private $taxonFullName;
 
     /**
      * @var string
@@ -575,5 +582,29 @@ class ReferentielTaxon
     public function getUserMaj()
     {
         return $this->userMaj;
+    }
+
+    /**
+     * Set taxonFullName
+     *
+     * @param string $taxonFullName
+     *
+     * @return ReferentielTaxon
+     */
+    public function setTaxonFullName($taxonFullName)
+    {
+        $this->taxonFullName = $taxonFullName;
+
+        return $this;
+    }
+
+    /**
+     * Get taxonFullName
+     *
+     * @return string
+     */
+    public function getTaxonFullName()
+    {
+        return $this->taxonFullName;
     }
 }
