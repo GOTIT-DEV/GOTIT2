@@ -18,7 +18,7 @@
 namespace Lehna\SpeciesSearchBundle\Controller;
 
 use Bbees\E3sBundle\Entity\Motu;
-use Lehna\SpeciesSearchBundle\Services\QueryBuilderService;
+use Lehna\SpeciesSearchBundle\Services\SpeciesQueryService;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -38,7 +38,7 @@ class CommonController extends Controller {
    *
    * Returns the set of methods in a target dataset as JSON
    */
-  public function methodsByDate(Request $request, QueryBuilderService $service) {
+  public function methodsByDate(Request $request, SpeciesQueryService $service) {
     $data = json_decode($request->getContent());
     # target dataset 
     $id_dataset = $data->dataset;

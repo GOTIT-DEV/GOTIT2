@@ -17,7 +17,7 @@
 
 namespace Lehna\SpeciesSearchBundle\Controller;
 
-use Lehna\SpeciesSearchBundle\Services\QueryBuilderService;
+use Lehna\SpeciesSearchBundle\Services\SpeciesQueryService;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -39,7 +39,7 @@ class TaxonConsistencyController extends Controller {
    *
    * Index : render query form template
    */
-  public function index(QueryBuilderService $service) {
+  public function index(SpeciesQueryService $service) {
     # fetch genus set
     $genus_set = $service->getGenusSet();
     # render form template
@@ -53,7 +53,7 @@ class TaxonConsistencyController extends Controller {
    *
    * Returns a JSON response with species assignment at each identification level
    */
-  public function searchQuery(Request $request, QueryBuilderService $service) {
+  public function searchQuery(Request $request, SpeciesQueryService $service) {
     # POST parameters 
     $data = $request->request;
     # fetch species assignments

@@ -78,7 +78,7 @@ Autowirable Services
   Lehna\SpeciesSearchBundle\Controller\MotuDistributionController                     
   Lehna\SpeciesSearchBundle\Controller\SpeciesHypothesesController                    
   Lehna\SpeciesSearchBundle\Controller\TaxonConsistencyController                     
-  Lehna\SpeciesSearchBundle\Services\QueryBuilderService                              
+  Lehna\SpeciesSearchBundle\Services\SpeciesQueryService                              
   Lehna\SpeciesSearchBundle\Services\RearrangementsService                            
   Psr\Cache\CacheItemPoolInterface                                                    
       alias to cache.app                                                              

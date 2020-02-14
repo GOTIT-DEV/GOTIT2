@@ -18,7 +18,7 @@
 namespace Lehna\SpeciesSearchBundle\Controller;
 
 use Bbees\E3sBundle\Entity\ReferentielTaxon;
-use Lehna\SpeciesSearchBundle\Services\QueryBuilderService;
+use Lehna\SpeciesSearchBundle\Services\SpeciesQueryService;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -38,7 +38,7 @@ class CO1SamplingController extends Controller {
    * @Route("/", name="co1-sampling")
    * Index : render query form interface
    */
-  public function index(QueryBuilderService $service) {
+  public function index(SpeciesQueryService $service) {
     # fetch genus set
     $genus_set = $service->getGenusSet();
     # render form template
@@ -52,7 +52,7 @@ class CO1SamplingController extends Controller {
    *
    * Returns a JSON response with COI sampling statistics
    */
-  public function searchQuery(Request $request, QueryBuilderService $service) {
+  public function searchQuery(Request $request, SpeciesQueryService $service) {
     # POST parameters 
     $data = $request->request;
 
@@ -91,7 +91,7 @@ class CO1SamplingController extends Controller {
    * Returns a JSON response with sampling geographical coordinates for target species 
    * Used to plot sampling an world map projection in modal pop-up
    */
-  public function geoCoords(Request $request, QueryBuilderService $service) {
+  public function geoCoords(Request $request, SpeciesQueryService $service) {
     # POST parameters 
     $data = $request->request;
     $id   = $data->get('taxon');

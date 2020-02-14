@@ -18,7 +18,7 @@
 namespace Lehna\SpeciesSearchBundle\Controller;
 
 use Bbees\E3sBundle\Entity\Motu;
-use Lehna\SpeciesSearchBundle\Services\QueryBuilderService;
+use Lehna\SpeciesSearchBundle\Services\SpeciesQueryService;
 use Lehna\SpeciesSearchBundle\Services\RearrangementsService;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -39,7 +39,7 @@ class SpeciesHypothesesController extends Controller {
    *
    * Index : render query form template 
    */
-  public function indexAction(QueryBuilderService $service) {
+  public function indexAction(SpeciesQueryService $service) {
     # fetch genus set 
     $genus_set = $service->getGenusSet();
     # fetch MOTU datasets

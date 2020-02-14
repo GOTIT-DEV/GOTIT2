@@ -19,7 +19,7 @@ namespace Lehna\SpeciesSearchBundle\Controller;
 
 use Bbees\E3sBundle\Entity\Motu;
 use Bbees\E3sBundle\Entity\Voc;
-use Lehna\SpeciesSearchBundle\Services\QueryBuilderService;
+use Lehna\SpeciesSearchBundle\Services\SpeciesQueryService;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -40,7 +40,7 @@ class AssignationMotuController extends Controller {
    *
    * Index page : Query form interface
    */
-  public function index(QueryBuilderService $service) {
+  public function index(SpeciesQueryService $service) {
     $doctrine = $this->getDoctrine();
     # fetch genus set
     $genus_set = $service->getGenusSet();
@@ -66,7 +66,7 @@ class AssignationMotuController extends Controller {
    * (methods, identification level and criterions). Used to query details 
    * for a molecular method
    */
-  public function searchQuery(Request $request, QueryBuilderService $service) {
+  public function searchQuery(Request $request, SpeciesQueryService $service) {
     # POST parameters
     $data = $request->request;
     # execute query
@@ -85,7 +85,7 @@ class AssignationMotuController extends Controller {
    * - rows : array of sequence MOTU assignments 
    * Shown in modal pop-up : details for one molecular method
    */
-  public function detailsModal(Request $request, QueryBuilderService $service) {
+  public function detailsModal(Request $request, SpeciesQueryService $service) {
     # POST parameters
     $data = $request->request;
     # execute query

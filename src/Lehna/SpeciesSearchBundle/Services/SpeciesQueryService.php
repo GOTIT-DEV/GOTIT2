@@ -5,9 +5,9 @@ namespace Lehna\SpeciesSearchBundle\Services;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * Service QueryBuilderService
+ * Service SpeciesQueryService
  */
-class QueryBuilderService
+class SpeciesQueryService
 {
   private $entityManager;
 
@@ -139,7 +139,7 @@ class QueryBuilderService
     $criteres = $data->get('criteres');
 
     $qb    = $this->entityManager->createQueryBuilder();
-    $query = $qb->select('rt.taxon_name, rt.id')
+    $query = $qb->select('rt.taxname, rt.id')
       ->addSelect('vocabulary.id as id_methode, vocabulary.code as methode')
       ->addSelect('motu.id as id_dataset, motu.dateMotu as motu_date, motu.libelleMotu as motu_title')
       ->addSelect('COUNT(DISTINCT ass.numMotu ) as nb_motus')
@@ -190,7 +190,7 @@ class QueryBuilderService
     $query = $query->andWHere("vocabulary.code != 'HAPLO'")
       ->andWhere('motu.id = :id_dataset')
       ->setParameter('id_dataset', $dataset)
-      ->groupBy('rt.id, rt.taxon_name, vocabulary.id, vocabulary.code, motu.id')
+      ->groupBy('rt.id, rt.taxname, vocabulary.id, vocabulary.code, motu.id')
       ->orderBy('rt.id')
       ->getQuery();
 
@@ -217,13 +217,13 @@ class QueryBuilderService
 
     $qb    = $this->entityManager->createQueryBuilder();
     $query = $qb->select('lm.id as id_lm, lm.codeLotMateriel as code_lm') // lot matériel
-      ->addSelect('lmrt.id as idtax_lm, lmrt.taxon_name as taxname_lm') // taxon lot matériel
+      ->addSelect('lmrt.id as idtax_lm, lmrt.taxname as taxname_lm') // taxon lot matériel
       ->addSelect('lmvoc.code as critere_lm') // critere lot matériel
       ->addSelect('indiv.id as id_indiv, indiv.codeIndBiomol as code_biomol, indiv.codeIndTriMorpho as code_tri_morpho') // individu
-      ->addSelect('indivrt.id as idtax_indiv, indivrt.taxon_name as taxname_indiv') // taxon individu
+      ->addSelect('indivrt.id as idtax_indiv, indivrt.taxname as taxname_indiv') // taxon individu
       ->addSelect('ivoc.code as critere_indiv') // critere individu
       ->addSelect('seq.id as id_seq, seq.codeSqcAss as code_seq') // séquence
-      ->addSelect('seqrt.id as idtax_seq, seqrt.taxon_name as taxname_seq') // taxon séquence
+      ->addSelect('seqrt.id as idtax_seq, seqrt.taxname as taxname_seq') // taxon séquence
       ->addSelect('seqvoc.code as critere_seq') // critere sequence
       // JOIN lot matériel
       ->from('BbeesE3sBundle:LotMateriel', 'lm')
@@ -275,7 +275,7 @@ class QueryBuilderService
     $criteres   = $data->get('criteres');
 
     $qb    = $this->entityManager->createQueryBuilder();
-    $query = $qb->select('rt.id as idesp, rt.taxon_name')
+    $query = $qb->select('rt.id as idesp, rt.taxname')
       ->addSelect('vocabulary.code as methode')
       ->addSelect('m.dateMotu as motu_date')
       ->addSelect('seq.id, seq.codeSqcAss as code, seq.accessionNumber as acc')

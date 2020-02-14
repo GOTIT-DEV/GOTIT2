@@ -18,7 +18,7 @@
 namespace Lehna\SpeciesSearchBundle\Controller;
 
 use Bbees\E3sBundle\Entity\Motu;
-use Lehna\SpeciesSearchBundle\Services\QueryBuilderService;
+use Lehna\SpeciesSearchBundle\Services\SpeciesQueryService;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -39,7 +39,7 @@ class MotuDistributionController extends Controller {
    *
    * Index : render query form template
    */
-  public function index(QueryBuilderService $service) {
+  public function index(SpeciesQueryService $service) {
     $doctrine = $this->getDoctrine();
     # fetch datasets
     $datasets = $doctrine->getRepository(Motu::class)->findAll();
@@ -62,7 +62,7 @@ class MotuDistributionController extends Controller {
    * - rows : geographical + motu data for each sequence
    * - methode : MOTU method details
    */
-  public function searchQuery(Request $request, QueryBuilderService $service) {
+  public function searchQuery(Request $request, SpeciesQueryService $service) {
     # POST parameters 
     $data = $request->request;
     # Obtention de la localisation géographique

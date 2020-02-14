@@ -1,7 +1,7 @@
 <?php
 
 namespace Lehna\SpeciesSearchBundle\Services;
-use Lehna\SpeciesSearchBundle\Services\QueryBuilderService;
+use Lehna\SpeciesSearchBundle\Services\SpeciesQueryService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
@@ -26,7 +26,7 @@ class RearrangementsService {
   /**
    * Constructeur
    */
-  public function __construct(EntityManagerInterface $manager, QueryBuilderService $qbservice) {
+  public function __construct(EntityManagerInterface $manager, SpeciesQueryService $qbservice) {
     $this->entityManager = $manager;
     $this->qbservice     = $qbservice;
     $this->fwdCounter    = [];
