@@ -30,13 +30,17 @@ trait BlockingStoreTestTrait
      *
      * This test is time sensible: the $clockDelay could be adjust.
      *
+     * It also fails when run with the global ./phpunit test suite.
+     *
+     * @group transient
+     *
      * @requires extension pcntl
      * @requires extension posix
      * @requires function pcntl_sigwaitinfo
      */
     public function testBlockingLocks()
     {
-        // Amount a microsecond used to order async actions
+        // Amount of microseconds we should wait without slowing things down too much
         $clockDelay = 50000;
 
         if (\PHP_VERSION_ID < 50600 || \defined('HHVM_VERSION_ID')) {
@@ -51,11 +55,11 @@ trait BlockingStoreTestTrait
         $parentPID = posix_getpid();
 
         // Block SIGHUP signal
-        pcntl_sigprocmask(SIG_BLOCK, array(SIGHUP));
+        pcntl_sigprocmask(SIG_BLOCK, [SIGHUP]);
 
         if ($childPID = pcntl_fork()) {
             // Wait the start of the child
-            pcntl_sigwaitinfo(array(SIGHUP), $info);
+            pcntl_sigwaitinfo([SIGHUP], $info);
 
             try {
                 // This call should failed given the lock should already by acquired by the child
@@ -77,14 +81,14 @@ trait BlockingStoreTestTrait
             $this->assertSame(0, pcntl_wexitstatus($status1), 'The child process couldn\'t lock the resource');
         } else {
             // Block SIGHUP signal
-            pcntl_sigprocmask(SIG_BLOCK, array(SIGHUP));
+            pcntl_sigprocmask(SIG_BLOCK, [SIGHUP]);
             try {
                 $store->save($key);
                 // send the ready signal to the parent
                 posix_kill($parentPID, SIGHUP);
 
                 // Wait for the parent to be ready
-                pcntl_sigwaitinfo(array(SIGHUP), $info);
+                pcntl_sigwaitinfo([SIGHUP], $info);
 
                 // Wait ClockDelay to let parent assert to finish
                 usleep($clockDelay);

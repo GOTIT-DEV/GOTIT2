@@ -18,7 +18,6 @@ use Symfony\Component\Form\ChoiceList\View\ChoiceView;
 use Symfony\Component\Form\FormView;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
-use Twig\Extension\InitRuntimeInterface;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 use Twig\TwigTest;
@@ -41,7 +40,7 @@ class FormExtension extends AbstractExtension implements InitRuntimeInterface
         if ($renderer instanceof TwigRendererInterface) {
             @trigger_error(sprintf('Passing a Twig Form Renderer to the "%s" constructor is deprecated since Symfony 3.2 and won\'t be possible in 4.0. Pass the Twig\Environment to the TwigRendererEngine constructor instead.', static::class), E_USER_DEPRECATED);
         } elseif (null !== $renderer && !(\is_array($renderer) && isset($renderer[0], $renderer[1]) && $renderer[0] instanceof ContainerInterface)) {
-            throw new \InvalidArgumentException(sprintf('Passing any arguments the constructor of %s is reserved for internal use.', __CLASS__));
+            throw new \InvalidArgumentException(sprintf('Passing any arguments to the constructor of %s is reserved for internal use.', __CLASS__));
         }
         $this->renderer = $renderer;
     }
@@ -65,10 +64,10 @@ class FormExtension extends AbstractExtension implements InitRuntimeInterface
      */
     public function getTokenParsers()
     {
-        return array(
+        return [
             // {% form_theme form "SomeBundle::widgets.twig" %}
             new FormThemeTokenParser(),
-        );
+        ];
     }
 
     /**
@@ -76,17 +75,17 @@ class FormExtension extends AbstractExtension implements InitRuntimeInterface
      */
     public function getFunctions()
     {
-        return array(
-            new TwigFunction('form_widget', null, array('node_class' => 'Symfony\Bridge\Twig\Node\SearchAndRenderBlockNode', 'is_safe' => array('html'))),
-            new TwigFunction('form_errors', null, array('node_class' => 'Symfony\Bridge\Twig\Node\SearchAndRenderBlockNode', 'is_safe' => array('html'))),
-            new TwigFunction('form_label', null, array('node_class' => 'Symfony\Bridge\Twig\Node\SearchAndRenderBlockNode', 'is_safe' => array('html'))),
-            new TwigFunction('form_row', null, array('node_class' => 'Symfony\Bridge\Twig\Node\SearchAndRenderBlockNode', 'is_safe' => array('html'))),
-            new TwigFunction('form_rest', null, array('node_class' => 'Symfony\Bridge\Twig\Node\SearchAndRenderBlockNode', 'is_safe' => array('html'))),
-            new TwigFunction('form', null, array('node_class' => 'Symfony\Bridge\Twig\Node\RenderBlockNode', 'is_safe' => array('html'))),
-            new TwigFunction('form_start', null, array('node_class' => 'Symfony\Bridge\Twig\Node\RenderBlockNode', 'is_safe' => array('html'))),
-            new TwigFunction('form_end', null, array('node_class' => 'Symfony\Bridge\Twig\Node\RenderBlockNode', 'is_safe' => array('html'))),
-            new TwigFunction('csrf_token', array('Symfony\Component\Form\FormRenderer', 'renderCsrfToken')),
-        );
+        return [
+            new TwigFunction('form_widget', null, ['node_class' => 'Symfony\Bridge\Twig\Node\SearchAndRenderBlockNode', 'is_safe' => ['html']]),
+            new TwigFunction('form_errors', null, ['node_class' => 'Symfony\Bridge\Twig\Node\SearchAndRenderBlockNode', 'is_safe' => ['html']]),
+            new TwigFunction('form_label', null, ['node_class' => 'Symfony\Bridge\Twig\Node\SearchAndRenderBlockNode', 'is_safe' => ['html']]),
+            new TwigFunction('form_row', null, ['node_class' => 'Symfony\Bridge\Twig\Node\SearchAndRenderBlockNode', 'is_safe' => ['html']]),
+            new TwigFunction('form_rest', null, ['node_class' => 'Symfony\Bridge\Twig\Node\SearchAndRenderBlockNode', 'is_safe' => ['html']]),
+            new TwigFunction('form', null, ['node_class' => 'Symfony\Bridge\Twig\Node\RenderBlockNode', 'is_safe' => ['html']]),
+            new TwigFunction('form_start', null, ['node_class' => 'Symfony\Bridge\Twig\Node\RenderBlockNode', 'is_safe' => ['html']]),
+            new TwigFunction('form_end', null, ['node_class' => 'Symfony\Bridge\Twig\Node\RenderBlockNode', 'is_safe' => ['html']]),
+            new TwigFunction('csrf_token', ['Symfony\Component\Form\FormRenderer', 'renderCsrfToken']),
+        ];
     }
 
     /**
@@ -94,10 +93,10 @@ class FormExtension extends AbstractExtension implements InitRuntimeInterface
      */
     public function getFilters()
     {
-        return array(
-            new TwigFilter('humanize', array('Symfony\Component\Form\FormRenderer', 'humanize')),
-            new TwigFilter('form_encode_currency', array('Symfony\Component\Form\FormRenderer', 'encodeCurrency'), array('is_safe' => array('html'), 'needs_environment' => true)),
-        );
+        return [
+            new TwigFilter('humanize', ['Symfony\Component\Form\FormRenderer', 'humanize']),
+            new TwigFilter('form_encode_currency', ['Symfony\Component\Form\FormRenderer', 'encodeCurrency'], ['is_safe' => ['html'], 'needs_environment' => true]),
+        ];
     }
 
     /**
@@ -105,10 +104,10 @@ class FormExtension extends AbstractExtension implements InitRuntimeInterface
      */
     public function getTests()
     {
-        return array(
+        return [
             new TwigTest('selectedchoice', 'Symfony\Bridge\Twig\Extension\twig_is_selected_choice'),
             new TwigTest('rootform', 'Symfony\Bridge\Twig\Extension\twig_is_root_form'),
-        );
+        ];
     }
 
     /**

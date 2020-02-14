@@ -21,10 +21,9 @@ use Symfony\Component\Workflow\SupportStrategy\SupportStrategyInterface;
  */
 class Registry
 {
-    private $workflows = array();
+    private $workflows = [];
 
     /**
-     * @param Workflow                        $workflow
      * @param string|SupportStrategyInterface $supportStrategy
      */
     public function add(Workflow $workflow, $supportStrategy)
@@ -35,7 +34,7 @@ class Registry
             $supportStrategy = new ClassInstanceSupportStrategy($supportStrategy);
         }
 
-        $this->workflows[] = array($workflow, $supportStrategy);
+        $this->workflows[] = [$workflow, $supportStrategy];
     }
 
     /**
@@ -64,6 +63,13 @@ class Registry
         return $matched;
     }
 
+    /**
+     * @param SupportStrategyInterface $supportStrategy
+     * @param object                   $subject
+     * @param string|null              $workflowName
+     *
+     * @return bool
+     */
     private function supports(Workflow $workflow, $supportStrategy, $subject, $workflowName)
     {
         if (null !== $workflowName && $workflowName !== $workflow->getName()) {

@@ -27,7 +27,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
  */
 class ServerLogCommand extends Command
 {
-    private static $bgColor = array('black', 'blue', 'cyan', 'green', 'magenta', 'red', 'white', 'yellow');
+    private static $bgColor = ['black', 'blue', 'cyan', 'green', 'magenta', 'red', 'white', 'yellow'];
 
     private $el;
     private $handler;
@@ -87,12 +87,12 @@ EOF
 
         $this->handler = new ConsoleHandler($output);
 
-        $this->handler->setFormatter(new ConsoleFormatter(array(
+        $this->handler->setFormatter(new ConsoleFormatter([
             'format' => str_replace('\n', "\n", $input->getOption('format')),
             'date_format' => $input->getOption('date-format'),
             'colors' => $output->isDecorated(),
             'multiline' => OutputInterface::VERBOSITY_DEBUG <= $output->getVerbosity(),
-        )));
+        ]));
 
         if (false === strpos($host = $input->getOption('host'), '://')) {
             $host = 'tcp://'.$host;
@@ -114,14 +114,14 @@ EOF
                 continue;
             }
 
-            $this->displayLog($input, $output, $clientId, $record);
+            $this->displayLog($output, $clientId, $record);
         }
     }
 
     private function getLogs($socket)
     {
-        $sockets = array((int) $socket => $socket);
-        $write = array();
+        $sockets = [(int) $socket => $socket];
+        $write = [];
 
         while (true) {
             $read = $sockets;
@@ -141,7 +141,7 @@ EOF
         }
     }
 
-    private function displayLog(InputInterface $input, OutputInterface $output, $clientId, array $record)
+    private function displayLog(OutputInterface $output, $clientId, array $record)
     {
         if ($this->handler->isHandling($record)) {
             if (isset($record['log_id'])) {

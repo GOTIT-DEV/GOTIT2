@@ -49,7 +49,7 @@ class FullTransformer
         $notImplementedCharsMatch = $this->buildCharsMatch($this->notImplementedChars);
         $this->regExp = "/($this->quoteMatch|$implementedCharsMatch|$notImplementedCharsMatch)/";
 
-        $this->transformers = array(
+        $this->transformers = [
             'M' => new MonthTransformer(),
             'L' => new MonthTransformer(),
             'y' => new YearTransformer(),
@@ -66,7 +66,7 @@ class FullTransformer
             'm' => new MinuteTransformer(),
             's' => new SecondTransformer(),
             'z' => new TimezoneTransformer(),
-        );
+        ];
     }
 
     /**
@@ -101,7 +101,7 @@ class FullTransformer
      * @param string    $dateChars The date characters to be replaced with a formatted ICU value
      * @param \DateTime $dateTime  A DateTime object to be used to generate the formatted value
      *
-     * @return string The formatted value
+     * @return string|null The formatted value
      *
      * @throws NotImplementedException When it encounters a not implemented date character
      */
@@ -123,6 +123,8 @@ class FullTransformer
         if (false !== strpos($this->notImplementedChars, $dateChars[0])) {
             throw new NotImplementedException(sprintf('Unimplemented date character "%s" in format "%s"', $dateChars[0], $this->pattern));
         }
+
+        return null;
     }
 
     /**
@@ -140,7 +142,7 @@ class FullTransformer
         $reverseMatchingRegExp = $this->getReverseMatchingRegExp($this->pattern);
         $reverseMatchingRegExp = '/^'.$reverseMatchingRegExp.'$/';
 
-        $options = array();
+        $options = [];
 
         if (preg_match($reverseMatchingRegExp, $value, $matches)) {
             $matches = $this->normalizeArray($matches);
@@ -196,6 +198,8 @@ class FullTransformer
 
                 return "(?P<$captureName>".$transformer->getReverseMatchingRegExp($length).')';
             }
+
+            return null;
         }, $escapedPattern);
 
         return $reverseMatchingRegExp;
@@ -255,17 +259,17 @@ class FullTransformer
      */
     protected function normalizeArray(array $data)
     {
-        $ret = array();
+        $ret = [];
 
         foreach ($data as $key => $value) {
             if (!\is_string($key)) {
                 continue;
             }
 
-            $ret[$key[0]] = array(
+            $ret[$key[0]] = [
                 'value' => $value,
                 'pattern' => $key,
-            );
+            ];
         }
 
         return $ret;
@@ -315,7 +319,7 @@ class FullTransformer
         preg_match_all($this->regExp, $this->pattern, $matches);
         if (\in_array('yy', $matches[0])) {
             $dateTime->setTimestamp(time());
-            $year = $year > $dateTime->format('y') + 20 ? 1900 + $year : 2000 + $year;
+            $year = $year > (int) $dateTime->format('y') + 20 ? 1900 + $year : 2000 + $year;
         }
 
         $dateTime->setDate($year, $month, $day);
@@ -332,7 +336,7 @@ class FullTransformer
      */
     private function getDefaultValueForOptions(array $options)
     {
-        return array(
+        return [
             'year' => isset($options['year']) ? $options['year'] : 1970,
             'month' => isset($options['month']) ? $options['month'] : 1,
             'day' => isset($options['day']) ? $options['day'] : 1,
@@ -342,6 +346,6 @@ class FullTransformer
             'second' => isset($options['second']) ? $options['second'] : 0,
             'marker' => isset($options['marker']) ? $options['marker'] : null,
             'timezone' => isset($options['timezone']) ? $options['timezone'] : null,
-        );
+        ];
     }
 }

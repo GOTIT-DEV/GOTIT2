@@ -13,7 +13,6 @@ namespace Symfony\Bundle\MonologBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
@@ -50,7 +49,7 @@ class FixEmptyLoggerPass implements CompilerPassInterface
                 }
             }
 
-            $def->addMethodCall('pushHandler', array(new Reference('monolog.handler.null_internal')));
+            $def->addMethodCall('pushHandler', [new Reference('monolog.handler.null_internal')]);
         }
     }
 }

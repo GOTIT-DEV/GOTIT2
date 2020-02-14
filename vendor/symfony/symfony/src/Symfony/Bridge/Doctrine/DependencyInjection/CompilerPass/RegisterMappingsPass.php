@@ -24,8 +24,8 @@ use Symfony\Component\DependencyInjection\Reference;
  * The compiler pass is meant to register the mappings with the metadata
  * chain driver corresponding to one of the object managers.
  *
- * For concrete implementations that are easy to use, see the
- * RegisterXyMappingsPass classes in the DoctrineBundle resp.
+ * For concrete implementations, see the RegisterXyMappingsPass classes
+ * in the DoctrineBundle resp.
  * DoctrineMongodbBundle, DoctrineCouchdbBundle and DoctrinePhpcrBundle.
  *
  * @author David Buchmann <david@liip.ch>
@@ -50,7 +50,7 @@ abstract class RegisterMappingsPass implements CompilerPassInterface
     /**
      * List of potential container parameters that hold the object manager name
      * to register the mappings with the correct metadata driver, for example
-     * array('acme.manager', 'doctrine.default_entity_manager').
+     * ['acme.manager', 'doctrine.default_entity_manager'].
      *
      * @var string[]
      */
@@ -117,7 +117,7 @@ abstract class RegisterMappingsPass implements CompilerPassInterface
      *                                                      register alias
      * @param string[]             $aliasMap                Map of alias to namespace
      */
-    public function __construct($driver, array $namespaces, array $managerParameters, $driverPattern, $enabledParameter = false, $configurationPattern = '', $registerAliasMethodName = '', array $aliasMap = array())
+    public function __construct($driver, array $namespaces, array $managerParameters, $driverPattern, $enabledParameter = false, $configurationPattern = '', $registerAliasMethodName = '', array $aliasMap = [])
     {
         $this->driver = $driver;
         $this->namespaces = $namespaces;
@@ -143,10 +143,10 @@ abstract class RegisterMappingsPass implements CompilerPassInterface
 
         $mappingDriverDef = $this->getDriver($container);
         $chainDriverDefService = $this->getChainDriverServiceName($container);
-        // Definition for a Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain
+        // Definition for a Doctrine\Persistence\Mapping\Driver\MappingDriverChain
         $chainDriverDef = $container->getDefinition($chainDriverDefService);
         foreach ($this->namespaces as $namespace) {
-            $chainDriverDef->addMethodCall('addDriver', array($mappingDriverDef, $namespace));
+            $chainDriverDef->addMethodCall('addDriver', [$mappingDriverDef, $namespace]);
         }
 
         if (!\count($this->aliasMap)) {
@@ -157,7 +157,7 @@ abstract class RegisterMappingsPass implements CompilerPassInterface
         // Definition of the Doctrine\...\Configuration class specific to the Doctrine flavour.
         $configurationServiceDefinition = $container->getDefinition($configurationServiceName);
         foreach ($this->aliasMap as $alias => $namespace) {
-            $configurationServiceDefinition->addMethodCall($this->registerAliasMethodName, array($alias, $namespace));
+            $configurationServiceDefinition->addMethodCall($this->registerAliasMethodName, [$alias, $namespace]);
         }
     }
 
@@ -222,10 +222,7 @@ abstract class RegisterMappingsPass implements CompilerPassInterface
             }
         }
 
-        throw new InvalidArgumentException(sprintf(
-            'Could not find the manager name parameter in the container. Tried the following parameter names: "%s"',
-            implode('", "', $this->managerParameters)
-        ));
+        throw new InvalidArgumentException(sprintf('Could not find the manager name parameter in the container. Tried the following parameter names: "%s"', implode('", "', $this->managerParameters)));
     }
 
     /**

@@ -29,9 +29,8 @@ class DependencyInjectionExtension implements FormExtensionInterface
     private $guesserServiceIds;
 
     /**
-     * @param ContainerInterface $typeContainer
-     * @param iterable[]         $typeExtensionServices
-     * @param iterable           $guesserServices
+     * @param iterable[] $typeExtensionServices
+     * @param iterable   $guesserServices
      */
     public function __construct(ContainerInterface $typeContainer, array $typeExtensionServices, $guesserServices, array $guesserServiceIds = null)
     {
@@ -76,7 +75,7 @@ class DependencyInjectionExtension implements FormExtensionInterface
 
     public function getTypeExtensions($name)
     {
-        $extensions = array();
+        $extensions = [];
 
         if (isset($this->typeExtensionServices[$name])) {
             foreach ($this->typeExtensionServices[$name] as $serviceId => $extension) {
@@ -105,7 +104,7 @@ class DependencyInjectionExtension implements FormExtensionInterface
     {
         if (!$this->guesserLoaded) {
             $this->guesserLoaded = true;
-            $guessers = array();
+            $guessers = [];
 
             foreach ($this->guesserServices as $serviceId => $service) {
                 if (null !== $this->guesserServiceIds) {

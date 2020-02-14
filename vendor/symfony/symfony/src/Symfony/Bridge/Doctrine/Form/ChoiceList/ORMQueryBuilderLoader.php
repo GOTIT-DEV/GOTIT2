@@ -55,6 +55,21 @@ class ORMQueryBuilderLoader implements EntityLoaderInterface
      */
     public function getEntitiesByIds($identifier, array $values)
     {
+        if (null !== $this->queryBuilder->getMaxResults() || null !== $this->queryBuilder->getFirstResult()) {
+            // an offset or a limit would apply on results including the where clause with submitted id values
+            // that could make invalid choices valid
+            $choices = [];
+            $metadata = $this->queryBuilder->getEntityManager()->getClassMetadata(current($this->queryBuilder->getRootEntities()));
+
+            foreach ($this->getEntities() as $entity) {
+                if (\in_array(current($metadata->getIdentifierValues($entity)), $values, true)) {
+                    $choices[] = $entity;
+                }
+            }
+
+            return $choices;
+        }
+
         $qb = clone $this->queryBuilder;
         $alias = current($qb->getRootAliases());
         $parameter = 'ORMQueryBuilderLoader_getEntitiesByIds_'.$identifier;
@@ -64,7 +79,7 @@ class ORMQueryBuilderLoader implements EntityLoaderInterface
         // Guess type
         $entity = current($qb->getRootEntities());
         $metadata = $qb->getEntityManager()->getClassMetadata($entity);
-        if (\in_array($metadata->getTypeOfField($identifier), array('integer', 'bigint', 'smallint'))) {
+        if (\in_array($metadata->getTypeOfField($identifier), ['integer', 'bigint', 'smallint'])) {
             $parameterType = Connection::PARAM_INT_ARRAY;
 
             // Filter out non-integer values (e.g. ""). If we don't, some
@@ -72,7 +87,7 @@ class ORMQueryBuilderLoader implements EntityLoaderInterface
             $values = array_values(array_filter($values, function ($v) {
                 return (string) $v === (string) (int) $v || ctype_digit($v);
             }));
-        } elseif (\in_array($metadata->getTypeOfField($identifier), array('uuid', 'guid'))) {
+        } elseif (\in_array($metadata->getTypeOfField($identifier), ['uuid', 'guid'])) {
             $parameterType = Connection::PARAM_STR_ARRAY;
 
             // Like above, but we just filter out empty strings.
@@ -83,7 +98,7 @@ class ORMQueryBuilderLoader implements EntityLoaderInterface
             $parameterType = Connection::PARAM_STR_ARRAY;
         }
         if (!$values) {
-            return array();
+            return [];
         }
 
         return $qb->andWhere($where)

@@ -24,17 +24,17 @@ class CachePoolPrunerPassTest extends TestCase
     public function testCompilerPassReplacesCommandArgument()
     {
         $container = new ContainerBuilder();
-        $container->register('console.command.cache_pool_prune')->addArgument(array());
+        $container->register('console.command.cache_pool_prune')->addArgument([]);
         $container->register('pool.foo', FilesystemAdapter::class)->addTag('cache.pool');
         $container->register('pool.bar', PhpFilesAdapter::class)->addTag('cache.pool');
 
         $pass = new CachePoolPrunerPass();
         $pass->process($container);
 
-        $expected = array(
+        $expected = [
             'pool.foo' => new Reference('pool.foo'),
             'pool.bar' => new Reference('pool.bar'),
-        );
+        ];
         $argument = $container->getDefinition('console.command.cache_pool_prune')->getArgument(0);
 
         $this->assertInstanceOf(IteratorArgument::class, $argument);
@@ -56,14 +56,12 @@ class CachePoolPrunerPassTest extends TestCase
         $this->assertCount($aliasesBefore, $container->getAliases());
     }
 
-    /**
-     * @expectedException \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Class "Symfony\Bundle\FrameworkBundle\Tests\DependencyInjection\Compiler\NotFound" used for service "pool.not-found" cannot be found.
-     */
     public function testCompilerPassThrowsOnInvalidDefinitionClass()
     {
+        $this->expectException('Symfony\Component\DependencyInjection\Exception\InvalidArgumentException');
+        $this->expectExceptionMessage('Class "Symfony\Bundle\FrameworkBundle\Tests\DependencyInjection\Compiler\NotFound" used for service "pool.not-found" cannot be found.');
         $container = new ContainerBuilder();
-        $container->register('console.command.cache_pool_prune')->addArgument(array());
+        $container->register('console.command.cache_pool_prune')->addArgument([]);
         $container->register('pool.not-found', NotFound::class)->addTag('cache.pool');
 
         $pass = new CachePoolPrunerPass();

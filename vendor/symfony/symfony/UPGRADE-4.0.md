@@ -26,8 +26,8 @@ file and directory structure of your application:
 
 Then, upgrade the contents of your console script and your front controller:
 
-* `bin/console`: https://github.com/symfony/recipes/blob/master/symfony/console/3.3/bin/console
-* `public/index.php`: https://github.com/symfony/recipes/blob/master/symfony/framework-bundle/3.3/public/index.php
+* `bin/console`: https://github.com/symfony/recipes/blob/master/symfony/console/4.4/bin/console
+* `public/index.php`: https://github.com/symfony/recipes/blob/master/symfony/framework-bundle/4.4/public/index.php
 
 Lastly, read the following article to add Symfony Flex to your application and
 upgrade the configuration files: https://symfony.com/doc/current/setup/flex.html
@@ -230,7 +230,7 @@ DependencyInjection
    supported.
 
  * The ``strict`` attribute in service arguments has been removed.
-   The attribute is ignored since 3.0, so you can simply remove it.
+   The attribute is ignored since 3.0, you can remove it.
 
  * Top-level anonymous services in XML are no longer supported.
 
@@ -297,19 +297,17 @@ Form
    `ArrayAccess` in `ResizeFormListener::preSubmit` method has been removed.
 
  * Using callable strings as choice options in ChoiceType is not supported
-   anymore in favor of passing PropertyPath instances.
+   anymore.
 
    Before:
 
    ```php
-   'choice_value' => new PropertyPath('range'),
    'choice_label' => 'strtoupper',
    ```
 
    After:
 
    ```php
-   'choice_value' => 'range',
    'choice_label' => function ($choice) {
        return strtoupper($choice);
    },
@@ -926,7 +924,7 @@ Validator
 VarDumper
 ---------
 
- * The `VarDumperTestTrait::assertDumpEquals()` method expects a 3rd `$context = null`
+ * The `VarDumperTestTrait::assertDumpEquals()` method expects a 3rd `$filter = 0`
    argument and moves `$message = ''` argument at 4th position.
 
    Before:
@@ -941,7 +939,7 @@ VarDumper
    VarDumperTestTrait::assertDumpEquals($dump, $data, $filter = 0, $message = '');
    ```
 
- * The `VarDumperTestTrait::assertDumpMatchesFormat()` method expects a 3rd `$context = null`
+ * The `VarDumperTestTrait::assertDumpMatchesFormat()` method expects a 3rd `$filter = 0`
    argument and moves `$message = ''` argument at 4th position.
 
    Before:

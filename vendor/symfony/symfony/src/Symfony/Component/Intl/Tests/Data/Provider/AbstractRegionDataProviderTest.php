@@ -13,7 +13,6 @@ namespace Symfony\Component\Intl\Tests\Data\Provider;
 
 use Symfony\Component\Intl\Data\Provider\RegionDataProvider;
 use Symfony\Component\Intl\Intl;
-use Symfony\Component\Intl\Locale;
 
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
@@ -22,7 +21,7 @@ abstract class AbstractRegionDataProviderTest extends AbstractDataProviderTest
 {
     // The below arrays document the state of the ICU data bundled with this package.
 
-    protected static $territories = array(
+    protected static $territories = [
         'AC',
         'AD',
         'AE',
@@ -278,12 +277,13 @@ abstract class AbstractRegionDataProviderTest extends AbstractDataProviderTest
         'ZA',
         'ZM',
         'ZW',
-    );
+    ];
 
     /**
      * @var RegionDataProvider
      */
     protected $dataProvider;
+    private $defaultLocale;
 
     protected function setUp()
     {
@@ -293,6 +293,15 @@ abstract class AbstractRegionDataProviderTest extends AbstractDataProviderTest
             $this->getDataDirectory().'/'.Intl::REGION_DIR,
             $this->createEntryReader()
         );
+
+        $this->defaultLocale = \Locale::getDefault();
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        \Locale::setDefault($this->defaultLocale);
     }
 
     abstract protected function getDataDirectory();
@@ -316,7 +325,7 @@ abstract class AbstractRegionDataProviderTest extends AbstractDataProviderTest
 
     public function testGetNamesDefaultLocale()
     {
-        Locale::setDefault('de_AT');
+        \Locale::setDefault('de_AT');
 
         $this->assertSame(
             $this->dataProvider->getNames('de_AT'),

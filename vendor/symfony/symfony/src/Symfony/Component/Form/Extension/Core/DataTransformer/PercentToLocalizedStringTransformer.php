@@ -26,10 +26,10 @@ class PercentToLocalizedStringTransformer implements DataTransformerInterface
     const FRACTIONAL = 'fractional';
     const INTEGER = 'integer';
 
-    protected static $types = array(
+    protected static $types = [
         self::FRACTIONAL,
         self::INTEGER,
-    );
+    ];
 
     private $type;
     private $scale;
@@ -112,7 +112,7 @@ class PercentToLocalizedStringTransformer implements DataTransformerInterface
         }
 
         if ('' === $value) {
-            return;
+            return null;
         }
 
         $position = 0;

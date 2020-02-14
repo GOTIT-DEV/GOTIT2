@@ -11,10 +11,11 @@
 
 namespace Symfony\Bridge\Doctrine\DataCollector;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
 use Doctrine\DBAL\Logging\DebugStack;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
@@ -33,9 +34,12 @@ class DoctrineDataCollector extends DataCollector
     /**
      * @var DebugStack[]
      */
-    private $loggers = array();
+    private $loggers = [];
 
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * @param ManagerRegistry|LegacyManagerRegistry $registry
+     */
+    public function __construct($registry)
     {
         $this->registry = $registry;
         $this->connections = $registry->getConnectionNames();
@@ -45,8 +49,7 @@ class DoctrineDataCollector extends DataCollector
     /**
      * Adds the stack logger for a connection.
      *
-     * @param string     $name
-     * @param DebugStack $logger
+     * @param string $name
      */
     public function addLogger($name, DebugStack $logger)
     {
@@ -58,24 +61,24 @@ class DoctrineDataCollector extends DataCollector
      */
     public function collect(Request $request, Response $response, \Exception $exception = null)
     {
-        $queries = array();
+        $queries = [];
         foreach ($this->loggers as $name => $logger) {
             $queries[$name] = $this->sanitizeQueries($name, $logger->queries);
         }
 
-        $this->data = array(
+        $this->data = [
             'queries' => $queries,
             'connections' => $this->connections,
             'managers' => $this->managers,
-        );
+        ];
     }
 
     public function reset()
     {
-        $this->data = array();
+        $this->data = [];
 
         foreach ($this->loggers as $logger) {
-            $logger->queries = array();
+            $logger->queries = [];
             $logger->currentQuery = 0;
         }
     }
@@ -133,10 +136,13 @@ class DoctrineDataCollector extends DataCollector
     {
         $query['explainable'] = true;
         if (null === $query['params']) {
-            $query['params'] = array();
+            $query['params'] = [];
         }
         if (!\is_array($query['params'])) {
-            $query['params'] = array($query['params']);
+            $query['params'] = [$query['params']];
+        }
+        if (!\is_array($query['types'])) {
+            $query['types'] = [];
         }
         foreach ($query['params'] as $j => $param) {
             if (isset($query['types'][$j])) {
@@ -184,12 +190,12 @@ class DoctrineDataCollector extends DataCollector
             $className = \get_class($var);
 
             return method_exists($var, '__toString') ?
-                array(sprintf('Object(%s): "%s"', $className, $var->__toString()), false) :
-                array(sprintf('Object(%s)', $className), false);
+                [sprintf('Object(%s): "%s"', $className, $var->__toString()), false] :
+                [sprintf('Object(%s)', $className), false];
         }
 
         if (\is_array($var)) {
-            $a = array();
+            $a = [];
             $original = true;
             foreach ($var as $k => $v) {
                 list($value, $orig) = $this->sanitizeParam($v);
@@ -197,13 +203,13 @@ class DoctrineDataCollector extends DataCollector
                 $a[$k] = $value;
             }
 
-            return array($a, $original);
+            return [$a, $original];
         }
 
         if (\is_resource($var)) {
-            return array(sprintf('Resource(%s)', get_resource_type($var)), false);
+            return [sprintf('Resource(%s)', get_resource_type($var)), false];
         }
 
-        return array($var, true);
+        return [$var, true];
     }
 }

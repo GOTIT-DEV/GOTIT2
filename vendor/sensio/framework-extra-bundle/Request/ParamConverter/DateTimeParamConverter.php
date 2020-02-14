@@ -40,7 +40,9 @@ class DateTimeParamConverter implements ParamConverterInterface
         $value = $request->attributes->get($param);
 
         if (!$value && $configuration->isOptional()) {
-            return false;
+            $request->attributes->set($param, null);
+
+            return true;
         }
 
         $class = $configuration->getClass();
@@ -77,6 +79,6 @@ class DateTimeParamConverter implements ParamConverterInterface
             return false;
         }
 
-        return 'DateTime' === $configuration->getClass() || is_subclass_of($configuration->getClass(), PHP_VERSION_ID < 50500 ? 'DateTime' : 'DateTimeInterface');
+        return 'DateTime' === $configuration->getClass() || is_subclass_of($configuration->getClass(), \PHP_VERSION_ID < 50500 ? 'DateTime' : 'DateTimeInterface');
     }
 }

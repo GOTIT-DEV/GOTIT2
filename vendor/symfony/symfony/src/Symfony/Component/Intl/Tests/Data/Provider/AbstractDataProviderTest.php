@@ -26,7 +26,7 @@ abstract class AbstractDataProviderTest extends TestCase
     // not loaded, because it is NOT possible to skip the execution of data
     // providers.
 
-    private static $locales = array(
+    private static $locales = [
         'af',
         'af_NA',
         'af_ZA',
@@ -124,6 +124,7 @@ abstract class AbstractDataProviderTest extends TestCase
         'en',
         'en_001',
         'en_150',
+        'en_AE',
         'en_AG',
         'en_AI',
         'en_AS',
@@ -230,6 +231,7 @@ abstract class AbstractDataProviderTest extends TestCase
         'en_ZM',
         'en_ZW',
         'eo',
+        'eo_001',
         'es',
         'es_419',
         'es_AR',
@@ -267,6 +269,23 @@ abstract class AbstractDataProviderTest extends TestCase
         'fa_AF',
         'fa_IR',
         'ff',
+        'ff_CM',
+        'ff_GN',
+        'ff_Latn',
+        'ff_Latn_BF',
+        'ff_Latn_CM',
+        'ff_Latn_GH',
+        'ff_Latn_GM',
+        'ff_Latn_GN',
+        'ff_Latn_GW',
+        'ff_Latn_LR',
+        'ff_Latn_MR',
+        'ff_Latn_NE',
+        'ff_Latn_NG',
+        'ff_Latn_SL',
+        'ff_Latn_SN',
+        'ff_MR',
+        'ff_SN',
         'fi',
         'fi_FI',
         'fo',
@@ -322,6 +341,7 @@ abstract class AbstractDataProviderTest extends TestCase
         'fy',
         'fy_NL',
         'ga',
+        'ga_GB',
         'ga_IE',
         'gd',
         'gd_GB',
@@ -471,6 +491,7 @@ abstract class AbstractDataProviderTest extends TestCase
         'pl_PL',
         'ps',
         'ps_AF',
+        'ps_PK',
         'pt',
         'pt_AO',
         'pt_BR',
@@ -633,18 +654,22 @@ abstract class AbstractDataProviderTest extends TestCase
         'zh_TW',
         'zu',
         'zu_ZA',
-    );
+    ];
 
-    private static $localeAliases = array(
+    private static $localeAliases = [
         'az_AZ' => 'az_Latn_AZ',
         'bs_BA' => 'bs_Latn_BA',
         'en_NH' => 'en_VU',
         'en_RH' => 'en_ZW',
+        'ff_CM' => 'ff_Latn_CM',
+        'ff_GN' => 'ff_Latn_GN',
+        'ff_MR' => 'ff_Latn_MR',
+        'ff_SN' => 'ff_Latn_SN',
         'in' => 'id',
         'in_ID' => 'id_ID',
         'iw' => 'he',
         'iw_IL' => 'he_IL',
-        'mo' => 'ro_MD',
+        'mo' => 'ro',
         'no' => 'nb',
         'no_NO' => 'nb_NO',
         'no_NO_NY' => 'nn_NO',
@@ -673,20 +698,20 @@ abstract class AbstractDataProviderTest extends TestCase
         'zh_MO' => 'zh_Hant_MO',
         'zh_SG' => 'zh_Hans_SG',
         'zh_TW' => 'zh_Hant_TW',
-    );
+    ];
 
     private static $rootLocales;
 
     protected function setUp()
     {
-        Locale::setDefault('en');
+        \Locale::setDefault('en');
         Locale::setDefaultFallback('en');
     }
 
     public function provideLocales()
     {
         return array_map(
-            function ($locale) { return array($locale); },
+            function ($locale) { return [$locale]; },
             $this->getLocales()
         );
     }
@@ -694,7 +719,7 @@ abstract class AbstractDataProviderTest extends TestCase
     public function provideLocaleAliases()
     {
         return array_map(
-            function ($alias, $ofLocale) { return array($alias, $ofLocale); },
+            function ($alias, $ofLocale) { return [$alias, $ofLocale]; },
             array_keys($this->getLocaleAliases()),
             $this->getLocaleAliases()
         );
@@ -703,7 +728,7 @@ abstract class AbstractDataProviderTest extends TestCase
     public function provideRootLocales()
     {
         return array_map(
-            function ($locale) { return array($locale); },
+            function ($locale) { return [$locale]; },
             $this->getRootLocales()
         );
     }

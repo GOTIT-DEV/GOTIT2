@@ -23,37 +23,33 @@ class PhpFrameworkExtensionTest extends FrameworkExtensionTest
         $loader->load($file.'.php');
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testAssetsCannotHavePathAndUrl()
     {
+        $this->expectException('LogicException');
         $this->createContainerFromClosure(function ($container) {
-            $container->loadFromExtension('framework', array(
-                'assets' => array(
+            $container->loadFromExtension('framework', [
+                'assets' => [
                     'base_urls' => 'http://cdn.example.com',
                     'base_path' => '/foo',
-                ),
-            ));
+                ],
+            ]);
         });
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testAssetPackageCannotHavePathAndUrl()
     {
+        $this->expectException('LogicException');
         $this->createContainerFromClosure(function ($container) {
-            $container->loadFromExtension('framework', array(
-                'assets' => array(
-                    'packages' => array(
-                        'impossible' => array(
+            $container->loadFromExtension('framework', [
+                'assets' => [
+                    'packages' => [
+                        'impossible' => [
                             'base_urls' => 'http://cdn.example.com',
                             'base_path' => '/foo',
-                        ),
-                    ),
-                ),
-            ));
+                        ],
+                    ],
+                ],
+            ]);
         });
     }
 }

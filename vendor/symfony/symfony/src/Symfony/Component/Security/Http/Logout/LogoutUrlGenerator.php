@@ -28,7 +28,7 @@ class LogoutUrlGenerator
     private $requestStack;
     private $router;
     private $tokenStorage;
-    private $listeners = array();
+    private $listeners = [];
     private $currentFirewall;
 
     public function __construct(RequestStack $requestStack = null, UrlGeneratorInterface $router = null, TokenStorageInterface $tokenStorage = null)
@@ -41,12 +41,11 @@ class LogoutUrlGenerator
     /**
      * Registers a firewall's LogoutListener, allowing its URL to be generated.
      *
-     * @param string                         $key              The firewall key
-     * @param string                         $logoutPath       The path that starts the logout process
-     * @param string                         $csrfTokenId      The ID of the CSRF token
-     * @param string                         $csrfParameter    The CSRF token parameter name
-     * @param CsrfTokenManagerInterface|null $csrfTokenManager A CsrfTokenManagerInterface instance
-     * @param string|null                    $context          The listener context
+     * @param string      $key           The firewall key
+     * @param string      $logoutPath    The path that starts the logout process
+     * @param string|null $csrfTokenId   The ID of the CSRF token
+     * @param string|null $csrfParameter The CSRF token parameter name
+     * @param string|null $context       The listener context
      */
     public function registerListener($key, $logoutPath, $csrfTokenId, $csrfParameter, CsrfTokenManagerInterface $csrfTokenManager = null/*, string $context = null*/)
     {
@@ -63,7 +62,7 @@ class LogoutUrlGenerator
             $context = null;
         }
 
-        $this->listeners[$key] = array($logoutPath, $csrfTokenId, $csrfParameter, $csrfTokenManager, $context);
+        $this->listeners[$key] = [$logoutPath, $csrfTokenId, $csrfParameter, $csrfTokenManager, $context];
     }
 
     /**
@@ -96,7 +95,7 @@ class LogoutUrlGenerator
      */
     public function setCurrentFirewall($key, $context = null)
     {
-        $this->currentFirewall = array($key, $context);
+        $this->currentFirewall = [$key, $context];
     }
 
     /**
@@ -115,7 +114,7 @@ class LogoutUrlGenerator
             throw new \LogicException('Unable to generate the logout URL without a path.');
         }
 
-        $parameters = null !== $csrfTokenManager ? array($csrfParameter => (string) $csrfTokenManager->getToken($csrfTokenId)) : array();
+        $parameters = null !== $csrfTokenManager ? [$csrfParameter => (string) $csrfTokenManager->getToken($csrfTokenId)] : [];
 
         if ('/' === $logoutPath[0]) {
             if (!$this->requestStack) {

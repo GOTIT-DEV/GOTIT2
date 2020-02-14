@@ -11,8 +11,10 @@
 
 namespace Symfony\Bridge\Doctrine\Form\ChoiceList;
 
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\Mapping\ClassMetadata as LegacyClassMetadata;
+use Doctrine\Common\Persistence\ObjectManager as LegacyObjectManager;
+use Doctrine\Persistence\Mapping\ClassMetadata;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Form\Exception\RuntimeException;
 
 /**
@@ -35,7 +37,11 @@ class IdReader
      */
     private $associationIdReader;
 
-    public function __construct(ObjectManager $om, ClassMetadata $classMetadata)
+    /**
+     * @param ObjectManager|LegacyObjectManager $om
+     * @param ClassMetadata|LegacyClassMetadata $classMetadata
+     */
+    public function __construct($om, $classMetadata)
     {
         $ids = $classMetadata->getIdentifierFieldNames();
         $idType = $classMetadata->getTypeOfField(current($ids));
@@ -43,7 +49,7 @@ class IdReader
         $this->om = $om;
         $this->classMetadata = $classMetadata;
         $this->singleId = 1 === \count($ids);
-        $this->intId = $this->singleId && \in_array($idType, array('integer', 'smallint', 'bigint'));
+        $this->intId = $this->singleId && \in_array($idType, ['integer', 'smallint', 'bigint']);
         $this->idField = current($ids);
 
         // single field association are resolved, since the schema column could be an int
@@ -91,7 +97,7 @@ class IdReader
     public function getIdValue($object)
     {
         if (!$object) {
-            return;
+            return null;
         }
 
         if (!$this->om->contains($object)) {

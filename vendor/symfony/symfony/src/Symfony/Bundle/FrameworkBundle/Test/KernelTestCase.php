@@ -23,12 +23,20 @@ use Symfony\Component\HttpKernel\KernelInterface;
  */
 abstract class KernelTestCase extends TestCase
 {
+    use ForwardCompatTestTrait;
+
     protected static $class;
 
     /**
      * @var KernelInterface
      */
     protected static $kernel;
+
+    private function doTearDown()
+    {
+        static::ensureKernelShutdown();
+        static::$kernel = null;
+    }
 
     /**
      * Finds the directory where the phpunit.xml(.dist) is stored.
@@ -158,7 +166,7 @@ abstract class KernelTestCase extends TestCase
      *
      * @return KernelInterface A KernelInterface instance
      */
-    protected static function bootKernel(array $options = array())
+    protected static function bootKernel(array $options = [])
     {
         static::ensureKernelShutdown();
 
@@ -178,7 +186,7 @@ abstract class KernelTestCase extends TestCase
      *
      * @return KernelInterface A KernelInterface instance
      */
-    protected static function createKernel(array $options = array())
+    protected static function createKernel(array $options = [])
     {
         if (null === static::$class) {
             static::$class = static::getKernelClass();
@@ -208,7 +216,7 @@ abstract class KernelTestCase extends TestCase
     }
 
     /**
-     * Shuts the kernel down if it was used in the test.
+     * Shuts the kernel down if it was used in the test - called by the tearDown method by default.
      */
     protected static function ensureKernelShutdown()
     {
@@ -219,13 +227,5 @@ abstract class KernelTestCase extends TestCase
                 $container->reset();
             }
         }
-    }
-
-    /**
-     * Clean up Kernel usage in this test.
-     */
-    protected function tearDown()
-    {
-        static::ensureKernelShutdown();
     }
 }

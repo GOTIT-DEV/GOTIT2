@@ -31,7 +31,7 @@ class ChoiceValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
         if (!$constraint instanceof Choice) {
-            throw new UnexpectedTypeException($constraint, __NAMESPACE__.'\Choice');
+            throw new UnexpectedTypeException($constraint, Choice::class);
         }
 
         if (!\is_array($constraint->choices) && !$constraint->callback) {
@@ -47,8 +47,8 @@ class ChoiceValidator extends ConstraintValidator
         }
 
         if ($constraint->callback) {
-            if (!\is_callable($choices = array($this->context->getObject(), $constraint->callback))
-                && !\is_callable($choices = array($this->context->getClassName(), $constraint->callback))
+            if (!\is_callable($choices = [$this->context->getObject(), $constraint->callback])
+                && !\is_callable($choices = [$this->context->getClassName(), $constraint->callback])
                 && !\is_callable($choices = $constraint->callback)
             ) {
                 throw new ConstraintDefinitionException('The Choice constraint expects a valid callback');

@@ -77,7 +77,7 @@ class Controller
 
         $cache = new ConfigCache($this->exposedRoutesExtractor->getCachePath($request->getLocale()), $this->debug);
 
-        if (!$cache->isFresh()) {
+        if (!$cache->isFresh() || $this->debug) {
             $exposedRoutes    = $this->exposedRoutesExtractor->getRoutes();
             $serializedRoutes = $this->serializer->serialize($exposedRoutes, 'json');
             $cache->write($serializedRoutes, $this->exposedRoutesExtractor->getResources());
@@ -98,7 +98,8 @@ class Controller
             $this->exposedRoutesExtractor->getHost(),
             $this->exposedRoutesExtractor->getPort(),
             $this->exposedRoutesExtractor->getScheme(),
-            $request->getLocale()
+            $request->getLocale(),
+            $request->query->has('domain') ? explode(',', $request->query->get('domain')) : array()
         );
 
         $content = $this->serializer->serialize($routesResponse, 'json');

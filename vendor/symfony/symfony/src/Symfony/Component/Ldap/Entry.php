@@ -19,7 +19,7 @@ class Entry
     private $dn;
     private $attributes;
 
-    public function __construct($dn, array $attributes = array())
+    public function __construct($dn, array $attributes = [])
     {
         $this->dn = $dn;
         $this->attributes = $attributes;
@@ -76,7 +76,6 @@ class Entry
      * Sets a value for the given attribute.
      *
      * @param string $name
-     * @param array  $value
      */
     public function setAttribute($name, array $value)
     {

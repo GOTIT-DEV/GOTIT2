@@ -15,11 +15,11 @@ use Symfony\Component\Cache\Simple\RedisCache;
 
 abstract class AbstractRedisCacheTest extends CacheTestCase
 {
-    protected $skippedTests = array(
+    protected $skippedTests = [
         'testSetTtl' => 'Testing expiration slows down the test suite',
         'testSetMultipleTtl' => 'Testing expiration slows down the test suite',
         'testDefaultLifeTime' => 'Testing expiration slows down the test suite',
-    );
+    ];
 
     protected static $redis;
 
@@ -28,7 +28,7 @@ abstract class AbstractRedisCacheTest extends CacheTestCase
         return new RedisCache(self::$redis, str_replace('\\', '.', __CLASS__), $defaultLifetime);
     }
 
-    public static function setupBeforeClass()
+    public static function setUpBeforeClass()
     {
         if (!\extension_loaded('redis')) {
             self::markTestSkipped('Extension redis required.');

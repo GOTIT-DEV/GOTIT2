@@ -24,27 +24,25 @@ class RouterDebugCommandTest extends TestCase
     public function testDebugAllRoutes()
     {
         $tester = $this->createCommandTester();
-        $ret = $tester->execute(array('name' => null), array('decorated' => false));
+        $ret = $tester->execute(['name' => null], ['decorated' => false]);
 
         $this->assertEquals(0, $ret, 'Returns 0 in case of success');
-        $this->assertContains('Name   Method   Scheme   Host   Path', $tester->getDisplay());
+        $this->assertStringContainsString('Name   Method   Scheme   Host   Path', $tester->getDisplay());
     }
 
     public function testDebugSingleRoute()
     {
         $tester = $this->createCommandTester();
-        $ret = $tester->execute(array('name' => 'foo'), array('decorated' => false));
+        $ret = $tester->execute(['name' => 'foo'], ['decorated' => false]);
 
         $this->assertEquals(0, $ret, 'Returns 0 in case of success');
-        $this->assertContains('Route Name   | foo', $tester->getDisplay());
+        $this->assertStringContainsString('Route Name   | foo', $tester->getDisplay());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testDebugInvalidRoute()
     {
-        $this->createCommandTester()->execute(array('name' => 'test'));
+        $this->expectException('InvalidArgumentException');
+        $this->createCommandTester()->execute(['name' => 'test']);
     }
 
     /**
@@ -58,7 +56,7 @@ class RouterDebugCommandTest extends TestCase
 
         $tester = new CommandTester($application->find('debug:router'));
 
-        $tester->execute(array());
+        $tester->execute([]);
 
         $this->assertRegExp('/foo\s+ANY\s+ANY\s+ANY\s+\\/foo/', $tester->getDisplay());
     }
@@ -82,7 +80,7 @@ class RouterDebugCommandTest extends TestCase
         $router
             ->expects($this->any())
             ->method('getRouteCollection')
-            ->will($this->returnValue($routeCollection));
+            ->willReturn($routeCollection);
 
         return $router;
     }
@@ -93,13 +91,13 @@ class RouterDebugCommandTest extends TestCase
         $container
             ->expects($this->atLeastOnce())
             ->method('has')
-            ->will($this->returnCallback(function ($id) {
+            ->willReturnCallback(function ($id) {
                 if ('console.command_loader' === $id) {
                     return false;
                 }
 
                 return true;
-            }))
+            })
         ;
         $container
             ->expects($this->any())
@@ -117,7 +115,7 @@ class RouterDebugCommandTest extends TestCase
         $kernel
             ->expects($this->once())
             ->method('getBundles')
-            ->willReturn(array())
+            ->willReturn([])
         ;
 
         return $kernel;

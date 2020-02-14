@@ -34,7 +34,7 @@ class Client extends BaseClient
     /**
      * {@inheritdoc}
      */
-    public function __construct(KernelInterface $kernel, array $server = array(), History $history = null, CookieJar $cookieJar = null)
+    public function __construct(KernelInterface $kernel, array $server = [], History $history = null, CookieJar $cookieJar = null)
     {
         parent::__construct($kernel, $server, $history, $cookieJar);
     }
@@ -66,7 +66,7 @@ class Client extends BaseClient
      */
     public function getProfile()
     {
-        if (!$this->kernel->getContainer()->has('profiler')) {
+        if (null === $this->response || !$this->kernel->getContainer()->has('profiler')) {
             return false;
         }
 

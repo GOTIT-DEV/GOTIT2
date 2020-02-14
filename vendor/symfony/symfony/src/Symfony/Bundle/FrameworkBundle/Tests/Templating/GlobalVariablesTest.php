@@ -47,7 +47,7 @@ class GlobalVariablesTest extends TestCase
         $tokenStorage
             ->expects($this->once())
             ->method('getToken')
-            ->will($this->returnValue('token'));
+            ->willReturn('token');
 
         $this->assertSame('token', $this->globals->getToken());
     }
@@ -77,12 +77,12 @@ class GlobalVariablesTest extends TestCase
         $token
             ->expects($this->once())
             ->method('getUser')
-            ->will($this->returnValue($user));
+            ->willReturn($user);
 
         $tokenStorage
             ->expects($this->once())
             ->method('getToken')
-            ->will($this->returnValue($token));
+            ->willReturn($token);
 
         $this->assertSame($expectedUser, $this->globals->getUser());
     }
@@ -93,14 +93,14 @@ class GlobalVariablesTest extends TestCase
         $std = new \stdClass();
         $token = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\TokenInterface')->getMock();
 
-        return array(
-            array($user, $user),
-            array($std, $std),
-            array($token, $token),
-            array('Anon.', null),
-            array(null, null),
-            array(10, null),
-            array(true, null),
-        );
+        return [
+            [$user, $user],
+            [$std, $std],
+            [$token, $token],
+            ['Anon.', null],
+            [null, null],
+            [10, null],
+            [true, null],
+        ];
     }
 }

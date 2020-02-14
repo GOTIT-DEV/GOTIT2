@@ -36,7 +36,7 @@ abstract class AbstractExtension implements FormExtensionInterface
     /**
      * The type guesser provided by this extension.
      *
-     * @var FormTypeGuesserInterface
+     * @var FormTypeGuesserInterface|null
      */
     private $typeGuesser;
 
@@ -86,7 +86,7 @@ abstract class AbstractExtension implements FormExtensionInterface
 
         return isset($this->typeExtensions[$name])
             ? $this->typeExtensions[$name]
-            : array();
+            : [];
     }
 
     /**
@@ -120,7 +120,7 @@ abstract class AbstractExtension implements FormExtensionInterface
      */
     protected function loadTypes()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -130,16 +130,17 @@ abstract class AbstractExtension implements FormExtensionInterface
      */
     protected function loadTypeExtensions()
     {
-        return array();
+        return [];
     }
 
     /**
      * Registers the type guesser.
      *
-     * @return FormTypeGuesserInterface|null A type guesser
+     * @return FormTypeGuesserInterface|null
      */
     protected function loadTypeGuesser()
     {
+        return null;
     }
 
     /**
@@ -149,7 +150,7 @@ abstract class AbstractExtension implements FormExtensionInterface
      */
     private function initTypes()
     {
-        $this->types = array();
+        $this->types = [];
 
         foreach ($this->loadTypes() as $type) {
             if (!$type instanceof FormTypeInterface) {
@@ -168,7 +169,7 @@ abstract class AbstractExtension implements FormExtensionInterface
      */
     private function initTypeExtensions()
     {
-        $this->typeExtensions = array();
+        $this->typeExtensions = [];
 
         foreach ($this->loadTypeExtensions() as $extension) {
             if (!$extension instanceof FormTypeExtensionInterface) {

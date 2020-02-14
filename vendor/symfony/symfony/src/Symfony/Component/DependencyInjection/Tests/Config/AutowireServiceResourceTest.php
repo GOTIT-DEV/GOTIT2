@@ -34,11 +34,11 @@ class AutowireServiceResourceTest extends TestCase
         $this->time = time();
         touch($this->file, $this->time);
 
-        $this->class = __NAMESPACE__.'\Foo';
+        $this->class = Foo::class;
         $this->resource = new AutowireServiceResource(
             $this->class,
             $this->file,
-            array()
+            []
         );
     }
 
@@ -73,7 +73,7 @@ class AutowireServiceResourceTest extends TestCase
         $oldResource = new AutowireServiceResource(
             $this->class,
             $this->file,
-            array('will_be_different')
+            ['will_be_different']
         );
 
         // test with a stale file *and* a resource that *will* be different than the actual
@@ -83,7 +83,7 @@ class AutowireServiceResourceTest extends TestCase
     public function testIsFreshSameConstructorArgs()
     {
         $oldResource = AutowirePass::createResourceForClass(
-            new \ReflectionClass(__NAMESPACE__.'\Foo')
+            new \ReflectionClass(Foo::class)
         );
 
         // test with a stale file *but* the resource will not be changed
@@ -95,7 +95,7 @@ class AutowireServiceResourceTest extends TestCase
         $resource = new AutowireServiceResource(
             'Some\Non\Existent\Class',
             $this->file,
-            array()
+            []
         );
 
         $this->assertFalse($resource->isFresh($this->getStaleFileTime()), '->isFresh() returns false if the class no longer exists');

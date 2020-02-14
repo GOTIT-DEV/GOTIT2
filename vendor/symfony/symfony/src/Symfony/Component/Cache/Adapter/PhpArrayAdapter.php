@@ -42,7 +42,7 @@ class PhpArrayAdapter implements AdapterInterface, PruneableInterface, Resettabl
         $this->pool = $fallbackPool;
         $this->zendDetectUnicode = filter_var(ini_get('zend.detect_unicode'), FILTER_VALIDATE_BOOLEAN);
         $this->createCacheItem = \Closure::bind(
-            function ($key, $value, $isHit) {
+            static function ($key, $value, $isHit) {
                 $item = new CacheItem();
                 $item->key = $key;
                 $item->value = $value;
@@ -61,14 +61,13 @@ class PhpArrayAdapter implements AdapterInterface, PruneableInterface, Resettabl
      * fallback pool with this adapter only if the current PHP version is supported.
      *
      * @param string                 $file         The PHP file were values are cached
-     * @param CacheItemPoolInterface $fallbackPool Fallback for old PHP versions or opcache disabled
+     * @param CacheItemPoolInterface $fallbackPool A pool to fallback on when an item is not hit
      *
      * @return CacheItemPoolInterface
      */
     public static function create($file, CacheItemPoolInterface $fallbackPool)
     {
-        // Shared memory is available in PHP 7.0+ with OPCache enabled and in HHVM
-        if ((\PHP_VERSION_ID >= 70000 && filter_var(ini_get('opcache.enable'), FILTER_VALIDATE_BOOLEAN)) || \defined('HHVM_VERSION')) {
+        if (\PHP_VERSION_ID >= 70000) {
             if (!$fallbackPool instanceof AdapterInterface) {
                 $fallbackPool = new ProxyAdapter($fallbackPool);
             }
@@ -120,7 +119,7 @@ class PhpArrayAdapter implements AdapterInterface, PruneableInterface, Resettabl
     /**
      * {@inheritdoc}
      */
-    public function getItems(array $keys = array())
+    public function getItems(array $keys = [])
     {
         foreach ($keys as $key) {
             if (!\is_string($key)) {
@@ -170,7 +169,7 @@ class PhpArrayAdapter implements AdapterInterface, PruneableInterface, Resettabl
     public function deleteItems(array $keys)
     {
         $deleted = true;
-        $fallbackKeys = array();
+        $fallbackKeys = [];
 
         foreach ($keys as $key) {
             if (!\is_string($key)) {
@@ -232,7 +231,7 @@ class PhpArrayAdapter implements AdapterInterface, PruneableInterface, Resettabl
     private function generateItems(array $keys)
     {
         $f = $this->createCacheItem;
-        $fallbackKeys = array();
+        $fallbackKeys = [];
 
         foreach ($keys as $key) {
             if (isset($this->values[$key])) {
@@ -266,16 +265,16 @@ class PhpArrayAdapter implements AdapterInterface, PruneableInterface, Resettabl
     /**
      * @throws \ReflectionException When $class is not found and is required
      *
-     * @internal
+     * @internal to be removed in Symfony 5.0
      */
     public static function throwOnRequiredClass($class)
     {
         $e = new \ReflectionException("Class $class does not exist");
-        $trace = $e->getTrace();
-        $autoloadFrame = array(
+        $trace = debug_backtrace();
+        $autoloadFrame = [
             'function' => 'spl_autoload_call',
-            'args' => array($class),
-        );
+            'args' => [$class],
+        ];
         $i = 1 + array_search($autoloadFrame, $trace, true);
 
         if (isset($trace[$i]['function']) && !isset($trace[$i]['class'])) {

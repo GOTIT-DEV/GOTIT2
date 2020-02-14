@@ -78,7 +78,7 @@ class CodeHelper extends Helper
      */
     public function formatArgs(array $args)
     {
-        $result = array();
+        $result = [];
         foreach ($args as $key => $item) {
             if ('object' === $item[0]) {
                 $parts = explode('\\', $item[1]);
@@ -110,7 +110,7 @@ class CodeHelper extends Helper
      * @param string $file A file path
      * @param int    $line The selected line number
      *
-     * @return string An HTML string
+     * @return string|null An HTML string
      */
     public function fileExcerpt($file, $line)
     {
@@ -120,24 +120,26 @@ class CodeHelper extends Helper
 
                 // Check if the file is an application/octet-stream (eg. Phar file) because highlight_file cannot parse these files
                 if ('application/octet-stream' === $finfo->file($file, FILEINFO_MIME_TYPE)) {
-                    return;
+                    return '';
                 }
             }
 
             // highlight_file could throw warnings
-            // see https://bugs.php.net/bug.php?id=25725
+            // see https://bugs.php.net/25725
             $code = @highlight_file($file, true);
             // remove main code/span tags
             $code = preg_replace('#^<code.*?>\s*<span.*?>(.*)</span>\s*</code>#s', '\\1', $code);
             $content = explode('<br />', $code);
 
-            $lines = array();
+            $lines = [];
             for ($i = max($line - 3, 1), $max = min($line + 3, \count($content)); $i <= $max; ++$i) {
                 $lines[] = '<li'.($i == $line ? ' class="selected"' : '').'><code>'.self::fixCodeMarkup($content[$i - 1]).'</code></li>';
             }
 
             return '<ol start="'.max($line - 3, 1).'">'.implode("\n", $lines).'</ol>';
         }
+
+        return null;
     }
 
     /**
@@ -157,7 +159,7 @@ class CodeHelper extends Helper
             $file = trim($file);
             $fileStr = $file;
             if (0 === strpos($fileStr, $this->rootDir)) {
-                $fileStr = str_replace(array('\\', $this->rootDir), array('/', ''), $fileStr);
+                $fileStr = str_replace(['\\', $this->rootDir], ['/', ''], $fileStr);
                 $fileStr = htmlspecialchars($fileStr, $flags, $this->charset);
                 $fileStr = sprintf('<abbr title="%s">kernel.root_dir</abbr>/%s', htmlspecialchars($this->rootDir, $flags, $this->charset), $fileStr);
             }
@@ -183,7 +185,7 @@ class CodeHelper extends Helper
     public function getFileLink($file, $line)
     {
         if ($fmt = $this->fileLinkFormat) {
-            return \is_string($fmt) ? strtr($fmt, array('%f' => $file, '%l' => $line)) : $fmt->format($file, $line);
+            return \is_string($fmt) ? strtr($fmt, ['%f' => $file, '%l' => $line]) : $fmt->format($file, $line);
         }
 
         return false;

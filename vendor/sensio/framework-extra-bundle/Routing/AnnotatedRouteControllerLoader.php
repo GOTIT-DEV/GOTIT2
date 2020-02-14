@@ -16,6 +16,8 @@ use Symfony\Component\Routing\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route as FrameworkExtraBundleRoute;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
+@trigger_error(sprintf('The "%s" class is deprecated since version 5.2. Use "%s" instead.', AnnotatedRouteControllerLoader::class, \Symfony\Bundle\FrameworkBundle\Routing\AnnotatedRouteControllerLoader::class), E_USER_DEPRECATED);
+
 /**
  * AnnotatedRouteControllerLoader is an implementation of AnnotationClassLoader
  * that sets the '_controller' default based on the class and method names.
@@ -23,6 +25,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  * It also parse the @Method annotation.
  *
  * @author Fabien Potencier <fabien@symfony.com>
+ *
+ * @deprecated since version 5.2
  */
 class AnnotatedRouteControllerLoader extends AnnotationClassLoader
 {
@@ -49,7 +53,7 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
         // requirements (@Method)
         foreach ($this->reader->getMethodAnnotations($method) as $configuration) {
             if ($configuration instanceof Method) {
-                $route->setMethods(implode('|', $configuration->getMethods()));
+                $route->setMethods($configuration->getMethods());
             } elseif ($configuration instanceof FrameworkExtraBundleRoute && $configuration->getService()) {
                 throw new \LogicException('The service option can only be specified at class level.');
             }
@@ -79,8 +83,8 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
         $routeName = parent::getDefaultRouteName($class, $method);
 
         return preg_replace(
-            array('/(bundle|controller)_/', '/action(_\d+)?$/', '/__/'),
-            array('_', '\\1', '_'),
+            ['/(bundle|controller)_/', '/action(_\d+)?$/', '/__/'],
+            ['_', '\\1', '_'],
             $routeName
         );
     }

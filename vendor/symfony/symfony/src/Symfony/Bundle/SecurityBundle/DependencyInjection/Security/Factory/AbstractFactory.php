@@ -26,26 +26,26 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 abstract class AbstractFactory implements SecurityFactoryInterface
 {
-    protected $options = array(
+    protected $options = [
         'check_path' => '/login_check',
         'use_forward' => false,
         'require_previous_session' => false,
-    );
+    ];
 
-    protected $defaultSuccessHandlerOptions = array(
+    protected $defaultSuccessHandlerOptions = [
         'always_use_default_target_path' => false,
         'default_target_path' => '/',
         'login_path' => '/login',
         'target_path_parameter' => '_target_path',
         'use_referer' => false,
-    );
+    ];
 
-    protected $defaultFailureHandlerOptions = array(
+    protected $defaultFailureHandlerOptions = [
         'failure_path' => null,
         'failure_forward' => false,
         'login_path' => '/login',
         'failure_path_parameter' => '_failure_path',
-    );
+    ];
 
     public function create(ContainerBuilder $container, $id, $config, $userProviderId, $defaultEntryPointId)
     {
@@ -59,14 +59,14 @@ abstract class AbstractFactory implements SecurityFactoryInterface
         if ($this->isRememberMeAware($config)) {
             $container
                 ->getDefinition($listenerId)
-                ->addTag('security.remember_me_aware', array('id' => $id, 'provider' => $userProviderId))
+                ->addTag('security.remember_me_aware', ['id' => $id, 'provider' => $userProviderId])
             ;
         }
 
         // create entry point if applicable (optional)
         $entryPointId = $this->createEntryPoint($container, $id, $config, $defaultEntryPointId);
 
-        return array($authProviderId, $listenerId, $entryPointId);
+        return [$authProviderId, $listenerId, $entryPointId];
     }
 
     public function addConfiguration(NodeDefinition $node)
@@ -98,10 +98,9 @@ abstract class AbstractFactory implements SecurityFactoryInterface
      * Subclasses must return the id of a service which implements the
      * AuthenticationProviderInterface.
      *
-     * @param ContainerBuilder $container
-     * @param string           $id             The unique id of the firewall
-     * @param array            $config         The options array for this listener
-     * @param string           $userProviderId The id of the user provider
+     * @param string $id             The unique id of the firewall
+     * @param array  $config         The options array for this listener
+     * @param string $userProviderId The id of the user provider
      *
      * @return string never null, the id of the authentication provider
      */
@@ -131,9 +130,9 @@ abstract class AbstractFactory implements SecurityFactoryInterface
      * @param ContainerBuilder $container
      * @param string           $id
      * @param array            $config
-     * @param string           $defaultEntryPointId
+     * @param string|null      $defaultEntryPointId
      *
-     * @return string the entry point id
+     * @return string|null the entry point id
      */
     protected function createEntryPoint($container, $id, $config, $defaultEntryPointId)
     {
@@ -178,8 +177,8 @@ abstract class AbstractFactory implements SecurityFactoryInterface
             $successHandler->replaceArgument(2, $id);
         } else {
             $successHandler = $container->setDefinition($successHandlerId, new ChildDefinition('security.authentication.success_handler'));
-            $successHandler->addMethodCall('setOptions', array($options));
-            $successHandler->addMethodCall('setProviderKey', array($id));
+            $successHandler->addMethodCall('setOptions', [$options]);
+            $successHandler->addMethodCall('setProviderKey', [$id]);
         }
 
         return $successHandlerId;
@@ -196,7 +195,7 @@ abstract class AbstractFactory implements SecurityFactoryInterface
             $failureHandler->replaceArgument(1, $options);
         } else {
             $failureHandler = $container->setDefinition($id, new ChildDefinition('security.authentication.failure_handler'));
-            $failureHandler->addMethodCall('setOptions', array($options));
+            $failureHandler->addMethodCall('setOptions', [$options]);
         }
 
         return $id;

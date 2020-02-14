@@ -24,38 +24,36 @@ class DebugCommandTest extends TestCase
     public function testDebugDefaults()
     {
         $tester = $this->createCommandTester();
-        $ret = $tester->execute(array(), array('decorated' => false));
+        $ret = $tester->execute([], ['decorated' => false]);
 
         $this->assertEquals(0, $ret, 'Returns 0 in case of success');
-        $this->assertContains('Built-in form types', $tester->getDisplay());
+        $this->assertStringContainsString('Built-in form types', $tester->getDisplay());
     }
 
     public function testDebugSingleFormType()
     {
         $tester = $this->createCommandTester();
-        $ret = $tester->execute(array('class' => 'FormType'), array('decorated' => false));
+        $ret = $tester->execute(['class' => 'FormType'], ['decorated' => false]);
 
         $this->assertEquals(0, $ret, 'Returns 0 in case of success');
-        $this->assertContains('Symfony\Component\Form\Extension\Core\Type\FormType (Block prefix: "form")', $tester->getDisplay());
+        $this->assertStringContainsString('Symfony\Component\Form\Extension\Core\Type\FormType (Block prefix: "form")', $tester->getDisplay());
     }
 
     public function testDebugFormTypeOption()
     {
         $tester = $this->createCommandTester();
-        $ret = $tester->execute(array('class' => 'FormType', 'option' => 'method'), array('decorated' => false));
+        $ret = $tester->execute(['class' => 'FormType', 'option' => 'method'], ['decorated' => false]);
 
         $this->assertEquals(0, $ret, 'Returns 0 in case of success');
-        $this->assertContains('Symfony\Component\Form\Extension\Core\Type\FormType (method)', $tester->getDisplay());
+        $this->assertStringContainsString('Symfony\Component\Form\Extension\Core\Type\FormType (method)', $tester->getDisplay());
     }
 
-    /**
-     * @expectedException \Symfony\Component\Console\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Could not find type "NonExistentType"
-     */
     public function testDebugSingleFormTypeNotFound()
     {
+        $this->expectException('Symfony\Component\Console\Exception\InvalidArgumentException');
+        $this->expectExceptionMessage('Could not find type "NonExistentType"');
         $tester = $this->createCommandTester();
-        $tester->execute(array('class' => 'NonExistentType'), array('decorated' => false, 'interactive' => false));
+        $tester->execute(['class' => 'NonExistentType'], ['decorated' => false, 'interactive' => false]);
     }
 
     public function testDebugAmbiguousFormType()
@@ -68,30 +66,26 @@ Did you mean one of these?
     Symfony\Component\Form\Tests\Fixtures\Debug\B\AmbiguousType
 TXT;
 
-        if (method_exists($this, 'expectException')) {
-            $this->expectException(InvalidArgumentException::class);
-            $this->expectExceptionMessage($expectedMessage);
-        } else {
-            $this->setExpectedException(InvalidArgumentException::class, $expectedMessage);
-        }
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage($expectedMessage);
 
-        $tester = $this->createCommandTester(array(
+        $tester = $this->createCommandTester([
             'Symfony\Component\Form\Tests\Fixtures\Debug\A',
             'Symfony\Component\Form\Tests\Fixtures\Debug\B',
-        ));
+        ]);
 
-        $tester->execute(array('class' => 'AmbiguousType'), array('decorated' => false, 'interactive' => false));
+        $tester->execute(['class' => 'AmbiguousType'], ['decorated' => false, 'interactive' => false]);
     }
 
     public function testDebugAmbiguousFormTypeInteractive()
     {
-        $tester = $this->createCommandTester(array(
+        $tester = $this->createCommandTester([
             'Symfony\Component\Form\Tests\Fixtures\Debug\A',
             'Symfony\Component\Form\Tests\Fixtures\Debug\B',
-        ));
+        ]);
 
-        $tester->setInputs(array(0));
-        $tester->execute(array('class' => 'AmbiguousType'), array('decorated' => false, 'interactive' => true));
+        $tester->setInputs([0]);
+        $tester->execute(['class' => 'AmbiguousType'], ['decorated' => false, 'interactive' => true]);
 
         $this->assertEquals(0, $tester->getStatusCode(), 'Returns 0 in case of success');
         $output = $tester->getDisplay(true);
@@ -109,17 +103,15 @@ TXT
         , $output);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testDebugInvalidFormType()
     {
-        $this->createCommandTester()->execute(array('class' => 'test'));
+        $this->expectException('InvalidArgumentException');
+        $this->createCommandTester()->execute(['class' => 'test']);
     }
 
     private function createCommandTester(array $namespaces = null)
     {
-        $formRegistry = new FormRegistry(array(), new ResolvedFormTypeFactory());
+        $formRegistry = new FormRegistry([], new ResolvedFormTypeFactory());
         $command = null === $namespaces ? new DebugCommand($formRegistry) : new DebugCommand($formRegistry, $namespaces);
         $application = new Application();
         $application->add($command);

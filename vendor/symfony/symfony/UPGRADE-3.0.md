@@ -595,7 +595,7 @@ UPGRADE FROM 2.x to 3.0
       }
    }
    ```
-   
+
    If the form is submitted with a different request method than `POST`, you need to configure this in the form:
 
    Before:
@@ -1063,7 +1063,7 @@ UPGRADE FROM 2.x to 3.0
    ```
 
  * The `ApacheMatcherDumper` and `ApacheUrlMatcher` were removed since
-   the performance gains were minimal and it's hard to replicate the behaviour
+   the performance gains were minimal and it's hard to replicate the behavior
    of PHP implementation.
 
  * The `getMatcherDumperInstance()` and `getGeneratorDumperInstance()` methods in the

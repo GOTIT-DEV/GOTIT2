@@ -17,11 +17,11 @@ use Symfony\Component\Console\Tester\ApplicationTester;
 /**
  * @group functional
  */
-class ContainerDebugCommandTest extends WebTestCase
+class ContainerDebugCommandTest extends AbstractWebTestCase
 {
     public function testDumpContainerIfNotExists()
     {
-        static::bootKernel(array('test_case' => 'ContainerDebug', 'root_config' => 'config.yml'));
+        static::bootKernel(['test_case' => 'ContainerDebug', 'root_config' => 'config.yml', 'debug' => true]);
 
         $application = new Application(static::$kernel);
         $application->setAutoExit(false);
@@ -29,38 +29,38 @@ class ContainerDebugCommandTest extends WebTestCase
         @unlink(static::$kernel->getContainer()->getParameter('debug.container.dump'));
 
         $tester = new ApplicationTester($application);
-        $tester->run(array('command' => 'debug:container'));
+        $tester->run(['command' => 'debug:container']);
 
         $this->assertFileExists(static::$kernel->getContainer()->getParameter('debug.container.dump'));
     }
 
     public function testNoDebug()
     {
-        static::bootKernel(array('test_case' => 'ContainerDebug', 'root_config' => 'config.yml', 'debug' => false));
+        static::bootKernel(['test_case' => 'ContainerDebug', 'root_config' => 'config.yml', 'debug' => false]);
 
         $application = new Application(static::$kernel);
         $application->setAutoExit(false);
 
         $tester = new ApplicationTester($application);
-        $tester->run(array('command' => 'debug:container'));
+        $tester->run(['command' => 'debug:container']);
 
-        $this->assertContains('public', $tester->getDisplay());
+        $this->assertStringContainsString('public', $tester->getDisplay());
     }
 
     public function testPrivateAlias()
     {
-        static::bootKernel(array('test_case' => 'ContainerDebug', 'root_config' => 'config.yml'));
+        static::bootKernel(['test_case' => 'ContainerDebug', 'root_config' => 'config.yml']);
 
         $application = new Application(static::$kernel);
         $application->setAutoExit(false);
 
         $tester = new ApplicationTester($application);
-        $tester->run(array('command' => 'debug:container', '--show-private' => true));
-        $this->assertContains('public', $tester->getDisplay());
-        $this->assertContains('private_alias', $tester->getDisplay());
+        $tester->run(['command' => 'debug:container', '--show-private' => true]);
+        $this->assertStringContainsString('public', $tester->getDisplay());
+        $this->assertStringContainsString('private_alias', $tester->getDisplay());
 
-        $tester->run(array('command' => 'debug:container'));
-        $this->assertContains('public', $tester->getDisplay());
-        $this->assertNotContains('private_alias', $tester->getDisplay());
+        $tester->run(['command' => 'debug:container']);
+        $this->assertStringContainsString('public', $tester->getDisplay());
+        $this->assertStringNotContainsString('private_alias', $tester->getDisplay());
     }
 }

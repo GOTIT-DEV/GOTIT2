@@ -29,8 +29,6 @@ trait MicroKernelTrait
      *
      *     $routes->import('config/routing.yml');
      *     $routes->add('/admin', 'AppBundle:Admin:dashboard', 'admin_dashboard');
-     *
-     * @param RouteCollectionBuilder $routes
      */
     abstract protected function configureRoutes(RouteCollectionBuilder $routes);
 
@@ -39,9 +37,9 @@ trait MicroKernelTrait
      *
      * You can register extensions:
      *
-     *     $c->loadFromExtension('framework', array(
+     *     $c->loadFromExtension('framework', [
      *         'secret' => '%secret%'
-     *     ));
+     *     ]);
      *
      * Or services:
      *
@@ -50,9 +48,6 @@ trait MicroKernelTrait
      * Or parameters:
      *
      *     $c->setParameter('halloween', 'lot of fun');
-     *
-     * @param ContainerBuilder $c
-     * @param LoaderInterface  $loader
      */
     abstract protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader);
 
@@ -62,12 +57,12 @@ trait MicroKernelTrait
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load(function (ContainerBuilder $container) use ($loader) {
-            $container->loadFromExtension('framework', array(
-                'router' => array(
+            $container->loadFromExtension('framework', [
+                'router' => [
                     'resource' => 'kernel:loadRoutes',
                     'type' => 'service',
-                ),
-            ));
+                ],
+            ]);
 
             if ($this instanceof EventSubscriberInterface) {
                 $container->register('kernel', static::class)

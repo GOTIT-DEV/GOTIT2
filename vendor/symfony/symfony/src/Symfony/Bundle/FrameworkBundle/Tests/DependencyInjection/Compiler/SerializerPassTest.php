@@ -25,12 +25,10 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class SerializerPassTest extends TestCase
 {
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage You must tag at least one service as "serializer.normalizer" to use the "serializer" service
-     */
     public function testThrowExceptionWhenNoNormalizers()
     {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('You must tag at least one service as "serializer.normalizer" to use the "serializer" service');
         $container = new ContainerBuilder();
         $container->register('serializer');
 
@@ -38,16 +36,14 @@ class SerializerPassTest extends TestCase
         $serializerPass->process($container);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage You must tag at least one service as "serializer.encoder" to use the "serializer" service
-     */
     public function testThrowExceptionWhenNoEncoders()
     {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('You must tag at least one service as "serializer.encoder" to use the "serializer" service');
         $container = new ContainerBuilder();
         $container->register('serializer')
-            ->addArgument(array())
-            ->addArgument(array());
+            ->addArgument([])
+            ->addArgument([]);
         $container->register('normalizer')->addTag('serializer.normalizer');
 
         $serializerPass = new SerializerPass();
@@ -58,19 +54,19 @@ class SerializerPassTest extends TestCase
     {
         $container = new ContainerBuilder();
 
-        $definition = $container->register('serializer')->setArguments(array(null, null));
-        $container->register('n2')->addTag('serializer.normalizer', array('priority' => 100))->addTag('serializer.encoder', array('priority' => 100));
-        $container->register('n1')->addTag('serializer.normalizer', array('priority' => 200))->addTag('serializer.encoder', array('priority' => 200));
+        $definition = $container->register('serializer')->setArguments([null, null]);
+        $container->register('n2')->addTag('serializer.normalizer', ['priority' => 100])->addTag('serializer.encoder', ['priority' => 100]);
+        $container->register('n1')->addTag('serializer.normalizer', ['priority' => 200])->addTag('serializer.encoder', ['priority' => 200]);
         $container->register('n3')->addTag('serializer.normalizer')->addTag('serializer.encoder');
 
         $serializerPass = new SerializerPass();
         $serializerPass->process($container);
 
-        $expected = array(
+        $expected = [
             new Reference('n1'),
             new Reference('n2'),
             new Reference('n3'),
-        );
+        ];
         $this->assertEquals($expected, $definition->getArgument(0));
         $this->assertEquals($expected, $definition->getArgument(1));
     }

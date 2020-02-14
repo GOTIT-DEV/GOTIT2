@@ -30,7 +30,7 @@ use Symfony\Component\Routing\Router as BaseRouter;
 class Router extends BaseRouter implements WarmableInterface, ServiceSubscriberInterface
 {
     private $container;
-    private $collectedParameters = array();
+    private $collectedParameters = [];
 
     /**
      * @param ContainerInterface $container A ContainerInterface instance
@@ -38,7 +38,7 @@ class Router extends BaseRouter implements WarmableInterface, ServiceSubscriberI
      * @param array              $options   An array of options
      * @param RequestContext     $context   The context
      */
-    public function __construct(ContainerInterface $container, $resource, array $options = array(), RequestContext $context = null)
+    public function __construct(ContainerInterface $container, $resource, array $options = [], RequestContext $context = null)
     {
         $this->container = $container;
 
@@ -99,13 +99,13 @@ class Router extends BaseRouter implements WarmableInterface, ServiceSubscriberI
             $route->setPath($this->resolve($route->getPath()));
             $route->setHost($this->resolve($route->getHost()));
 
-            $schemes = array();
+            $schemes = [];
             foreach ($route->getSchemes() as $scheme) {
                 $schemes = array_merge($schemes, explode('|', $this->resolve($scheme)));
             }
             $route->setSchemes($schemes);
 
-            $methods = array();
+            $methods = [];
             foreach ($route->getMethods() as $method) {
                 $methods = array_merge($methods, explode('|', $this->resolve($method)));
             }
@@ -147,7 +147,7 @@ class Router extends BaseRouter implements WarmableInterface, ServiceSubscriberI
                 return '%%';
             }
 
-            if (preg_match('/^env\(\w+\)$/', $match[1])) {
+            if (preg_match('/^env\((?:\w++:)*+\w++\)$/', $match[1])) {
                 throw new RuntimeException(sprintf('Using "%%%s%%" is not allowed in routing configuration.', $match[1]));
             }
 
@@ -156,7 +156,7 @@ class Router extends BaseRouter implements WarmableInterface, ServiceSubscriberI
             if (\is_string($resolved) || is_numeric($resolved)) {
                 $this->collectedParameters[$match[1]] = $resolved;
 
-                return (string) $resolved;
+                return (string) $this->resolve($resolved);
             }
 
             throw new RuntimeException(sprintf('The container parameter "%s", used in the route configuration value "%s", must be a string or numeric, but it is of type %s.', $match[1], $value, \gettype($resolved)));
@@ -170,8 +170,8 @@ class Router extends BaseRouter implements WarmableInterface, ServiceSubscriberI
      */
     public static function getSubscribedServices()
     {
-        return array(
+        return [
             'routing.loader' => LoaderInterface::class,
-        );
+        ];
     }
 }

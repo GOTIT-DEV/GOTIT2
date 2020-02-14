@@ -38,7 +38,7 @@ interface UserInterface
      *
      *     public function getRoles()
      *     {
-     *         return array('ROLE_USER');
+     *         return ['ROLE_USER'];
      *     }
      *
      * Alternatively, the roles might be stored on a ``roles`` property,
@@ -55,7 +55,7 @@ interface UserInterface
      * This should be the encoded password. On authentication, a plain-text
      * password will be salted, encoded, and then compared to this value.
      *
-     * @return string The password
+     * @return string|null The encoded password if any
      */
     public function getPassword();
 

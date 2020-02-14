@@ -48,7 +48,7 @@ var Router = function () {
     function Router(context, routes) {
         _classCallCheck(this, Router);
 
-        this.context_ = context || { base_url: '', prefix: '', host: '', port: '', scheme: '' };
+        this.context_ = context || { base_url: '', prefix: '', host: '', port: '', scheme: '', locale: '' };
         this.setRoutes(routes || {});
     }
 
@@ -75,6 +75,9 @@ var Router = function () {
             }
             if ('port' in data) {
                 this.setPort(data['port']);
+            }
+            if ('locale' in data) {
+                this.setLocale(data['locale']);
             }
 
             this.setHost(data['host']);
@@ -191,6 +194,26 @@ var Router = function () {
             return this.context_.port;
         }
     }, {
+        key: 'setLocale',
+
+
+        /**
+         * @param {string} locale
+         */
+        value: function setLocale(locale) {
+            this.context_.locale = locale;
+        }
+
+        /**
+         * @return {string}
+         */
+
+    }, {
+        key: 'getLocale',
+        value: function getLocale() {
+            return this.context_.locale;
+        }
+    }, {
         key: 'buildQueryParams',
 
 
@@ -236,17 +259,17 @@ var Router = function () {
         key: 'getRoute',
         value: function getRoute(name) {
             var prefixedName = this.context_.prefix + name;
+            var sf41i18nName = name + '.' + this.context_.locale;
+            var prefixedSf41i18nName = this.context_.prefix + name + '.' + this.context_.locale;
+            var variants = [prefixedName, sf41i18nName, prefixedSf41i18nName, name];
 
-            if (!(prefixedName in this.routes_)) {
-                // Check first for default route before failing
-                if (!(name in this.routes_)) {
-                    throw new Error('The route "' + name + '" does not exist.');
+            for (var i in variants) {
+                if (variants[i] in this.routes_) {
+                    return this.routes_[variants[i]];
                 }
-            } else {
-                name = prefixedName;
             }
 
-            return this.routes_[name];
+            throw new Error('The route "' + name + '" does not exist.');
         }
 
         /**
@@ -345,13 +368,13 @@ var Router = function () {
             // Foo-bar!
             url = this.context_.base_url + url;
             if (route.requirements && "_scheme" in route.requirements && this.getScheme() != route.requirements["_scheme"]) {
-                url = route.requirements["_scheme"] + "://" + (host || this.getHost()) + url;
+                url = route.requirements["_scheme"] + "://" + (host || this.getHost()) + ('' === port ? '' : ':' + port) + url;
             } else if ("undefined" !== typeof route.schemes && "undefined" !== typeof route.schemes[0] && this.getScheme() !== route.schemes[0]) {
-                url = route.schemes[0] + "://" + (host || this.getHost()) + url;
+                url = route.schemes[0] + "://" + (host || this.getHost()) + ('' === port ? '' : ':' + port) + url;
             } else if (host && this.getHost() !== host + ('' === port ? '' : ':' + port)) {
                 url = this.getScheme() + "://" + host + ('' === port ? '' : ':' + port) + url;
             } else if (absolute === true) {
-                url = this.getScheme() + "://" + this.getHost() + url;
+                url = this.getScheme() + "://" + this.getHost() + ('' === port ? '' : ':' + port) + url;
             }
 
             if (Object.keys(unusedParams).length > 0) {

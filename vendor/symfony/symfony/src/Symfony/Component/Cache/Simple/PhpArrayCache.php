@@ -44,14 +44,14 @@ class PhpArrayCache implements CacheInterface, PruneableInterface, ResettableInt
      * stores arrays in its latest versions. This factory method decorates the given
      * fallback pool with this adapter only if the current PHP version is supported.
      *
-     * @param string $file The PHP file were values are cached
+     * @param string         $file         The PHP file were values are cached
+     * @param CacheInterface $fallbackPool A pool to fallback on when an item is not hit
      *
      * @return CacheInterface
      */
     public static function create($file, CacheInterface $fallbackPool)
     {
-        // Shared memory is available in PHP 7.0+ with OPCache enabled and in HHVM
-        if ((\PHP_VERSION_ID >= 70000 && filter_var(ini_get('opcache.enable'), FILTER_VALIDATE_BOOLEAN)) || \defined('HHVM_VERSION')) {
+        if (\PHP_VERSION_ID >= 70000) {
             return new static($file, $fallbackPool);
         }
 
@@ -154,7 +154,7 @@ class PhpArrayCache implements CacheInterface, PruneableInterface, ResettableInt
         }
 
         $deleted = true;
-        $fallbackKeys = array();
+        $fallbackKeys = [];
 
         foreach ($keys as $key) {
             if (!\is_string($key)) {
@@ -203,7 +203,7 @@ class PhpArrayCache implements CacheInterface, PruneableInterface, ResettableInt
         }
 
         $saved = true;
-        $fallbackValues = array();
+        $fallbackValues = [];
 
         foreach ($values as $key => $value) {
             if (!\is_string($key) && !\is_int($key)) {
@@ -226,7 +226,7 @@ class PhpArrayCache implements CacheInterface, PruneableInterface, ResettableInt
 
     private function generateItems(array $keys, $default)
     {
-        $fallbackKeys = array();
+        $fallbackKeys = [];
 
         foreach ($keys as $key) {
             if (isset($this->values[$key])) {

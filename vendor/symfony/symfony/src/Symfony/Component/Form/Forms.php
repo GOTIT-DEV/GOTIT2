@@ -11,8 +11,6 @@
 
 namespace Symfony\Component\Form;
 
-use Symfony\Component\Form\Extension\Core\CoreExtension;
-
 /**
  * Entry point of the Form component.
  *
@@ -26,9 +24,9 @@ use Symfony\Component\Form\Extension\Core\CoreExtension;
  *         ->add('firstName', 'Symfony\Component\Form\Extension\Core\Type\TextType')
  *         ->add('lastName', 'Symfony\Component\Form\Extension\Core\Type\TextType')
  *         ->add('age', 'Symfony\Component\Form\Extension\Core\Type\IntegerType')
- *         ->add('gender', 'Symfony\Component\Form\Extension\Core\Type\ChoiceType', array(
- *             'choices' => array('Male' => 'm', 'Female' => 'f'),
- *         ))
+ *         ->add('color', 'Symfony\Component\Form\Extension\Core\Type\ChoiceType', [
+ *             'choices' => ['Red' => 'r', 'Blue' => 'b'],
+ *         ])
  *         ->getForm();
  *
  * You can also add custom extensions to the form factory:
@@ -68,9 +66,9 @@ use Symfony\Component\Form\Extension\Core\CoreExtension;
  *     use Symfony\Component\Form\Extension\Templating\TemplatingExtension;
  *
  *     $formFactory = Forms::createFormFactoryBuilder()
- *         ->addExtension(new TemplatingExtension($engine, null, array(
+ *         ->addExtension(new TemplatingExtension($engine, null, [
  *             'FrameworkBundle:Form',
- *         )))
+ *         ]))
  *         ->getFormFactory();
  *
  * The next example shows how to include the "<table>" layout:
@@ -78,10 +76,10 @@ use Symfony\Component\Form\Extension\Core\CoreExtension;
  *     use Symfony\Component\Form\Extension\Templating\TemplatingExtension;
  *
  *     $formFactory = Forms::createFormFactoryBuilder()
- *         ->addExtension(new TemplatingExtension($engine, null, array(
+ *         ->addExtension(new TemplatingExtension($engine, null, [
  *             'FrameworkBundle:Form',
  *             'FrameworkBundle:FormTable',
- *         )))
+ *         ]))
  *         ->getFormFactory();
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
@@ -105,10 +103,7 @@ final class Forms
      */
     public static function createFormFactoryBuilder()
     {
-        $builder = new FormFactoryBuilder();
-        $builder->addExtension(new CoreExtension());
-
-        return $builder;
+        return new FormFactoryBuilder(true);
     }
 
     /**

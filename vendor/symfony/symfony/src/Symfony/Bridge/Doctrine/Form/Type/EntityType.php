@@ -11,7 +11,7 @@
 
 namespace Symfony\Bridge\Doctrine\Form\Type;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ObjectManager as LegacyObjectManager;
 use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\Form\ChoiceList\ORMQueryBuilderLoader;
@@ -40,19 +40,18 @@ class EntityType extends DoctrineType
         };
 
         $resolver->setNormalizer('query_builder', $queryBuilderNormalizer);
-        $resolver->setAllowedTypes('query_builder', array('null', 'callable', 'Doctrine\ORM\QueryBuilder'));
+        $resolver->setAllowedTypes('query_builder', ['null', 'callable', 'Doctrine\ORM\QueryBuilder']);
     }
 
     /**
      * Return the default loader object.
      *
-     * @param ObjectManager $manager
-     * @param QueryBuilder  $queryBuilder
-     * @param string        $class
+     * @param QueryBuilder $queryBuilder
+     * @param string       $class
      *
      * @return ORMQueryBuilderLoader
      */
-    public function getLoader(ObjectManager $manager, $queryBuilder, $class)
+    public function getLoader(LegacyObjectManager $manager, $queryBuilder, $class)
     {
         return new ORMQueryBuilderLoader($queryBuilder);
     }
@@ -78,10 +77,10 @@ class EntityType extends DoctrineType
      */
     public function getQueryBuilderPartsForCachingHash($queryBuilder)
     {
-        return array(
+        return [
             $queryBuilder->getQuery()->getSQL(),
-            array_map(array($this, 'parameterToArray'), $queryBuilder->getParameters()->toArray()),
-        );
+            array_map([$this, 'parameterToArray'], $queryBuilder->getParameters()->toArray()),
+        ];
     }
 
     /**
@@ -91,6 +90,6 @@ class EntityType extends DoctrineType
      */
     private function parameterToArray(Parameter $parameter)
     {
-        return array($parameter->getName(), $parameter->getType(), $parameter->getValue());
+        return [$parameter->getName(), $parameter->getType(), $parameter->getValue()];
     }
 }

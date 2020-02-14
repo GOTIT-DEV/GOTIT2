@@ -8,6 +8,9 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Role\Role;
+use Symfony\Component\Security\Core\Role\RoleHierarchy;
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Workflow\Event\GuardEvent;
 use Symfony\Component\Workflow\EventListener\ExpressionLanguage;
@@ -25,23 +28,24 @@ class GuardListenerTest extends TestCase
 
     protected function setUp()
     {
-        $this->configuration = array(
+        $this->configuration = [
             'test_is_granted' => 'is_granted("something")',
             'test_is_valid' => 'is_valid(subject)',
-            'test_expression' => array(
+            'test_expression' => [
                 new GuardExpression(new Transition('name', 'from', 'to'), '!is_valid(subject)'),
                 new GuardExpression(new Transition('name', 'from', 'to'), 'is_valid(subject)'),
-            ),
-        );
+            ],
+        ];
         $expressionLanguage = new ExpressionLanguage();
         $token = $this->getMockBuilder(TokenInterface::class)->getMock();
-        $token->expects($this->any())->method('getRoles')->willReturn(array(new Role('ROLE_USER')));
+        $token->expects($this->any())->method('getRoles')->willReturn([new Role('ROLE_USER')]);
         $tokenStorage = $this->getMockBuilder(TokenStorageInterface::class)->getMock();
         $tokenStorage->expects($this->any())->method('getToken')->willReturn($token);
         $this->authenticationChecker = $this->getMockBuilder(AuthorizationCheckerInterface::class)->getMock();
         $trustResolver = $this->getMockBuilder(AuthenticationTrustResolverInterface::class)->getMock();
         $this->validator = $this->getMockBuilder(ValidatorInterface::class)->getMock();
-        $this->listener = new GuardListener($this->configuration, $expressionLanguage, $tokenStorage, $this->authenticationChecker, $trustResolver, null, $this->validator);
+        $roleHierarchy = new RoleHierarchy([]);
+        $this->listener = new GuardListener($this->configuration, $expressionLanguage, $tokenStorage, $this->authenticationChecker, $trustResolver, $roleHierarchy, $this->validator);
     }
 
     protected function tearDown()
@@ -170,7 +174,7 @@ class GuardListenerTest extends TestCase
         $this->validator
             ->expects($this->once())
             ->method('validate')
-            ->willReturn($valid ? array() : array('a violation'))
+            ->willReturn(new ConstraintViolationList($valid ? [] : [new ConstraintViolation('a violation', null, [], '', null, '')]))
         ;
     }
 }

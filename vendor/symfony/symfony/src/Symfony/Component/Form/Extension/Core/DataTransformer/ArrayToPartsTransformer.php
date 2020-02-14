@@ -29,14 +29,14 @@ class ArrayToPartsTransformer implements DataTransformerInterface
     public function transform($array)
     {
         if (null === $array) {
-            $array = array();
+            $array = [];
         }
 
         if (!\is_array($array)) {
             throw new TransformationFailedException('Expected an array.');
         }
 
-        $result = array();
+        $result = [];
 
         foreach ($this->partMapping as $partKey => $originalKeys) {
             if (empty($array)) {
@@ -55,8 +55,8 @@ class ArrayToPartsTransformer implements DataTransformerInterface
             throw new TransformationFailedException('Expected an array.');
         }
 
-        $result = array();
-        $emptyKeys = array();
+        $result = [];
+        $emptyKeys = [];
 
         foreach ($this->partMapping as $partKey => $originalKeys) {
             if (!empty($array[$partKey])) {
@@ -73,7 +73,7 @@ class ArrayToPartsTransformer implements DataTransformerInterface
         if (\count($emptyKeys) > 0) {
             if (\count($emptyKeys) === \count($this->partMapping)) {
                 // All parts empty
-                return;
+                return null;
             }
 
             throw new TransformationFailedException(sprintf('The keys "%s" should not be empty', implode('", "', $emptyKeys)));

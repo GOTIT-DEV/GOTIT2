@@ -29,11 +29,6 @@ class DumpCommand extends Command
     protected static $defaultName = 'fos:js-routing:dump';
 
     /**
-     * @var string
-     */
-    private $targetPath;
-
-    /**
      * @var ExposedRoutesExtractorInterface
      */
     private $extractor;
@@ -46,18 +41,18 @@ class DumpCommand extends Command
     /**
      * @var string
      */
-    private $rootDir;
+    private $projectDir;
 
     /**
      * @var string
      */
     private $requestContextBaseUrl;
 
-    public function __construct(ExposedRoutesExtractorInterface $extractor, SerializerInterface $serializer, $rootDir, $requestContextBaseUrl = null)
+    public function __construct(ExposedRoutesExtractorInterface $extractor, SerializerInterface $serializer, $projectDir, $requestContextBaseUrl = null)
     {
         $this->extractor = $extractor;
         $this->serializer = $serializer;
-        $this->rootDir = $rootDir;
+        $this->projectDir = $projectDir;
         $this->requestContextBaseUrl = $requestContextBaseUrl;
 
         parent::__construct();
@@ -101,6 +96,13 @@ class DumpCommand extends Command
                 InputOption::VALUE_NONE,
                 'Pretty print the JSON.'
             )
+            ->addOption(
+                'domain',
+                null,
+                InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+                'Specify expose domain',
+                array()
+            )
         ;
     }
 
@@ -132,12 +134,15 @@ class DumpCommand extends Command
      */
     private function doDump(InputInterface $input, OutputInterface $output)
     {
+        $domain = $input->getOption('domain');
+
         $extractor = $this->extractor;
         $serializer = $this->serializer;
         $targetPath = $input->getOption('target') ?:
             sprintf(
-                '%s/../web/js/fos_js_routes.%s',
-                $this->rootDir,
+                '%s/web/js/fos_js_routes%s.%s',
+                $this->projectDir,
+                empty($domain) ? '' : ('_' . implode('_', $domain)),
                 $input->getOption('format')
             );
         
@@ -168,7 +173,8 @@ class DumpCommand extends Command
                 $extractor->getPrefix($input->getOption('locale')),
                 $extractor->getHost(),
                 $extractor->getPort(),
-                $extractor->getScheme()
+                $extractor->getScheme(),
+                $domain
             ),
             'json',
             $params

@@ -17,6 +17,7 @@ use FOS\JsRoutingBundle\Serializer\Normalizer\RouteCollectionNormalizer;
 use FOS\JsRoutingBundle\Serializer\Normalizer\RoutesResponseNormalizer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -26,12 +27,12 @@ class ControllerTest extends TestCase
 {
     private $cachePath;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->cachePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'fosJsRouting' . DIRECTORY_SEPARATOR . 'data.json';
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         unlink($this->cachePath);
     }
@@ -49,7 +50,7 @@ class ControllerTest extends TestCase
 
         $response = $controller->indexAction($this->getRequest('/'), 'json');
 
-        $this->assertEquals('{"base_url":"","routes":{"literal":{"tokens":[["text","\/homepage"]],"defaults":[],"requirements":[],"hosttokens":[],"methods":[],"schemes":[]},"blog":{"tokens":[["variable","\/","[^\/]++","slug"],["text","\/blog-post"]],"defaults":[],"requirements":[],"hosttokens":[["text","localhost"]],"methods":[],"schemes":[]}},"prefix":"","host":"","port":null,"scheme":""}', $response->getContent());
+        $this->assertEquals('{"base_url":"","routes":{"literal":{"tokens":[["text","\/homepage"]],"defaults":[],"requirements":[],"hosttokens":[],"methods":[],"schemes":[]},"blog":{"tokens":[["variable","\/","[^\/]++","slug"],["text","\/blog-post"]],"defaults":[],"requirements":[],"hosttokens":[["text","localhost"]],"methods":[],"schemes":[]}},"prefix":"","host":"","port":null,"scheme":"","locale":"en"}', $response->getContent());
     }
 
     public function testIndexActionWithLocalizedRoutes()
@@ -65,7 +66,7 @@ class ControllerTest extends TestCase
 
         $response = $controller->indexAction($this->getRequest('/'), 'json');
 
-        $this->assertEquals('{"base_url":"","routes":{"literal":{"tokens":[["text","\/homepage"]],"defaults":[],"requirements":[],"hosttokens":[],"methods":[],"schemes":[]},"blog":{"tokens":[["variable","\/","[^\/]++","_locale"],["variable","\/","[^\/]++","slug"],["text","\/blog-post"]],"defaults":{"_locale":"en"},"requirements":[],"hosttokens":[["text","localhost"]],"methods":[],"schemes":[]}},"prefix":"","host":"","port":null,"scheme":""}', $response->getContent());
+        $this->assertEquals('{"base_url":"","routes":{"literal":{"tokens":[["text","\/homepage"]],"defaults":[],"requirements":[],"hosttokens":[],"methods":[],"schemes":[]},"blog":{"tokens":[["variable","\/","[^\/]++","_locale"],["variable","\/","[^\/]++","slug"],["text","\/blog-post"]],"defaults":{"_locale":"en"},"requirements":[],"hosttokens":[["text","localhost"]],"methods":[],"schemes":[]}},"prefix":"","host":"","port":null,"scheme":"","locale":"en"}', $response->getContent());
     }
 
     public function testConfigCache()
@@ -79,11 +80,11 @@ class ControllerTest extends TestCase
         );
 
         $response = $controller->indexAction($this->getRequest('/'), 'json');
-        $this->assertEquals('{"base_url":"","routes":{"literal":{"tokens":[["text","\/homepage"]],"defaults":[],"requirements":[],"hosttokens":[],"methods":[],"schemes":[]}},"prefix":"","host":"","port":null,"scheme":""}', $response->getContent());
+        $this->assertEquals('{"base_url":"","routes":{"literal":{"tokens":[["text","\/homepage"]],"defaults":[],"requirements":[],"hosttokens":[],"methods":[],"schemes":[]}},"prefix":"","host":"","port":null,"scheme":"","locale":"en"}', $response->getContent());
 
         // second call should serve the cached content
         $response = $controller->indexAction($this->getRequest('/'), 'json');
-        $this->assertEquals('{"base_url":"","routes":{"literal":{"tokens":[["text","\/homepage"]],"defaults":[],"requirements":[],"hosttokens":[],"methods":[],"schemes":[]}},"prefix":"","host":"","port":null,"scheme":""}', $response->getContent());
+        $this->assertEquals('{"base_url":"","routes":{"literal":{"tokens":[["text","\/homepage"]],"defaults":[],"requirements":[],"hosttokens":[],"methods":[],"schemes":[]}},"prefix":"","host":"","port":null,"scheme":"","locale":"en"}', $response->getContent());
     }
 
     /**
@@ -95,7 +96,7 @@ class ControllerTest extends TestCase
         $response   = $controller->indexAction($this->getRequest('/', 'GET', array('callback' => $callback)), 'json');
 
         $this->assertEquals(
-            sprintf('/**/%s({"base_url":"","routes":[],"prefix":"","host":"","port":null,"scheme":""});', $callback),
+            sprintf('/**/%s({"base_url":"","routes":[],"prefix":"","host":"","port":null,"scheme":"","locale":"en"});', $callback),
             $response->getContent()
         );
     }
@@ -108,11 +109,9 @@ class ControllerTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
-     */
     public function testGenerateWithInvalidCallback()
     {
+        $this->expectException(HttpException::class);
         $controller = new Controller($this->getSerializer(), $this->getExtractor());
         $controller->indexAction($this->getRequest('/', 'GET', array('callback' => '(function xss(x) {evil()})')), 'json');
     }
@@ -122,7 +121,7 @@ class ControllerTest extends TestCase
         $controller = new Controller($this->getSerializer(), $this->getExtractor(), array(), sys_get_temp_dir());
         $response   = $controller->indexAction($this->getRequest('/'), 'json');
 
-        $this->assertEquals('{"base_url":"","routes":[],"prefix":"","host":"","port":null,"scheme":""}', $response->getContent());
+        $this->assertEquals('{"base_url":"","routes":[],"prefix":"","host":"","port":null,"scheme":"","locale":"en"}', $response->getContent());
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-Type'));
 
@@ -155,6 +154,49 @@ class ControllerTest extends TestCase
 
         $this->assertTrue($response->headers->hasCacheControlDirective('s-maxage'));
         $this->assertEquals(456, $response->headers->getCacheControlDirective('s-maxage'));
+    }
+
+    public function testExposeDomain()
+    {
+        $routes = new RouteCollection();
+        $routes->add('homepage', new Route('/'));
+        $routes->add('admin_index', new Route('/admin', array(), array(),
+            array('expose' => 'admin')));
+        $routes->add('admin_pages', new Route('/admin/path', array(), array(),
+            array('expose' => 'admin')));
+        $routes->add('blog_index', new Route('/blog', array(), array(),
+            array('expose' => 'blog'), 'localhost'));
+        $routes->add('blog_post', new Route('/blog/{slug}', array(), array(),
+            array('expose' => 'blog'), 'localhost'));
+
+        $controller = new Controller(
+            $this->getSerializer(),
+            $this->getExtractor($routes)
+        );
+
+        $response = $controller->indexAction($this->getRequest('/'), 'json');
+
+        $this->assertEquals('{"base_url":"","routes":{"homepage":{"tokens":[["text","\/"]],"defaults":[],"requirements":[],"hosttokens":[],"methods":[],"schemes":[]}},"prefix":"","host":"","port":null,"scheme":"","locale":"en"}', $response->getContent());
+
+        $response = $controller->indexAction($this->getRequest('/',
+            'GET', array('domain' => 'admin')), 'json');
+
+        $this->assertEquals('{"base_url":"","routes":{"admin_index":{"tokens":[["text","\/admin"]],"defaults":[],"requirements":[],"hosttokens":[],"methods":[],"schemes":[]},"admin_pages":{"tokens":[["text","\/admin\/path"]],"defaults":[],"requirements":[],"hosttokens":[],"methods":[],"schemes":[]}},"prefix":"","host":"","port":null,"scheme":"","locale":"en"}', $response->getContent());
+
+        $response = $controller->indexAction($this->getRequest('/',
+            'GET', array('domain' => 'blog')), 'json');
+
+        $this->assertEquals('{"base_url":"","routes":{"blog_index":{"tokens":[["text","\/blog"]],"defaults":[],"requirements":[],"hosttokens":[["text","localhost"]],"methods":[],"schemes":[]},"blog_post":{"tokens":[["variable","\/","[^\/]++","slug"],["text","\/blog"]],"defaults":[],"requirements":[],"hosttokens":[["text","localhost"]],"methods":[],"schemes":[]}},"prefix":"","host":"","port":null,"scheme":"","locale":"en"}', $response->getContent());
+
+        $response = $controller->indexAction($this->getRequest('/',
+            'GET', array('domain' => 'admin,blog')), 'json');
+
+        $this->assertEquals('{"base_url":"","routes":{"admin_index":{"tokens":[["text","\/admin"]],"defaults":[],"requirements":[],"hosttokens":[],"methods":[],"schemes":[]},"admin_pages":{"tokens":[["text","\/admin\/path"]],"defaults":[],"requirements":[],"hosttokens":[],"methods":[],"schemes":[]},"blog_index":{"tokens":[["text","\/blog"]],"defaults":[],"requirements":[],"hosttokens":[["text","localhost"]],"methods":[],"schemes":[]},"blog_post":{"tokens":[["variable","\/","[^\/]++","slug"],["text","\/blog"]],"defaults":[],"requirements":[],"hosttokens":[["text","localhost"]],"methods":[],"schemes":[]}},"prefix":"","host":"","port":null,"scheme":"","locale":"en"}', $response->getContent());
+
+        $response = $controller->indexAction($this->getRequest('/',
+            'GET', array('domain' => 'default,admin,blog')), 'json');
+
+        $this->assertEquals('{"base_url":"","routes":{"homepage":{"tokens":[["text","\/"]],"defaults":[],"requirements":[],"hosttokens":[],"methods":[],"schemes":[]},"admin_index":{"tokens":[["text","\/admin"]],"defaults":[],"requirements":[],"hosttokens":[],"methods":[],"schemes":[]},"admin_pages":{"tokens":[["text","\/admin\/path"]],"defaults":[],"requirements":[],"hosttokens":[],"methods":[],"schemes":[]},"blog_index":{"tokens":[["text","\/blog"]],"defaults":[],"requirements":[],"hosttokens":[["text","localhost"]],"methods":[],"schemes":[]},"blog_post":{"tokens":[["variable","\/","[^\/]++","slug"],["text","\/blog"]],"defaults":[],"requirements":[],"hosttokens":[["text","localhost"]],"methods":[],"schemes":[]}},"prefix":"","host":"","port":null,"scheme":"","locale":"en"}', $response->getContent());
     }
 
     private function getExtractor(RouteCollection $exposedRoutes = null, $baseUrl = '')
