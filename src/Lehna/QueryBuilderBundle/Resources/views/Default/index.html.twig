@@ -58,9 +58,7 @@
 {% endblock %}
 {% block scripts %}
 {{ parent() }}
-
-<script src="{{ asset('e3s/vendors/jquery-extendext/jQuery.extendext/jquery-extendext.js') }}"></script>
-<script src="{{ asset('e3s/vendors/doT/doT.js') }}"></script>
-<script type="module" src="{{ asset('e3s/vendors/queryBuilder/query-builder.js') }}"></script>
+<!-- Query Builder -->
+<script src="{{ asset('e3s/vendors/queryBuilder/query-builder.standalone.min.js') }}"></script>
 {% endblock %}
 
