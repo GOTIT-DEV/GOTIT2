@@ -61,7 +61,7 @@ export function initDataTable(tableId) {
           }, {
             data: "methode"
           }, {
-            data: "libelle_motu",
+            data: "motu_title",
           }, {
             data: "nb_seq"
           }, {

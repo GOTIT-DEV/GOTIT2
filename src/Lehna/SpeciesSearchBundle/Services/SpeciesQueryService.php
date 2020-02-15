@@ -270,7 +270,7 @@ class SpeciesQueryService
   {
     $id_taxon   = $data->get('taxon');
     $id_methode = $data->get('methode');
-    $dataset    = $data->get('motu_date');
+    $dataset    = $data->get('date_motu');
     $niveau     = $data->get('niveau');
     $criteres   = $data->get('criteres');
 
@@ -286,18 +286,18 @@ class SpeciesQueryService
       ->join('BbeesE3sBundle:EspeceIdentifiee', 'e', 'WITH', 'rt.id = e.referentielTaxonFk')
       ->join('BbeesE3sBundle:Voc', 'v', 'WITH', 'e.critereIdentificationVocFk=v.id');
     switch ($niveau) {
-      case 1: #lot matériel
+      case 1: # Bio material
         $query = $query->join('BbeesE3sBundle:LotMateriel', 'lm', 'WITH', 'lm.id=e.lotMaterielFk')
           ->join('BbeesE3sBundle:Individu', 'i', 'WITH', 'i.lotMaterielFk = lm.id');
         $query = $this->joinIndivSeq($query, 'i', 'seq');
         break;
 
-      case 2: #individu
+      case 2: # Specimen
         $query = $query->join('BbeesE3sBundle:Individu', 'i', 'WITH', 'i.id = e.individuFk');
         $query = $this->joinIndivSeq($query, 'i', 'seq');
         break;
 
-      case 3: # sequence
+      case 3: # Sequence
         $query = $query->leftJoin('BbeesE3sBundle:SequenceAssemblee', 'seq', 'WITH', 'seq.id=e.sequenceAssembleeFk')
           ->leftJoin('BbeesE3sBundle:SequenceAssembleeExt', 'seqext', 'WITH', 'seqext.id=e.sequenceAssembleeExtFk')
           ->leftJoin('BbeesE3sBundle:EstAligneEtTraite', 'eaet', 'WITH', 'eaet.sequenceAssembleeFk = seq.id')
@@ -312,12 +312,12 @@ class SpeciesQueryService
     $query = $query->join('BbeesE3sBundle:Motu', 'm', 'WITH', 'ass.motuFk = m.id')
       ->join('BbeesE3sBundle:Voc', 'vocabulary', 'WITH', 'ass.methodeMotuVocFk = vocabulary.id')
       ->andWhere('rt.id = :id_taxon')
-      ->andWhere('vocabulary.id = :methode')
-      ->andWhere('m.id = :motu_date')
+      ->andWhere('vocabulary.id = :method')
+      ->andWhere('m.id = :dataset')
       ->setParameters([
         'id_taxon'  => $id_taxon,
-        'methode'   => $id_methode,
-        'motu_date' => $dataset,
+        'method'   => $id_methode,
+        'dataset' => $dataset,
       ]);
 
     if ($criteres) {
@@ -327,7 +327,10 @@ class SpeciesQueryService
 
     $query = $query->distinct()->getQuery();
 
+    dump($query->getSQL());
+
     $res = $query->getArrayResult();
+    dump($res);
 
     # fusion des résultats séquences internes/externes
     foreach ($res as $key => $row) {
