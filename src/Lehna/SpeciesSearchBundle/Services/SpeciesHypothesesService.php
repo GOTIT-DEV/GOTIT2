@@ -6,22 +6,22 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
- * Service comptage des réarrangements de taxonomie
+ * Species hypotheses rearrangements service
  */
-class RearrangementsService {
+class SpeciesHypothesesService {
   private $entityManager; // database manager
 
   // Parameters
-  private $parameters; // parametres POST
+  private $parameters; // POST params
   private $reference;
   private $target;
 
   // Counting and indexing
   private $rawResults; // raw result table
-  private $fwdCounter; // compteur référence -> méthodes
-  private $revCounter; // compteur méthodes -> référence
-  private $refIndex; // index des données brutes sur la référence
-  private $compareIndex; // index des données brutes par méthodes
+  private $fwdCounter; // (reference -> methods) counter
+  private $revCounter; // (methods -> reference) counter
+  private $refIndex; // raw data indexing with keys = reference
+  private $compareIndex; // raw data indexing with keys = methods
 
   /**
    * Constructeur
@@ -223,7 +223,7 @@ class RearrangementsService {
 
     if ($this->reference < 2) {
       // morpho
-      $rawSql = "SELECT distinct Ass.motu_number,
+      $rawSql = "SELECT distinct motu_nb.motu_number,
                 vocabulary.code AS methode,
                 vocabulary.id AS id_methode,
                 motu.id AS id_dataset,
@@ -234,16 +234,16 @@ class RearrangementsService {
                 R.species,
                 R.taxon_name,
 
-                Ass.internal_sequence_fk as seq,
-                Ass.external_sequence_fk as seq_ext,
+                motu_nb.internal_sequence_fk as seq,
+                motu_nb.external_sequence_fk as seq_ext,
                 sta.id as id_sta
 
-                FROM Assigne Ass
-                JOIN motu ON Ass.motu_fk=motu.id
-                JOIN vocabulary ON Ass.delimitation_method_voc_fk=vocabulary.id
+                FROM motu_number AS motu_nb
+                JOIN motu ON motu_nb.motu_fk=motu.id
+                JOIN vocabulary ON motu_nb.delimitation_method_voc_fk=vocabulary.id
                 JOIN identified_species Esp
-                    ON Ass.internal_sequence_fk=Esp.internal_sequence_fk
-                    OR Ass.external_sequence_fk=Esp.external_sequence_fk
+                    ON motu_nb.internal_sequence_fk=Esp.internal_sequence_fk
+                    OR motu_nb.external_sequence_fk=Esp.external_sequence_fk
                 JOIN taxon R ON Esp.taxon_fk=R.id
 
                 LEFT JOIN external_sequence sext ON Esp.external_sequence_fk=sext.id

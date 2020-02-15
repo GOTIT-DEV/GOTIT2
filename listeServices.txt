@@ -79,7 +79,7 @@ Autowirable Services
   Lehna\SpeciesSearchBundle\Controller\SpeciesHypothesesController                    
   Lehna\SpeciesSearchBundle\Controller\TaxonConsistencyController                     
   Lehna\SpeciesSearchBundle\Services\SpeciesQueryService                              
-  Lehna\SpeciesSearchBundle\Services\RearrangementsService                            
+  Lehna\SpeciesSearchBundle\Services\SpeciesHypothesesService                            
   Psr\Cache\CacheItemPoolInterface                                                    
       alias to cache.app                                                              
   Psr\Container\ContainerInterface                                                    

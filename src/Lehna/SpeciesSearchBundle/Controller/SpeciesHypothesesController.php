@@ -19,7 +19,7 @@ namespace Lehna\SpeciesSearchBundle\Controller;
 
 use Bbees\E3sBundle\Entity\Motu;
 use Lehna\SpeciesSearchBundle\Services\SpeciesQueryService;
-use Lehna\SpeciesSearchBundle\Services\RearrangementsService;
+use Lehna\SpeciesSearchBundle\Services\SpeciesHypothesesService;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -57,7 +57,7 @@ class SpeciesHypothesesController extends Controller {
    *
    * Returns a JSON reponse with species hypotheses data
    */
-  public function searchQuery(Request $request, RearrangementsService $service) {
+  public function searchQuery(Request $request, SpeciesHypothesesService $service) {
     $result = $service->processQuery($request->request);
     return new JsonResponse($result);
   }
