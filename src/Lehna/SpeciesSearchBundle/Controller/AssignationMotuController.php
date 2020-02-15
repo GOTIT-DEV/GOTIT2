@@ -20,7 +20,7 @@ namespace Lehna\SpeciesSearchBundle\Controller;
 use Bbees\E3sBundle\Entity\Motu;
 use Bbees\E3sBundle\Entity\Voc;
 use Lehna\SpeciesSearchBundle\Services\QueryBuilderService;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

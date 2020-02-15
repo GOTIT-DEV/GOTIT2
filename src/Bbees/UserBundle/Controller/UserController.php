@@ -19,8 +19,7 @@ namespace Bbees\UserBundle\Controller;
 
 use Bbees\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -38,8 +37,7 @@ class UserController extends Controller
     /**
      * Lists all user entities.
      *
-     * @Route("/", name="user_index")
-     * @Method("GET")
+     * @Route("/", name="user_index", methods={"GET"})
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function indexAction()
@@ -56,8 +54,7 @@ class UserController extends Controller
     /**
      * Get currently logged in user public informations
      * 
-     * @Route("/current", name="user_current")
-     * @Method("GET")
+     * @Route("/current", name="user_current", methods={"GET"})
      */
     public function currentUserAction()
     {
@@ -79,8 +76,7 @@ class UserController extends Controller
      * b) the number of lines to display ($ request-> get ('rowCount'))
      * c) 1 sort criterion on a collone ($ request-> get ('sort'))
      *
-     * @Route("/indexjson", name="user_indexjson")
-     * @Method("POST")
+     * @Route("/indexjson", name="user_indexjson", methods={"POST"})
      */
     public function indexjsonAction(Request $request)
     {   
@@ -132,8 +128,7 @@ class UserController extends Controller
     /**
      * Creates a new user entity.
      *
-     * @Route("/new", name="user_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="user_new", methods={"GET", "POST"})
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function newAction(Request $request, UserPasswordEncoderInterface $encoder)
@@ -171,8 +166,7 @@ class UserController extends Controller
     /**
      * Finds and displays a user entity.
      *
-     * @Route("/{id}", name="user_show")
-     * @Method("GET")
+     * @Route("/{id}", name="user_show", methods={"GET"})
      */
     public function showAction(User $user)
     {
@@ -190,8 +184,7 @@ class UserController extends Controller
     /**
      * Displays a form to edit an existing user entity.
      *
-     * @Route("/{id}/edit", name="user_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="user_edit", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function editAction(Request $request, User $user, UserPasswordEncoderInterface $encoder)
@@ -237,8 +230,7 @@ class UserController extends Controller
     /**
      * Deletes a user entity.
      *
-     * @Route("/{id}", name="user_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="user_delete", methods={"DELETE"})
      */
     public function deleteAction(Request $request, User $user)
     {

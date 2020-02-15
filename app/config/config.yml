@@ -82,3 +82,9 @@ bazinga_js_translation:
         - en
         - fr
     locale_fallback: en
+
+# Disable deprecated Sensio routing annotations
+# replaced by Symfony core routing annotations
+sensio_framework_extra:
+    router:
+        annotations: false

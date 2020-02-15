@@ -19,8 +19,7 @@ namespace Bbees\E3sBundle\Controller;
 
 use Bbees\E3sBundle\Entity\Pcr;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -41,8 +40,7 @@ class PcrController extends Controller
      * Lists all pcr entities.
      *
      * @Route("/", name="pcr_index")
-     * @Route("/", name="pcrchromato_index")
-     * @Method("GET")
+     * @Route("/", name="pcrchromato_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -61,8 +59,7 @@ class PcrController extends Controller
      * b) the number of lines to display ($ request-> get ('rowCount'))
      * c) 1 sort criterion on a collone ($ request-> get ('sort'))
      *
-     * @Route("/indexjson", name="pcr_indexjson")
-     * @Method("POST")
+     * @Route("/indexjson", name="pcr_indexjson", methods={"POST"})
      */
     public function indexjsonAction(Request $request)
     {
@@ -149,8 +146,7 @@ class PcrController extends Controller
     /**
      * Creates a new pcr entity.
      *
-     * @Route("/new", name="pcr_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="pcr_new", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function newAction(Request $request)
@@ -184,8 +180,7 @@ class PcrController extends Controller
     /**
      * Finds and displays a pcr entity.
      *
-     * @Route("/{id}", name="pcr_show")
-     * @Method("GET")
+     * @Route("/{id}", name="pcr_show", methods={"GET"})
      */
     public function showAction(Pcr $pcr)
     {
@@ -202,8 +197,7 @@ class PcrController extends Controller
     /**
      * Displays a form to edit an existing pcr entity.
      *
-     * @Route("/{id}/edit", name="pcr_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="pcr_edit", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      * 
      */
@@ -254,8 +248,7 @@ class PcrController extends Controller
     /**
      * Deletes a pcr entity.
      *
-     * @Route("/{id}", name="pcr_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="pcr_delete", methods={"DELETE"})
      * @Security("has_role('ROLE_COLLABORATION')")
      * 
      */

@@ -19,8 +19,7 @@ namespace Bbees\E3sBundle\Controller;
 
 use Bbees\E3sBundle\Entity\SequenceAssemblee;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -55,8 +54,7 @@ class SequenceAssembleeController extends Controller
     /**
      * Lists all sequenceAssemblee entities.
      *
-     * @Route("/", name="sequenceassemblee_index")
-     * @Method("GET")
+     * @Route("/", name="sequenceassemblee_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -75,8 +73,7 @@ class SequenceAssembleeController extends Controller
      * b) the number of lines to display ($ request-> get ('rowCount'))
      * c) 1 sort criterion on a collone ($ request-> get ('sort'))
      *
-     * @Route("/indexjson", name="sequenceassemblee_indexjson")
-     * @Method("POST")
+     * @Route("/indexjson", name="sequenceassemblee_indexjson", methods={"POST"})
      */
     public function indexjsonAction(Request $request)
     {
@@ -182,8 +179,7 @@ class SequenceAssembleeController extends Controller
     /**
      * Creates a new sequenceAssemblee entity.
      *
-     * @Route("/new", name="sequenceassemblee_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="sequenceassemblee_new", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function newAction(Request $request)
@@ -235,8 +231,7 @@ class SequenceAssembleeController extends Controller
     /**
      * Finds and displays a sequenceAssemblee entity.
      *
-     * @Route("/{id}", name="sequenceassemblee_show")
-     * @Method("GET")
+     * @Route("/{id}", name="sequenceassemblee_show", methods={"GET"})
      */
     public function showAction(SequenceAssemblee $sequenceAssemblee)
     {
@@ -262,8 +257,7 @@ class SequenceAssembleeController extends Controller
     /**
      * Displays a form to edit an existing sequenceAssemblee entity.
      *
-     * @Route("/{id}/edit", name="sequenceassemblee_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="sequenceassemblee_edit", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function editAction(Request $request, SequenceAssemblee $sequenceAssemblee)
@@ -329,8 +323,7 @@ class SequenceAssembleeController extends Controller
     /**
      * Deletes a sequenceAssemblee entity.
      *
-     * @Route("/{id}", name="sequenceassemblee_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="sequenceassemblee_delete", methods={"DELETE"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function deleteAction(Request $request, SequenceAssemblee $sequenceAssemblee)

@@ -19,8 +19,7 @@ namespace Bbees\E3sBundle\Controller;
 
 use Bbees\E3sBundle\Entity\Programme;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Bbees\E3sBundle\Services\GenericFunctionService;
@@ -38,8 +37,7 @@ class ProgrammeController extends Controller
     /**
      * Lists all programme entities.
      *
-     * @Route("/", name="programme_index")
-     * @Method("GET")
+     * @Route("/", name="programme_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -59,8 +57,7 @@ class ProgrammeController extends Controller
      * b) the number of lines to display ($ request-> get ('rowCount'))
      * c) 1 sort criterion on a collone ($ request-> get ('sort'))
      *
-     * @Route("/indexjson", name="programme_indexjson")
-     * @Method("POST")
+     * @Route("/indexjson", name="programme_indexjson", methods={"POST"})
      */
     public function indexjsonAction(Request $request)
     {
@@ -124,8 +121,7 @@ class ProgrammeController extends Controller
     /**
      * Creates a new programme entity.
      *
-     * @Route("/new", name="programme_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="programme_new", methods={"GET", "POST"})
      * @Security("has_role('ROLE_PROJECT')")
      */
     public function newAction(Request $request)
@@ -158,8 +154,7 @@ class ProgrammeController extends Controller
     /**
      * Creates a new programme entity for modal windows
      *
-     * @Route("/newmodal", name="programme_newmodal")
-     * @Method({"GET", "POST"})
+     * @Route("/newmodal", name="programme_newmodal", methods={"GET", "POST"})
      */
     public function newmodalAction(Request $request)
     {
@@ -223,8 +218,7 @@ class ProgrammeController extends Controller
     /**
      * Finds and displays a programme entity.
      *
-     * @Route("/{id}", name="programme_show")
-     * @Method("GET")
+     * @Route("/{id}", name="programme_show", methods={"GET"})
      */
     public function showAction(Programme $programme)
     {
@@ -242,8 +236,7 @@ class ProgrammeController extends Controller
     /**
      * Displays a form to edit an existing programme entity.
      *
-     * @Route("/{id}/edit", name="programme_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="programme_edit", methods={"GET", "POST"})
      * @Security("has_role('ROLE_PROJECT')")
      */
     public function editAction(Request $request, Programme $programme)
@@ -277,8 +270,7 @@ class ProgrammeController extends Controller
     /**
      * Deletes a programme entity.
      *
-     * @Route("/{id}", name="programme_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="programme_delete", methods={"DELETE"})
      * @Security("has_role('ROLE_PROJECT')")
      */
     public function deleteAction(Request $request, Programme $programme)

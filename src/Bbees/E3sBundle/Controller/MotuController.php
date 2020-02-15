@@ -19,8 +19,7 @@ namespace Bbees\E3sBundle\Controller;
 
 use Bbees\E3sBundle\Entity\Motu;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -43,8 +42,7 @@ class MotuController extends Controller
     /**
      * Lists all motu entities.
      *
-     * @Route("/", name="motu_index")
-     * @Method("GET")
+     * @Route("/", name="motu_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -64,8 +62,7 @@ class MotuController extends Controller
      * b) the number of lines to display ($ request-> get ('rowCount'))
      * c) 1 sort criterion on a collone ($ request-> get ('sort'))
      *
-     * @Route("/indexjson", name="motu_indexjson")
-     * @Method("POST")
+     * @Route("/indexjson", name="motu_indexjson", methods={"POST"})
      */
     public function indexjsonAction(Request $request)
     {
@@ -136,8 +133,7 @@ class MotuController extends Controller
     /**
      * Creates a new motu entity.
      *
-     * @Route("/new", name="motu_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="motu_new", methods={"GET", "POST"})
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function newAction(Request $request)
@@ -168,8 +164,7 @@ class MotuController extends Controller
     /**
      * Finds and displays a motu entity.
      *
-     * @Route("/{id}", name="motu_show")
-     * @Method("GET")
+     * @Route("/{id}", name="motu_show", methods={"GET"})
      */
     public function showAction(Motu $motu)
     {
@@ -186,8 +181,7 @@ class MotuController extends Controller
     /**
      * Displays a form to edit an existing motu entity.
      *
-     * @Route("/{id}/edit", name="motu_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="motu_edit", methods={"GET", "POST"})
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function editAction(Request $request, Motu $motu)
@@ -229,8 +223,7 @@ class MotuController extends Controller
     /**
      * Deletes a motu entity.
      *
-     * @Route("/{id}", name="motu_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="motu_delete", methods={"DELETE"})
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function deleteAction(Request $request, Motu $motu)

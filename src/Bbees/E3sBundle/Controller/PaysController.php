@@ -19,8 +19,7 @@ namespace Bbees\E3sBundle\Controller;
 
 use Bbees\E3sBundle\Entity\Pays;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Bbees\E3sBundle\Services\GenericFunctionService;
@@ -38,8 +37,7 @@ class PaysController extends Controller
     /**
      * Lists all pay entities.
      *
-     * @Route("/", name="pays_index")
-     * @Method("GET")
+     * @Route("/", name="pays_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -58,8 +56,7 @@ class PaysController extends Controller
      * b) the number of lines to display ($ request-> get ('rowCount'))
      * c) 1 sort criterion on a collone ($ request-> get ('sort'))
      *
-     * @Route("/indexjson", name="pays_indexjson")
-     * @Method("POST")
+     * @Route("/indexjson", name="pays_indexjson", methods={"POST"})
      */
     public function indexjsonAction(Request $request)
     {
@@ -119,8 +116,7 @@ class PaysController extends Controller
     /**
      * Creates a new pay entity.
      *
-     * @Route("/new", name="pays_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="pays_new", methods={"GET", "POST"})
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function newAction(Request $request)
@@ -151,8 +147,7 @@ class PaysController extends Controller
     /**
      * Finds and displays a pay entity.
      *
-     * @Route("/{id}", name="pays_show")
-     * @Method("GET")
+     * @Route("/{id}", name="pays_show", methods={"GET"})
      */
     public function showAction(Pays $pays)
     {
@@ -169,8 +164,7 @@ class PaysController extends Controller
     /**
      * Displays a form to edit an existing pay entity.
      *
-     * @Route("/{id}/edit", name="pays_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="pays_edit", methods={"GET", "POST"})
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function editAction(Request $request, Pays $pays)
@@ -203,8 +197,7 @@ class PaysController extends Controller
     /**
      * Deletes a pay entity.
      *
-     * @Route("/{id}", name="pays_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="pays_delete", methods={"DELETE"})
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function deleteAction(Request $request, Pays $pays)

@@ -19,8 +19,7 @@ namespace Bbees\E3sBundle\Controller;
 
 use Bbees\E3sBundle\Entity\Commune;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Bbees\E3sBundle\Services\GenericFunctionService;
@@ -38,8 +37,7 @@ class CommuneController extends Controller
     /**
      * Lists all commune entities.
      *
-     * @Route("/", name="commune_index")
-     * @Method("GET")
+     * @Route("/", name="commune_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -58,8 +56,7 @@ class CommuneController extends Controller
      * b) the number of lines to display ($ request-> get ('rowCount'))
      * c) 1 sort criterion on a collone ($ request-> get ('sort'))
      *
-     * @Route("/indexjson", name="commune_indexjson")
-     * @Method("POST")
+     * @Route("/indexjson", name="commune_indexjson", methods={"POST"})
      */
     public function indexjsonAction(Request $request)
     {   
@@ -118,8 +115,7 @@ class CommuneController extends Controller
     /**
      * Creates a new commune entity.
      *
-     * @Route("/new", name="commune_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="commune_new", methods={"GET", "POST"})
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function newAction(Request $request)
@@ -150,8 +146,7 @@ class CommuneController extends Controller
     /**
      * Creates a new commune entity for modal windows
      *
-     * @Route("/newmodal", name="commune_newmodal")
-     * @Method({"GET", "POST"})
+     * @Route("/newmodal", name="commune_newmodal", methods={"GET", "POST"})
      */
     public function newmodalAction(Request $request, $id_pays = null)
     {
@@ -215,8 +210,7 @@ class CommuneController extends Controller
     /**
      * Finds and displays a commune entity.
      *
-     * @Route("/{id}", name="commune_show")
-     * @Method("GET")
+     * @Route("/{id}", name="commune_show", methods={"GET"})
      */
     public function showAction(Commune $commune)
     {
@@ -234,8 +228,7 @@ class CommuneController extends Controller
     /**
      * Displays a form to edit an existing commune entity.
      *
-     * @Route("/{id}/edit", name="commune_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="commune_edit", methods={"GET", "POST"})
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function editAction(Request $request, Commune $commune)
@@ -270,8 +263,7 @@ class CommuneController extends Controller
     /**
      * Deletes a commune entity.
      *
-     * @Route("/{id}", name="commune_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="commune_delete", methods={"DELETE"})
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function deleteAction(Request $request, Commune $commune)

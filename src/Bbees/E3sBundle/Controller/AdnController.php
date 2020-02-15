@@ -19,8 +19,7 @@ namespace Bbees\E3sBundle\Controller;
 
 use Bbees\E3sBundle\Entity\Adn;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -41,8 +40,7 @@ class AdnController extends Controller
     /**
      * Lists all adn entities.
      *
-     * @Route("/", name="adn_index")
-     * @Method("GET")
+     * @Route("/", name="adn_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -88,8 +86,7 @@ class AdnController extends Controller
      * b) the number of lines to display ($ request-> get ('rowCount'))
      * c) 1 sort criterion on a collone ($ request-> get ('sort'))
      *
-     * @Route("/indexjson", name="adn_indexjson")
-     * @Method("POST")
+     * @Route("/indexjson", name="adn_indexjson", methods={"POST"})
      */
     public function indexjsonAction(Request $request)
     {
@@ -171,8 +168,7 @@ class AdnController extends Controller
     /**
      * Creates a new adn entity.
      *
-     * @Route("/new", name="adn_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="adn_new", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function newAction(Request $request)
@@ -209,8 +205,7 @@ class AdnController extends Controller
     /**
      * Finds and displays a adn entity.
      *
-     * @Route("/{id}", name="adn_show")
-     * @Method("GET")
+     * @Route("/{id}", name="adn_show", methods={"GET"})
      */
     public function showAction(Adn $adn)
     {
@@ -227,8 +222,7 @@ class AdnController extends Controller
     /**
      * Displays a form to edit an existing adn entity.
      *
-     * @Route("/{id}/edit", name="adn_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="adn_edit", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function editAction(Request $request, Adn $adn)
@@ -282,8 +276,7 @@ class AdnController extends Controller
     /**
      * Deletes a adn entity.
      *
-     * @Route("/{id}", name="adn_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="adn_delete", methods={"DELETE"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function deleteAction(Request $request, Adn $adn)

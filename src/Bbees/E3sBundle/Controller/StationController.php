@@ -19,8 +19,7 @@ namespace Bbees\E3sBundle\Controller;
 
 use Bbees\E3sBundle\Entity\Station;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -39,8 +38,7 @@ class StationController extends Controller
     /**
      * Lists all station entities.
      *
-     * @Route("/", name="station_index")
-     * @Method("GET")
+     * @Route("/", name="station_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -59,8 +57,7 @@ class StationController extends Controller
      * b) the number of lines to display ($ request-> get ('rowCount'))
      * c) 1 sort criterion on a collone ($ request-> get ('sort'))
      *
-     * @Route("/indexjson", name="station_indexjson")
-     * @Method("POST")
+     * @Route("/indexjson", name="station_indexjson", methods={"POST"})
      */
     public function indexjsonAction(Request $request)
     {   
@@ -114,8 +111,7 @@ class StationController extends Controller
     }
 
     /**
-     * @Route("/geocoordstations/", name="geocoordstations")
-     * @Method("POST")
+     * @Route("/geocoordstations/", name="geocoordstations", methods={"POST"})
      */
     public function geoCoords(Request $request){
         $data = $request->request;
@@ -163,8 +159,7 @@ class StationController extends Controller
     /**
      * Creates a new station entity.
      *
-     * @Route("/new", name="station_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="station_new", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function newAction(Request $request)
@@ -195,8 +190,7 @@ class StationController extends Controller
     /**
      * Finds and displays a station entity.
      *
-     * @Route("/{id}", name="station_show")
-     * @Method("GET")
+     * @Route("/{id}", name="station_show", methods={"GET"})
      */
     public function showAction(Station $station)
     {
@@ -213,8 +207,7 @@ class StationController extends Controller
     /**
      * Displays a form to edit an existing station entity.
      *
-     * @Route("/{id}/edit", name="station_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="station_edit", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function editAction(Request $request, Station $station)
@@ -256,8 +249,7 @@ class StationController extends Controller
     /**
      * Deletes a station entity.
      *
-     * @Route("/{id}", name="station_delete")
-     * @Method({"DELETE","POST"})
+     * @Route("/{id}", name="station_delete", methods={"DELETE","POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function deleteAction(Request $request, Station $station)

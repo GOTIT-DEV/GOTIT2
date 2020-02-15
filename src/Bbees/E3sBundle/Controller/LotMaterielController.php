@@ -19,8 +19,7 @@ namespace Bbees\E3sBundle\Controller;
 
 use Bbees\E3sBundle\Entity\LotMateriel;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -39,8 +38,7 @@ class LotMaterielController extends Controller
     /**
      * Lists all lotMateriel entities.
      *
-     * @Route("/", name="lotmateriel_index")
-     * @Method("GET")
+     * @Route("/", name="lotmateriel_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -59,8 +57,7 @@ class LotMaterielController extends Controller
      * b) the number of lines to display ($ request-> get ('rowCount'))
      * c) 1 sort criterion on a collone ($ request-> get ('sort'))
      *
-     * @Route("/indexjson", name="lotmateriel_indexjson")
-     * @Method("POST")
+     * @Route("/indexjson", name="lotmateriel_indexjson", methods={"POST"})
      */
     public function indexjsonAction(Request $request)
     {
@@ -147,8 +144,7 @@ class LotMaterielController extends Controller
     /**
      * Creates a new lotMateriel entity.
      *
-     * @Route("/new", name="lotmateriel_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="lotmateriel_new", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function newAction(Request $request)
@@ -179,8 +175,7 @@ class LotMaterielController extends Controller
     /**
      * Finds and displays a lotMateriel entity.
      *
-     * @Route("/{id}", name="lotmateriel_show")
-     * @Method("GET")
+     * @Route("/{id}", name="lotmateriel_show", methods={"GET"})
      */
     public function showAction(LotMateriel $lotMateriel)
     {
@@ -198,8 +193,7 @@ class LotMaterielController extends Controller
     /**
      * Displays a form to edit an existing lotMateriel entity.
      *
-     * @Route("/{id}/edit", name="lotmateriel_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="lotmateriel_edit", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function editAction(Request $request, LotMateriel $lotMateriel)
@@ -255,8 +249,7 @@ class LotMaterielController extends Controller
     /**
      * Deletes a lotMateriel entity.
      *
-     * @Route("/{id}", name="lotmateriel_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="lotmateriel_delete", methods={"DELETE"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function deleteAction(Request $request, LotMateriel $lotMateriel)

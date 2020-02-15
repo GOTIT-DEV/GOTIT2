@@ -19,8 +19,7 @@ namespace Bbees\E3sBundle\Controller;
 
 use Bbees\E3sBundle\Entity\Individu;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -41,8 +40,7 @@ class IndividuController extends Controller
     /**
      * Lists all individu entities.
      *
-     * @Route("/", name="individu_index")
-     * @Method("GET")
+     * @Route("/", name="individu_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -87,8 +85,7 @@ class IndividuController extends Controller
      * b) the number of lines to display ($ request-> get ('rowCount'))
      * c) 1 sort criterion on a collone ($ request-> get ('sort'))
      *
-     * @Route("/indexjson", name="individu_indexjson")
-     * @Method("POST")
+     * @Route("/indexjson", name="individu_indexjson", methods={"POST"})
      */
     public function indexjsonAction(Request $request)
     {
@@ -173,8 +170,7 @@ class IndividuController extends Controller
     /**
      * Creates a new individu entity.
      *
-     * @Route("/new", name="individu_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="individu_new", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function newAction(Request $request)
@@ -206,8 +202,7 @@ class IndividuController extends Controller
     /**
      * Finds and displays a individu entity.
      *
-     * @Route("/{id}", name="individu_show")
-     * @Method("GET")
+     * @Route("/{id}", name="individu_show", methods={"GET"})
      */
     public function showAction(Individu $individu)
     {
@@ -225,8 +220,7 @@ class IndividuController extends Controller
     /**
      * Displays a form to edit an existing individu entity.
      *
-     * @Route("/{id}/edit", name="individu_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="individu_edit", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function editAction(Request $request, Individu $individu)
@@ -291,8 +285,7 @@ class IndividuController extends Controller
     /**
      * Deletes a individu entity.
      *
-     * @Route("/{id}", name="individu_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="individu_delete", methods={"DELETE"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function deleteAction(Request $request, Individu $individu)

@@ -18,8 +18,7 @@
 namespace Bbees\E3sBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -314,8 +313,7 @@ class DefaultController extends Controller
     }
     
     /**
-     * @Route("/mapstations/", name="mapstations")
-     * @Method("POST")
+     * @Route("/mapstations/", name="mapstations", methods={"POST"})
      */
     public function geoCoords(Request $request){
         $data = $request->request;

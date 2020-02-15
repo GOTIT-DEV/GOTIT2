@@ -18,7 +18,7 @@
 namespace Lehna\SpeciesSearchBundle\Controller;
 
 use Lehna\SpeciesSearchBundle\Services\QueryBuilderService;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

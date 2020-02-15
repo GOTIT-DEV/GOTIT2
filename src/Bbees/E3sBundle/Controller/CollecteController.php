@@ -19,8 +19,7 @@ namespace Bbees\E3sBundle\Controller;
 
 use Bbees\E3sBundle\Entity\Collecte;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -39,8 +38,7 @@ class CollecteController extends Controller
     /**
      * Lists all collecte entities.
      *
-     * @Route("/", name="collecte_index")
-     * @Method({"GET", "POST"})
+     * @Route("/", name="collecte_index", methods={"GET", "POST"})
      */
     public function indexAction(Request $request)
     {
@@ -61,8 +59,7 @@ class CollecteController extends Controller
      * b) the number of lines to display ($ request-> get ('rowCount'))
      * c) 1 sort criterion on a collone ($ request-> get ('sort'))
      *
-     * @Route("/indexjson", name="collecte_indexjson")
-     * @Method("POST")
+     * @Route("/indexjson", name="collecte_indexjson", methods={"POST"})
      */
     public function indexjsonAction(Request $request)
     {
@@ -150,8 +147,7 @@ class CollecteController extends Controller
     /**
      * Creates a new collecte entity.
      *
-     * @Route("/new", name="collecte_new")
-     * @Method({"GET", "POST"}) 
+     * @Route("/new", name="collecte_new", methods={"GET", "POST"}) 
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function newAction(Request $request)
@@ -182,8 +178,7 @@ class CollecteController extends Controller
     /**
      * Finds and displays a collecte entity.
      *
-     * @Route("/{id}", name="collecte_show")
-     * @Method("GET")
+     * @Route("/{id}", name="collecte_show", methods={"GET"})
      */
     public function showAction(Collecte $collecte)
     {
@@ -200,8 +195,7 @@ class CollecteController extends Controller
     /**
      * Displays a form to edit an existing collecte entity.
      *
-     * @Route("/{id}/edit", name="collecte_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="collecte_edit", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function editAction(Request $request, Collecte $collecte)
@@ -261,8 +255,7 @@ class CollecteController extends Controller
     /**
      * Deletes a collecte entity.
      *
-     * @Route("/{id}", name="collecte_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="collecte_delete", methods={"DELETE"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function deleteAction(Request $request, Collecte $collecte)

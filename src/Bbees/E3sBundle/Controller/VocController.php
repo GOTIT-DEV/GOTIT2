@@ -19,8 +19,7 @@ namespace Bbees\E3sBundle\Controller;
 
 use Bbees\E3sBundle\Entity\Voc;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Bbees\E3sBundle\Services\GenericFunctionService;
@@ -38,8 +37,7 @@ class VocController extends Controller
     /**
      * Lists all voc entities.
      *
-     * @Route("/", name="voc_index")
-     * @Method("GET")
+     * @Route("/", name="voc_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -59,8 +57,7 @@ class VocController extends Controller
      * b) the number of lines to display ($ request-> get ('rowCount'))
      * c) 1 sort criterion on a collone ($ request-> get ('sort'))
      *
-     * @Route("/indexjson", name="voc_indexjson")
-     * @Method("POST")
+     * @Route("/indexjson", name="voc_indexjson", methods={"POST"})
      */
     public function indexjsonAction(Request $request)
     {
@@ -122,8 +119,7 @@ class VocController extends Controller
     /**
      * Creates a new voc entity.
      *
-     * @Route("/new", name="voc_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="voc_new", methods={"GET", "POST"})
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function newAction(Request $request)
@@ -154,8 +150,7 @@ class VocController extends Controller
     /**
      * Finds and displays a voc entity.
      *
-     * @Route("/{id}", name="voc_show")
-     * @Method("GET")
+     * @Route("/{id}", name="voc_show", methods={"GET"})
      */
     public function showAction(Voc $voc)
     {
@@ -172,8 +167,7 @@ class VocController extends Controller
     /**
      * Displays a form to edit an existing voc entity.
      *
-     * @Route("/{id}/edit", name="voc_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="voc_edit", methods={"GET", "POST"})
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function editAction(Request $request, Voc $voc)
@@ -206,8 +200,7 @@ class VocController extends Controller
     /**
      * Deletes a voc entity.
      *
-     * @Route("/{id}", name="voc_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="voc_delete", methods={"DELETE"})
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function deleteAction(Request $request, Voc $voc)

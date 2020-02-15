@@ -19,8 +19,7 @@ namespace Bbees\E3sBundle\Controller;
 
 use Bbees\E3sBundle\Entity\Etablissement;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Bbees\E3sBundle\Services\GenericFunctionService;
@@ -38,8 +37,7 @@ class EtablissementController extends Controller
     /**
      * Lists all etablissement entities.
      *
-     * @Route("/", name="etablissement_index")
-     * @Method("GET")
+     * @Route("/", name="etablissement_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -58,8 +56,7 @@ class EtablissementController extends Controller
      * b) the number of lines to display ($ request-> get ('rowCount'))
      * c) 1 sort criterion on a collone ($ request-> get ('sort'))
      *
-     * @Route("/indexjson", name="etablissement_indexjson")
-     * @Method("POST")
+     * @Route("/indexjson", name="etablissement_indexjson", methods={"POST"})
      */
     public function indexjsonAction(Request $request)
     {
@@ -118,8 +115,7 @@ class EtablissementController extends Controller
     /**
      * Creates a new etablissement entity.
      *
-     * @Route("/new", name="etablissement_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="etablissement_new", methods={"GET", "POST"})
      * @Security("has_role('ROLE_PROJECT')")
      */
     public function newAction(Request $request)
@@ -150,8 +146,7 @@ class EtablissementController extends Controller
     /**
      * Finds and displays a etablissement entity.
      *
-     * @Route("/{id}", name="etablissement_show")
-     * @Method("GET")
+     * @Route("/{id}", name="etablissement_show", methods={"GET"})
      */
     public function showAction(Etablissement $etablissement)
     {
@@ -168,8 +163,7 @@ class EtablissementController extends Controller
     /**
      * Displays a form to edit an existing etablissement entity.
      *
-     * @Route("/{id}/edit", name="etablissement_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="etablissement_edit", methods={"GET", "POST"})
      * @Security("has_role('ROLE_PROJECT')")
      */
     public function editAction(Request $request, Etablissement $etablissement)
@@ -202,8 +196,7 @@ class EtablissementController extends Controller
     /**
      * Deletes a etablissement entity.
      *
-     * @Route("/{id}", name="etablissement_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="etablissement_delete", methods={"DELETE"})
      * @Security("has_role('ROLE_PROJECT')")
      */
     public function deleteAction(Request $request, Etablissement $etablissement)

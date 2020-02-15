@@ -19,8 +19,7 @@ namespace Bbees\E3sBundle\Controller;
 
 use Bbees\E3sBundle\Entity\Personne;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Bbees\E3sBundle\Services\GenericFunctionService;
@@ -38,8 +37,7 @@ class PersonneController extends Controller
     /**
      * Lists all personne entities.
      *
-     * @Route("/", name="personne_index")
-     * @Method("GET")
+     * @Route("/", name="personne_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -59,8 +57,7 @@ class PersonneController extends Controller
      * b) the number of lines to display ($ request-> get ('rowCount'))
      * c) 1 sort criterion on a collone ($ request-> get ('sort'))
      *
-     * @Route("/indexjson", name="personne_indexjson")
-     * @Method("POST")
+     * @Route("/indexjson", name="personne_indexjson", methods={"POST"})
      */
     public function indexjsonAction(Request $request)
     {
@@ -122,8 +119,7 @@ class PersonneController extends Controller
     /**
      * Creates a new personne entity.
      *
-     * @Route("/new", name="personne_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="personne_new", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function newAction(Request $request)
@@ -154,8 +150,7 @@ class PersonneController extends Controller
     /**
      * Creates a new personne entity for modal windows
      *
-     * @Route("/newmodal", name="personne_newmodal")
-     * @Method({"GET", "POST"})
+     * @Route("/newmodal", name="personne_newmodal", methods={"GET", "POST"})
      */
     public function newmodalAction(Request $request)
     {
@@ -220,8 +215,7 @@ class PersonneController extends Controller
     /**
      * Finds and displays a personne entity.
      *
-     * @Route("/{id}", name="personne_show")
-     * @Method("GET")
+     * @Route("/{id}", name="personne_show", methods={"GET"})
      */
     public function showAction(Personne $personne)
     {
@@ -238,8 +232,7 @@ class PersonneController extends Controller
     /**
      * Displays a form to edit an existing personne entity.
      *
-     * @Route("/{id}/edit", name="personne_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="personne_edit", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function editAction(Request $request, Personne $personne)
@@ -278,8 +271,7 @@ class PersonneController extends Controller
     /**
      * Deletes a personne entity.
      *
-     * @Route("/{id}", name="personne_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="personne_delete", methods={"DELETE"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function deleteAction(Request $request, Personne $personne)

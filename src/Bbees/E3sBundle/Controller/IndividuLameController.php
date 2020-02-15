@@ -19,8 +19,7 @@ namespace Bbees\E3sBundle\Controller;
 
 use Bbees\E3sBundle\Entity\IndividuLame;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -39,8 +38,7 @@ class IndividuLameController extends Controller
     /**
      * Lists all individuLame entities.
      *
-     * @Route("/", name="individulame_index")
-     * @Method("GET")
+     * @Route("/", name="individulame_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -60,8 +58,7 @@ class IndividuLameController extends Controller
      * b) the number of lines to display ($ request-> get ('rowCount'))
      * c) 1 sort criterion on a collone ($ request-> get ('sort'))
      *
-     * @Route("/indexjson", name="individulame_indexjson")
-     * @Method("POST")
+     * @Route("/indexjson", name="individulame_indexjson", methods={"POST"})
      */
     public function indexjsonAction(Request $request)
     {
@@ -154,8 +151,7 @@ class IndividuLameController extends Controller
     /**
      * Creates a new individuLame entity.
      *
-     * @Route("/new", name="individulame_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="individulame_new", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function newAction(Request $request)
@@ -186,8 +182,7 @@ class IndividuLameController extends Controller
     /**
      * Finds and displays a individuLame entity.
      *
-     * @Route("/{id}", name="individulame_show")
-     * @Method("GET")
+     * @Route("/{id}", name="individulame_show", methods={"GET"})
      */
     public function showAction(IndividuLame $individuLame)
     {
@@ -205,8 +200,7 @@ class IndividuLameController extends Controller
     /**
      * Displays a form to edit an existing individuLame entity.
      *
-     * @Route("/{id}/edit", name="individulame_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="individulame_edit", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function editAction(Request $request, IndividuLame $individuLame)
@@ -255,8 +249,7 @@ class IndividuLameController extends Controller
     /**
      * Deletes a individuLame entity.
      *
-     * @Route("/{id}", name="individulame_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="individulame_delete", methods={"DELETE"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function deleteAction(Request $request, IndividuLame $individuLame)

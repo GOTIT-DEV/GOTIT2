@@ -19,8 +19,7 @@ namespace Bbees\E3sBundle\Controller;
 
 use Bbees\E3sBundle\Entity\Source;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -39,8 +38,7 @@ class SourceController extends Controller
     /**
      * Lists all source entities.
      *
-     * @Route("/", name="source_index")
-     * @Method("GET")
+     * @Route("/", name="source_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -59,8 +57,7 @@ class SourceController extends Controller
      * b) the number of lines to display ($ request-> get ('rowCount'))
      * c) 1 sort criterion on a collone ($ request-> get ('sort'))
      *
-     * @Route("/indexjson", name="source_indexjson")
-     * @Method("POST")
+     * @Route("/indexjson", name="source_indexjson", methods={"POST"})
      */
     public function indexjsonAction(Request $request)
     {
@@ -121,8 +118,7 @@ class SourceController extends Controller
     /**
      * Creates a new source entity.
      *
-     * @Route("/new", name="source_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="source_new", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function newAction(Request $request)
@@ -153,8 +149,7 @@ class SourceController extends Controller
     /**
      * Finds and displays a source entity.
      *
-     * @Route("/{id}", name="source_show")
-     * @Method("GET")
+     * @Route("/{id}", name="source_show", methods={"GET"})
      */
     public function showAction(Source $source)
     {
@@ -172,8 +167,7 @@ class SourceController extends Controller
     /**
      * Displays a form to edit an existing source entity.
      *
-     * @Route("/{id}/edit", name="source_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="source_edit", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function editAction(Request $request, Source $source)
@@ -220,8 +214,7 @@ class SourceController extends Controller
     /**
      * Deletes a source entity.
      *
-     * @Route("/{id}", name="source_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="source_delete", methods={"DELETE"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function deleteAction(Request $request, Source $source)

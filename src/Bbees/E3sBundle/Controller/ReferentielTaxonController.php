@@ -19,8 +19,7 @@ namespace Bbees\E3sBundle\Controller;
 
 use Bbees\E3sBundle\Entity\ReferentielTaxon;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,8 +38,7 @@ class ReferentielTaxonController extends Controller
     /**
      * Lists all referentielTaxon entities.
      *
-     * @Route("/", name="referentieltaxon_index")
-     * @Method("GET")
+     * @Route("/", name="referentieltaxon_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -59,8 +57,7 @@ class ReferentielTaxonController extends Controller
      * b) the number of lines to display ($ request-> get ('rowCount'))
      * c) 1 sort criterion on a collone ($ request-> get ('sort'))
      *
-     * @Route("/indexjson", name="referentieltaxon_indexjson")
-     * @Method("POST")
+     * @Route("/indexjson", name="referentieltaxon_indexjson", methods={"POST"})
      */
     public function indexjsonAction(Request $request)
     {
@@ -124,8 +121,7 @@ class ReferentielTaxonController extends Controller
     /**
      * Creates a new referentielTaxon entity.
      *
-     * @Route("/new", name="referentieltaxon_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="referentieltaxon_new", methods={"GET", "POST"})
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function newAction(Request $request)
@@ -157,8 +153,7 @@ class ReferentielTaxonController extends Controller
     /**
      * Finds and displays a referentielTaxon entity.
      *
-     * @Route("/{id}", name="referentieltaxon_show")
-     * @Method("GET")
+     * @Route("/{id}", name="referentieltaxon_show", methods={"GET"})
      */
     public function showAction(ReferentielTaxon $referentielTaxon)
     {
@@ -175,8 +170,7 @@ class ReferentielTaxonController extends Controller
     /**
      * Displays a form to edit an existing referentielTaxon entity.
      *
-     * @Route("/{id}/edit", name="referentieltaxon_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="referentieltaxon_edit", methods={"GET", "POST"})
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function editAction(Request $request, ReferentielTaxon $referentielTaxon)
@@ -209,8 +203,7 @@ class ReferentielTaxonController extends Controller
     /**
      * Deletes a referentielTaxon entity.
      *
-     * @Route("/{id}", name="referentieltaxon_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="referentieltaxon_delete", methods={"DELETE"})
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function deleteAction(Request $request, ReferentielTaxon $referentielTaxon)

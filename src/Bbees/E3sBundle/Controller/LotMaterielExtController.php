@@ -19,8 +19,7 @@ namespace Bbees\E3sBundle\Controller;
 
 use Bbees\E3sBundle\Entity\LotMaterielExt;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -39,8 +38,7 @@ class LotMaterielExtController extends Controller
     /**
      * Lists all lotMaterielExt entities.
      *
-     * @Route("/", name="lotmaterielext_index")
-     * @Method("GET")
+     * @Route("/", name="lotmaterielext_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -59,8 +57,7 @@ class LotMaterielExtController extends Controller
      * b) the number of lines to display ($ request-> get ('rowCount'))
      * c) 1 sort criterion on a collone ($ request-> get ('sort'))
      *
-     * @Route("/indexjson", name="lotmaterielext_indexjson")
-     * @Method("POST")
+     * @Route("/indexjson", name="lotmaterielext_indexjson", methods={"POST"})
      */
     public function indexjsonAction(Request $request)
     {
@@ -142,8 +139,7 @@ class LotMaterielExtController extends Controller
     /**
      * Creates a new lotMaterielExt entity.
      *
-     * @Route("/new", name="lotmaterielext_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="lotmaterielext_new", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function newAction(Request $request)
@@ -174,8 +170,7 @@ class LotMaterielExtController extends Controller
     /**
      * Finds and displays a lotMaterielExt entity.
      *
-     * @Route("/{id}", name="lotmaterielext_show")
-     * @Method("GET")
+     * @Route("/{id}", name="lotmaterielext_show", methods={"GET"})
      */
     public function showAction(LotMaterielExt $lotMaterielExt)
     {
@@ -193,8 +188,7 @@ class LotMaterielExtController extends Controller
     /**
      * Displays a form to edit an existing lotMaterielExt entity.
      *
-     * @Route("/{id}/edit", name="lotmaterielext_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="lotmaterielext_edit", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function editAction(Request $request, LotMaterielExt $lotMaterielExt)
@@ -248,8 +242,7 @@ class LotMaterielExtController extends Controller
     /**
      * Deletes a lotMaterielExt entity.
      *
-     * @Route("/{id}", name="lotmaterielext_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="lotmaterielext_delete", methods={"DELETE"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
     public function deleteAction(Request $request, LotMaterielExt $lotMaterielExt)
