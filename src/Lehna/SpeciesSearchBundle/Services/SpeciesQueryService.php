@@ -122,7 +122,7 @@ class SpeciesQueryService
       ->leftJoin('BbeesE3sBundle:Pcr', 'motu_pcr', 'WITH', "motu_pcr.id = motu_chr.pcrFk")
       ->leftJoin('BbeesE3sBundle:Adn', 'motu_adn', 'WITH', "motu_adn.id = motu_pcr.adnFk")
       ->leftJoin('BbeesE3sBundle:Individu', 'motu_ind', 'WITH', "motu_ind.id = motu_adn.individuFk")
-      ->join('BbeesE3sBundle:EspeceIndividu', 'motu_eid', 'WITH', "eid.individuFk = motu_ind.id OR eid.sequenceAssembleeExtFk=motu_sext.id")
+      ->join('BbeesE3sBundle:EspeceIdentifiée', 'motu_eid', 'WITH', "motu_eid.individuFk = motu_ind.id OR motu_eid.sequenceAssembleeExtFk=motu_sext.id")
       ->join('BbeesE3sBundle:Voc', 'motu_voc', 'WITH', "motu_voc.id = $alias.methodeMotuVocFk")
       ->join('BbeesE3sBundle:Motu', 'motu_date', 'WITH', "motu_date.id = $alias.motuFk");
   }
@@ -300,8 +300,8 @@ class SpeciesQueryService
       case 3: # Sequence
         $query = $query->leftJoin('BbeesE3sBundle:SequenceAssemblee', 'seq', 'WITH', 'seq.id=e.sequenceAssembleeFk')
           ->leftJoin('BbeesE3sBundle:SequenceAssembleeExt', 'seqext', 'WITH', 'seqext.id=e.sequenceAssembleeExtFk')
-          ->leftJoin('BbeesE3sBundle:EstAligneEtTraite', 'eaet', 'WITH', 'eaet.sequenceAssembleeFk = seq.id')
-          ->leftJoin('BbeesE3sBundle:Chromatogramme', 'chromatogram', 'WITH', 'eaet.chromatogrammeFk = chromatogram.id')
+          ->leftJoin('BbeesE3sBundle:EstAligneEtTraite', 'chrom_proc', 'WITH', 'chrom_proc.sequenceAssembleeFk = seq.id')
+          ->leftJoin('BbeesE3sBundle:Chromatogramme', 'chromatogram', 'WITH', 'chrom_proc.chromatogrammeFk = chromatogram.id')
           ->leftJoin('BbeesE3sBundle:Pcr', 'pcr', 'WITH', 'chromatogram.pcrFk = pcr.id')
           ->join('BbeesE3sBundle:Assigne', 'ass', 'WITH', 'ass.sequenceAssembleeExtFk=seqext.id OR ass.sequenceAssembleeFk=seq.id')
           ->join('BbeesE3sBundle:Voc', 'vocGene', 'WITH', 'vocGene.id=seqext.geneVocFk OR vocGene.id=pcr.geneVocFk')
@@ -503,7 +503,7 @@ class SpeciesQueryService
   public function getMotuGeoLocation($data)
   {
 
-    $taxid    = $data->get('taxon_name');
+    $taxid    = $data->get('taxname');
     $subquery = "SELECT
             seq.id, type_seq,
             vocabulary.id as id_methode, vocabulary.code as methode,
@@ -528,7 +528,7 @@ class SpeciesQueryService
             WHERE motu.id = :id_dataset AND vocabulary.id=:id_methode ";
 
     $rawSql = "WITH liste_motus AS ($subquery)";
-    $rawSql .= "SELECT DISTINCT seq.id, seq.code, seq.internal_sequence_accession_number,
+    $rawSql .= "SELECT DISTINCT seq.id, seq.code, seq.accession_number,
             seq.delimitation,
             seq.type_seq as seq_type,
             liste_motus.id_methode,
@@ -546,12 +546,12 @@ class SpeciesQueryService
             municipality.municipality_name as municipality,
             country.country_name as country
 
-            FROM (SELECT id,code,  internal_sequence_accession_number,
+            FROM (SELECT id,code,  accession_number,
                  sampling_fk, rt, delimitation, type_seq
                 FROM (
                     SELECT  external_sequence.id,
                             external_sequence.external_sequence_code as code,
-                            external_sequence_accession_number as internal_sequence_accession_number,
+                            external_sequence_accession_number as accession_number,
                             sampling_fk, ei.taxon_fk as rt,
                             critere.code as delimitation,
                             1 as type_seq
@@ -559,9 +559,9 @@ class SpeciesQueryService
                         LEFT JOIN identified_species ei on ei.external_sequence_fk=external_sequence.id
                         LEFT JOIN vocabulary critere ON ei.identification_criterion_voc_fk=critere.id
                 UNION
-                    SELECT  seqas.id,
-                            seqas.internal_sequence_code as code,
-                            seqas.internal_sequence_accession_number,
+                    SELECT  seq_int.id,
+                            seq_int.internal_sequence_code as code,
+                            seq_int.internal_sequence_accession_number as accession_number,
                             lmat.sampling_fk, ei.taxon_fk as rt,
                             critere.code as delimitation,
                             0 as type_seq
@@ -570,9 +570,9 @@ class SpeciesQueryService
                         JOIN dna ON dna.specimen_fk=I.id
                         JOIN pcr ON pcr.dna_fk=dna.id
                         JOIN chromatogram ON chromatogram.pcr_fk=pcr.id
-                        JOIN chromatogram_is_processed_to eaet ON chromatogram.id=eaet.chromatogram_fk
-                        JOIN internal_sequence seqas ON seqas.id=eaet.internal_sequence_fk
-                        LEFT JOIN identified_species ei on ei.internal_sequence_fk=seqas.id
+                        JOIN chromatogram_is_processed_to chrom_proc ON chromatogram.id=chrom_proc.chromatogram_fk
+                        JOIN internal_sequence seq_int ON seq_int.id=chrom_proc.internal_sequence_fk
+                        LEFT JOIN identified_species ei on ei.internal_sequence_fk=seq_int.id
                         LEFT JOIN vocabulary critere ON ei.identification_criterion_voc_fk=critere.id
                     ) AS union_seq ) AS seq
             LEFT JOIN taxon tax ON tax.id=seq.rt

@@ -43,7 +43,7 @@ export function initModalTable(tableId) {
         }, {
           data: 'accession_number',
           render: linkify('https://www.ncbi.nlm.nih.gov/nuccore/',
-            { col: 'acc', ellipsis: false, generateRoute: false })
+            { col: 'accession_number', ellipsis: false, generateRoute: false })
         },
         {
           data: 'type',
