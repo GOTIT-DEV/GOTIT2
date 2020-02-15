@@ -12,8 +12,8 @@ class ComposerStaticInitd574308a719b2fb996f42a3788bebc57
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
-        'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
         '0d59ee240a4cd96ddbb4ff164fccea4d' => __DIR__ . '/..' . '/symfony/polyfill-php73/bootstrap.php',
+        'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
         '32dcc8afd4335739640db7d200c1971d' => __DIR__ . '/..' . '/symfony/polyfill-apcu/bootstrap.php',
         '6a47392539ca2329373e0d33e1dba053' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/bootstrap.php',
         'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
@@ -44,13 +44,13 @@ class ComposerStaticInitd574308a719b2fb996f42a3788bebc57
             'Symfony\\Component\\' => 18,
             'Symfony\\Bundle\\SwiftmailerBundle\\' => 33,
             'Symfony\\Bundle\\MonologBundle\\' => 29,
+            'Symfony\\Bundle\\MakerBundle\\' => 27,
             'Symfony\\Bundle\\' => 15,
             'Symfony\\Bridge\\Twig\\' => 20,
             'Symfony\\Bridge\\ProxyManager\\' => 28,
             'Symfony\\Bridge\\PhpUnit\\' => 23,
             'Symfony\\Bridge\\Monolog\\' => 23,
             'Symfony\\Bridge\\Doctrine\\' => 24,
-            'Sensio\\Bundle\\GeneratorBundle\\' => 30,
             'Sensio\\Bundle\\FrameworkExtraBundle\\' => 35,
             'Sensio\\Bundle\\DistributionBundle\\' => 33,
             'SensioLabs\\Security\\' => 20,
@@ -62,6 +62,7 @@ class ComposerStaticInitd574308a719b2fb996f42a3788bebc57
             'Psr\\Link\\' => 9,
             'Psr\\Container\\' => 14,
             'Psr\\Cache\\' => 10,
+            'PhpParser\\' => 10,
         ),
         'M' => 
         array (
@@ -166,6 +167,10 @@ class ComposerStaticInitd574308a719b2fb996f42a3788bebc57
         array (
             0 => __DIR__ . '/..' . '/symfony/monolog-bundle',
         ),
+        'Symfony\\Bundle\\MakerBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/maker-bundle/src',
+        ),
         'Symfony\\Bundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Bundle',
@@ -189,10 +194,6 @@ class ComposerStaticInitd574308a719b2fb996f42a3788bebc57
         'Symfony\\Bridge\\Doctrine\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Bridge/Doctrine',
-        ),
-        'Sensio\\Bundle\\GeneratorBundle\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/sensio/generator-bundle',
         ),
         'Sensio\\Bundle\\FrameworkExtraBundle\\' => 
         array (
@@ -225,6 +226,10 @@ class ComposerStaticInitd574308a719b2fb996f42a3788bebc57
         'Psr\\Cache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/cache/src',
+        ),
+        'PhpParser\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
         ),
         'Monolog\\' => 
         array (
