@@ -55,10 +55,10 @@ jQuery.fn.dataTable.render.ellipsis = function (cutoff, wordbreak, escapeHtml = 
       '<span class="ellipsis" data-toggle="tooltip" \
       data-placement="{{placement}}" \
       title="{{title}}">{{shortText}}&#8230;</span>', {
-        placement: placement,
-        title: esc(d),
-        shortText: shortened
-      })
+      placement: placement,
+      title: esc(d),
+      shortText: shortened
+    })
   };
 };
 
@@ -96,6 +96,31 @@ function linkify(url,
     })
   }
 }
+
+
+function dt_responsive_meta_header(datatable) {
+  let meta_header = $(datatable.table().header())
+    .find(".table-header-meta")
+    .children()
+  // Using meta header colspans to associate them with subcolumns
+  let colspans = meta_header.toArray()
+    .map(v => parseInt(v.getAttribute("colspan")))
+
+  datatable.on("responsive-resize", function (e, dt, columns) {
+    // Parse visible/hidden subcolumns of each meta header
+    let i = 0
+    let show_headers = colspans.map( span => {
+      let start = i, end = start + span
+      i = end
+      return columns.slice(start, end).some(v => v === true)
+    })
+    // Toggle meta header cells show/hide if they have visible subcolumns
+    meta_header.each(
+      (index, elt) => show_headers[index] ? $(elt).show() : $(elt).hide()
+    )
+  })
+}
+
 
 
 /**
@@ -166,4 +191,4 @@ const dtconfig = {
   }
 }
 
-export { dtconfig, linkify }
+export { dtconfig, linkify, dt_responsive_meta_header }

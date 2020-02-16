@@ -15,7 +15,7 @@
  */
 
 import { fetchCurrentUser } from '../utils.js'
-import { dtconfig, linkify } from '../datatables_utils.js'
+import { dtconfig, linkify, dt_responsive_meta_header } from '../datatables_utils.js'
 
 /**
  * Toggle loading mode on
@@ -73,7 +73,8 @@ function initDataTable(tableId) {
               render: renderLinkify('idtax_lm', "referentieltaxon_show")
             },
             {
-              data: "critere_lm"
+              data: "critere_lm",
+              className: "border-right"
             },
             {
               data: "code_biomol",
@@ -88,7 +89,8 @@ function initDataTable(tableId) {
               render: renderLinkify('idtax_lm', "referentieltaxon_show")
             },
             {
-              data: "critere_indiv"
+              data: "critere_indiv",
+              className: "border-right"
             },
             {
               data: "code_seq",
@@ -111,6 +113,9 @@ function initDataTable(tableId) {
           } // drawCallback
         }) // datatables
 
+        // Making two-rows header responsive
+        dt_responsive_meta_header(dataTable)
+        
         /****************
          * Submit form handler
          */
