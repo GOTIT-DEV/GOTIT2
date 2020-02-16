@@ -1,5 +1,10 @@
 # VOCABULARY ###################################################################
 
+Morphologie: MORPHOLOGIE
+Assignation moleculaire temporaire: ASSIGNATION MOLÉCULAIRE TEMPORAIRE
+Delimitation moleculaire: DÉLIMITATION MOLÉCULAIRE
+Inconnu: INCONNU
+
 # autocomplete field form
 Individu typeahead: Individu [af]
 Individu typeahead placeholder: Taper les première lettres du Code Ind Biomol 
