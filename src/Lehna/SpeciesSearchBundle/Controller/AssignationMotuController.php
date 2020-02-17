@@ -36,7 +36,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class AssignationMotuController extends Controller {
 
   /**
-   * @Route("/", name="assign-motu")
+   * @Route("/", name="assign-motu", methods={"GET"})
    *
    * Index page : Query form interface
    */
@@ -58,7 +58,7 @@ class AssignationMotuController extends Controller {
   }
 
   /**
-   * @Route("/query", name="motu-query")
+   * @Route("/query", name="motu-query", methods={"POST"})
    *
    * Returns a JSON response with 
    *  - rows : an array of motu count for each method in target dataset
@@ -79,7 +79,7 @@ class AssignationMotuController extends Controller {
   }
 
   /**
-   * @Route("/detailsModal", name="motu-modal")
+   * @Route("/detailsModal", name="motu-modal", methods={"POST"})
    *
    * Returns a JSON response with
    * - rows : array of sequence MOTU assignments 

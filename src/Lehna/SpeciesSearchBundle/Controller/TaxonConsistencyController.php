@@ -35,7 +35,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class TaxonConsistencyController extends Controller {
 
   /**
-   * @Route("/", name="consistency")
+   * @Route("/", name="consistency", methods={"GET"})
    *
    * Index : render query form template
    */
@@ -49,7 +49,7 @@ class TaxonConsistencyController extends Controller {
   }
 
   /**
-   * @Route("/query", name="consistency-query")
+   * @Route("/query", name="consistency-query", methods={"POST"})
    *
    * Returns a JSON response with species assignment at each identification level
    */

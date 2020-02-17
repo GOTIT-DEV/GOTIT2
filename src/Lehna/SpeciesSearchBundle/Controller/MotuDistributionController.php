@@ -35,7 +35,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class MotuDistributionController extends Controller {
 
   /**
-   * @Route("/", name="distribution")
+   * @Route("/", name="distribution", methods={"GET"})
    *
    * Index : render query form template
    */
@@ -55,7 +55,7 @@ class MotuDistributionController extends Controller {
   }
 
   /**
-   * @Route("/query", name="distribution-query")
+   * @Route("/query", name="distribution-query", methods={"POST"})
    *
    * returns a JSON response with 
    * - query : the initial query parameters 

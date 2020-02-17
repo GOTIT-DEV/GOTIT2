@@ -35,7 +35,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class CO1SamplingController extends Controller {
 
   /**
-   * @Route("/", name="co1-sampling")
+   * @Route("/", name="co1-sampling", methods={"GET"})
    * Index : render query form interface
    */
   public function index(SpeciesQueryService $service) {
@@ -48,7 +48,7 @@ class CO1SamplingController extends Controller {
   }
 
   /**
-   * @Route("/query", name="co1-sampling-query")
+   * @Route("/query", name="co1-sampling-query", methods={"POST"})
    *
    * Returns a JSON response with COI sampling statistics
    */
@@ -86,7 +86,7 @@ class CO1SamplingController extends Controller {
   }
 
   /**
-   * @Route("/geocoords/", name="co1-geocoords")
+   * @Route("/geocoords/", name="co1-geocoords", methods={"POST"})
    * 
    * Returns a JSON response with sampling geographical coordinates for target species 
    * Used to plot sampling an world map projection in modal pop-up

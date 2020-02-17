@@ -17,7 +17,6 @@
 
 namespace Lehna\SpeciesSearchBundle\Controller;
 
-use Bbees\E3sBundle\Entity\Motu;
 use Lehna\SpeciesSearchBundle\Services\SpeciesQueryService;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -34,7 +33,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class CommonController extends Controller {
 
   /**
-   * @Route("/methods-in-date", name="methodsindate")
+   * @Route("/methods-in-date", name="methodsindate", methods={"POST"})
    *
    * Returns the set of methods in a target dataset as JSON
    */

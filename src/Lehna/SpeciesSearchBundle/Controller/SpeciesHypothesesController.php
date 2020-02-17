@@ -35,7 +35,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
  */
 class SpeciesHypothesesController extends Controller {
   /**
-   * @Route("/", name="species-hypotheses")
+   * @Route("/", name="species-hypotheses", methods={"GET"})
    *
    * Index : render query form template 
    */
@@ -53,7 +53,7 @@ class SpeciesHypothesesController extends Controller {
   }
 
   /**
-   * @Route("/query", name="species-hypotheses-query")
+   * @Route("/query", name="species-hypotheses-query", methods={"POST"})
    *
    * Returns a JSON reponse with species hypotheses data
    */
