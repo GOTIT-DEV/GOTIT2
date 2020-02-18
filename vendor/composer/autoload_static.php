@@ -76,6 +76,8 @@ class ComposerStaticInitd574308a719b2fb996f42a3788bebc57
         array (
             'Fig\\Link\\' => 9,
             'FOS\\JsRoutingBundle\\' => 20,
+            'FL\\QBJSParser\\' => 14,
+            'FL\\QBJSParserBundle\\' => 20,
         ),
         'D' => 
         array (
@@ -246,6 +248,14 @@ class ComposerStaticInitd574308a719b2fb996f42a3788bebc57
         'FOS\\JsRoutingBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/friendsofsymfony/jsrouting-bundle',
+        ),
+        'FL\\QBJSParser\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/fourlabs/qbjs-parser/src',
+        ),
+        'FL\\QBJSParserBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/fourlabs/qbjs-parser-bundle',
         ),
         'Doctrine\\Persistence\\' => 
         array (

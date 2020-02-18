@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d06d74f4e3f3db7e97c3be68eaa4819f",
+    "content-hash": "aa67f01b29d1d6df5fe3cb7a497a7863",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1147,6 +1147,121 @@
                 "rest"
             ],
             "time": "2019-12-18T15:40:05+00:00"
+        },
+        {
+            "name": "fourlabs/qbjs-parser",
+            "version": "1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fourlabsldn/QBJSParser.git",
+                "reference": "4aedf876e0262e6c8d64a520e34bad8c53f01bc8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fourlabsldn/QBJSParser/zipball/4aedf876e0262e6c8d64a520e34bad8c53f01bc8",
+                "reference": "4aedf876e0262e6c8d64a520e34bad8c53f01bc8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0",
+                "symfony/property-info": "~2.8|~3.0|~3.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*",
+                "satooshi/php-coveralls": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "FL\\QBJSParser\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Four Labs",
+                    "homepage": "https://fourlabs.co.uk"
+                }
+            ],
+            "description": "Parse JSON coming from jQuery QueryBuilder, into database queries.",
+            "homepage": "https://github.com/fourlabsldn/QBJSParser",
+            "keywords": [
+                "QBJS",
+                "QBJSParser",
+                "doctrine",
+                "jQuery-QueryBuilder",
+                "jquery",
+                "orm",
+                "parser",
+                "php",
+                "querybuilder",
+                "querybuilder.js",
+                "querybuilder.js.org",
+                "symfony"
+            ],
+            "time": "2018-07-10T10:57:22+00:00"
+        },
+        {
+            "name": "fourlabs/qbjs-parser-bundle",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fourlabsldn/QBJSParserBundle.git",
+                "reference": "4a1b26d359b884c7053a736f9e3177895e2baf42"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fourlabsldn/QBJSParserBundle/zipball/4a1b26d359b884c7053a736f9e3177895e2baf42",
+                "reference": "4a1b26d359b884c7053a736f9e3177895e2baf42",
+                "shasum": ""
+            },
+            "require": {
+                "fourlabs/qbjs-parser": "~1.0",
+                "php": "^7.0",
+                "symfony/config": "~2.8|~3.0|~3.1|^4.0|^5.0",
+                "symfony/dependency-injection": "~2.8|~3.0|~3.1|^4.0|^5.0",
+                "symfony/event-dispatcher": "~2.8|~3.0|~3.1|^4.0|^5.0",
+                "symfony/http-kernel": "~2.8|~3.0|~3.1|^4.0|^5.0",
+                "symfony/property-info": "~2.8|~3.0|~3.1|^4.0|^5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "FL\\QBJSParserBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Four Labs",
+                    "email": "luis@fourlabs.co.uk",
+                    "homepage": "https://fourlabs.co.uk/"
+                }
+            ],
+            "description": "This bundle is a Symfony wrapper for fourlabs/qbjs-parser.",
+            "homepage": "https://github.com/fourlabsldn/QBJSParserBundle",
+            "keywords": [
+                "QBJS",
+                "QBJSParser",
+                "QBJSParserBundle",
+                "doctrine",
+                "jQuery-QueryBuilder",
+                "jquery",
+                "orm",
+                "parser",
+                "php",
+                "querybuilder",
+                "querybuilder.js",
+                "querybuilder.js.org",
+                "symfony"
+            ],
+            "time": "2019-11-29T07:50:10+00:00"
         },
         {
             "name": "friendsofsymfony/jsrouting-bundle",

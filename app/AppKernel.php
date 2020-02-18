@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new Bbees\UserBundle\BbeesUserBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(), // routing from JS
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(), // translations in JS,
+            new FL\QBJSParserBundle\FLQBJSParserBundle(),
             new Lehna\SpeciesSearchBundle\LehnaSpeciesSearchBundle(),
             new Lehna\QueryBuilderBundle\LehnaQueryBuilderBundle(),
         ];
