@@ -52,7 +52,7 @@ class BoiteController extends Controller
         $boites = $em->getRepository('BbeesE3sBundle:Boite')->findAll();
 
         return $this->render('boite/index.html.twig', array(
-            'boites' => $boites,
+            'boites' => $boites
         ));
     }
 

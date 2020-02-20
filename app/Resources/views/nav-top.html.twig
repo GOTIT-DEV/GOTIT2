@@ -1,8 +1,8 @@
 <nav class="top-nav">
+
 	<a id="menu-toggle">
 		<i class="fas fa-bars"></i>
 	</a>
-
 
 	<ul class="nav navbar-nav navbar-right">
 		<li class="">
@@ -13,69 +13,33 @@
 					{{app.user.roles|first|trans}}
 					<span class=" fas fa-angle-down"></span>
 				</a>
-				<ul class="dropdown-menu dropdown-usermenu pull-right">
+				<ul id="dropdown-usermenu" class="dropdown-menu dropdown-usermenu pull-right">
 					{% if is_granted('ROLE_PROJECT') %}
 						<li>
 							<a href="{{ path('user_index')}}{{app.user.id}}/edit">
-								Profile
+								{{"Profile"|trans}}
 								<i class="fas fa-user pull-right"></i>
 							</a>
 						</li>
 					{% endif %}
-					<li>
-						{% set requestUri = app.request.requestUri %}
-						{% set locale = app.request.getLocale() %}
-						{% set defaultLocale = app.request.getDefaultLocale() %}
-						{% set pathRouteInArray = requestUri|split(['/', locale, '/']|join) %}
-						{% set FlagUrilangageParameter = requestUri|split('langage=switch') %}
-						{% set FlagUriParameter = requestUri|split('?') %}
-						{% set UrilangageParameter = '' %}
-						{% if second_language != '' %}
-							{% if FlagUriParameter|length == 1 %}
-								{% if FlagUrilangageParameter|length == 1 %}
-									{% set UrilangageParameter = '?langage=switch' %}
-								{% endif %}
-							{% else %}
-								{% if FlagUrilangageParameter|length == 1 %}
-									{% set UrilangageParameter = '&langage=switch' %}
-								{% endif %}
-							{% endif %}
-							{% if locale == defaultLocale %}
-								{% if FlagUriParameter|length == 1 %}
-									<a href="{{ [pathRouteInArray[0], ['/', second_language, '/']|join, pathRouteInArray[1], UrilangageParameter]|join }}">
-										<i class="fas fa-flag-checkered pull-right"></i>
-										{{'Switch version'|trans}}
-										{{locale}}
-										/
-										{{second_language}}</a>
-								{% else %}
-									<a href="{{ [pathRouteInArray[0], ['/', second_language, '/']|join, pathRouteInArray[1], UrilangageParameter]|join }}">
-										<i class="fas fa-flag-checkered pull-right"></i>
-										{{'Switch version'|trans}}
-										{{locale}}
-										/
-										{{second_language}}</a>
-								{% endif %}
-							{% else %}
-								{% set pathRouteEnInArray = requestUri|split(['/', second_language, '/']|join) %}
-								{% if FlagUriParameter|length == 1 %}
-									<a href="{{ [pathRouteInArray[0], ['/', defaultLocale, '/']|join , pathRouteInArray[1], UrilangageParameter]|join }}">
-										<i class="fas fa-flag-checkered pull-right"></i>
-										{{'Switch version'|trans}}
-										{{locale}}
-										/
-										{{defaultLocale}}</a>
-								{% else %}
-									<a href="{{ [pathRouteInArray[0], ['/', defaultLocale, '/']|join , pathRouteInArray[1], UrilangageParameter]|join }}">
-										<i class="fas fa-flag-checkered pull-right"></i>
-										{{'Switch version'|trans}}
-										{{locale}}
-										/
-										{{defaultLocale}}</a>
-								{% endif %}
-							{% endif %}
+					{% if second_language is defined %}
+						{% set target_locale = app.request.getDefaultLocale() %}
+						{% if app.request.getLocale() == target_locale %}
+							{% set target_locale = second_language %}
 						{% endif %}
-					</li>
+						{% set current_route = app.request.attributes.get('_route') %}
+						{% set route_params = app.request.attributes.get("_route_params") %}
+						{% set route_args = app.request.query|merge(route_params)|merge({_locale: target_locale}) %}
+						<li>
+							<a href="{{path(app.request.attributes.get('_route'), route_args)}}">
+								<i class="fas fa-flag-checkered pull-right"></i>
+								{{'Switch version'|trans}}
+								{{app.request.getLocale()|upper}}
+								/
+								{{target_locale|upper}}
+							</a>
+						</li>
+					{% endif %}
 					<li>
 						<a href="{{path('logout') }}">
 							<i class="fas fa-sign-out-alt pull-right"></i>

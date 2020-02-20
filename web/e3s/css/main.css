@@ -194,6 +194,12 @@ nav.top-nav {
   background: #ededed;
   border-bottom: 1px solid #d9dee4;
 }
+nav.top-nav a.user-profile:hover {
+  background-color: #d9dee4;
+}
+nav.top-nav ul#dropdown-usermenu li > a {
+  padding: 10px;
+}
 nav.top-nav a#menu-toggle {
   cursor: pointer;
   font-size: 26px;

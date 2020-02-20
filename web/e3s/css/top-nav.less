@@ -1,16 +1,32 @@
 // main: ./main.less
 
+@top-nav-highlight-color: #d9dee4;
+
 nav.top-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: #ededed;
-  border-bottom: 1px solid #d9dee4;
+  border-bottom: 1px solid @top-nav-highlight-color;
+
+  a.user-profile{
+    &:hover{
+      background-color: #d9dee4;
+    }
+  }
+
+  ul#dropdown-usermenu{
+    li>a{
+      padding: 10px;
+    }
+  }
 
   a#menu-toggle {
     cursor: pointer;
     font-size: 26px;
     padding: 0 20px;
+
+    
     // height: 100%;
     // .toggle {
     //   float: left;
