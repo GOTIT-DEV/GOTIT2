@@ -2,9 +2,11 @@
 
 @nav-width: 230px;
 @active-border: 5px;
+@active-color: #1abb9c;
 @entry-padding: 12px;
 @sub-menu-decorator-color: #687b8b; //#425668;
 @sub-menu-decorator-size: 9px;
+
 
 .nav-left {
   min-height: 100%;
@@ -23,9 +25,8 @@
   .nav-title {
     display: flex;
     align-items: center;
-
-    height: 57px; // CHANGE
-    padding-left: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
     border-radius: 0;
     color: #ECF0F1;
 
@@ -95,7 +96,7 @@
 
     &:hover,
     &.active {
-      border-right: @active-border solid #1abb9c;
+      border-right: @active-border solid @active-color;
 
       >a {
         padding-right: calc(@entry-padding - @active-border);
@@ -107,11 +108,11 @@
 
     &.current-page {
       >a>i {
-        color: #1abb9c;
+        color: @active-color;
       }
 
       ul.nav.child_menu>li.menu-sub-entry.current-page:before {
-        background-color: #1abb9c;
+        background-color: @active-color;
       }
     }
 

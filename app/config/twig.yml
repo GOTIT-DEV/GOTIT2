@@ -91,8 +91,8 @@ twig:
             text: title.etablissement
             auth_required: ROLE_PROJECT
       - route: user_index
-        text: title.user
-        icon: fas fa-lock
+        text: title.users
+        icon: fas fa-users
         auth_required: ROLE_ADMIN
         children: []
       - route: ~

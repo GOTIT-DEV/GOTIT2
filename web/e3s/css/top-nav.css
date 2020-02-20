@@ -1,0 +1,9 @@
+nav.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+nav.top-nav a#menu-toggle {
+  cursor: pointer;
+  font-size: 26px;
+}

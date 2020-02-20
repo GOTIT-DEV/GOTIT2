@@ -7,8 +7,8 @@
 
 	{# sidebar menu #}
 	{% block sidebar %}
-		<div id="main-menu" class="hidden-print main_menu">
-			<div class="menu_section">
+		{# <div id="main-menu" class="hidden-print main_menu">
+			<div class="menu_section"> #}
 				<ul class="nav side-menu">
 					{% set current_route = app.request.attributes.get('_route') %}
 					{% for menu_entry in navbar_menu_entries %}
@@ -70,7 +70,7 @@
 						</li>
 					{% endfor %}
 				</ul>
-			</div>
+			{# </div> #}
 		{% endblock %}
 		{# sidebar menu #}
 

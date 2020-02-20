@@ -1,4 +1,5 @@
 @import "nav.less";
+@import "top-nav.less";
 
 body {
   font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
@@ -14,7 +15,9 @@ body>.main-container {
     "nav-left footer";
 
   grid-template-columns: 0fr auto;
-  gap: 10px;
+  grid-template-rows: 0fr auto 1fr;
+  // gap: 10px;
+  row-gap: 10px;
 
   nav.nav-left {
     grid-area: nav-left;
@@ -26,6 +29,7 @@ body>.main-container {
 
   div.main-content {
     grid-area: main-content;
+    padding: 0 10px;
   }
 
   footer {
