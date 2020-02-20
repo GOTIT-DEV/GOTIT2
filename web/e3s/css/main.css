@@ -194,11 +194,36 @@ nav.top-nav {
   background: #ededed;
   border-bottom: 1px solid #d9dee4;
 }
-nav.top-nav a.user-profile:hover {
+nav.top-nav #top-nav-dropdown-menu a {
+  font-family: 'Courier New', Courier, monospace;
+}
+nav.top-nav .dropdown {
+  height: 50px;
+}
+nav.top-nav .dropdown.open > a.dropdown-toggle {
   background-color: #d9dee4;
 }
-nav.top-nav ul#dropdown-usermenu li > a {
+nav.top-nav .dropdown a.dropdown-toggle {
+  display: inline-block;
+  height: 100%;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  vertical-align: middle;
+}
+nav.top-nav .dropdown a.dropdown-toggle:hover {
+  background-color: #d9dee4;
+}
+nav.top-nav .dropdown a.dropdown-toggle > i.fas,
+nav.top-nav .dropdown a.dropdown-toggle i.far {
+  padding: 0 8px;
+  vertical-align: middle;
+}
+nav.top-nav .dropdown ul.dropdown-menu li > a {
   padding: 10px;
+}
+nav.top-nav .dropdown ul.dropdown-menu li > a i {
+  margin-right: 5px;
 }
 nav.top-nav a#menu-toggle {
   cursor: pointer;

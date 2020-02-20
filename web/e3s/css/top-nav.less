@@ -2,6 +2,8 @@
 
 @top-nav-highlight-color: #d9dee4;
 
+@top-nav-height: 50px;
+
 nav.top-nav {
   display: flex;
   justify-content: space-between;
@@ -9,24 +11,54 @@ nav.top-nav {
   background: #ededed;
   border-bottom: 1px solid @top-nav-highlight-color;
 
-  a.user-profile{
-    &:hover{
-      background-color: #d9dee4;
+
+
+
+  #top-nav-dropdown-menu a {
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  .dropdown {
+    height: @top-nav-height;
+
+    &.open > a.dropdown-toggle {background-color: #d9dee4;}
+
+    a.dropdown-toggle {
+      
+      display: inline-block;
+      height: 100%;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      vertical-align: middle;
+      &:hover{
+        background-color: #d9dee4;
+      }
+      > i.fas, i.far{
+        padding: 0 8px;
+        vertical-align: middle;
+      }
+    }
+
+    ul.dropdown-menu {
+      li>a {
+        padding: 10px;
+
+        i {
+          margin-right: 5px;
+        }
+      }
     }
   }
 
-  ul#dropdown-usermenu{
-    li>a{
-      padding: 10px;
-    }
-  }
+
 
   a#menu-toggle {
     cursor: pointer;
     font-size: 26px;
     padding: 0 20px;
 
-    
+
     // height: 100%;
     // .toggle {
     //   float: left;
