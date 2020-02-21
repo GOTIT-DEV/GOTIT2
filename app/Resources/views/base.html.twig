@@ -53,8 +53,7 @@
 		{% block headincl %}{% endblock %}
 
 	</head>
-	<body >
-	<div class="container">
+	<body>
 		<div class="main-container">
 			{% include "nav.html.twig" %}
 
@@ -66,7 +65,7 @@
 
 			{# page content #}
 			<div
-				class="main-content container-fluid" role="main">
+				class="main-content" role="main">
 				{# help button #}
 				{% block helpbutton %}
 					<button class="btn btn-info pull-right" type="button" data-toggle="collapse" data-target="#page-help" aria-expanded="false" aria-controls="page-help">
@@ -116,7 +115,6 @@
 			{% endblock %}
 			{# footer content #}
 		</div>
-	</div>
 
 		{# General Scripts #}
 		{% block scripts %}

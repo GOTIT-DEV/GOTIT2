@@ -174,52 +174,8 @@
   bottom: 50%;
 }
 @media (max-width: 900px) {
-  .nav-left {
-    width: auto;
-  }
-  .nav-left .nav-title {
-    padding: inherit 0px;
-    margin: 0;
-  }
-  .nav-left .nav-title i {
-    font-size: 27px;
-  }
-  .nav-left .nav-title #nav-title-text {
+  .nav-left:not(.nav-sm) {
     display: none;
-  }
-  .nav-left li.menu-entry > a {
-    display: flex;
-    flex-direction: column;
-    font-size: 10px;
-    text-align: center;
-    padding: 10px 5px;
-  }
-  .nav-left li.menu-entry > a span.nav-collapse-control {
-    display: none;
-  }
-  .nav-left li.menu-entry ul.nav.child_menu {
-    left: calc(100%);
-    position: absolute;
-    top: 0;
-    width: 210px;
-    z-index: 4000;
-    background: #3e5367;
-    display: none;
-  }
-  .nav-left li.menu-entry ul.nav.child_menu > li.menu-sub-entry {
-    padding: 0;
-  }
-  .nav-left li.menu-entry ul.nav.child_menu > li.menu-sub-entry:before,
-  .nav-left li.menu-entry ul.nav.child_menu > li.menu-sub-entry:after {
-    display: none;
-  }
-  .nav-left li.menu-entry.current-page ul.nav.child_menu {
-    display: none;
-  }
-  .nav-left li.menu-entry:hover > a,
-  .nav-left li.menu-entry.active > a,
-  .nav-left li.menu-entry.current-page > a {
-    padding-right: 0;
   }
 }
 nav.top-nav {
@@ -270,24 +226,25 @@ body {
   font-size: 13px;
 }
 body .main-container {
+  max-width: 100vw;
   min-height: 100vh;
   display: grid;
-  grid-template-areas: "nav-left nav-top" "nav-left main-content" "nav-left footer";
-  grid-template-columns: 0fr auto;
-  grid-template-rows: 0fr auto 1fr;
+  grid-template-areas: "nav-left nav-top" "nav-left main-content" "nav-left footer" 'nav-left .';
+  grid-template-columns: 0fr minmax(250px, 1fr);
+  grid-template-rows: 0fr auto auto 1fr;
   row-gap: 10px;
 }
 body .main-container nav.nav-left {
   grid-area: nav-left;
 }
-body .main-container nav.top_nav {
+body .main-container nav.top-nav {
   grid-area: nav-top;
   width: fit-content;
 }
 body .main-container div.main-content {
   grid-area: main-content;
   padding: 0 10px;
-  width: fit-content;
+  max-width: 100%;
 }
 body .main-container footer {
   grid-area: footer;
