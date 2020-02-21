@@ -6,7 +6,7 @@ body {
   font-size: 13px;
 }
 
-body>.main-container {
+body .main-container {
   min-height: 100vh;
   display: grid;
   grid-template-areas:
@@ -25,11 +25,13 @@ body>.main-container {
 
   nav.top_nav {
     grid-area: nav-top;
+    width: fit-content;
   }
 
   div.main-content {
     grid-area: main-content;
     padding: 0 10px;
+    width: fit-content;
   }
 
   footer {

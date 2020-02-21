@@ -53,7 +53,8 @@
 		{% block headincl %}{% endblock %}
 
 	</head>
-	<body>
+	<body >
+	<div class="container">
 		<div class="main-container">
 			{% include "nav.html.twig" %}
 
@@ -65,7 +66,7 @@
 
 			{# page content #}
 			<div
-				class="main-content" role="main">
+				class="main-content container-fluid" role="main">
 				{# help button #}
 				{% block helpbutton %}
 					<button class="btn btn-info pull-right" type="button" data-toggle="collapse" data-target="#page-help" aria-expanded="false" aria-controls="page-help">
@@ -115,7 +116,7 @@
 			{% endblock %}
 			{# footer content #}
 		</div>
-
+	</div>
 
 		{# General Scripts #}
 		{% block scripts %}
@@ -123,6 +124,10 @@
 			<script src="{{ asset('e3s/vendors/jquery/dist/jquery.min.js') }}"></script>
 			{# Bootstrap #}
 			<script src="{{ asset('e3s/vendors/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+			{# JS cookies #}
+			<script src="{{ asset('e3s/vendors/js-cookies/js.cookie.js') }}"></script>
+			{# Mustache templating engine #}
+			<script src="{{ asset('e3s/vendors/mustache/mustache.js') }}"></script>
 			{# Custom Theme Scripts #}
 			<script src="{{ asset('e3s/js/options.min.js') }}"></script>
 			<script src="{{ asset('e3s/js/e3s.js') }}"></script>
@@ -132,8 +137,6 @@
 			<script src="{{ asset('e3s/vendors/bootgrid/jquery.bootgrid.min.js') }}"></script>
 			{# typeahead #}
 			<script src="{{ asset('e3s/js/typeahead.bundle.min.js') }}"></script>
-			{# Mustache templating engine #}
-			<script src="{{ asset('e3s/vendors/mustache/mustache.js') }}"></script>
 		{% endblock %}
 		{#  Templates Scripts #}
 		{% block templatescripts %}

@@ -597,63 +597,7 @@ a:focus {
   text-decoration: none
 }
 
-.navbar {
-  margin-bottom: 0
-}
 
-.navbar-header {
-  background: #34495E
-}
-
-.navbar-right {
-  margin-right: 0
-}
-
-.top_nav .navbar-right {
-  margin: 0;
-  width: 70%;
-  float: right
-}
-
-.top_nav .navbar-right li {
-  display: inline-block;
-  float: right;
-  position: static
-}
-
-@media (min-width: 480px) {
-  .top_nav .navbar-right li {
-    position: relative
-  }
-}
-
-.top_nav .dropdown-menu li {
-  width: 100%
-}
-
-.top_nav .dropdown-menu li a {
-  width: 100%;
-  padding: 12px 20px
-}
-
-.top_nav li a i {
-  font-size: 15px
-}
-
-.navbar-static-top {
-  position: fixed;
-  top: 0;
-  width: 100%
-}
-
-.sidebar-header {
-  border-bottom: 0;
-  margin-top: 46px
-}
-
-.sidebar-header:first-of-type {
-  margin-top: 0
-}
 
 /* .nav.side-menu>li {
   position: relative;
