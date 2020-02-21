@@ -229,7 +229,7 @@ body .main-container {
   max-width: 100vw;
   min-height: 100vh;
   display: grid;
-  grid-template-areas: "nav-left nav-top" "nav-left main-content" "nav-left footer" 'nav-left .';
+  grid-template-areas: "nav-left nav-top" "nav-left main-content" "nav-left footer" "nav-left .";
   grid-template-columns: 0fr minmax(250px, 1fr);
   grid-template-rows: 0fr auto auto 1fr;
   row-gap: 10px;
