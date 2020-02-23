@@ -3,12 +3,7 @@
 
 {# setup TWIG variables ; base_route_index, base_route_url, help_message #}
 {% set base_route_index = app.request.attributes.get('_route') %}
-{% set base_route_url = base_route_index|split('_')[0] %}
 {% set help_message = base_route_index|trans({},'help')|nl2br %}
-{% if help_message ==  base_route_index %}
-	{% set help_message =  base_route_index %}
-{% endif %}
-
 
 {# Main TWIG template of GOTIT application : BASE.HTML.TWIG #}
 
@@ -37,17 +32,11 @@
 			{# Font Awesome #}
 			<link
 			href="{{ asset('e3s/vendors/font-awesome/css/all.min.css') }}" rel="stylesheet">
-			{# Custom Theme Style #}
-			<link
-			href="{{ asset('e3s/css/custom.min.css') }}" rel="stylesheet">
 			{# Nav Theme Style #}
 			<link
 			href="{{ asset('e3s/css/main.css') }}" rel="stylesheet">
 			{# Bootgrid  #}
-			<link
-			href="{{ asset('e3s/vendors/bootgrid/jquery.bootgrid.min.css') }}" rel="stylesheet">
-			{# typeaheadjs Style #}
-			<link href="{{ asset('e3s/css/typeaheadjs.css') }}" rel="stylesheet">
+			<link href="{{ asset('e3s/vendors/bootgrid/jquery.bootgrid.min.css') }}" rel="stylesheet">
 		{% endblock %}
 
 		{% block headincl %}{% endblock %}
@@ -55,8 +44,9 @@
 	</head>
 	<body>
 		<div class="main-container">
-			{% include "nav.html.twig" %}
-
+			{% block leftnav %}
+				{% include "nav.html.twig" %}
+			{% endblock %}
 			{# top navigation #}
 			{% block topnav %}
 				{% include "nav-top.html.twig" %}
@@ -64,40 +54,43 @@
 			{# top navigation #}
 
 			{# page content #}
-			<div
-				class="main-content" role="main">
-				{# help button #}
-				{% block helpbutton %}
-					<button class="btn btn-info pull-right" type="button" data-toggle="collapse" data-target="#page-help" aria-expanded="false" aria-controls="page-help">
-						<i class="fas fa-question"></i>
-					</button>
-				{% endblock %}
 
-				{% block titlepage %}{% endblock %}
+			<header class="main-header">
+					{% block helpbutton %}
+						<button class="help-btn btn btn-info" type="button" data-toggle="collapse" data-target="#page-help" aria-expanded="false" aria-controls="page-help">
+							<i class="fas fa-question"></i>
+						</button>
+					{% endblock %}
 
-				<ul>
-					{% block action %}{% endblock %}
-				</ul>
+					{% block titlepage %}{% endblock %}
 
-				<div class="collapse" id="page-help">
-					<div class="well">
-						{% block pagehelp %}
-							{% if help_message is defined and help_message is not empty %}
-								{{help_message|raw}}
-							{% else %}
-								Undefined
-							{% endif %}
+					<ul class="page-actions">
+						{% block action %}
+						{# Page action buttons #}
 						{% endblock %}
+					</ul>
+
+					<div class="collapse" id="page-help">
+						<div class="well">
+							{% block pagehelp %}
+								{% if help_message is defined and help_message is not empty %}
+									{{help_message|raw}}
+								{% else %}
+									Undefined
+								{% endif %}
+							{% endblock %}
+						</div>
 					</div>
-				</div>
+				</header>
 
-				{% block body %}
-				{% endblock %}
+			<div class="main-content" role="main">
 
-				{% block link %}
-				{% endblock %}
+				
+
+				{% block body %}{% endblock %}
+
+				{% block link %}{% endblock %}
 			</div>
-			{# /page content #}
 
 			{# footer content #}
 			{% block footer %}
@@ -108,36 +101,34 @@
 						2019 - GOTIT1.1.2 -
 						<a href="{{ asset(['doc/legal_notices_', app.request.getLocale(), '.pdf']|join) }}" target="_blank">{{'legales_mentions'|trans}}</a>
 					</div>
-					<div class="clearfix"></div>
 				</footer>
 			{% endblock %}
 			{# footer content #}
-		</div>
 
-		{# General Scripts #}
-		{% block scripts %}
-			{# jQuery #}
-			<script src="{{ asset('e3s/vendors/jquery/dist/jquery.min.js') }}"></script>
-			{# Bootstrap #}
-			<script src="{{ asset('e3s/vendors/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-			{# JS cookies #}
-			<script src="{{ asset('e3s/vendors/js-cookies/js.cookie.js') }}"></script>
-			{# Mustache templating engine #}
-			<script src="{{ asset('e3s/vendors/mustache/mustache.js') }}"></script>
-			{# Custom Theme Scripts #}
-			<script src="{{ asset('e3s/js/options.min.js') }}"></script>
-			<script src="{{ asset('e3s/js/e3s.js') }}"></script>
-			<script src="{{ asset('e3s/js/nav.js') }}"></script>
-			<script src="{{ asset('e3s/js/custom.min.js') }}"></script>
-			{# Bootgrid  #}
-			<script src="{{ asset('e3s/vendors/bootgrid/jquery.bootgrid.min.js') }}"></script>
-			{# typeahead #}
-			<script src="{{ asset('e3s/js/typeahead.bundle.min.js') }}"></script>
-		{% endblock %}
-		{#  Templates Scripts #}
-		{% block templatescripts %}
-			{#  Templates Scripts : index.html.twig / edit.html.twig ... #}
-		{% endblock %}
-
+			{# General Scripts #}
+			{% block scripts %}
+				{# jQuery #}
+				<script src="{{ asset('e3s/vendors/jquery/dist/jquery.min.js') }}"></script>
+				{# Bootstrap #}
+				<script src="{{ asset('e3s/vendors/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+				{# JS cookies #}
+				<script src="{{ asset('e3s/vendors/js-cookies/js.cookie.js') }}"></script>
+				{# Mustache templating engine #}
+				<script src="{{ asset('e3s/vendors/mustache/mustache.js') }}"></script>
+				{# Bootgrid  #}
+				<script src="{{ asset('e3s/vendors/bootgrid/jquery.bootgrid.min.js') }}"></script>
+				{# typeahead #}
+				<script src="{{ asset('e3s/vendors/typeahead.js/typeahead.bundle.min.js') }}"></script>
+				{# Custom Theme Scripts #}
+				<script src="{{ asset('e3s/js/options.min.js') }}"></script>
+				<script src="{{ asset('e3s/js/e3s.js') }}"></script>
+				<script src="{{ asset('e3s/js/nav.js') }}"></script>
+				<script src="{{ asset('e3s/js/custom.min.js') }}"></script>
+			{% endblock %}
+			{#  Templates Scripts #}
+			{% block templatescripts %}
+				{#  Templates Scripts : index.html.twig / edit.html.twig ... #}
+			{% endblock %}
+		</body>
 	</body>
 </html>

@@ -1,3 +1,5 @@
+// Navbar events and animations
+
 function close_sub_menus() {
   $(".nav-left .menu-entry.active")
     .removeClass("active")

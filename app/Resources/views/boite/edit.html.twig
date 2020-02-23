@@ -1,24 +1,19 @@
 {% extends 'edit.html.twig' %}
 
 {# EDIT : BOX #}
-
 {% block titlepage %}
-    <div class="page-title">
-      <div class="title_left">
-        <h1>
-            {% if  flagvalid == 1 and actioncontroller != 'new'%} <i class="glyphicon glyphicon-ok"></i>  {% endif %}
-            {% if app.request.query.get('typeBoite') is defined and  app.request.query.get('typeBoite') != '' %} 
-                    {{ [ ['title.',entityname]|join , app.request.query.get('typeBoite')]|join|trans}}
-                {% else %} 
-                    {{['title.',entityname ]|join|trans}}
-            {% endif %} 
-        </h1>
-      </div>
-      <div class="title_right">
-      </div>
-    </div>            
-    <div class="clearfix"></div>
+	<h1>
+		{% if  flagvalid == 1 and actioncontroller != 'new'%}
+			<i class="glyphicon glyphicon-ok"></i>
+		{% endif %}
+		{% if app.request.query.get('typeBoite') is defined and  app.request.query.get('typeBoite') != '' %}
+			{{ [ ['title.',entityname]|join , app.request.query.get('typeBoite')]|join|trans}}
+		{% else %}
+			{{['title.',entityname ]|join|trans}}
+		{% endif %}
+	</h1>
 {% endblock %}
+
 
 {% block body %}
     

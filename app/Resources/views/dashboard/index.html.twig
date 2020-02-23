@@ -9,8 +9,6 @@
 
 {% block stylesheets %}
 	{{ parent() }}
-	<!-- Dashboard Style -->
-	<link href="{{ asset('e3s/css/dashboard.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block titlepage %}
@@ -548,15 +546,15 @@
 										<td>{{entity.userMaj }}</td>
 										<td></td>
 									</tr>
-								</tbody>
+
+								{% endfor %}
 							</tbody>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
+						</table>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-
 {% endblock %}
 {% block scripts %}
 	{{ parent() }}
