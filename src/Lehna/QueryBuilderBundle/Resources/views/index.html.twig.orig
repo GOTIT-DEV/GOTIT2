@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+  {{parent()}}
+  <!-- Modal window styles -->
+  <link href="{{ asset('e3s/vendors/queryBuilder/query-builder.default.css') }}" rel="stylesheet">
+  {% endblock %}
+
+{% block titlepage %}
+<<<<<<< HEAD:src/Lehna/QueryBuilderBundle/Resources/views/index.html.twig
+	<h1>
+		Query Builder
+	</h1>
+=======
+    <h1>
+        Query Builder
+    </h1>
+    <hr style="clear:both">
+>>>>>>> 1c6bed15... Running tests on QBJSParserBundle:src/Lehna/QueryBuilderBundle/Resources/views/Default/index.html.twig
+{% endblock %}
+
+{% block body %}
+
+
+	<div class='row'>
+		<div
+			class="col-xs-12">
+			{# Formulaire #}
+			{% include '@LehnaQueryBuilder/form.html.twig' %}
+		</div>
+<<<<<<< HEAD:src/Lehna/QueryBuilderBundle/Resources/views/index.html.twig
+=======
+
+>>>>>>> 1c6bed15... Running tests on QBJSParserBundle:src/Lehna/QueryBuilderBundle/Resources/views/Default/index.html.twig
+		<hr>
+		<div>
+			<h2 id="results-title">
+				<span>
+					{% trans from 'queries' %}
+					label.resultats
+					{% endtrans %}
+				</span>
+			</h2>
+			{% include '@LehnaQueryBuilder/results.html.twig' %}
+		</div>
+	</div>
+
+
+{% endblock %}
+{% block scripts %}
+<<<<<<< HEAD:src/Lehna/QueryBuilderBundle/Resources/views/index.html.twig
+	{{ parent() }}
+	<!-- Query Builder -->
+	<script src="{{ asset('e3s/vendors/queryBuilder/query-builder.standalone.min.js') }}"></script>
+	<!-- interactive js for the form aspect and data included-->
+	<script src="{{ asset('e3s/bundles/lehnaquerybuilder/js/demo-basic.js') }}"></script>
+=======
+{{ parent() }}
+<!-- Query Builder -->
+<script src="{{ asset('e3s/vendors/queryBuilder/query-builder.standalone.min.js') }}"></script>
+<script src="{{ asset('bundles/lehnaquerybuilder/js/main.js') }}"></script>
+>>>>>>> 1c6bed15... Running tests on QBJSParserBundle:src/Lehna/QueryBuilderBundle/Resources/views/Default/index.html.twig
+{% endblock %}
+

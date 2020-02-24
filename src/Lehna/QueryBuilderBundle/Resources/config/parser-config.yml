@@ -1,0 +1,789 @@
+fl_qbjs_parser:
+  builders:
+    Internal_biological_material_is_treated_by:
+      class: Bbees\E3sBundle\Entity\LotMaterielEstRealisePar
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: Internal_biological_material_is_treated_by
+      result_columns: []
+    chromatogram:
+      class: Bbees\E3sBundle\Entity\Chromatogramme
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: codeChromato, label: codeChromato, type: string}
+      - {id: numYas, label: numYas, type: string}
+      - {id: commentaireChromato, label: commentaireChromato, type: string}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: chromatogram
+      result_columns: []
+    chromatogram_is_processed_to:
+      class: Bbees\E3sBundle\Entity\EstAligneEtTraite
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: chromatogram_is_processed_to
+      result_columns: []
+    composition_of_internal_biological_material:
+      class: Bbees\E3sBundle\Entity\CompositionLotMateriel
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: nbIndividus, label: nbIndividus, type: integer}
+      - {id: commentaireCompoLotMateriel, label: commentaireCompoLotMateriel, type: string}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: composition_of_internal_biological_material
+      result_columns: []
+    country:
+      class: Bbees\E3sBundle\Entity\Pays
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: codePays, label: codePays, type: string}
+      - {id: nomPays, label: nomPays, type: string}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: country
+      result_columns: []
+    dna:
+      class: Bbees\E3sBundle\Entity\Adn
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: codeAdn, label: codeAdn, type: string}
+      - {id: dateAdn, label: dateAdn, type: date}
+      - {id: concentrationNgMicrolitre, label: concentrationNgMicrolitre, type: double}
+      - {id: commentaireAdn, label: commentaireAdn, type: string}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: dna
+      result_columns: []
+    dna_is_extracted_by:
+      class: Bbees\E3sBundle\Entity\AdnEstRealisePar
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: dna_is_extracted_by
+      result_columns: []
+    external_biological_material:
+      class: Bbees\E3sBundle\Entity\LotMaterielExt
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: codeLotMaterielExt, label: codeLotMaterielExt, type: string}
+      - {id: dateCreationLotMaterielExt, label: dateCreationLotMaterielExt, type: date}
+      - {id: commentaireLotMaterielExt, label: commentaireLotMaterielExt, type: string}
+      - {id: commentaireNbIndividus, label: commentaireNbIndividus, type: string}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: external_biological_material
+      result_columns: []
+    external_biological_material_is_processed_by:
+      class: Bbees\E3sBundle\Entity\LotMaterielExtEstRealisePar
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: external_biological_material_is_processed_by
+      result_columns: []
+    external_biological_material_is_published_in:
+      class: Bbees\E3sBundle\Entity\LotMaterielExtEstReferenceDans
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: external_biological_material_is_published_in
+      result_columns: []
+    external_sequence:
+      class: Bbees\E3sBundle\Entity\SequenceAssembleeExt
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: codeSqcAssExt, label: codeSqcAssExt, type: string}
+      - {id: dateCreationSqcAssExt, label: dateCreationSqcAssExt, type: date}
+      - {id: accessionNumberSqcAssExt, label: accessionNumberSqcAssExt, type: string}
+      - {id: codeSqcAssExtAlignement, label: codeSqcAssExtAlignement, type: string}
+      - {id: numIndividuSqcAssExt, label: numIndividuSqcAssExt, type: string}
+      - {id: taxonOrigineSqcAssExt, label: taxonOrigineSqcAssExt, type: string}
+      - {id: commentaireSqcAssExt, label: commentaireSqcAssExt, type: string}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: external_sequence
+      result_columns: []
+    external_sequence_is_entered_by:
+      class: Bbees\E3sBundle\Entity\SqcExtEstRealisePar
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: external_sequence_is_entered_by
+      result_columns: []
+    external_sequence_is_published_in:
+      class: Bbees\E3sBundle\Entity\SqcExtEstReferenceDans
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: external_sequence_is_published_in
+      result_columns: []
+    has_targeted_taxa:
+      class: Bbees\E3sBundle\Entity\ACibler
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: has_targeted_taxa
+      result_columns: []
+    identified_species:
+      class: Bbees\E3sBundle\Entity\EspeceIdentifiee
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: dateIdentification, label: dateIdentification, type: date}
+      - {id: commentaireEspId, label: commentaireEspId, type: string}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: identified_species
+      result_columns: []
+    institution:
+      class: Bbees\E3sBundle\Entity\Etablissement
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: nomEtablissement, label: nomEtablissement, type: string}
+      - {id: commentaireEtablissement, label: commentaireEtablissement, type: string}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: institution
+      result_columns: []
+    internal_biological_material:
+      class: Bbees\E3sBundle\Entity\LotMateriel
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: codeLotMateriel, label: codeLotMateriel, type: string}
+      - {id: dateLotMateriel, label: dateLotMateriel, type: date}
+      - {id: commentaireConseilSqc, label: commentaireConseilSqc, type: string}
+      - {id: commentaireLotMateriel, label: commentaireLotMateriel, type: string}
+      - {id: aFaire, label: aFaire, type: integer}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: internal_biological_material
+      result_columns: []
+    internal_biological_material_is_published_in:
+      class: Bbees\E3sBundle\Entity\LotEstPublieDans
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: internal_biological_material_is_published_in
+      result_columns: []
+    internal_sequence:
+      class: Bbees\E3sBundle\Entity\SequenceAssemblee
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: codeSqcAss, label: codeSqcAss, type: string}
+      - {id: dateCreationSqcAss, label: dateCreationSqcAss, type: date}
+      - {id: accessionNumber, label: accessionNumber, type: string}
+      - {id: codeSqcAlignement, label: codeSqcAlignement, type: string}
+      - {id: commentaireSqcAss, label: commentaireSqcAss, type: string}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: internal_sequence
+      result_columns: []
+    internal_sequence_is_assembled_by:
+      class: Bbees\E3sBundle\Entity\SequenceAssembleeEstRealisePar
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: internal_sequence_is_assembled_by
+      result_columns: []
+    internal_sequence_is_published_in:
+      class: Bbees\E3sBundle\Entity\SqcEstPublieDans
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: internal_sequence_is_published_in
+      result_columns: []
+    motu:
+      class: Bbees\E3sBundle\Entity\Motu
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: nomFichierCsv, label: nomFichierCsv, type: string}
+      - {id: dateMotu, label: dateMotu, type: date}
+      - {id: commentaireMotu, label: commentaireMotu, type: string}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      - {id: libelleMotu, label: libelleMotu, type: string}
+      human_readable_name: motu
+      result_columns: []
+    motu_is_generated_by:
+      class: Bbees\E3sBundle\Entity\MotuEstGenerePar
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: motu_is_generated_by
+      result_columns: []
+    motu_number:
+      class: Bbees\E3sBundle\Entity\Assigne
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: numMotu, label: numMotu, type: integer}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: motu_number
+      result_columns: []
+    municipality:
+      class: Bbees\E3sBundle\Entity\Commune
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: codeCommune, label: codeCommune, type: string}
+      - {id: nomCommune, label: nomCommune, type: string}
+      - {id: nomRegion, label: nomRegion, type: string}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: municipality
+      result_columns: []
+    pcr:
+      class: Bbees\E3sBundle\Entity\Pcr
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: codePcr, label: codePcr, type: string}
+      - {id: numPcr, label: numPcr, type: string}
+      - {id: datePcr, label: datePcr, type: date}
+      - {id: detailPcr, label: detailPcr, type: string}
+      - {id: remarquePcr, label: remarquePcr, type: string}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: pcr
+      result_columns: []
+    pcr_is_done_by:
+      class: Bbees\E3sBundle\Entity\PcrEstRealisePar
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: pcr_is_done_by
+      result_columns: []
+    person:
+      class: Bbees\E3sBundle\Entity\Personne
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: nomPersonne, label: nomPersonne, type: string}
+      - {id: nomComplet, label: nomComplet, type: string}
+      - {id: nomPersonneRef, label: nomPersonneRef, type: string}
+      - {id: commentairePersonne, label: commentairePersonne, type: string}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: person
+      result_columns: []
+    program:
+      class: Bbees\E3sBundle\Entity\Programme
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: codeProgramme, label: codeProgramme, type: string}
+      - {id: nomProgramme, label: nomProgramme, type: string}
+      - {id: nomsResponsables, label: nomsResponsables, type: string}
+      - {id: typeFinanceur, label: typeFinanceur, type: string}
+      - {id: anneeDebut, label: anneeDebut, type: integer}
+      - {id: anneeFin, label: anneeFin, type: integer}
+      - {id: commentaireProgramme, label: commentaireProgramme, type: string}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: program
+      result_columns: []
+    sample_is_fixed_with:
+      class: Bbees\E3sBundle\Entity\APourFixateur
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: sample_is_fixed_with
+      result_columns: []
+    sampling:
+      class: Bbees\E3sBundle\Entity\Collecte
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: codeCollecte, label: codeCollecte, type: string}
+      - {id: dateCollecte, label: dateCollecte, type: date}
+      - {id: dureeEchantillonnageMn, label: dureeEchantillonnageMn, type: integer}
+      - {id: temperatureC, label: temperatureC, type: double}
+      - {id: conductiviteMicroSieCm, label: conductiviteMicroSieCm, type: double}
+      - {id: aFaire, label: aFaire, type: integer}
+      - {id: commentaireCollecte, label: commentaireCollecte, type: string}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: sampling
+      result_columns: []
+    sampling_is_done_with_method:
+      class: Bbees\E3sBundle\Entity\APourSamplingMethod
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: sampling_is_done_with_method
+      result_columns: []
+    sampling_is_funded_by:
+      class: Bbees\E3sBundle\Entity\EstFinancePar
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: sampling_is_funded_by
+      result_columns: []
+    sampling_is_performed_by:
+      class: Bbees\E3sBundle\Entity\EstEffectuePar
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: sampling_is_performed_by
+      result_columns: []
+    site:
+      class: Bbees\E3sBundle\Entity\Station
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: codeStation, label: codeStation, type: string}
+      - {id: nomStation, label: nomStation, type: string}
+      - {id: latDegDec, label: latDegDec, type: double}
+      - {id: longDegDec, label: longDegDec, type: double}
+      - {id: altitudeM, label: altitudeM, type: integer}
+      - {id: infoLocalisation, label: infoLocalisation, type: string}
+      - {id: infoDescription, label: infoDescription, type: string}
+      - {id: commentaireStation, label: commentaireStation, type: string}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: site
+      result_columns: []
+    slide_is_mounted_by:
+      class: Bbees\E3sBundle\Entity\IndividuLameEstRealisePar
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: slide_is_mounted_by
+      result_columns: []
+    source:
+      class: Bbees\E3sBundle\Entity\Source
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: codeSource, label: codeSource, type: string}
+      - {id: anneeSource, label: anneeSource, type: integer}
+      - {id: libelleSource, label: libelleSource, type: string}
+      - {id: commentaireSource, label: commentaireSource, type: string}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: source
+      result_columns: []
+    source_is_entered_by:
+      class: Bbees\E3sBundle\Entity\SourceAEteIntegrePar
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: source_is_entered_by
+      result_columns: []
+    species_is_identified_by:
+      class: Bbees\E3sBundle\Entity\EstIdentifiePar
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: species_is_identified_by
+      result_columns: []
+    specimen:
+      class: Bbees\E3sBundle\Entity\Individu
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: codeIndBiomol, label: codeIndBiomol, type: string}
+      - {id: codeIndTriMorpho, label: codeIndTriMorpho, type: string}
+      - {id: codeTube, label: codeTube, type: string}
+      - {id: numIndBiomol, label: numIndBiomol, type: string}
+      - {id: commentaireInd, label: commentaireInd, type: string}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: specimen
+      result_columns: []
+    specimen_slide:
+      class: Bbees\E3sBundle\Entity\IndividuLame
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: codeLameColl, label: codeLameColl, type: string}
+      - {id: libelleLame, label: libelleLame, type: string}
+      - {id: dateLame, label: dateLame, type: date}
+      - {id: nomDossierPhotos, label: nomDossierPhotos, type: string}
+      - {id: commentaireLame, label: commentaireLame, type: string}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: specimen_slide
+      result_columns: []
+    storage_box:
+      class: Bbees\E3sBundle\Entity\Boite
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: codeBoite, label: codeBoite, type: string}
+      - {id: libelleBoite, label: libelleBoite, type: string}
+      - {id: libelleCollection, label: libelleCollection, type: string}
+      - {id: commentaireBoite, label: commentaireBoite, type: string}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: storage_box
+      result_columns: []
+    taxon:
+      class: Bbees\E3sBundle\Entity\ReferentielTaxon
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: taxon_name, label: taxon_name, type: string}
+      - {id: taxon_rank, label: taxon_rank, type: string}
+      - {id: subclass, label: subclass, type: string}
+      - {id: taxon_order, label: taxon_order, type: string}
+      - {id: family, label: family, type: string}
+      - {id: genus, label: genus, type: string}
+      - {id: species, label: species, type: string}
+      - {id: subspecies, label: subspecies, type: string}
+      - {id: taxon_validity, label: taxon_validity, type: integer}
+      - {id: codeTaxon, label: codeTaxon, type: string}
+      - {id: commentaireRef, label: commentaireRef, type: string}
+      - {id: objectif, label: objectif, type: string}
+      - {id: clade, label: clade, type: string}
+      - {id: taxnameRef, label: taxnameRef, type: string}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: taxon
+      result_columns: []
+    vocabulary:
+      class: Bbees\E3sBundle\Entity\Voc
+      filters:
+      - {id: id, label: id, type: integer}
+      - {id: code, label: code, type: string}
+      - {id: vocabulary_title, label: vocabulary_title, type: string}
+      - {id: parent, label: parent, type: string}
+      - {id: voc_comments, label: voc_comments, type: string}
+      - {id: dateCre, label: dateCre, type: datetime}
+      - {id: dateMaj, label: dateMaj, type: datetime}
+      - {id: userCre, label: userCre, type: integer}
+      - {id: userMaj, label: userMaj, type: integer}
+      human_readable_name: vocabulary
+      result_columns: []
+  doctrine_classes_and_mappings:
+    Internal_biological_material_is_treated_by:
+      association_classes: {lotMaterielFk: Bbees\E3sBundle\Entity\LotMateriel, personneFk: Bbees\E3sBundle\Entity\Personne}
+      class: Bbees\E3sBundle\Entity\LotMaterielEstRealisePar
+      properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
+    chromatogram:
+      association_classes: {etablissementFk: Bbees\E3sBundle\Entity\Etablissement,
+        pcrFk: Bbees\E3sBundle\Entity\Pcr, primerChromatoVocFk: Bbees\E3sBundle\Entity\Voc,
+        qualiteChromatoVocFk: Bbees\E3sBundle\Entity\Voc}
+      class: Bbees\E3sBundle\Entity\Chromatogramme
+      properties: {codeChromato: null, commentaireChromato: null, dateCre: null, dateMaj: null,
+        id: null, numYas: null, userCre: null, userMaj: null}
+    chromatogram_is_processed_to:
+      association_classes: {chromatogrammeFk: Bbees\E3sBundle\Entity\Chromatogramme,
+        sequenceAssembleeFk: Bbees\E3sBundle\Entity\SequenceAssemblee}
+      class: Bbees\E3sBundle\Entity\EstAligneEtTraite
+      properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
+    composition_of_internal_biological_material:
+      association_classes: {lotMaterielFk: Bbees\E3sBundle\Entity\LotMateriel, typeIndividuVocFk: Bbees\E3sBundle\Entity\Voc}
+      class: Bbees\E3sBundle\Entity\CompositionLotMateriel
+      properties: {commentaireCompoLotMateriel: null, dateCre: null, dateMaj: null,
+        id: null, nbIndividus: null, userCre: null, userMaj: null}
+    country:
+      class: Bbees\E3sBundle\Entity\Pays
+      properties: {codePays: null, dateCre: null, dateMaj: null, id: null, nomPays: null,
+        userCre: null, userMaj: null}
+    dna:
+      association_classes: {boiteFk: Bbees\E3sBundle\Entity\Boite, datePrecisionVocFk: Bbees\E3sBundle\Entity\Voc,
+        individuFk: Bbees\E3sBundle\Entity\Individu, methodeExtractionAdnVocFk: Bbees\E3sBundle\Entity\Voc,
+        qualiteAdnVocFk: Bbees\E3sBundle\Entity\Voc}
+      class: Bbees\E3sBundle\Entity\Adn
+      properties: {codeAdn: null, commentaireAdn: null, concentrationNgMicrolitre: null,
+        dateAdn: null, dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
+    dna_is_extracted_by:
+      association_classes: {adnFk: Bbees\E3sBundle\Entity\Adn, personneFk: Bbees\E3sBundle\Entity\Personne}
+      class: Bbees\E3sBundle\Entity\AdnEstRealisePar
+      properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
+    external_biological_material:
+      association_classes: {collecteFk: Bbees\E3sBundle\Entity\Collecte, datePrecisionVocFk: Bbees\E3sBundle\Entity\Voc,
+        nbIndividusVocFk: Bbees\E3sBundle\Entity\Voc, pigmentationVocFk: Bbees\E3sBundle\Entity\Voc,
+        yeuxVocFk: Bbees\E3sBundle\Entity\Voc}
+      class: Bbees\E3sBundle\Entity\LotMaterielExt
+      properties: {codeLotMaterielExt: null, commentaireLotMaterielExt: null, commentaireNbIndividus: null,
+        dateCre: null, dateCreationLotMaterielExt: null, dateMaj: null, id: null,
+        userCre: null, userMaj: null}
+    external_biological_material_is_processed_by:
+      association_classes: {lotMaterielExtFk: Bbees\E3sBundle\Entity\LotMaterielExt,
+        personneFk: Bbees\E3sBundle\Entity\Personne}
+      class: Bbees\E3sBundle\Entity\LotMaterielExtEstRealisePar
+      properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
+    external_biological_material_is_published_in:
+      association_classes: {lotMaterielExtFk: Bbees\E3sBundle\Entity\LotMaterielExt,
+        sourceFk: Bbees\E3sBundle\Entity\Source}
+      class: Bbees\E3sBundle\Entity\LotMaterielExtEstReferenceDans
+      properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
+    external_sequence:
+      association_classes: {collecteFk: Bbees\E3sBundle\Entity\Collecte, datePrecisionVocFk: Bbees\E3sBundle\Entity\Voc,
+        geneVocFk: Bbees\E3sBundle\Entity\Voc, origineSqcAssExtVocFk: Bbees\E3sBundle\Entity\Voc,
+        statutSqcAssVocFk: Bbees\E3sBundle\Entity\Voc}
+      class: Bbees\E3sBundle\Entity\SequenceAssembleeExt
+      properties: {accessionNumberSqcAssExt: null, codeSqcAssExt: null, codeSqcAssExtAlignement: null,
+        commentaireSqcAssExt: null, dateCre: null, dateCreationSqcAssExt: null, dateMaj: null,
+        id: null, numIndividuSqcAssExt: null, taxonOrigineSqcAssExt: null, userCre: null,
+        userMaj: null}
+    external_sequence_is_entered_by:
+      association_classes: {personneFk: Bbees\E3sBundle\Entity\Personne, sequenceAssembleeExtFk: Bbees\E3sBundle\Entity\SequenceAssembleeExt}
+      class: Bbees\E3sBundle\Entity\SqcExtEstRealisePar
+      properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
+    external_sequence_is_published_in:
+      association_classes: {sequenceAssembleeExtFk: Bbees\E3sBundle\Entity\SequenceAssembleeExt,
+        sourceFk: Bbees\E3sBundle\Entity\Source}
+      class: Bbees\E3sBundle\Entity\SqcExtEstReferenceDans
+      properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
+    has_targeted_taxa:
+      association_classes: {collecteFk: Bbees\E3sBundle\Entity\Collecte, referentielTaxonFk: Bbees\E3sBundle\Entity\ReferentielTaxon}
+      class: Bbees\E3sBundle\Entity\ACibler
+      properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
+    identified_species:
+      association_classes: {critereentificationVocFk: Bbees\E3sBundle\Entity\Voc,
+        datePrecisionVocFk: Bbees\E3sBundle\Entity\Voc, individuFk: Bbees\E3sBundle\Entity\Individu,
+        lotMaterielExtFk: Bbees\E3sBundle\Entity\LotMaterielExt, lotMaterielFk: Bbees\E3sBundle\Entity\LotMateriel,
+        referentielTaxonFk: Bbees\E3sBundle\Entity\ReferentielTaxon, sequenceAssembleeExtFk: Bbees\E3sBundle\Entity\SequenceAssembleeExt,
+        sequenceAssembleeFk: Bbees\E3sBundle\Entity\SequenceAssemblee}
+      class: Bbees\E3sBundle\Entity\EspeceIdentifiee
+      properties: {commentaireEspId: null, dateCre: null, dateIdentification: null,
+        dateMaj: null, id: null, userCre: null, userMaj: null}
+    institution:
+      class: Bbees\E3sBundle\Entity\Etablissement
+      properties: {commentaireEtablissement: null, dateCre: null, dateMaj: null, id: null,
+        nomEtablissement: null, userCre: null, userMaj: null}
+    internal_biological_material:
+      association_classes: {boiteFk: Bbees\E3sBundle\Entity\Boite, collecteFk: Bbees\E3sBundle\Entity\Collecte,
+        datePrecisionVocFk: Bbees\E3sBundle\Entity\Voc, pigmentationVocFk: Bbees\E3sBundle\Entity\Voc,
+        yeuxVocFk: Bbees\E3sBundle\Entity\Voc}
+      class: Bbees\E3sBundle\Entity\LotMateriel
+      properties: {aFaire: null, codeLotMateriel: null, commentaireConseilSqc: null,
+        commentaireLotMateriel: null, dateCre: null, dateLotMateriel: null, dateMaj: null,
+        id: null, userCre: null, userMaj: null}
+    internal_biological_material_is_published_in:
+      association_classes: {lotMaterielFk: Bbees\E3sBundle\Entity\LotMateriel, sourceFk: Bbees\E3sBundle\Entity\Source}
+      class: Bbees\E3sBundle\Entity\LotEstPublieDans
+      properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
+    internal_sequence:
+      association_classes: {datePrecisionVocFk: Bbees\E3sBundle\Entity\Voc, statutSqcAssVocFk: Bbees\E3sBundle\Entity\Voc}
+      class: Bbees\E3sBundle\Entity\SequenceAssemblee
+      properties: {accessionNumber: null, codeSqcAlignement: null, codeSqcAss: null,
+        commentaireSqcAss: null, dateCre: null, dateCreationSqcAss: null, dateMaj: null,
+        id: null, userCre: null, userMaj: null}
+    internal_sequence_is_assembled_by:
+      association_classes: {personneFk: Bbees\E3sBundle\Entity\Personne, sequenceAssembleeFk: Bbees\E3sBundle\Entity\SequenceAssemblee}
+      class: Bbees\E3sBundle\Entity\SequenceAssembleeEstRealisePar
+      properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
+    internal_sequence_is_published_in:
+      association_classes: {sequenceAssembleeFk: Bbees\E3sBundle\Entity\SequenceAssemblee,
+        sourceFk: Bbees\E3sBundle\Entity\Source}
+      class: Bbees\E3sBundle\Entity\SqcEstPublieDans
+      properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
+    motu:
+      class: Bbees\E3sBundle\Entity\Motu
+      properties: {commentaireMotu: null, dateCre: null, dateMaj: null, dateMotu: null,
+        id: null, libelleMotu: null, nomFichierCsv: null, userCre: null, userMaj: null}
+    motu_is_generated_by:
+      association_classes: {motuFk: Bbees\E3sBundle\Entity\Motu, personneFk: Bbees\E3sBundle\Entity\Personne}
+      class: Bbees\E3sBundle\Entity\MotuEstGenerePar
+      properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
+    motu_number:
+      association_classes: {methodeMotuVocFk: Bbees\E3sBundle\Entity\Voc, motuFk: Bbees\E3sBundle\Entity\Motu,
+        sequenceAssembleeExtFk: Bbees\E3sBundle\Entity\SequenceAssembleeExt, sequenceAssembleeFk: Bbees\E3sBundle\Entity\SequenceAssemblee}
+      class: Bbees\E3sBundle\Entity\Assigne
+      properties: {dateCre: null, dateMaj: null, id: null, numMotu: null, userCre: null,
+        userMaj: null}
+    municipality:
+      association_classes: {paysFk: Bbees\E3sBundle\Entity\Pays}
+      class: Bbees\E3sBundle\Entity\Commune
+      properties: {codeCommune: null, dateCre: null, dateMaj: null, id: null, nomCommune: null,
+        nomRegion: null, userCre: null, userMaj: null}
+    pcr:
+      association_classes: {adnFk: Bbees\E3sBundle\Entity\Adn, datePrecisionVocFk: Bbees\E3sBundle\Entity\Voc,
+        geneVocFk: Bbees\E3sBundle\Entity\Voc, primerPcrEndVocFk: Bbees\E3sBundle\Entity\Voc,
+        primerPcrStartVocFk: Bbees\E3sBundle\Entity\Voc, qualitePcrVocFk: Bbees\E3sBundle\Entity\Voc,
+        specificiteVocFk: Bbees\E3sBundle\Entity\Voc}
+      class: Bbees\E3sBundle\Entity\Pcr
+      properties: {codePcr: null, dateCre: null, dateMaj: null, datePcr: null, detailPcr: null,
+        id: null, numPcr: null, remarquePcr: null, userCre: null, userMaj: null}
+    pcr_is_done_by:
+      association_classes: {pcrFk: Bbees\E3sBundle\Entity\Pcr, personneFk: Bbees\E3sBundle\Entity\Personne}
+      class: Bbees\E3sBundle\Entity\PcrEstRealisePar
+      properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
+    person:
+      association_classes: {etablissementFk: Bbees\E3sBundle\Entity\Etablissement}
+      class: Bbees\E3sBundle\Entity\Personne
+      properties: {commentairePersonne: null, dateCre: null, dateMaj: null, id: null,
+        nomComplet: null, nomPersonne: null, nomPersonneRef: null, userCre: null,
+        userMaj: null}
+    program:
+      class: Bbees\E3sBundle\Entity\Programme
+      properties: {anneeDebut: null, anneeFin: null, codeProgramme: null, commentaireProgramme: null,
+        dateCre: null, dateMaj: null, id: null, nomProgramme: null, nomsResponsables: null,
+        typeFinanceur: null, userCre: null, userMaj: null}
+    sample_is_fixed_with:
+      association_classes: {collecteFk: Bbees\E3sBundle\Entity\Collecte, fixateurVocFk: Bbees\E3sBundle\Entity\Voc}
+      class: Bbees\E3sBundle\Entity\APourFixateur
+      properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
+    sampling:
+      association_classes: {datePrecisionVocFk: Bbees\E3sBundle\Entity\Voc, legVocFk: Bbees\E3sBundle\Entity\Voc,
+        stationFk: Bbees\E3sBundle\Entity\Station}
+      class: Bbees\E3sBundle\Entity\Collecte
+      properties: {aFaire: null, codeCollecte: null, commentaireCollecte: null, conductiviteMicroSieCm: null,
+        dateCollecte: null, dateCre: null, dateMaj: null, dureeEchantillonnageMn: null,
+        id: null, temperatureC: null, userCre: null, userMaj: null}
+    sampling_is_done_with_method:
+      association_classes: {collecteFk: Bbees\E3sBundle\Entity\Collecte, samplingMethodVocFk: Bbees\E3sBundle\Entity\Voc}
+      class: Bbees\E3sBundle\Entity\APourSamplingMethod
+      properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
+    sampling_is_funded_by:
+      association_classes: {collecteFk: Bbees\E3sBundle\Entity\Collecte, programmeFk: Bbees\E3sBundle\Entity\Programme}
+      class: Bbees\E3sBundle\Entity\EstFinancePar
+      properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
+    sampling_is_performed_by:
+      association_classes: {collecteFk: Bbees\E3sBundle\Entity\Collecte, personneFk: Bbees\E3sBundle\Entity\Personne}
+      class: Bbees\E3sBundle\Entity\EstEffectuePar
+      properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
+    site:
+      association_classes: {communeFk: Bbees\E3sBundle\Entity\Commune, habitatTypeVocFk: Bbees\E3sBundle\Entity\Voc,
+        paysFk: Bbees\E3sBundle\Entity\Pays, pointAccesVocFk: Bbees\E3sBundle\Entity\Voc,
+        precisionLatLongVocFk: Bbees\E3sBundle\Entity\Voc}
+      class: Bbees\E3sBundle\Entity\Station
+      properties: {altitudeM: null, codeStation: null, commentaireStation: null, dateCre: null,
+        dateMaj: null, id: null, infoDescription: null, infoLocalisation: null, latDegDec: null,
+        longDegDec: null, nomStation: null, userCre: null, userMaj: null}
+    slide_is_mounted_by:
+      association_classes: {individuLameFk: Bbees\E3sBundle\Entity\IndividuLame, personneFk: Bbees\E3sBundle\Entity\Personne}
+      class: Bbees\E3sBundle\Entity\IndividuLameEstRealisePar
+      properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
+    source:
+      class: Bbees\E3sBundle\Entity\Source
+      properties: {anneeSource: null, codeSource: null, commentaireSource: null, dateCre: null,
+        dateMaj: null, id: null, libelleSource: null, userCre: null, userMaj: null}
+    source_is_entered_by:
+      association_classes: {personneFk: Bbees\E3sBundle\Entity\Personne, sourceFk: Bbees\E3sBundle\Entity\Source}
+      class: Bbees\E3sBundle\Entity\SourceAEteIntegrePar
+      properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
+    species_is_identified_by:
+      association_classes: {especeentifieeFk: Bbees\E3sBundle\Entity\EspeceIdentifiee,
+        personneFk: Bbees\E3sBundle\Entity\Personne}
+      class: Bbees\E3sBundle\Entity\EstIdentifiePar
+      properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
+    specimen:
+      association_classes: {lotMaterielFk: Bbees\E3sBundle\Entity\LotMateriel, typeIndividuVocFk: Bbees\E3sBundle\Entity\Voc}
+      class: Bbees\E3sBundle\Entity\Individu
+      properties: {codeIndBiomol: null, codeIndTriMorpho: null, codeTube: null, commentaireInd: null,
+        dateCre: null, dateMaj: null, id: null, numIndBiomol: null, userCre: null,
+        userMaj: null}
+    specimen_slide:
+      association_classes: {boiteFk: Bbees\E3sBundle\Entity\Boite, datePrecisionVocFk: Bbees\E3sBundle\Entity\Voc,
+        individuFk: Bbees\E3sBundle\Entity\Individu}
+      class: Bbees\E3sBundle\Entity\IndividuLame
+      properties: {codeLameColl: null, commentaireLame: null, dateCre: null, dateLame: null,
+        dateMaj: null, id: null, libelleLame: null, nomDossierPhotos: null, userCre: null,
+        userMaj: null}
+    storage_box:
+      association_classes: {codeCollectionVocFk: Bbees\E3sBundle\Entity\Voc, typeBoiteVocFk: Bbees\E3sBundle\Entity\Voc,
+        typeCollectionVocFk: Bbees\E3sBundle\Entity\Voc}
+      class: Bbees\E3sBundle\Entity\Boite
+      properties: {codeBoite: null, commentaireBoite: null, dateCre: null, dateMaj: null,
+        id: null, libelleBoite: null, libelleCollection: null, userCre: null, userMaj: null}
+    taxon:
+      class: Bbees\E3sBundle\Entity\ReferentielTaxon
+      properties: {clade: null, codeTaxon: null, commentaireRef: null, dateCre: null,
+        dateMaj: null, family: null, genus: null, id: null, objectif: null, species: null,
+        subclass: null, subspecies: null, taxnameRef: null, taxon_name: null, taxon_order: null,
+        taxon_rank: null, taxon_validity: null, userCre: null, userMaj: null}
+    vocabulary:
+      class: Bbees\E3sBundle\Entity\Voc
+      properties: {code: null, dateCre: null, dateMaj: null, id: null, parent: null,
+        userCre: null, userMaj: null, voc_comments: null, vocabulary_title: null}

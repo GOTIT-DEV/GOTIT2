@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use FL\QBJSParserBundle\Service\JavascriptBuilders;
 use Symfony\Component\HttpFoundation\Request;
 use Bbees\E3sBundle\Entity;
-use Doctrine\Persistence\Mapping\ClassMetadata;
 
 /**
  * Controller for querying COI sampling coverage
@@ -21,23 +20,28 @@ use Doctrine\Persistence\Mapping\ClassMetadata;
 class DefaultController extends Controller
 {
     /**
-     * @Route("/", name="query_builder_index")
+<<<<<<< HEAD
+   * @Route("/", name="query_builder_index")
+   * Index : render query form interface
+   */
+    public function indexAction()
+    {
+        return $this->render('@LehnaQueryBuilder/index.html.twig');
+=======
+     * @Route("/", name="query_index")
      * Index : render query form interface
      */
     public function indexAction()
     {
         $x = $this->getDoctrine()->getConnection()->getSchemaManager();
-        $x = $this->getDoctrine()->getManager();
+        $x = $this->getDoctrine()-> getManager();
         // $bundle = $this->getKernel()->getBundle("BbeesE3sBundle");
         // $meta = $x->getMetadataFactory()->getBundleMetadata($bundle);
         $meta = $x->getMetadataFactory()->getAllMetadata();
-
-        // dump($meta[0]);
-        // dump($meta[0]->fieldMappings)
-
-        return $this->render('@LehnaQueryBuilder/index.html.twig', [
-            "meta" => $meta[0]#->getAssociationMappings()
-        ]);
+        dump($meta);
+        dump($meta[0]->fieldMappings);#getFieldMapping("codeCommune"));
+        return $this->render('@LehnaQueryBuilder/Default/index.html.twig');
+>>>>>>> 1c6bed15... Running tests on QBJSParserBundle
     }
 
     /**
@@ -46,38 +50,36 @@ class DefaultController extends Controller
      */
     public function init_builders()
     {
-        $x = $this->getDoctrine()->getConnection()->getSchemaManager();
-        $x = $this->getDoctrine()->getManager();
-        // $bundle = $this->getKernel()->getBundle("BbeesE3sBundle");
-        // $meta = $x->getMetadataFactory()->getBundleMetadata($bundle);
-        $meta = $x->getMetadataFactory()->getAllMetadata();
+        // dump($sm->listTableForeignKeys("dna"));
+        $builders = $this->get('fl_qbjs_parser.javascript_builders')->getBuilders();
+        
+        
+        // $foreign_keys = $sm->listTableForeignKeys("dna");
+        // dump($foreign_keys);
+        
+        $builders_array = array_map(
+            function ($b) {
+                $builder_data = json_decode($b->getJsonString(), true);
+                $extra_data = [
+                    "class" => $b->getClassName(),
+                    "name" => $b->getHumanReadableName()
+                ];
+                $sm = $this->getDoctrine()->getConnection()->getSchemaManager();
+                $foreign_keys = $sm->listTableForeignKeys($extra_data['name']);
+               
+                $related = array_map(
+                    function ($fk) {
+                        return $fk->getForeignTableName();
+                    },
+                    $foreign_keys
+                );
 
-        // dump($meta[0]);
-        // dump($meta[0]->fieldMappings);#getFieldMapping("codeCommune"));
-
-        $res = $this->parse_metadata($meta[0]);
-        return new JsonResponse($res);
+                return array_merge($builder_data, $extra_data, ["related" => $related]);
+            },
+            $builders
+        );
+        return new JsonResponse($builders_array);
     }
-    private function parse_metadata(ClassMetadata $metadata)
-    {
-        $make_filter = function ($field) {
-            return [
-                "id" => $field['fieldName'],
-                "label" => $field['fieldName'],
-                "type" => $field['type']
-            ];
-        };
-        $entity = $metadata->name;
-        $filters = array_map($make_filter, $metadata->fieldMappings);
-        $relations = 
-        return [
-            "class" => $entity,
-            "filters" => $filters,
-            "human_readable_name" => $entity,
-            "table" => $metadata->table["name"]
-        ];
-    }
-
 
     /**
      * @Route("/parser-test", name="parser-test", methods={"POST"})

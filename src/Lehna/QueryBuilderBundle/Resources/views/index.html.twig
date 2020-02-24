@@ -14,13 +14,14 @@
 
 {% block body %}
 
-
+{{ dump(meta) }}
 	<div class='row'>
 		<div
 			class="col-xs-12">
 			{# Formulaire #}
 			{% include '@LehnaQueryBuilder/form.html.twig' %}
 		</div>
+
 		<hr>
 		<div>
 			<h2 id="results-title">
@@ -40,6 +41,8 @@
 	{{ parent() }}
 	<!-- Query Builder -->
 	<script src="{{ asset('e3s/vendors/queryBuilder/query-builder.standalone.min.js') }}"></script>
+	<script src="{{ asset('bundles/lehnaquerybuilder/js/main.js') }}"></script>
 	<!-- interactive js for the form aspect and data included-->
-	<script src="{{ asset('e3s/bundles/lehnaquerybuilder/js/demo-basic.js') }}"></script>
+	<script src="{{ asset('bundles/lehnaquerybuilder/js/demo-basic.js') }}"></script>
 {% endblock %}
+

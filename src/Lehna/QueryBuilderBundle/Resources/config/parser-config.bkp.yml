@@ -1,0 +1,74 @@
+fl_qbjs_parser:
+  builders: # these are used for service fl_qbjs_parser.builders
+    boite_builder:
+      class: Bbees\E3sBundle\Entity\Boite # this class must exist in doctrine_class_and_mappings
+      human_readable_name: "Boite"
+      # result_columns
+      # Not being used inside the bundle, but you can use them in your own way
+      # Make sure not to use OnetoMany or ManyToMany properties here. That makes no sense!
+      # I.e. You can use direct properties of the class, ManyToOne, and OneToOne properties.
+      result_columns:
+        - column_machine_name: id
+          column_human_readable_name: ID
+        - column_machine_name: codeBoite
+          column_human_readable_name: Code Boite
+        - column_machine_name: libelleBoite
+          column_human_readable_name: Libellé Boite
+      filters:
+        - id: codeBoite
+          label: "Code Boite"
+          type: string # string, integer, double, date, time, datetime, boolean
+          # omit operators and get sensible defaults
+          # string operators [equal, not_equal, is_null, is_not_null,begins_with, not_begins_with, contains, not_contains, ends_with, not_ends_with, is_empty, is_not_empty]
+          # numeric/date operators [equal, not_equal, is_null, is_not_null, less, less_or_equal, greater, greater_or_equal, between, not_between]
+          # boolean operators [equal, not_equal, is_null, is_not_null]
+        - id: libelleBoite
+          label: "Libelle Boite"
+          type: string
+          operators:
+            [
+              equal,
+              not_equal,
+              less,
+              less_or_equal,
+              greater,
+              greater_or_equal,
+              between,
+              not_between,
+              is_null,
+              is_not_null,
+            ]
+
+  doctrine_classes_and_mappings:
+    entity_boite: # this key is for organizational purposes only
+      class: Bbees\E3sBundle\Entity\Boite # Class Name of a Doctrine Entity
+      properties: # required
+        # Keys sent by QueryBuilderJS in a jsonString
+        # Values should be visible property (public or by getter) in your entity
+        # They can also be associations and their properties
+        # Leave the value as null (~) to use the same value as the key
+        id: id
+        codeBoite: codeBoite
+        libelleBoite: libelleBoite
+      # association_classes:
+      #   # Indicate the class for each of the associations in properties
+      #   labels: AppBundle\Entity\Label
+      #   labels.authors: AppBundle\Entity\Author
+      #   labels.authors.address: AppBundle\Entity\Address
+      #   author: AppBundle\Entity\Author
+      # Now supporting embeddables!
+      # embeddables_properties:
+      #   availability.startDate: ~
+      #   availability.endDate: ~
+      #   labels.availability.startDate: ~
+      #   labels.availability.endDate: ~
+      #   price.amount: ~
+      # embeddables_inside_embeddables_properties:
+      #   price.currency.code: ~
+      # embeddables_association_classes:
+      #   labels: AppBundle\Entity\Label
+      # embeddables_embeddable_classes:
+      #   availability: League\Period\Period
+      #   labels.availability: League\Period\Period
+      #   price: Money\Money
+      #   price.currency: Money\Currency
