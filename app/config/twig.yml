@@ -4,6 +4,19 @@ twig:
   strict_variables: "%kernel.debug%"
   globals:
     navbar_menu_entries:
+      # USAGE :
+      # - route: nav link route name (~ for non-link menu wrappers)
+      #   icon: link icon (font awesome class)
+      #   text : link text
+      #   auth_required: (optional) user privilege/role required
+      #   children : [] -> no sub-navs
+      #     - route: sub-nav link route name
+      #       text: sub-nav link text
+      #       auth_required: (optional)
+      #       route_args: (optional)
+      #         key : value
+      #         ...
+
       - route: default_index
         icon: fas fa-home
         text: title.Dashboard
@@ -19,7 +32,7 @@ twig:
       - route: ~
         icon: fas fa-microscope
         text: title.Analyse morphologique
-        children: 
+        children:
           - route: lotmateriel_index
             text: title.lotmateriel
           - route: individu_index
@@ -31,11 +44,11 @@ twig:
       - route: ~
         icon: fas fa-flask
         text: title.Analyses génétiques
-        children: 
+        children:
           - route: adn_index
             text: title.adn
           - route: pcr_index
-            text: title.pcr 
+            text: title.pcr
           - route: chromatogramme_index
             text: title.chromatogramme
       - route: ~
@@ -53,15 +66,15 @@ twig:
         icon: fas fa-tasks
         children:
           - route: boite_index
-            route_args: 
+            route_args:
               typeBoite: LOT
             text: title.lotmateriel
           - route: boite_index
-            route_args: 
+            route_args:
               typeBoite: LAME
             text: title.individulame
           - route: boite_index
-            route_args: 
+            route_args:
               typeBoite: ADN
             text: title.adn
       - route: source_index
@@ -72,7 +85,7 @@ twig:
         text: title.Référentiels
         icon: fas fa-lock
         auth_required: ROLE_ADMIN
-        children: 
+        children:
           - route: voc_index
             text: title.voc
           - route: referentieltaxon_index
@@ -100,7 +113,7 @@ twig:
         trans: queries
         icon: fas fa-search
         auth_required: ROLE_INVITED
-        children: 
+        children:
           - route: co1-sampling
             text: queries.sampling.nav
           - route: assign-motu
@@ -111,7 +124,3 @@ twig:
             text: queries.distribution.nav
           - route: consistency
             text: queries.concordance.nav
-      
-
-          
-

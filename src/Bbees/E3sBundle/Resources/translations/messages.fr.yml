@@ -577,6 +577,12 @@ Commentaire user: Commentaires utilisateur
 Locale: Version
 buton.NewUser: Créer un nouvel utilisateur
 title.user: Utilisateur
+title.users: Utilisateurs
 list.User cre: User Create
 list.User maj: User Update
 title.Personne: Personne
+ROLE_ADMIN: ADMIN
+ROLE_PROJECT: MEMBRE PROJET
+ROLE_COLLABORATION: MEMBRE COLLABORATION
+ROLE_INVITED: INVITÉ
+Profile: Profil utilisateur
