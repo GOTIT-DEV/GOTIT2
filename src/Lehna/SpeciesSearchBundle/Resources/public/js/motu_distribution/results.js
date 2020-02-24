@@ -21,7 +21,7 @@ const form = $("#main-form")
 const renderNumber = $.fn.dataTable.render.number('', '.', 3)
 const columns = [
   dtconfig.expandColumn, {
-    data: "taxname",
+    data: "taxon_name",
     render: linkify("referentieltaxon_show", { col: 'taxon_id' })
   }, {
     data: 'code',
