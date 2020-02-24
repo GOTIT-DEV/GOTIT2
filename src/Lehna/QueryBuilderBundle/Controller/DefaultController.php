@@ -15,11 +15,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class DefaultController extends Controller
 {
     /**
-   * @Route("/", name="query_index")
+   * @Route("/", name="query_builder_index")
    * Index : render query form interface
    */
     public function indexAction()
     {
-        return $this->render('@LehnaQueryBuilder/Default/index.html.twig');
+        return $this->render('@LehnaQueryBuilder/index.html.twig');
     }
 }

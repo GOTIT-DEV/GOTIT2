@@ -1,0 +1,129 @@
+<form id="main-form" action="#">
+	<legend>
+		<h2 style='margin-bottom:18px'>
+			Query fields
+		</h2>
+	</legend>
+
+</div>
+<div class="row">
+	<div class="col-xs-12 col-md-5 col-lg-5" style="padding-left:25px">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-xs-12 col-sm-7">
+						<div class="form-group">
+							<label class="control-label" for="niveau">
+								Table
+							</label>
+							<div class="btn-group bootstrap-select form-control" data-original-title="" title=""></div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-5">
+						<div class="form-horizontal">
+							<div class="form-group">
+								<div class="checkbox checkbox-inline">
+									<label class="control-label" title data-toggle="tooltip" data-placement="right">
+										<input type="checkbox" value="2" data-toggle="collapse" data-target="#collapseConstraints" class="collapsed" aria-expanded="false">
+										<strong>
+											Contraintes
+										</strong>
+										<i class="fas fa-spinner fa-spin pull-right hidden" id="method-spinner" style="font-size:16px"></i>
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel-collapse collapse col-xs-12" id="collapseConstraints" aria-expanded="false">
+		<div class="col-xs-12 col-sm-5 col-sm col-lg-4" style="padding-left:20px">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<div class="form-check">
+						<strong>
+							Choix des champs
+						</strong>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-2 col-sm-8">
+			<div id="builder-basic"></div>
+		</div>
+	</div>
+	<div class="col-xs-12 btn-group pull-left group-actions">
+		<button class="btn btn-xs btn-basic collapsed" type="button" data-toggle="collapse" data-target="#collapseTables" aria-expanded="true" aria-controls="collapseTables">
+			<i class="glyphicon glyphicon-plus-sign" style="font-size:25px" ;></i>
+		</button>
+	</div>
+	<div class="col-xs-12 col-sm-8" style="padding-left:25px">
+		<div class="panel panel-default collapse " id="collapseTables">
+			<div class="panel-heading">
+				<strong>Nouvelle sélection</strong>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-xs-12 col-sm-4">
+						<label for="lot-materiel" class="control-label">
+							Table précédente</label>
+						<div class="btn-group bootstrap-select form-control concordance"></div>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<label for="individu" class="control-label">
+							Choix jointure
+						</label>
+						<div class="btn-group bootstrap-select form-control concordance"></div>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<label for="sequence" class="control-label">
+							Table adjacente
+						</label>
+						<div class="btn-group bootstrap-select form-control concordance"></div>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<div class="form-group">
+							<div class="checkbox checkbox-inline">
+								<label class="control-label" title data-toggle="tooltip" data-placement="right">
+									<input type="checkbox" value="2" data-toggle="collapse" data-target="#collapseConstraints2" class="collapsed" aria-expanded="false">
+									<strong>
+										Contraintes
+									</strong>
+									<i class="fas fa-spinner fa-spin pull-right hidden" id="method-spinner" style="font-size:16px"></i>
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="panel-collapse collapse col-xs-12" id="collapseConstraints2" aria-expanded="false">
+			<div class="col-xs-12 col-sm-5 col-sm col-lg-4" style="padding-left:20px">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class="form-check">
+							<strong>
+								Choix des champs
+							</strong>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-2 col-sm-8">
+				<div id="builder-basic"></div>
+			</div>
+		</div>
+		<div>
+			<center>
+				<button type="submit" href="#resultats" value="Rechercher" class="btn btn-primary btn-lg" id="submit-button" style="min-width: 10em" data-loading-text="<i class='fas fa-spinner fa-spin'></i>">
+					{% trans %}
+					Search
+					{% endtrans %}
+				</button>
+			</center>
+		</div>
+	</div>
+</form>

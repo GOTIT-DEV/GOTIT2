@@ -124,7 +124,7 @@ twig:
             text: queries.distribution.nav
           - route: consistency
             text: queries.concordance.nav
-      - route: query_index
+      - route: query_builder_index
         text: Query Builder
         icon: fas fa-search
         auth_required: ROLE_COLLABORATION
