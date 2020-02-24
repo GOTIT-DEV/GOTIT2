@@ -3,7 +3,8 @@
 import yaml
 import os
 
-DIR = "src/Bbees/E3sBundle/Resources/config/doctrine/metadata/orm"
+# DIR = "src/Bbees/E3sBundle/Resources/config/doctrine/metadata/orm"
+DIR = "/home/louis/Bureau/test/"
 OUTPUT = "src/Lehna/QueryBuilderBundle/Resources/config/parser-config.yml"
 TEST_FILE = os.path.join(DIR, "Adn.orm.yml")
 
@@ -35,7 +36,7 @@ def generate_config(orm_dir=DIR, out_file=OUTPUT):
 
 
 def parse_file(file_path):
-    name = os.path.basename(file_path).split('.')[0]
+    name = os.path.basename(file_path).split('.')[-3]
     print(name)
     output = {
         "filters": [],
@@ -43,7 +44,7 @@ def parse_file(file_path):
         "class": CLASS_PREFIX + name,
     }
     with open(file_path, 'r') as fh:
-        entity = yaml.safe_load(fh)[name]
+        entity = next(iter(yaml.safe_load(fh).values()))
         table = entity["table"]
     
         output["human_readable_name"] = table

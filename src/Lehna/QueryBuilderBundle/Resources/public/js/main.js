@@ -4,22 +4,23 @@ $(document).ready(_ => {
     .then(response => response.json())
     .then(builders => {
       console.log(builders);
-      let qbuilder_block = $(".query-builder")
+      let qbuilder_block = $("#builder-basic")
       
-      // Set to table "Boite"
-      qbuilder_block.queryBuilder({filters: builders.chromatogram.filters});
+      // Set to table "Commune"
+      qbuilder_block.queryBuilder({filters: builders.Commune.filters});
 
       $("#main-form").submit(event => {
         event.preventDefault()
         $(this).find("button[type='submit']").button('loading')
-
-        // let formData = new FormData(event.target)
+        console.log(qbuilder_block[0].queryBuilder.getSQL('questioon_mark'))
+        console.log(qbuilder_block[0].queryBuilder.getRules())
         fetch("parser-test", {
           method: 'POST', 
           body: JSON.stringify(qbuilder_block[0].queryBuilder.getRules()),
           headers: new Headers({ 'Content-Type': 'application/json'}) ,
           credentials: 'include'
-        }).then(response => console.log(response.json()))
+        }).then(response => response.json())
+        .then(json => console.log(json))
       })
     })
 })

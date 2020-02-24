@@ -250,6 +250,7 @@ fl_qbjs_parser:
       class: Bbees\E3sBundle\Entity\Motu
       filters:
       - {id: id, label: id, type: integer}
+      - {id: libelleMotu, label: libelleMotu, type: string}
       - {id: nomFichierCsv, label: nomFichierCsv, type: string}
       - {id: dateMotu, label: dateMotu, type: date}
       - {id: commentaireMotu, label: commentaireMotu, type: string}
@@ -257,7 +258,6 @@ fl_qbjs_parser:
       - {id: dateMaj, label: dateMaj, type: datetime}
       - {id: userCre, label: userCre, type: integer}
       - {id: userMaj, label: userMaj, type: integer}
-      - {id: libelleMotu, label: libelleMotu, type: string}
       human_readable_name: motu
       result_columns: []
     motu_is_generated_by:
@@ -505,7 +505,6 @@ fl_qbjs_parser:
       - {id: id, label: id, type: integer}
       - {id: codeBoite, label: codeBoite, type: string}
       - {id: libelleBoite, label: libelleBoite, type: string}
-      - {id: libelleCollection, label: libelleCollection, type: string}
       - {id: commentaireBoite, label: commentaireBoite, type: string}
       - {id: dateCre, label: dateCre, type: datetime}
       - {id: dateMaj, label: dateMaj, type: datetime}
@@ -517,18 +516,18 @@ fl_qbjs_parser:
       class: Bbees\E3sBundle\Entity\ReferentielTaxon
       filters:
       - {id: id, label: id, type: integer}
-      - {id: taxon_name, label: taxon_name, type: string}
-      - {id: taxon_rank, label: taxon_rank, type: string}
+      - {id: taxname, label: taxname, type: string}
+      - {id: taxonFullName, label: taxonFullName, type: string}
+      - {id: rank, label: rank, type: string}
       - {id: subclass, label: subclass, type: string}
-      - {id: taxon_order, label: taxon_order, type: string}
+      - {id: ordre, label: ordre, type: string}
       - {id: family, label: family, type: string}
       - {id: genus, label: genus, type: string}
       - {id: species, label: species, type: string}
       - {id: subspecies, label: subspecies, type: string}
-      - {id: taxon_validity, label: taxon_validity, type: integer}
+      - {id: validity, label: validity, type: integer}
       - {id: codeTaxon, label: codeTaxon, type: string}
       - {id: commentaireRef, label: commentaireRef, type: string}
-      - {id: objectif, label: objectif, type: string}
       - {id: clade, label: clade, type: string}
       - {id: taxnameRef, label: taxnameRef, type: string}
       - {id: dateCre, label: dateCre, type: datetime}
@@ -542,9 +541,9 @@ fl_qbjs_parser:
       filters:
       - {id: id, label: id, type: integer}
       - {id: code, label: code, type: string}
-      - {id: vocabulary_title, label: vocabulary_title, type: string}
+      - {id: libelle, label: libelle, type: string}
       - {id: parent, label: parent, type: string}
-      - {id: voc_comments, label: voc_comments, type: string}
+      - {id: commentaire, label: commentaire, type: string}
       - {id: dateCre, label: dateCre, type: datetime}
       - {id: dateMaj, label: dateMaj, type: datetime}
       - {id: userCre, label: userCre, type: integer}
@@ -553,23 +552,25 @@ fl_qbjs_parser:
       result_columns: []
   doctrine_classes_and_mappings:
     Internal_biological_material_is_treated_by:
-      association_classes: {lotMaterielFk: Bbees\E3sBundle\Entity\LotMateriel, personneFk: Bbees\E3sBundle\Entity\Personne}
+      association_classes: {lotMaterielFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\LotMateriel,
+        personneFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Personne}
       class: Bbees\E3sBundle\Entity\LotMaterielEstRealisePar
       properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
     chromatogram:
-      association_classes: {etablissementFk: Bbees\E3sBundle\Entity\Etablissement,
-        pcrFk: Bbees\E3sBundle\Entity\Pcr, primerChromatoVocFk: Bbees\E3sBundle\Entity\Voc,
-        qualiteChromatoVocFk: Bbees\E3sBundle\Entity\Voc}
+      association_classes: {etablissementFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Etablissement,
+        pcrFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Pcr, primerChromatoVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc,
+        qualiteChromatoVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc}
       class: Bbees\E3sBundle\Entity\Chromatogramme
       properties: {codeChromato: null, commentaireChromato: null, dateCre: null, dateMaj: null,
         id: null, numYas: null, userCre: null, userMaj: null}
     chromatogram_is_processed_to:
-      association_classes: {chromatogrammeFk: Bbees\E3sBundle\Entity\Chromatogramme,
-        sequenceAssembleeFk: Bbees\E3sBundle\Entity\SequenceAssemblee}
+      association_classes: {chromatogrammeFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Chromatogramme,
+        sequenceAssembleeFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\SequenceAssemblee}
       class: Bbees\E3sBundle\Entity\EstAligneEtTraite
       properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
     composition_of_internal_biological_material:
-      association_classes: {lotMaterielFk: Bbees\E3sBundle\Entity\LotMateriel, typeIndividuVocFk: Bbees\E3sBundle\Entity\Voc}
+      association_classes: {lotMaterielFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\LotMateriel,
+        typeIndividuVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc}
       class: Bbees\E3sBundle\Entity\CompositionLotMateriel
       properties: {commentaireCompoLotMateriel: null, dateCre: null, dateMaj: null,
         id: null, nbIndividus: null, userCre: null, userMaj: null}
@@ -578,62 +579,70 @@ fl_qbjs_parser:
       properties: {codePays: null, dateCre: null, dateMaj: null, id: null, nomPays: null,
         userCre: null, userMaj: null}
     dna:
-      association_classes: {boiteFk: Bbees\E3sBundle\Entity\Boite, datePrecisionVocFk: Bbees\E3sBundle\Entity\Voc,
-        individuFk: Bbees\E3sBundle\Entity\Individu, methodeExtractionAdnVocFk: Bbees\E3sBundle\Entity\Voc,
-        qualiteAdnVocFk: Bbees\E3sBundle\Entity\Voc}
+      association_classes: {boiteFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Boite,
+        datePrecisionVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc, individuFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Individu,
+        methodeExtractionAdnVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc,
+        qualiteAdnVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc}
       class: Bbees\E3sBundle\Entity\Adn
       properties: {codeAdn: null, commentaireAdn: null, concentrationNgMicrolitre: null,
         dateAdn: null, dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
     dna_is_extracted_by:
-      association_classes: {adnFk: Bbees\E3sBundle\Entity\Adn, personneFk: Bbees\E3sBundle\Entity\Personne}
+      association_classes: {adnFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Adn,
+        personneFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Personne}
       class: Bbees\E3sBundle\Entity\AdnEstRealisePar
       properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
     external_biological_material:
-      association_classes: {collecteFk: Bbees\E3sBundle\Entity\Collecte, datePrecisionVocFk: Bbees\E3sBundle\Entity\Voc,
-        nbIndividusVocFk: Bbees\E3sBundle\Entity\Voc, pigmentationVocFk: Bbees\E3sBundle\Entity\Voc,
-        yeuxVocFk: Bbees\E3sBundle\Entity\Voc}
+      association_classes: {collecteFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Collecte,
+        datePrecisionVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc, nbIndividusVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc,
+        pigmentationVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc, yeuxVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc}
       class: Bbees\E3sBundle\Entity\LotMaterielExt
       properties: {codeLotMaterielExt: null, commentaireLotMaterielExt: null, commentaireNbIndividus: null,
         dateCre: null, dateCreationLotMaterielExt: null, dateMaj: null, id: null,
         userCre: null, userMaj: null}
     external_biological_material_is_processed_by:
-      association_classes: {lotMaterielExtFk: Bbees\E3sBundle\Entity\LotMaterielExt,
-        personneFk: Bbees\E3sBundle\Entity\Personne}
+      association_classes: {lotMaterielExtFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\LotMaterielExt,
+        personneFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Personne}
       class: Bbees\E3sBundle\Entity\LotMaterielExtEstRealisePar
       properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
     external_biological_material_is_published_in:
-      association_classes: {lotMaterielExtFk: Bbees\E3sBundle\Entity\LotMaterielExt,
-        sourceFk: Bbees\E3sBundle\Entity\Source}
+      association_classes: {lotMaterielExtFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\LotMaterielExt,
+        sourceFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Source}
       class: Bbees\E3sBundle\Entity\LotMaterielExtEstReferenceDans
       properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
     external_sequence:
-      association_classes: {collecteFk: Bbees\E3sBundle\Entity\Collecte, datePrecisionVocFk: Bbees\E3sBundle\Entity\Voc,
-        geneVocFk: Bbees\E3sBundle\Entity\Voc, origineSqcAssExtVocFk: Bbees\E3sBundle\Entity\Voc,
-        statutSqcAssVocFk: Bbees\E3sBundle\Entity\Voc}
+      association_classes: {collecteFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Collecte,
+        datePrecisionVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc, geneVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc,
+        origineSqcAssExtVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc,
+        statutSqcAssVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc}
       class: Bbees\E3sBundle\Entity\SequenceAssembleeExt
       properties: {accessionNumberSqcAssExt: null, codeSqcAssExt: null, codeSqcAssExtAlignement: null,
         commentaireSqcAssExt: null, dateCre: null, dateCreationSqcAssExt: null, dateMaj: null,
         id: null, numIndividuSqcAssExt: null, taxonOrigineSqcAssExt: null, userCre: null,
         userMaj: null}
     external_sequence_is_entered_by:
-      association_classes: {personneFk: Bbees\E3sBundle\Entity\Personne, sequenceAssembleeExtFk: Bbees\E3sBundle\Entity\SequenceAssembleeExt}
+      association_classes: {personneFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Personne,
+        sequenceAssembleeExtFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\SequenceAssembleeExt}
       class: Bbees\E3sBundle\Entity\SqcExtEstRealisePar
       properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
     external_sequence_is_published_in:
-      association_classes: {sequenceAssembleeExtFk: Bbees\E3sBundle\Entity\SequenceAssembleeExt,
-        sourceFk: Bbees\E3sBundle\Entity\Source}
+      association_classes: {sequenceAssembleeExtFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\SequenceAssembleeExt,
+        sourceFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Source}
       class: Bbees\E3sBundle\Entity\SqcExtEstReferenceDans
       properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
     has_targeted_taxa:
-      association_classes: {collecteFk: Bbees\E3sBundle\Entity\Collecte, referentielTaxonFk: Bbees\E3sBundle\Entity\ReferentielTaxon}
+      association_classes: {collecteFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Collecte,
+        referentielTaxonFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\ReferentielTaxon}
       class: Bbees\E3sBundle\Entity\ACibler
       properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
     identified_species:
-      association_classes: {critereentificationVocFk: Bbees\E3sBundle\Entity\Voc,
-        datePrecisionVocFk: Bbees\E3sBundle\Entity\Voc, individuFk: Bbees\E3sBundle\Entity\Individu,
-        lotMaterielExtFk: Bbees\E3sBundle\Entity\LotMaterielExt, lotMaterielFk: Bbees\E3sBundle\Entity\LotMateriel,
-        referentielTaxonFk: Bbees\E3sBundle\Entity\ReferentielTaxon, sequenceAssembleeExtFk: Bbees\E3sBundle\Entity\SequenceAssembleeExt,
-        sequenceAssembleeFk: Bbees\E3sBundle\Entity\SequenceAssemblee}
+      association_classes: {critereIdentificationVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc,
+        datePrecisionVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc, individuFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Individu,
+        lotMaterielExtFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\LotMaterielExt,
+        lotMaterielFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\LotMateriel,
+        referentielTaxonFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\ReferentielTaxon,
+        sequenceAssembleeExtFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\SequenceAssembleeExt,
+        sequenceAssembleeFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\SequenceAssemblee,
+        typeMaterielVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc}
       class: Bbees\E3sBundle\Entity\EspeceIdentifiee
       properties: {commentaireEspId: null, dateCre: null, dateIdentification: null,
         dateMaj: null, id: null, userCre: null, userMaj: null}
@@ -642,30 +651,33 @@ fl_qbjs_parser:
       properties: {commentaireEtablissement: null, dateCre: null, dateMaj: null, id: null,
         nomEtablissement: null, userCre: null, userMaj: null}
     internal_biological_material:
-      association_classes: {boiteFk: Bbees\E3sBundle\Entity\Boite, collecteFk: Bbees\E3sBundle\Entity\Collecte,
-        datePrecisionVocFk: Bbees\E3sBundle\Entity\Voc, pigmentationVocFk: Bbees\E3sBundle\Entity\Voc,
-        yeuxVocFk: Bbees\E3sBundle\Entity\Voc}
+      association_classes: {boiteFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Boite,
+        collecteFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Collecte, datePrecisionVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc,
+        pigmentationVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc, yeuxVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc}
       class: Bbees\E3sBundle\Entity\LotMateriel
       properties: {aFaire: null, codeLotMateriel: null, commentaireConseilSqc: null,
         commentaireLotMateriel: null, dateCre: null, dateLotMateriel: null, dateMaj: null,
         id: null, userCre: null, userMaj: null}
     internal_biological_material_is_published_in:
-      association_classes: {lotMaterielFk: Bbees\E3sBundle\Entity\LotMateriel, sourceFk: Bbees\E3sBundle\Entity\Source}
+      association_classes: {lotMaterielFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\LotMateriel,
+        sourceFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Source}
       class: Bbees\E3sBundle\Entity\LotEstPublieDans
       properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
     internal_sequence:
-      association_classes: {datePrecisionVocFk: Bbees\E3sBundle\Entity\Voc, statutSqcAssVocFk: Bbees\E3sBundle\Entity\Voc}
+      association_classes: {datePrecisionVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc,
+        statutSqcAssVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc}
       class: Bbees\E3sBundle\Entity\SequenceAssemblee
       properties: {accessionNumber: null, codeSqcAlignement: null, codeSqcAss: null,
         commentaireSqcAss: null, dateCre: null, dateCreationSqcAss: null, dateMaj: null,
         id: null, userCre: null, userMaj: null}
     internal_sequence_is_assembled_by:
-      association_classes: {personneFk: Bbees\E3sBundle\Entity\Personne, sequenceAssembleeFk: Bbees\E3sBundle\Entity\SequenceAssemblee}
+      association_classes: {personneFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Personne,
+        sequenceAssembleeFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\SequenceAssemblee}
       class: Bbees\E3sBundle\Entity\SequenceAssembleeEstRealisePar
       properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
     internal_sequence_is_published_in:
-      association_classes: {sequenceAssembleeFk: Bbees\E3sBundle\Entity\SequenceAssemblee,
-        sourceFk: Bbees\E3sBundle\Entity\Source}
+      association_classes: {sequenceAssembleeFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\SequenceAssemblee,
+        sourceFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Source}
       class: Bbees\E3sBundle\Entity\SqcEstPublieDans
       properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
     motu:
@@ -673,34 +685,37 @@ fl_qbjs_parser:
       properties: {commentaireMotu: null, dateCre: null, dateMaj: null, dateMotu: null,
         id: null, libelleMotu: null, nomFichierCsv: null, userCre: null, userMaj: null}
     motu_is_generated_by:
-      association_classes: {motuFk: Bbees\E3sBundle\Entity\Motu, personneFk: Bbees\E3sBundle\Entity\Personne}
+      association_classes: {motuFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Motu,
+        personneFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Personne}
       class: Bbees\E3sBundle\Entity\MotuEstGenerePar
       properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
     motu_number:
-      association_classes: {methodeMotuVocFk: Bbees\E3sBundle\Entity\Voc, motuFk: Bbees\E3sBundle\Entity\Motu,
-        sequenceAssembleeExtFk: Bbees\E3sBundle\Entity\SequenceAssembleeExt, sequenceAssembleeFk: Bbees\E3sBundle\Entity\SequenceAssemblee}
+      association_classes: {methodeMotuVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc,
+        motuFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Motu, sequenceAssembleeExtFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\SequenceAssembleeExt,
+        sequenceAssembleeFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\SequenceAssemblee}
       class: Bbees\E3sBundle\Entity\Assigne
       properties: {dateCre: null, dateMaj: null, id: null, numMotu: null, userCre: null,
         userMaj: null}
     municipality:
-      association_classes: {paysFk: Bbees\E3sBundle\Entity\Pays}
+      association_classes: {paysFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Pays}
       class: Bbees\E3sBundle\Entity\Commune
       properties: {codeCommune: null, dateCre: null, dateMaj: null, id: null, nomCommune: null,
         nomRegion: null, userCre: null, userMaj: null}
     pcr:
-      association_classes: {adnFk: Bbees\E3sBundle\Entity\Adn, datePrecisionVocFk: Bbees\E3sBundle\Entity\Voc,
-        geneVocFk: Bbees\E3sBundle\Entity\Voc, primerPcrEndVocFk: Bbees\E3sBundle\Entity\Voc,
-        primerPcrStartVocFk: Bbees\E3sBundle\Entity\Voc, qualitePcrVocFk: Bbees\E3sBundle\Entity\Voc,
-        specificiteVocFk: Bbees\E3sBundle\Entity\Voc}
+      association_classes: {adnFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Adn,
+        datePrecisionVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc, geneVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc,
+        primerPcrEndVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc, primerPcrStartVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc,
+        qualitePcrVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc, specificiteVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc}
       class: Bbees\E3sBundle\Entity\Pcr
       properties: {codePcr: null, dateCre: null, dateMaj: null, datePcr: null, detailPcr: null,
         id: null, numPcr: null, remarquePcr: null, userCre: null, userMaj: null}
     pcr_is_done_by:
-      association_classes: {pcrFk: Bbees\E3sBundle\Entity\Pcr, personneFk: Bbees\E3sBundle\Entity\Personne}
+      association_classes: {pcrFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Pcr,
+        personneFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Personne}
       class: Bbees\E3sBundle\Entity\PcrEstRealisePar
       properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
     person:
-      association_classes: {etablissementFk: Bbees\E3sBundle\Entity\Etablissement}
+      association_classes: {etablissementFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Etablissement}
       class: Bbees\E3sBundle\Entity\Personne
       properties: {commentairePersonne: null, dateCre: null, dateMaj: null, id: null,
         nomComplet: null, nomPersonne: null, nomPersonneRef: null, userCre: null,
@@ -711,38 +726,43 @@ fl_qbjs_parser:
         dateCre: null, dateMaj: null, id: null, nomProgramme: null, nomsResponsables: null,
         typeFinanceur: null, userCre: null, userMaj: null}
     sample_is_fixed_with:
-      association_classes: {collecteFk: Bbees\E3sBundle\Entity\Collecte, fixateurVocFk: Bbees\E3sBundle\Entity\Voc}
+      association_classes: {collecteFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Collecte,
+        fixateurVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc}
       class: Bbees\E3sBundle\Entity\APourFixateur
       properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
     sampling:
-      association_classes: {datePrecisionVocFk: Bbees\E3sBundle\Entity\Voc, legVocFk: Bbees\E3sBundle\Entity\Voc,
-        stationFk: Bbees\E3sBundle\Entity\Station}
+      association_classes: {datePrecisionVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc,
+        legVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc, stationFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Station}
       class: Bbees\E3sBundle\Entity\Collecte
       properties: {aFaire: null, codeCollecte: null, commentaireCollecte: null, conductiviteMicroSieCm: null,
         dateCollecte: null, dateCre: null, dateMaj: null, dureeEchantillonnageMn: null,
         id: null, temperatureC: null, userCre: null, userMaj: null}
     sampling_is_done_with_method:
-      association_classes: {collecteFk: Bbees\E3sBundle\Entity\Collecte, samplingMethodVocFk: Bbees\E3sBundle\Entity\Voc}
+      association_classes: {collecteFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Collecte,
+        samplingMethodVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc}
       class: Bbees\E3sBundle\Entity\APourSamplingMethod
       properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
     sampling_is_funded_by:
-      association_classes: {collecteFk: Bbees\E3sBundle\Entity\Collecte, programmeFk: Bbees\E3sBundle\Entity\Programme}
+      association_classes: {collecteFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Collecte,
+        programmeFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Programme}
       class: Bbees\E3sBundle\Entity\EstFinancePar
       properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
     sampling_is_performed_by:
-      association_classes: {collecteFk: Bbees\E3sBundle\Entity\Collecte, personneFk: Bbees\E3sBundle\Entity\Personne}
+      association_classes: {collecteFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Collecte,
+        personneFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Personne}
       class: Bbees\E3sBundle\Entity\EstEffectuePar
       properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
     site:
-      association_classes: {communeFk: Bbees\E3sBundle\Entity\Commune, habitatTypeVocFk: Bbees\E3sBundle\Entity\Voc,
-        paysFk: Bbees\E3sBundle\Entity\Pays, pointAccesVocFk: Bbees\E3sBundle\Entity\Voc,
-        precisionLatLongVocFk: Bbees\E3sBundle\Entity\Voc}
+      association_classes: {communeFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Commune,
+        habitatTypeVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc, paysFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Pays,
+        pointAccesVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc, precisionLatLongVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc}
       class: Bbees\E3sBundle\Entity\Station
       properties: {altitudeM: null, codeStation: null, commentaireStation: null, dateCre: null,
         dateMaj: null, id: null, infoDescription: null, infoLocalisation: null, latDegDec: null,
         longDegDec: null, nomStation: null, userCre: null, userMaj: null}
     slide_is_mounted_by:
-      association_classes: {individuLameFk: Bbees\E3sBundle\Entity\IndividuLame, personneFk: Bbees\E3sBundle\Entity\Personne}
+      association_classes: {individuLameFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\IndividuLame,
+        personneFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Personne}
       class: Bbees\E3sBundle\Entity\IndividuLameEstRealisePar
       properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
     source:
@@ -750,40 +770,42 @@ fl_qbjs_parser:
       properties: {anneeSource: null, codeSource: null, commentaireSource: null, dateCre: null,
         dateMaj: null, id: null, libelleSource: null, userCre: null, userMaj: null}
     source_is_entered_by:
-      association_classes: {personneFk: Bbees\E3sBundle\Entity\Personne, sourceFk: Bbees\E3sBundle\Entity\Source}
+      association_classes: {personneFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Personne,
+        sourceFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Source}
       class: Bbees\E3sBundle\Entity\SourceAEteIntegrePar
       properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
     species_is_identified_by:
-      association_classes: {especeentifieeFk: Bbees\E3sBundle\Entity\EspeceIdentifiee,
-        personneFk: Bbees\E3sBundle\Entity\Personne}
+      association_classes: {especeIdentifieeFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\EspeceIdentifiee,
+        personneFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Personne}
       class: Bbees\E3sBundle\Entity\EstIdentifiePar
       properties: {dateCre: null, dateMaj: null, id: null, userCre: null, userMaj: null}
     specimen:
-      association_classes: {lotMaterielFk: Bbees\E3sBundle\Entity\LotMateriel, typeIndividuVocFk: Bbees\E3sBundle\Entity\Voc}
+      association_classes: {lotMaterielFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\LotMateriel,
+        typeIndividuVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc}
       class: Bbees\E3sBundle\Entity\Individu
       properties: {codeIndBiomol: null, codeIndTriMorpho: null, codeTube: null, commentaireInd: null,
         dateCre: null, dateMaj: null, id: null, numIndBiomol: null, userCre: null,
         userMaj: null}
     specimen_slide:
-      association_classes: {boiteFk: Bbees\E3sBundle\Entity\Boite, datePrecisionVocFk: Bbees\E3sBundle\Entity\Voc,
-        individuFk: Bbees\E3sBundle\Entity\Individu}
+      association_classes: {boiteFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Boite,
+        datePrecisionVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc, individuFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Individu}
       class: Bbees\E3sBundle\Entity\IndividuLame
       properties: {codeLameColl: null, commentaireLame: null, dateCre: null, dateLame: null,
         dateMaj: null, id: null, libelleLame: null, nomDossierPhotos: null, userCre: null,
         userMaj: null}
     storage_box:
-      association_classes: {codeCollectionVocFk: Bbees\E3sBundle\Entity\Voc, typeBoiteVocFk: Bbees\E3sBundle\Entity\Voc,
-        typeCollectionVocFk: Bbees\E3sBundle\Entity\Voc}
+      association_classes: {codeCollectionVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc,
+        typeBoiteVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc, typeCollectionVocFk: Bbees\E3sBundle\Entity\Bbees\E3sBundle\Entity\Voc}
       class: Bbees\E3sBundle\Entity\Boite
       properties: {codeBoite: null, commentaireBoite: null, dateCre: null, dateMaj: null,
-        id: null, libelleBoite: null, libelleCollection: null, userCre: null, userMaj: null}
+        id: null, libelleBoite: null, userCre: null, userMaj: null}
     taxon:
       class: Bbees\E3sBundle\Entity\ReferentielTaxon
       properties: {clade: null, codeTaxon: null, commentaireRef: null, dateCre: null,
-        dateMaj: null, family: null, genus: null, id: null, objectif: null, species: null,
-        subclass: null, subspecies: null, taxnameRef: null, taxon_name: null, taxon_order: null,
-        taxon_rank: null, taxon_validity: null, userCre: null, userMaj: null}
+        dateMaj: null, family: null, genus: null, id: null, ordre: null, rank: null,
+        species: null, subclass: null, subspecies: null, taxname: null, taxnameRef: null,
+        taxonFullName: null, userCre: null, userMaj: null, validity: null}
     vocabulary:
       class: Bbees\E3sBundle\Entity\Voc
-      properties: {code: null, dateCre: null, dateMaj: null, id: null, parent: null,
-        userCre: null, userMaj: null, voc_comments: null, vocabulary_title: null}
+      properties: {code: null, commentaire: null, dateCre: null, dateMaj: null, id: null,
+        libelle: null, parent: null, userCre: null, userMaj: null}

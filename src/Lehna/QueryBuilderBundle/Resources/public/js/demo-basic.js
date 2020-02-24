@@ -1,25 +1,24 @@
 
-/* example 
-var rules_basic = {
-  condition: 'AND',
-  rules: [{
-    id: 'price',
-    operator: 'less',
-    value: 10.25
-  }, {
-    condition: 'OR',
-    rules: [{
-      id: 'category',
-      operator: 'equal',
-      value: 2
-    }, {
-      id: 'category',
-      operator: 'equal',
-      value: 1
-    }]
-  }]
-};
-*/
+
+// var rules_basic = {
+//   condition: 'AND',
+//   rules: [{
+//     id: 'price',
+//     operator: 'less',
+//     value: 10.25
+//   }, {
+//     condition: 'OR',
+//     rules: [{
+//       id: 'category',
+//       operator: 'equal',
+//       value: 2
+//     }, {
+//       id: 'category',
+//       operator: 'equal',
+//       value: 1
+//     }]
+//   }]
+// };
 
 var rules_basic = {
   condition: 'AND',
@@ -80,7 +79,7 @@ $('#builder-basic').queryBuilder({
     }
   }],
 
-  rules: rules_basic
+  // rules: rules_basic
 });
 
 $('#btn-reset').on('click', function() {

@@ -49,7 +49,7 @@ EstIdentifiePar:
                 person_fk:
                     referencedColumnName: id
             orphanRemoval: false
-        especeentifieeFk:
+        especeIdentifieeFk:
             targetEntity: EspeceIdentifiee
             cascade: {  }
             fetch: LAZY

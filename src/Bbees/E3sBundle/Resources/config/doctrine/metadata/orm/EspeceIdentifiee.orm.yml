@@ -68,7 +68,7 @@ EspeceIdentifiee:
                 unsigned: false
             column: update_user_name
     manyToOne:
-        critereentificationVocFk:
+        critereIdentificationVocFk:
             targetEntity: Voc
             cascade: {  }
             fetch: LAZY

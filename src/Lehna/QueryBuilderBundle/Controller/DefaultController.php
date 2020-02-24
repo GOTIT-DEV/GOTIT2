@@ -46,15 +46,18 @@ class DefaultController extends Controller
         $jsonString = $request->getContent();
         dump($jsonString);
 
-        $parsedRuleGroup = $this->get('fl_qbjs_parser.json_query_parser.doctrine_orm_parser')
-            ->parseJsonString($jsonString, Entity\Boite::class, ["codeBoite", "libelleBoite"]);
-
+        $parsedRuleGroup = $this
+            ->get('fl_qbjs_parser.json_query_parser.doctrine_orm_parser')
+            ->parseJsonString($jsonString, Entity\Commune::class);
+        dump($parsedRuleGroup);
         $query_str = $parsedRuleGroup->getQueryString();
         $parameters = $parsedRuleGroup->getParameters();
 
         dump($query_str);
+        dump($parameters);
 
-        $query = $this->getDoctrine()->getEntityManager()
+        $query = $this->getDoctrine()
+            ->getEntityManager()
             ->createQuery($query_str);
         $query->setParameters($parameters);
         $results = $query->getArrayResult();

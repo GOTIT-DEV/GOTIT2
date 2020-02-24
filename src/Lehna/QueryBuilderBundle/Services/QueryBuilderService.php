@@ -85,16 +85,25 @@ class QueryBuilderService
       return [
         "id" => $field['fieldName'],
         "label" => $field['fieldName'],
-        "type" => $field['type']
+        "type" => $this->convert_field_type($field['type'])
       ];
     };
     $entity = $metadata->name;
-    $filters = array_map($make_filter, $metadata->fieldMappings);
+    $filters = array_values(array_map($make_filter, $metadata->fieldMappings));
     return [
       "class" => $entity,
       "filters" => $filters,
       "human_readable_name" => $this->parse_entity_name($entity),
       "table" => $metadata->table["name"]
     ];
+  }
+  
+  private function convert_field_type($type){
+    if (strpos($type, "int")){
+      return "integer";
+    }
+    elseif (strpos($type, "float")){
+      return "double";
+    }
   }
 }
