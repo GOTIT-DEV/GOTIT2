@@ -42,3 +42,4 @@
 /var/cache/dev/pools
 /var/cache/dev/translations
 /var/cache
+/app/Resources/views/base.html.twig.bup
