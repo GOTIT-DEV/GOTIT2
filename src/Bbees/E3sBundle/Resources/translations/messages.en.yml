@@ -739,7 +739,13 @@ Commentaire user: User comments
 Locale: Version
 buton.NewUser: Create a new User
 title.user: User
+title.users: Users
 list.User cre: User Create
 list.User maj: User Update
 title.Personne: Person
 Personne: Person
+ROLE_ADMIN: ADMIN
+ROLE_PROJECT: PROJECT MEMBER
+ROLE_COLLABORATION: COLLABORATION MEMBER
+ROLE_INVITED: INVITED MEMBER
+Profile: User profile

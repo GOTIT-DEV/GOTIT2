@@ -51,8 +51,7 @@ class DefaultController extends Controller
     {
         // load services
         //$service = $this->get('bbees_e3s.generic_function_e3s'); 
-        //
-        //
+        
         $em = $this->getDoctrine()->getManager();
         $nbcollectes = $em->createQuery('SELECT COUNT(u.id) FROM BbeesE3sBundle:Collecte u')->getSingleScalarResult();
         $nbstations = $em->createQuery('SELECT COUNT(u.id) FROM BbeesE3sBundle:Station u')->getSingleScalarResult();
@@ -290,7 +289,7 @@ class DefaultController extends Controller
              );
         }
 
-        return $this->render('default/index.html.twig', array( 
+        return $this->render('dashboard/index.html.twig', array( 
             'nbCollecte' => $nbcollectes,
             'nbStation' => $nbstations,
             'nbLotMateriel' => $nbLotMateriel,

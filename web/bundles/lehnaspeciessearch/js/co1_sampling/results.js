@@ -10,7 +10,7 @@ const renderNumber = $.fn.dataTable.render.number('', '.', 3)
 let columns = [
   dtconfig.expandColumn,
   {
-    data: "taxname",
+    data: "taxon_name",
     render: linkify("referentieltaxon_show", { col: 'id' })
   }, {
     data: "nb_sta"
