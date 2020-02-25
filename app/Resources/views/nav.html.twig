@@ -25,7 +25,7 @@
 				{# Unfold menu for current page #}
 				{% set active_flag = "" %}
 				{% if menu_entry.route == current_route or current_route in menu_entry.children|map(c => c.route) %}
-					{% set active_flag = "active current-page" %}
+					{% set active_flag = "current-page" %}
 				{% endif %}
 
 				{# Disable links for menu wrappers and restricted URIs #}
