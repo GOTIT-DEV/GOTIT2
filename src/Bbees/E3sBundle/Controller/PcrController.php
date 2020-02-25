@@ -21,10 +21,8 @@ use Bbees\E3sBundle\Entity\Pcr;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Doctrine\Common\Collections\ArrayCollection;
-use Bbees\E3sBundle\Services\GenericFunctionService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Pcr controller.
@@ -39,7 +37,7 @@ class PcrController extends Controller
     /**
      * Lists all pcr entities.
      *
-     * @Route("/", name="pcr_index")
+     * @Route("/", name="pcr_index", methods={"GET"})
      * @Route("/", name="pcrchromato_index", methods={"GET"})
      */
     public function indexAction()
@@ -64,27 +62,27 @@ class PcrController extends Controller
     public function indexjsonAction(Request $request)
     {
         // load services
-        $service = $this->get('bbees_e3s.generic_function_e3s');       
+        $service = $this->get('bbees_e3s.generic_function_e3s');
         $em = $this->getDoctrine()->getManager();
         //
         $rowCount = ($request->get('rowCount')  !== NULL) ? $request->get('rowCount') : 10;
-        $orderBy = ($request->get('sort')  !== NULL) ? $request->get('sort') : array('pcr.dateMaj' => 'desc', 'pcr.id' => 'desc');  
-        $minRecord = intval($request->get('current')-1)*$rowCount;
-        $maxRecord = $rowCount; 
+        $orderBy = ($request->get('sort')  !== NULL) ? $request->get('sort') : array('pcr.dateMaj' => 'desc', 'pcr.id' => 'desc');
+        $minRecord = intval($request->get('current') - 1) * $rowCount;
+        $maxRecord = $rowCount;
         // initializes the searchPhrase variable as appropriate and sets the condition according to the url idFk parameter
         $where = 'LOWER(individu.codeIndBiomol) LIKE :criteriaLower';
         $searchPhrase = $request->get('searchPhrase');
-        if ( $request->get('searchPatern') !== null && $request->get('searchPatern') !== '' && $searchPhrase == '') {
+        if ($request->get('searchPatern') !== null && $request->get('searchPatern') !== '' && $searchPhrase == '') {
             $searchPhrase = $request->get('searchPatern');
         }
-        if ( $request->get('idFk') !== null && $request->get('idFk') !== '') {
-            $where .= ' AND pcr.adnFk = '.$request->get('idFk');
+        if ($request->get('idFk') !== null && $request->get('idFk') !== '') {
+            $where .= ' AND pcr.adnFk = ' . $request->get('idFk');
         }
         // Search for the list to show
-        $tab_toshow =[];
+        $tab_toshow = [];
         $toshow = $em->getRepository("BbeesE3sBundle:Pcr")->createQueryBuilder('pcr')
             ->where($where)
-            ->setParameter('criteriaLower', strtolower($searchPhrase).'%')
+            ->setParameter('criteriaLower', strtolower($searchPhrase) . '%')
             ->leftJoin('BbeesE3sBundle:Adn', 'adn', 'WITH', 'pcr.adnFk = adn.id')
             ->leftJoin('BbeesE3sBundle:Individu', 'individu', 'WITH', 'adn.individuFk = individu.id')
             ->leftJoin('BbeesE3sBundle:Voc', 'vocGene', 'WITH', 'pcr.geneVocFk = vocGene.id')
@@ -94,55 +92,53 @@ class PcrController extends Controller
             ->getQuery()
             ->getResult();
         $nb = count($toshow);
-        $toshow = array_slice($toshow, $minRecord, $rowCount);  
+        $toshow = array_slice($toshow, $minRecord, $rowCount);
         $lastTaxname = '';
-        foreach($toshow as $entity)
-        {
+        foreach ($toshow as $entity) {
             $id = $entity->getId();
             $DatePcr = ($entity->getDatePcr() !== null) ?  $entity->getDatePcr()->format('Y-m-d') : null;
             $DateMaj = ($entity->getDateMaj() !== null) ?  $entity->getDateMaj()->format('Y-m-d H:i:s') : null;
             $DateCre = ($entity->getDateCre() !== null) ?  $entity->getDateCre()->format('Y-m-d H:i:s') : null;
             // Search chromatograms associated to a PCR
-            $query = $em->createQuery('SELECT chromato.id FROM BbeesE3sBundle:Chromatogramme chromato WHERE chromato.pcrFk = '.$id.'')->getResult();
-            $linkChromatogramme= (count($query) > 0) ? $id : '';
+            $query = $em->createQuery('SELECT chromato.id FROM BbeesE3sBundle:Chromatogramme chromato WHERE chromato.pcrFk = ' . $id . '')->getResult();
+            $linkChromatogramme = (count($query) > 0) ? $id : '';
             // concatenated list of people 
-            $query = $em->createQuery('SELECT p.nomPersonne as nom FROM BbeesE3sBundle:PcrEstRealisePar erp JOIN erp.personneFk p WHERE erp.pcrFk = '.$id.'')->getResult();            
+            $query = $em->createQuery('SELECT p.nomPersonne as nom FROM BbeesE3sBundle:PcrEstRealisePar erp JOIN erp.personneFk p WHERE erp.pcrFk = ' . $id . '')->getResult();
             $arrayListePersonne = array();
-            foreach($query as $taxon) {
-                 $arrayListePersonne[] = $taxon['nom'];
+            foreach ($query as $taxon) {
+                $arrayListePersonne[] = $taxon['nom'];
             }
-            $listePersonne= implode(", ", $arrayListePersonne);
+            $listePersonne = implode(", ", $arrayListePersonne);
             //
-            $tab_toshow[] = array("id" => $id, "pcr.id" => $id, 
-             "individu.codeIndBiomol" => $entity->getAdnFk()->getIndividuFk()->getCodeIndBiomol(),
-             "adn.codeAdn" => $entity->getAdnFk()->getCodeAdn(),
-             "pcr.codePcr" => $entity->getCodePcr(),
-             "pcr.numPcr" => $entity->getNumPcr(),
-             "vocGene.code" => $entity->getGeneVocFk()->getCode(), 
-             "listePersonne" => $listePersonne, 
-             "pcr.datePcr" => $DatePcr ,
-             "vocQualitePcr.code" => $entity->getQualitePcrVocFk()->getCode(), 
-             "vocSpecificite.code" => $entity->getSpecificiteVocFk()->getCode(), 
-             "pcr.dateCre" => $DateCre, "pcr.dateMaj" => $DateMaj,
-             "userCreId" => $service->GetUserCreId($entity), "pcr.userCre" => $service->GetUserCreUsername($entity) ,"pcr.userMaj" => $service->GetUserMajUsername($entity),
-             "linkChromatogramme" => $linkChromatogramme,);
-        }     
+            $tab_toshow[] = array(
+                "id" => $id, "pcr.id" => $id,
+                "individu.codeIndBiomol" => $entity->getAdnFk()->getIndividuFk()->getCodeIndBiomol(),
+                "adn.codeAdn" => $entity->getAdnFk()->getCodeAdn(),
+                "pcr.codePcr" => $entity->getCodePcr(),
+                "pcr.numPcr" => $entity->getNumPcr(),
+                "vocGene.code" => $entity->getGeneVocFk()->getCode(),
+                "listePersonne" => $listePersonne,
+                "pcr.datePcr" => $DatePcr,
+                "vocQualitePcr.code" => $entity->getQualitePcrVocFk()->getCode(),
+                "vocSpecificite.code" => $entity->getSpecificiteVocFk()->getCode(),
+                "pcr.dateCre" => $DateCre, "pcr.dateMaj" => $DateMaj,
+                "userCreId" => $service->GetUserCreId($entity), "pcr.userCre" => $service->GetUserCreUsername($entity), "pcr.userMaj" => $service->GetUserMajUsername($entity),
+                "linkChromatogramme" => $linkChromatogramme,
+            );
+        }
         // Ajax answer
-        $response = new Response ();
-        $response->setContent ( json_encode ( array (
-            "current"    => intval( $request->get('current') ), 
-            "rowCount"  => $rowCount,            
-            "rows"     => $tab_toshow, 
+        $response = new JsonResponse([
+            "current"    => intval($request->get('current')),
+            "rowCount"  => $rowCount,
+            "rows"     => $tab_toshow,
             "searchPhrase" => $searchPhrase,
-            "total"    => $nb // total data array				
-            ) ) );
-        // If it is an Ajax request: returns the content in json format
-        $response->headers->set('Content-Type', 'application/json');
+            "total"    => $nb // total data array
+        ]);
 
-        return $response;          
+        return $response;
     }
 
-    
+
     /**
      * Creates a new pcr entity.
      *
@@ -154,21 +150,19 @@ class PcrController extends Controller
         $pcr = new Pcr();
         $form = $this->createForm('Bbees\E3sBundle\Form\PcrType', $pcr);
         $form->handleRequest($request);
-            $numid_adnFk = $form->get('adnFk')->getData();
-            $numid_adnId = $form->get('adnId')->getData();
-            var_dump($numid_adnId); var_dump($numid_adnFk); 
-            
+        $numid_adnFk = $form->get('adnFk')->getData();
+        $numid_adnId = $form->get('adnId')->getData();
+
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($pcr);
             try {
                 $em->flush();
-            } 
-            catch(\Doctrine\DBAL\DBALException $e) {
-                $exception_message =  str_replace('"', '\"',str_replace("'", "\'", html_entity_decode(strval($e), ENT_QUOTES , 'UTF-8')));
+            } catch (\Doctrine\DBAL\DBALException $e) {
+                $exception_message =  str_replace('"', '\"', str_replace("'", "\'", html_entity_decode(strval($e), ENT_QUOTES, 'UTF-8')));
                 return $this->render('pcr/index.html.twig', array('exception_message' =>  explode("\n", $exception_message)[0]));
-            } 
-            return $this->redirectToRoute('pcr_edit', array('id' => $pcr->getId(), 'valid' => 1));                       
+            }
+            return $this->redirectToRoute('pcr_edit', array('id' => $pcr->getId(), 'valid' => 1));
         }
 
         return $this->render('pcr/edit.html.twig', array(
@@ -206,13 +200,13 @@ class PcrController extends Controller
         //  access control for user type  : ROLE_COLLABORATION
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $user = $this->getUser();
-        if ($user->getRole() ==  'ROLE_COLLABORATION' && $pcr->getUserCre() != $user->getId() ) {
-                $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'ACCESS DENIED');
+        if ($user->getRole() ==  'ROLE_COLLABORATION' && $pcr->getUserCre() != $user->getId()) {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'ACCESS DENIED');
         }
         // load service  generic_function_e3s
-        $service = $this->get('bbees_e3s.generic_function_e3s');       
+        $service = $this->get('bbees_e3s.generic_function_e3s');
         // store ArrayCollection       
-        $pcrEstRealisePars = $service->setArrayCollection('PcrEstRealisePars',$pcr);
+        $pcrEstRealisePars = $service->setArrayCollection('PcrEstRealisePars', $pcr);
         //
         $deleteForm = $this->createDeleteForm($pcr);
         $editForm = $this->createForm('Bbees\E3sBundle\Form\PcrType', $pcr);
@@ -220,24 +214,24 @@ class PcrController extends Controller
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             // delete ArrayCollection
-            $service->DelArrayCollection('PcrEstRealisePars',$pcr, $pcrEstRealisePars);
+            $service->DelArrayCollection('PcrEstRealisePars', $pcr, $pcrEstRealisePars);
             // flush
-            $this->getDoctrine()->getManager()->persist($pcr);                       
+            $this->getDoctrine()->getManager()->persist($pcr);
             try {
                 $this->getDoctrine()->getManager()->flush();
-            } 
-            catch(\Doctrine\DBAL\DBALException $e) {
-                $exception_message =  str_replace('"', '\"',str_replace("'", "\'", html_entity_decode(strval($e), ENT_QUOTES , 'UTF-8')));
+            } catch (\Doctrine\DBAL\DBALException $e) {
+                $exception_message =  str_replace('"', '\"', str_replace("'", "\'", html_entity_decode(strval($e), ENT_QUOTES, 'UTF-8')));
                 return $this->render('pcr/index.html.twig', array('exception_message' =>  explode("\n", $exception_message)[0]));
-            } 
+            }
             //return $this->redirectToRoute('lotmateriel_edit', array('id' => $lotMateriel->getId()));
             // return $this->redirectToRoute('lotmateriel_index');
             return $this->render('pcr/edit.html.twig', array(
                 'pcr' => $pcr,
                 'edit_form' => $editForm->createView(),
-                'valid' => 1));
+                'valid' => 1
+            ));
         }
-        
+
         return $this->render('pcr/edit.html.twig', array(
             'pcr' => $pcr,
             'edit_form' => $editForm->createView(),
@@ -258,18 +252,17 @@ class PcrController extends Controller
         $form->handleRequest($request);
 
         $submittedToken = $request->request->get('token');
-        if (($form->isSubmitted() && $form->isValid()) || $this->isCsrfTokenValid('delete-item', $submittedToken) ) {
+        if (($form->isSubmitted() && $form->isValid()) || $this->isCsrfTokenValid('delete-item', $submittedToken)) {
             $em = $this->getDoctrine()->getManager();
             try {
                 $em->remove($pcr);
                 $em->flush();
-            } 
-            catch(\Doctrine\DBAL\DBALException $e) {
-                $exception_message =  str_replace('"', '\"',str_replace("'", "\'", html_entity_decode(strval($e), ENT_QUOTES , 'UTF-8')));
+            } catch (\Doctrine\DBAL\DBALException $e) {
+                $exception_message =  str_replace('"', '\"', str_replace("'", "\'", html_entity_decode(strval($e), ENT_QUOTES, 'UTF-8')));
                 return $this->render('pcr/index.html.twig', array('exception_message' =>  explode("\n", $exception_message)[0]));
-            }   
+            }
         }
-        
+
         return $this->redirectToRoute('pcr_index');
     }
 
@@ -285,7 +278,6 @@ class PcrController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('pcr_delete', array('id' => $pcr->getId())))
             ->setMethod('DELETE')
-            ->getForm()
-        ;
+            ->getForm();
     }
 }
