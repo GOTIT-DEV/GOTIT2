@@ -1,0 +1,9 @@
+TEMPLATE MODIFICATIONS GOTIT 1.1 -> 2.0
+> add column espece_identifiee.type_material_voc_fk(voc.code) in :
+specimen
+internal_sequence
+internal_biological_material
+external_sequence
+external_biological_material
+> add column  referentiel_taxon.taxon_full_name in:
+taxon
