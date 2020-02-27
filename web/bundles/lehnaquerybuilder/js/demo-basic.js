@@ -80,7 +80,7 @@ $('#builder-basic').queryBuilder({
     }
   }],
 
-  rules: rules_basic
+  // rules: rules_basic
 });
 
 $('#btn-reset').on('click', function() {
@@ -98,4 +98,5 @@ $('#btn-get').on('click', function() {
     alert(JSON.stringify(result, null, 2));
   }
 });
+
 

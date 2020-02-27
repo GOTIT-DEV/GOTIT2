@@ -58,7 +58,7 @@ var rules_basic2 = {
       }
     }],
   
-    rules: rules_basic2
+    // rules: rules_basic2
   });
   
   $('#btn-reset').on('click', function() {

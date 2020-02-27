@@ -80,7 +80,7 @@ $('#builder-basic').queryBuilder({
     }
   }],
 
-  rules: rules_basic
+  // rules: rules_basic
 });
 
 $('#btn-reset').on('click', function() {
