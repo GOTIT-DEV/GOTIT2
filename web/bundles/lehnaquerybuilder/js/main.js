@@ -9,8 +9,8 @@ function myFunction() {
 $(document).ready(_ => {
   fetch("init")
     .then(response => response.json())
-    .then(builders => {
-      console.log(builders);
+    .then(qb_config => {
+      console.log(qb_config);
 
     })
 })

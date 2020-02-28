@@ -88,7 +88,7 @@ class QueryBuilderService
         "type" => $this->convert_field_type($field['type'])
       ];
     };
-    $entity = $metadata->name;
+    $entity = $metadata->getName();
     $filters = array_values(array_map($make_filter, $metadata->fieldMappings));
     return [
       "class" => $entity,
@@ -100,10 +100,16 @@ class QueryBuilderService
   
   private function convert_field_type($type){
     if (strpos($type, "int")){
-      return "integer";
+      $type = "integer";
     }
     elseif (strpos($type, "float")){
-      return "double";
+      $type = "double";
     }
+    elseif (strpos($type, "bool")){
+      $type= "boolean";
+    }
+    // $valid_types = ["string", "integer", "double", "date", "time", "datetime", "boolean"];
+    // assert(in_array($type, $valid_types));
+    return $type;
   }
 }
