@@ -61,18 +61,8 @@ var rules_basic2 = {
     // rules: rules_basic2
   });
   
-  $('#btn-reset').on('click', function() {
-    $('#builder-basic-2').queryBuilder('reset');
-  });
   
   $('#btn-set').on('click', function() {
     $('#builder-basic-2').queryBuilder('setRules', rules_basic2);
   });
   
-  $('#btn-get').on('click', function() {
-    var result = $('#builder-basic-2').queryBuilder('getRules');
-    
-    if (!$.isEmptyObject(result)) {
-      alert(JSON.stringify(result, null, 2));
-    }
-  });

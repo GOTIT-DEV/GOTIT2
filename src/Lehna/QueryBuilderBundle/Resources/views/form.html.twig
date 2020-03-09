@@ -6,16 +6,17 @@
 	</legend>
 </div>
 <div class="row">
-	<div class="col-xs-12 col-md-5 col-lg-5" style="padding-left:25px">
+	<div class="col-xs-12 col-md-5 col-lg-6" style="padding-left:25px">
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<div class="row">
 					<div class="col-xs-12 col-sm-7">
 						<div class="form-group">
 							<label class="control-label" for="niveau">
-								Table
+								Tables
 							</label>
-							<div class="btn-group bootstrap-select form-control" data-original-title="" title=""></div>
+							<select id="get-data" >
+    						</select>
 						</div>
 					</div>
 					<div class="col-xs-12 col-sm-5">
@@ -23,7 +24,7 @@
 							<div class="form-group">
 								<div class="checkbox checkbox-inline">
 									<label class="control-label" title data-toggle="tooltip" data-placement="right">
-										<input type="checkbox" value="2" data-toggle="collapse"  class="collapsed" aria-expanded="false" data-target="#collapseConstraints">
+										<input type="checkbox" value="2" data-toggle="collapse" id="getdata" class="collapsed" aria-expanded="false" data-target="#collapseConstraints">
 										<strong>
 											Contraintes
 										</strong>
@@ -38,19 +39,23 @@
 			</div>
 		</div>
 	</div>
-	<div class="panel-collapse collapse col-xs-12" id="collapseConstraints" aria-expanded="false">
-		<div class="col-xs-12 col-sm-5 col-sm col-lg-4" style="padding-left:20px">
+	<div class="panel-collapse collapse col-xs-11" id="collapseConstraints" aria-expanded="false">
+		<div class="col-xs-12 col-sm-5 col-sm col-lg-3" style="padding-left:20px">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<div class="form-check">
-						<strong>
-							Choix des champs
-						</strong>
+					<strong>
+						Choix des champs
+					</strong>
+				</div>
+				<div class="panel-body">
+					<div class="form-group">
+						<div  id="show-data">
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="col-xs-2 col-sm-8">
+		<div class="col-xs-2 col-sm-7">
 			<div id="builder-basic"></div>
 		</div>
 	</div>
@@ -59,7 +64,12 @@
 			<i class="glyphicon glyphicon-plus-sign" style="font-size:25px"></i>
 		</button>
 	</div>
-	<div class="col-xs-12 col-sm-8" style="padding-left:25px" id="newconstraints">
+	<div class="col-xs-12 btn-group pull-left group-actions" id="ab">
+		<button class="btn btn-xs btn-basic" type="button">
+			<i class="glyphicon glyphicon-plus-sign" style="font-size:25px"></i>
+		</button>
+	</div>	
+	<div class="col-xs-12 col-sm-10" style="padding-left:25px" id="newconstraints">
 		<div class="panel panel-default collapse " id="collapseTables">
 			<div class="panel-heading">
 				<strong>Nouvelle sélection</strong>
@@ -67,23 +77,30 @@
 			<div class="panel-body">
 				<div class="row">
 					<div class="col-xs-12 col-sm-4">
-						<label for="lot-materiel" class="control-label">
-							Table précédente</label>
-						<div class="btn-group bootstrap-select form-control concordance"></div>
+						<div class="form-group">
+							<label for="lot-materiel" class="control-label">
+								Table précédente</label>
+							<select id="get-data2" ></select>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-2">
+						<div class="form-group">
+							<label for="individu" class="control-label">
+								Choix jointure
+							</label>
+							<select id="get-data3" ></select>
+						</div>
+						<!-- <div class="btn-group bootstrap-select form-control concordance"></div> -->
 					</div>
 					<div class="col-xs-12 col-sm-4">
-						<label for="individu" class="control-label">
-							Choix jointure
-						</label>
-						<div class="btn-group bootstrap-select form-control concordance"></div>
+						<div class="form-group">
+							<label for="sequence" class="control-label">
+								Table adjacente
+							</label>
+							<select id="get-data4" ></select>
+						</div>
 					</div>
-					<div class="col-xs-12 col-sm-4">
-						<label for="sequence" class="control-label">
-							Table adjacente
-						</label>
-						<div class="btn-group bootstrap-select form-control concordance"></div>
-					</div>
-					<div class="col-xs-12 col-sm-4">
+					<div class="col-xs-12 col-sm-2">
 						<div class="form-horizontal">
 							<div class="form-group">
 								<div class="checkbox checkbox-inline">
