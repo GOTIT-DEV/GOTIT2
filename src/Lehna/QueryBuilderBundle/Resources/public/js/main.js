@@ -52,7 +52,7 @@ $.getJSON("init", function (data) {
   var texte2= data[texte];
   console.log(texte2.relations);
     $.each(texte2.relations, function(key, value) {
-      dropdown.append($('<option></option>').attr('value',key).text(key));
+  dropdown.append($('<option></option>').attr('value',key).text(key));
 });
   })
 });
@@ -81,7 +81,7 @@ $.each(jointures, function(index, value) {
 });
 });
 
-/* filters for each table */
+/* filters for table 1*/
 $('#getdata').click(function () {
   var showData = $('#show-data');
 
@@ -104,9 +104,45 @@ $('#getdata').click(function () {
   });
 });
 
+/* filters for table 2 */
+$('#getconstraints').click(function () {
+  var showData = $('#show-data2');
 
+  var liste, texte;
+  liste = document.getElementById("get-data4");
+  texte = liste.options[liste.selectedIndex].text;
 
+  $.getJSON('init', function (data) {
 
+    var items = data[texte].filters.map(function (item) {
+      return item.label;
+    });
+    showData.empty();
+
+    if (items.length) {
+      var content = '<input type="checkbox" >' + items.join('</input><br><input type="checkbox" >') + '</input><br>';
+      var list = $('<ul />').html(content);
+      showData.append(list);
+    }
+  });
+});
+
+/*
+function myFunctionAppendDiv(){
+  document.getElementById("collapseTables").collapse();
+  document.getElementById("newconstraints").append("hello");
+}
+*/
+
+let a = document.getElementById("button");
+let b = document.getElementById("collapseTables");
+let c = document.getElementById("newconstraints"); /*div plus grande*/
+
+function myFunctionAppendDiv2(){
+  var x= document.createElement("div");
+  x.innerHTML= b.innerHTML;
+  document.body.appendChild(x);
+}
 
 $(document).ready(_ => {
   fetch("init")
