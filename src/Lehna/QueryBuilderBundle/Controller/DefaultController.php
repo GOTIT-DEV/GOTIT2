@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Bbees\E3sBundle\Entity;
 use Lehna\QueryBuilderBundle\Services\QueryBuilderService;
 
+
 /**
  * Controller for querying COI sampling coverage
  *
@@ -24,6 +25,7 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
+        dump('hello');
         return $this->render('@LehnaQueryBuilder/index.html.twig');
     }
 

@@ -99,13 +99,16 @@ class QueryBuilderService
   }
   
   private function convert_field_type($type){
-    if (strpos($type, "int")){
+    if (strpos($type, "int") != false){
       $type = "integer";
     }
-    elseif (strpos($type, "float")){
+    elseif ($type == "float"){
       $type = "double";
     }
-    elseif (strpos($type, "bool")){
+    elseif ($type == "text"){
+      $type = "string";
+    }
+    elseif (strpos($type, "bool") != false){
       $type= "boolean";
     }
     // $valid_types = ["string", "integer", "double", "date", "time", "datetime", "boolean"];

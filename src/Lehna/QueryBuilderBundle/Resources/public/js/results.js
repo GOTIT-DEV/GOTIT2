@@ -97,54 +97,6 @@ export function initDataTable(tableId) {
   }
 }
 
-/**
-   * Initialize datatable on modal table
-   */
-function initModalTable(formData) {
-  return $(ids.details).DataTable({
-    autoWidth: false,
-    responsive: true,
-    ajax: {
-      type: 'POST',
-      url: Routing.generate("motu-modal"),
-      dataSrc: '',
-      data: _ => {
-        return detailsFormData
-      }
-    },
-    language: dtconfig.language[$("html").attr("lang")],
-    columns: [{
-      data: 'code',
-      render: (data, type, row) => {
-        let route = row.type ?
-          'sequenceassembleeext_show' :
-          'sequenceassemblee_show'
-        return linkify(route,
-          { col: 'id', placement: 'right' })(data, type, row)
-      }
-    }, {
-      data: 'acc',
-      render: linkify('https://www.ncbi.nlm.nih.gov/nuccore/',
-        { col: 'acc', ellipsis: false, generateRoute: false })
-    }, {
-      data: 'gene'
-    }, {
-      data: 'type',
-      render: seqType => {
-        return seqType ?
-          Translator.trans("entity.seq.type.externe") :
-          Translator.trans("entity.seq.type.interne")
-      }
-    }, {
-      data: 'motu'
-    }, {
-      data: 'critere'
-    }],
-    dom: "lfrtipB",
-    buttons: dtbuttons,
-    drawCallback: _ => { $('[data-toggle="tooltip"]').tooltip() }
-  })
-}
 
 /**
  * Toggle UI loading mode

@@ -2,58 +2,58 @@
 $(document).ready(function () {
   let dropdown = $('#get-data');
 
-dropdown.empty();
+  dropdown.empty();
 
-dropdown.append('<option selected="true" disabled>Choose table</option>');
-dropdown.prop('selectedIndex', 0);
+  dropdown.append('<option selected="true" disabled>Choose table</option>');
+  dropdown.prop('selectedIndex', 0);
 
 
-$.getJSON("init", function (data) {
-  $.each(data, function (key, entry) {
-    dropdown.append($('<option></option>').attr('value', entry.human_readable_name).text(entry.human_readable_name));
-  })
-});
+  $.getJSON("init", function (data) {
+    $.each(data, function (key, entry) {
+      dropdown.append($('<option></option>').attr('value', entry.human_readable_name).text(entry.human_readable_name));
+    })
+  });
 });
 
 /* json data for choosing table among others already chosen*/
 $('#get-data2').click(function () {
   let dropdown = $('#get-data2');
 
-dropdown.empty();
+  dropdown.empty();
 
-dropdown.append('<option selected="true" disabled>Tables</option>');
-dropdown.prop('selectedIndex', 0);
+  dropdown.append('<option selected="true" disabled>Tables</option>');
+  dropdown.prop('selectedIndex', 0);
 
-var liste,texte;
-liste=document.getElementById("get-data");
-texte=liste.options[liste.selectedIndex].text;
+  var liste, texte;
+  liste = document.getElementById("get-data");
+  texte = liste.options[liste.selectedIndex].text;
 
-$.getJSON("init", function (data) {
-  var texte2= data[texte];
-  console.log(texte2.human_readable_name);
-  dropdown.append($('<option></option>').attr('value',texte2.human_readable_name).text(texte2.human_readable_name));
+  $.getJSON("init", function (data) {
+    var texte2 = data[texte];
+    console.log(texte2.human_readable_name);
+    dropdown.append($('<option></option>').attr('value', texte2.human_readable_name).text(texte2.human_readable_name));
   });
-  });
+});
 
 /* json data for adjacent tables*/
 $('#get-data4').click(function () {
   let dropdown = $('#get-data4');
 
-dropdown.empty();
+  dropdown.empty();
 
-dropdown.append('<option selected="true" disabled>Relations</option>');
-dropdown.prop('selectedIndex', 0);
+  dropdown.append('<option selected="true" disabled>Relations</option>');
+  dropdown.prop('selectedIndex', 0);
 
-var liste,texte;
-liste=document.getElementById("get-data2");
-texte=liste.options[liste.selectedIndex].text;
+  var liste, texte;
+  liste = document.getElementById("get-data2");
+  texte = liste.options[liste.selectedIndex].text;
 
-$.getJSON("init", function (data) {
-  var texte2= data[texte];
-  console.log(texte2.relations);
-    $.each(texte2.relations, function(key, value) {
-  dropdown.append($('<option></option>').attr('value',key).text(key));
-});
+  $.getJSON("init", function (data) {
+    var texte2 = data[texte];
+    console.log(texte2.relations);
+    $.each(texte2.relations, function (key, value) {
+      dropdown.append($('<option></option>').attr('value', key).text(key));
+    });
   })
 });
 
@@ -70,28 +70,32 @@ jointures = [
 $(document).ready(function () {
   let dropdown = $('#get-data3');
 
-dropdown.empty();
+  dropdown.empty();
 
-dropdown.append('<option selected="true" disabled>Joins</option>');
-dropdown.prop('selectedIndex', 0);
+  dropdown.append('<option selected="true" disabled>Joins</option>');
+  dropdown.prop('selectedIndex', 0);
 
-$.each(jointures, function(index, value) {
-  dropdown.append($('<option></option>').attr('value', value).text(value));
-  
-});
+  $.each(jointures, function (index, value) {
+    dropdown.append($('<option></option>').attr('value', value).text(value));
+
+  });
 });
 
 /* filters for table 1*/
 $('#getdata').click(function () {
   var showData = $('#show-data');
 
-  var liste, texte;
-  liste = document.getElementById("get-data");
-  texte = liste.options[liste.selectedIndex].text;
-
+  var liste = document.getElementById("get-data");
+  let target_table = $(liste).val()
+  console.log(target_table)
   $.getJSON('init', function (data) {
+    let table_data = data[target_table]
+    console.log(table_data)
 
-    var items = data[texte].filters.map(function (item) {
+    $('#builder-basic').queryBuilder('setFilters',true, table_data.filters);
+    
+
+    var items = table_data.filters.map(function (item) {
       return item.label;
     });
     showData.empty();
@@ -132,9 +136,9 @@ let a = document.getElementById("button");
 let b = document.getElementById("collapseTables");
 let c = document.getElementById("newconstraints"); /*div plus grande*/
 
-function myFunctionAppendDiv2(){
-  var x= document.createElement("div");
-  x.innerHTML= b.innerHTML;
+function myFunctionAppendDiv2() {
+  var x = document.createElement("div");
+  x.innerHTML = b.innerHTML;
   document.body.appendChild(x);
 }
 
