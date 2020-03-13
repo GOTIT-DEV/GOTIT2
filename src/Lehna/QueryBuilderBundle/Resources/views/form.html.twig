@@ -59,13 +59,25 @@
 			<div id="builder-basic"></div>
 		</div>
 	</div>
+
+
+
+
+	<div class="addContraints" id="addContraints">
+	</div>
+
+
+
 	<div class="col-xs-12 btn-group pull-left group-actions">
-		<button class="btn btn-xs btn-basic collapsed" type="button" onclick="myFunctionAppendDiv2()"id="button" data-toggle="collapse"  aria-expanded="false" data-target="#collapseTables">
+		<button class="btn btn-xs btn-basic collapsed" type="button" onclick="addDiv()">
 			<i class="glyphicon glyphicon-plus-sign" style="font-size:25px"></i>
 		</button>
-	</div>	
-	<div class="col-xs-12 col-sm-10" style="padding-left:25px" id="newconstraints">
-		<div class="panel panel-default collapse " id="collapseTables">
+	</div>
+
+
+	<template>	
+	<div class="col-xs-12 col-sm-10" style="padding-left:25px">
+		<div class="panel panel-default ">
 			<div class="panel-heading">
 				<strong>Nouvelle sélection</strong>
 			</div>
@@ -134,6 +146,9 @@
 				</div>
 			</div>
 		</div>
+	</template>
+	</div>
+	<div class="col-xs-12 col-sm-10" style="padding-left:25px">
 		<div>
 			<center>
 				<button type="submit" href="#resultats" value="Rechercher" class="btn btn-primary btn-lg" id="submit-button" style="min-width: 10em" data-loading-text="<i class='fas fa-spinner fa-spin'></i>">

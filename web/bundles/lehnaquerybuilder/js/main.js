@@ -132,14 +132,11 @@ $('#getconstraints').click(function () {
 });
 
 
-let a = document.getElementById("button");
-let b = document.getElementById("collapseTables");
-let c = document.getElementById("newconstraints"); /*div plus grande*/
-
-function myFunctionAppendDiv2() {
-  var x = document.createElement("div");
-  x.innerHTML = b.innerHTML;
-  document.body.appendChild(x);
+function addDiv() {
+  var cont = document.getElementById("addContraints");
+  var temp = document.getElementsByTagName("template")[0];
+  var clon = temp.content.cloneNode(true);
+  cont.appendChild(clon);
 }
 
 
