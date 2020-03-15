@@ -25,7 +25,6 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        dump('hello');
         return $this->render('@LehnaQueryBuilder/index.html.twig');
     }
 
@@ -37,5 +36,15 @@ class DefaultController extends Controller
     {
         $config = $service->make_qbuilder_config();
         return new JsonResponse($config);
+    }
+
+    /**
+     *  @Route("/query", name="query_test", methods={"GET"})
+     * 
+     */
+    public function get_query(Request $request)
+    {
+        $data = $request->request;
+        dump($data);
     }
 }
