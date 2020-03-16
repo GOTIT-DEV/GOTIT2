@@ -46,5 +46,19 @@ class DefaultController extends Controller
     {
         $data = $request->request;
         dump($data);
+        return $data;
+    }
+
+    /**
+     * Lists all user entities. 
+     * @Route("/ab", name="user_index", methods={"GET"})
+     * 
+     */
+    public function showUser(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $users = $em->getRepository('BbeesUserBundle:User')->findAll();
+        dump($users);
+        return $this;
     }
 }
