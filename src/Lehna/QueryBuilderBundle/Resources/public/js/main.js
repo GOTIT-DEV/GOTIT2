@@ -137,24 +137,27 @@ function addDiv() {
   cont.appendChild(clon);
 }
 
+
+function getTable() {
+  console.log("test");
+  var table_result = document.getElementById('get-data').val();
+  console.log(table_result);
+  if(document.getElementById('getdata').is(checked )==True){
+    var result = document.getElementById('builder-basic').queryBuilder('getRules');
+    if (!$.isEmptyObject(result)) {
+      alert(JSON.stringify(result, null, 2));
+  }
+  };
+}
+
 $(document).ready(_ => {
   fetch("init")
     .then(response => response.json())
     .then(qb_config => {
       console.log(qb_config);
-    })
-})
+    });
+});
 
-console.log("test");
 
-$('#submit-button').click(function () {
-  var table_result = $('#get-data').val();
-  console.log(table_result);
-  if($('#getdata').is(checked )==True){
-    var result = $('#builder-basic').queryBuilder('getRules');
-    if (!$.isEmptyObject(result)) {
-      alert(JSON.stringify(result, null, 2));
-  }
-  };
-})
+
 

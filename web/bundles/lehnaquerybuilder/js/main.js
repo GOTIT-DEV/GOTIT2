@@ -139,6 +139,18 @@ function addDiv() {
   cont.appendChild(clon);
 }
 
+function getTable() {
+  console.log("test");
+  var table_result = $('#get-data').val();
+  console.log(table_result);
+  if($('#getdata').is(":checked")==true){
+    var result = $('#builder-basic').queryBuilder('getRules');
+    if (!$.isEmptyObject(result)) {
+      alert(JSON.stringify(result, null, 2));
+  }
+  };
+}
+
 
 $(document).ready(_ => {
   fetch("init")
