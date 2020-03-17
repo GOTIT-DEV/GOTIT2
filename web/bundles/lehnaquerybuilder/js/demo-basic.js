@@ -1,26 +1,3 @@
-
-/* example 
-var rules_basic = {
-  condition: 'AND',
-  rules: [{
-    id: 'price',
-    operator: 'less',
-    value: 10.25
-  }, {
-    condition: 'OR',
-    rules: [{
-      id: 'category',
-      operator: 'equal',
-      value: 2
-    }, {
-      id: 'category',
-      operator: 'equal',
-      value: 1
-    }]
-  }]
-};
-*/
-
 var rules_basic = {
   condition: 'AND',
   rules: [{}, {
@@ -37,20 +14,20 @@ $('#builder-basic').queryBuilder({
   
   filters:  [ 
     {
-    id: "id",
-    label: "id",
+    id: "empty",
+    label: "empty",
     type: "integer"
-  },
-  {
-    id: "dateCre",
-    label: "dateCre",
-    type: "datetime"
   }],
 
   // rules: rules_basic
 });
 
-// à voir comment utiliser $('#builder-basic').queryBuilder('setFilters', true, [ ])
+
+$('.reset').on('click', function() {
+  var target = $(this).data('target');
+
+  $('#builder-'+target).queryBuilder('reset');
+});
 
 
 $('#btn-reset').on('click', function() {
@@ -59,14 +36,6 @@ $('#btn-reset').on('click', function() {
 
 $('#btn-set').on('click', function() {
   $('#builder-basic').queryBuilder('setRules', rules_basic);
-});
-
-$('#btn-get').on('click', function() {
-  var result = $('#builder-basic').queryBuilder('getRules');
-  
-  if (!$.isEmptyObject(result)) {
-    alert(JSON.stringify(result, null, 2));
-  }
 });
 
 
