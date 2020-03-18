@@ -7,25 +7,16 @@ var rules_basic2 = {
   }]
 };
 
-$('#builder-basic-2').queryBuilder({
-plugins: ['bt-tooltip-errors'],
+$('.builder-basic').eq(1).queryBuilder({
+  plugins: ['bt-tooltip-errors'],
 
-filters:  [ 
-  {
-  id: "empty",
-  label: "empty",
-  type: "integer"
-}],
+  filters:  [ 
+    {
+    id: "empty",
+    label: "empty",
+    type: "integer"
+  }],
 
-// rules: rules_basic2
+  // rules: rules_basic2
 });
 
-
-
-$('#btn-reset').on('click', function() {
-$('#builder-basic-2').queryBuilder('reset');
-});
-
-$('#btn-set').on('click', function() {
-$('#builder-basic-2').queryBuilder('setRules', rules_basic2);
-});

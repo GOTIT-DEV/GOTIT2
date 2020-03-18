@@ -7,7 +7,7 @@ var rules_basic2 = {
   }]
 };
 
-$('#builder-basic-2').queryBuilder({
+$('.builder-basic').eq(1).queryBuilder({
   plugins: ['bt-tooltip-errors'],
 
   filters:  [ 
@@ -21,11 +21,3 @@ $('#builder-basic-2').queryBuilder({
 });
 
 
-
-$('#btn-reset').on('click', function() {
-  $('#builder-basic-2').queryBuilder('reset');
-});
-
-$('#btn-set').on('click', function() {
-  $('#builder-basic-2').queryBuilder('setRules', rules_basic2);
-});

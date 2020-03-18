@@ -9,7 +9,7 @@ var rules_basic = {
 
 
 
-$('#builder-basic').queryBuilder({
+$('.builder-basic').eq(0).queryBuilder({
   plugins: ['bt-tooltip-errors'],
   
   filters:  [ 
@@ -26,14 +26,5 @@ $('#builder-basic').queryBuilder({
 $('.reset').on('click', function() {
   var target = $(this).data('target');
 
-  $('#builder-'+target).queryBuilder('reset');
-});
-
-
-$('#btn-reset').on('click', function() {
-  $('#builder-basic').queryBuilder('reset');
-});
-
-$('#btn-set').on('click', function() {
-  $('#builder-basic').queryBuilder('setRules', rules_basic);
+  $('.builder-'+target).eq(0).queryBuilder('reset');
 });

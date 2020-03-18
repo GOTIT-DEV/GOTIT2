@@ -21,8 +21,7 @@ $(document).ready(function () {
     let target_table = $(liste).val();
     $.getJSON('init', function (data) {
       let table_data = data[target_table];
-  
-      $('#builder-basic').queryBuilder('setFilters',true, table_data.filters);
+      $('.builder-basic').eq(0).queryBuilder('setFilters',true, table_data.filters);
       
   
       var items = table_data.filters.map(function (item) {
@@ -60,10 +59,16 @@ joints = [
   'full join'
 ];
 
+
 /* choosing table among others already chosen, joins, adjacent tables*/
 $('#add-joint').click(function () {
-  let dropdown = $('.joints');
-  let dropdown2 = $('.previous-table');
+  let menu_tables = $('.previous-table:last > option');
+  let adj_table = $('.adjacent-tables').eq(-1).find(':selected').text();
+
+  console.log(menu_tables); 
+  addJoint();
+  let dropdown = $('.joints').eq(-1);
+  let dropdown2 = $('.previous-table').eq(-1);
 
   dropdown.empty();
 
@@ -72,51 +77,76 @@ $('#add-joint').click(function () {
 
   dropdown2.empty();
 
-  dropdown2.append('<option selected="true" disabled>Choose one previous table</option>');
-  dropdown2.prop('selectedIndex', 0);
 
-  $.getJSON("init", function (data) {
-    $.each(data, function (key, entry) {
-      dropdown2.append($('<option></option>').attr('value', entry.human_readable_name).text(entry.human_readable_name));
-    })
-  });
+  if (menu_tables.length == 0) {
+    dropdown2.append('<option selected="true" disabled>Choose one previous table</option>');
+    dropdown2.prop('selectedIndex', 0);
+    let first_selection = $('#first-table').find(':selected').text(); 
+    dropdown2.append($('<option></option>').attr('value', first_selection).text(first_selection));
+  }
+  else {
+    $.each(menu_tables, function (key, entry) {
+      dropdown2.append($('<option></option>').attr('value', entry.value).text(entry.value));
+    });
+    dropdown2.append($('<option></option>').attr('value', adj_table).text(adj_table));
+  }
+
+
+
 
   $.each(joints, function (index, value) {
     dropdown.append($('<option></option>').attr('value', value).text(value));
 
   });
+
+
   /* json data for adjacent tables*/
-  $('.previous-table').onchange(function () {
-    let dropdown = $('.adjacent-tables');
-    console.log("test");
+  $('.previous-table').eq(-1).change(function () {
+    let dropdown = $('.adjacent-tables').eq(-1);
+
     dropdown.empty();
 
     dropdown.append('<option selected="true" disabled>Choose adjacent table</option>');
     dropdown.prop('selectedIndex', 0);
 
-    var liste, texte;
-    liste = document.getElementsByClassName("previous-table");
-    console.log(liste[-1]);
-    let lastElement = liste[length-1];
-    texte = lastElement.options[lastElement.selectedIndex].text;
+    var texte = $('.previous-table').eq(-1).find(":selected").text();
 
     $.getJSON("init", function (data) {
+
       var texte2 = data[texte];
-      console.log(texte2.relations);
       $.each(texte2.relations, function (key, value) {
         dropdown.append($('<option></option>').attr('value', key).text(key));
       });
     })
   });
-  /* filters for table 2 */
-  $('.new-constraints').change(function () {
-    var showData = $('#show-data2');
 
-    var liste = document.getElementsByClassName("adjacent-tables");
-    let lastElement = liste[length-1];
-    texte = lastElement.options[lastElement.selectedIndex].text;
+
+  /* filters for table 2 */
+  $('.new-constraints').click(function () {
+    if($(this).is(":checked")==false){
+      return;
+    }
+    var showData = $('.show-data2').eq(-1);
+
+    var texte = $('.adjacent-tables').eq(-1).find(':selected').text();
+
 
     $.getJSON('init', function (data) {
+      
+      $('.builder-basic').eq(-1).queryBuilder({
+        plugins: ['bt-tooltip-errors'],
+      
+        filters:  [ 
+          {
+          id: "empty",
+          label: "empty",
+          type: "integer"
+        }],
+      
+        // rules: rules_basic2
+      });
+
+      $('.builder-basic').eq(-1).queryBuilder('setFilters',true, data[texte].filters);
 
       var items = data[texte].filters.map(function (item) {
         return item.label;
@@ -149,18 +179,17 @@ function removeDiv() {
 
 
 function addJoint() {
-  var cont = document.getElementById("add-constraints");
+  var cont = $('.add-constraints').eq(-1);
   var temp = document.getElementsByTagName("template")[0];
   var clon = temp.content.cloneNode(true);
-  cont.appendChild(clon);
+  cont.append(clon);
 }
 
 function getTable() {
   console.log("test");
   var table_result = $('#first-table').val();
-  console.log(table_result);
   if($('#first-constraints').is(":checked")==true){
-    var result = $('#builder-basic').queryBuilder('getRules');
+    var result = $('.builder-basic').eq(0).queryBuilder('getRules');
     if (!$.isEmptyObject(result)) {
       alert(JSON.stringify(result, null, 2));
   }
@@ -176,9 +205,4 @@ $(document).ready(_ => {
 
     })
 })
-
-
-
-
-
 
