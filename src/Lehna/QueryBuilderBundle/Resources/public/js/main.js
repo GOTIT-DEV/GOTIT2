@@ -1,6 +1,6 @@
 /* choose first table and constraints on it*/
 $(document).ready(function () {
-  let dropdown = $('#get-data');
+  let dropdown = $('#first-table');
 
   dropdown.empty();
 
@@ -14,13 +14,13 @@ $(document).ready(function () {
     })
   });
 
-  $('#get-data').click(function () {
+  $('#first-table').click(function () {
     var showData = $('#show-data');
   
-    var liste = document.getElementById("get-data");
-    let target_table = $(liste).val()
+    var liste = document.getElementById("first-table");
+    let target_table = $(liste).val();
     $.getJSON('init', function (data) {
-      let table_data = data[target_table]
+      let table_data = data[target_table];
   
       $('#builder-basic').queryBuilder('setFilters',true, table_data.filters);
       
@@ -51,7 +51,7 @@ $(document).ready(function () {
 
 
 /* relation between tables */
-jointures = [
+joints = [
   'inner join',
   'left join',
   'right join',
@@ -61,18 +61,18 @@ jointures = [
 ];
 
 /* choosing table among others already chosen, joins, adjacent tables*/
-$('#get-addDiv').click(function () {
-  let dropdown = $('#get-data3');
-  let dropdown2 = $('#get-data2');
+$('#add-joint').click(function () {
+  let dropdown = $('.joints');
+  let dropdown2 = $('.previous-table');
 
   dropdown.empty();
 
-  dropdown.append('<option selected="true" disabled>Joins</option>');
+  dropdown.append('<option selected="true" disabled>Choose joint</option>');
   dropdown.prop('selectedIndex', 0);
 
   dropdown2.empty();
 
-  dropdown2.append('<option selected="true" disabled>Joins</option>');
+  dropdown2.append('<option selected="true" disabled>Choose one previous table</option>');
   dropdown2.prop('selectedIndex', 0);
 
   $.getJSON("init", function (data) {
@@ -81,22 +81,24 @@ $('#get-addDiv').click(function () {
     })
   });
 
-  $.each(jointures, function (index, value) {
+  $.each(joints, function (index, value) {
     dropdown.append($('<option></option>').attr('value', value).text(value));
 
   });
   /* json data for adjacent tables*/
-  $('#get-data4').click(function () {
-    let dropdown = $('#get-data4');
-
+  $('.previous-table').onchange(function () {
+    let dropdown = $('.adjacent-tables');
+    console.log("test");
     dropdown.empty();
 
-    dropdown.append('<option selected="true" disabled>Relations</option>');
+    dropdown.append('<option selected="true" disabled>Choose adjacent table</option>');
     dropdown.prop('selectedIndex', 0);
 
     var liste, texte;
-    liste = document.getElementById("get-data2");
-    texte = liste.options[liste.selectedIndex].text;
+    liste = document.getElementsByClassName("previous-table");
+    console.log(liste[-1]);
+    let lastElement = liste[length-1];
+    texte = lastElement.options[lastElement.selectedIndex].text;
 
     $.getJSON("init", function (data) {
       var texte2 = data[texte];
@@ -107,12 +109,12 @@ $('#get-addDiv').click(function () {
     })
   });
   /* filters for table 2 */
-  $('#getconstraints').click(function () {
+  $('.new-constraints').change(function () {
     var showData = $('#show-data2');
 
-    var liste, texte;
-    liste = document.getElementById("get-data4");
-    texte = liste.options[liste.selectedIndex].text;
+    var liste = document.getElementsByClassName("adjacent-tables");
+    let lastElement = liste[length-1];
+    texte = lastElement.options[lastElement.selectedIndex].text;
 
     $.getJSON('init', function (data) {
 
@@ -146,8 +148,8 @@ function removeDiv() {
 
 
 
-function addDiv() {
-  var cont = document.getElementById("addContraints");
+function addJoint() {
+  var cont = document.getElementById("add-constraints");
   var temp = document.getElementsByTagName("template")[0];
   var clon = temp.content.cloneNode(true);
   cont.appendChild(clon);
@@ -155,9 +157,9 @@ function addDiv() {
 
 function getTable() {
   console.log("test");
-  var table_result = $('#get-data').val();
+  var table_result = $('#first-table').val();
   console.log(table_result);
-  if($('#getdata').is(":checked")==true){
+  if($('#first-constraints').is(":checked")==true){
     var result = $('#builder-basic').queryBuilder('getRules');
     if (!$.isEmptyObject(result)) {
       alert(JSON.stringify(result, null, 2));
@@ -174,6 +176,9 @@ $(document).ready(_ => {
 
     })
 })
+
+
+
 
 
 
