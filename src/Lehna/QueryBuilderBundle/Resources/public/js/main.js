@@ -148,6 +148,12 @@ $('#add-joint').click(function () {
 
       $('.builder-basic').eq(-1).queryBuilder('setFilters',true, data[texte].filters);
 
+      $('.reset').on('click', function() {
+        var target = $(this).data('target');
+      
+        $('.builder-'+target).eq(-1).queryBuilder('reset');
+      });
+
       var items = data[texte].filters.map(function (item) {
         return item.label;
       });
