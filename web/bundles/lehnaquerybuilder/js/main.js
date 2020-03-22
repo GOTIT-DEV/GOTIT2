@@ -8,6 +8,7 @@
 */ 
 
 
+
 // Initializing the first query block
 $(document).ready(function () {
   
@@ -207,9 +208,11 @@ function removeDiv() {
 function getTable() {
   
   if($('#first-constraints').is(":checked")==true){
+    var result1 = document.getElementById("first-table");
+    var valeur = result1.options[result1.selectedIndex].value;
     var result = $('.builder-basic').eq(0).queryBuilder('getRules');
-    if (!$.isEmptyObject(result)) {
-      alert(JSON.stringify(result, null, 2));
+    if (!$.isEmptyObject( [valeur ,[result] ])) {
+      alert(JSON.stringify([valeur ,[result] ], null, 2));
     }
   };
 }
@@ -222,6 +225,9 @@ $(document).ready(_ => {
       console.log(qb_config);
     })
 })
+
+
+
 
 
 //Get the button
@@ -243,3 +249,8 @@ function topFunction() {
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
 }
+
+
+
+
+

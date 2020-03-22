@@ -1,161 +1,106 @@
-
 import { fetchCurrentUser } from '../utils.js'
 import { dtconfig, linkify } from '../datatables_utils.js'
 
 
-let lastQuery = {}
-let detailsTable = null
-let dtbuttons = null
-let detailsFormData = null
+// Render floats with precision 3
+const renderNumber = $.fn.dataTable.render.number('', '.', 3)
+
+// Result table columns definition
+let columns = [
+  dtconfig.expandColumn,
+  {
+    data: "taxon_name",
+    render: linkify("referentieltaxon_show", { col: 'id' })
+  }, {
+    data: "nb_sta"
+  }, {
+    data: "lmp",
+    render: renderNumber,
+    defaultContent: ""
+  }, {
+    data: "mle",
+    render: renderNumber,
+    defaultContent: ""
+  }, {
+    data: "nb_sta_co1"
+  }, {
+    data: "lmp_co1",
+    render: renderNumber,
+    defaultContent: ""
+  }, {
+    data: "mle_co1",
+    render: renderNumber,
+    defaultContent: ""
+  }, {
+    title: "<i class='fas fa-map-marker' style='margin-left:7px'></i>",
+    data: "id",
+    orderable: false,
+    render: (data, type, row) =>
+      Mustache.render($("#details-form-template").html(), row)
+  }
+]
 
 /**
- * Initialize result table
- * @param {String} tableId DOM table ID
+ * Initializes Datatable on result table DOM element
+ * @param {String} tableId result table DOM id
  */
-export function initDataTable(tableId) {
-  uiWaitResponse()
-  // Don't try to initialize if already init
+function initDataTable(tableId, drawCallback) {
+  
+  const table = $(tableId)
+
   if (!$.fn.DataTable.isDataTable(tableId)) {
     fetchCurrentUser()
       .then(response => response.json())
       .then(user => {
-        dtbuttons = (user.role === 'ROLE_INVITED') ? [] : dtconfig.buttons
-        // Init DataTable
-        const table = $(tableId)
-        let dataTable = table.DataTable({
-          autoWidth: false,
-          responsive: true,
-          ajax: {
-            "url": Routing.generate("motu-query"),
-            "dataSrc": "rows",
-            "type": "POST",
-            "data": _ => {
-              return $(ids.form).serialize()
-            }
-          },
-          language: dtconfig.language[table.data('locale')],
-          dom: "lfrtipB",
-          buttons: dtbuttons,
-          columns: [{
-            data: "taxname",
-            render: linkify("referentieltaxon_show", {
-              col: 'id',
-              _locale: table.data('locale')
-            })
-          }, {
-            data: "methode"
-          }, {
-            data: "motu_title",
-          }, {
-            data: "nb_seq"
-          }, {
-            data: "nb_motus"
-          }, {
+
+        // Allow result table download to authorized users
+        const dtbuttons = user.role === 'ROLE_INVITED' ? [] : dtconfig.buttons
+
+        // Show download column to authorized users 
+        if (user.role !== 'ROLE_INVITED')
+          columns.push({
+            title: "<i class='fas fa-download' style='margin-left:7px'></i>",
+            orderable: false,
             data: "id",
             render: (data, type, row) =>
-              Mustache.render($("#details-form-template").html(), row)
-          }],
-          drawCallback: _ => {
-            // Toggle UI loading done
-            uiReceivedResponse()
-            // Init tooltips
-            $('[data-toggle="tooltip"]').tooltip()
-            // Init detail forms
-            $(".details-form").on('submit', event => {
-              event.preventDefault();
-              detailsFormData = $(event.target).serializeArray()
-              lastQuery.criteres.forEach(crit => {
-                detailsFormData.push({
-                  name: 'criteres[]',
-                  value: crit
-                })
-              })
-              detailsFormData.push({
-                name: 'niveau',
-                value: lastQuery.niveau
-              })
-              // Init details table if it is not already done
-              if (!$.fn.DataTable.isDataTable(ids.details))
-                detailsTable = initModalTable()
-              else
-                detailsTable.ajax.reload()
-              $("#modal-container .modal").modal('show');
-            });
-          }
-        }).on('xhr', _ => {
-          // Keep track of last query parameters
-          lastQuery = dataTable.ajax.json().query
-        })
+              Mustache.render($("#download-form-template").html(), row)
+          })
 
-        // Init form submit event
-        $(ids.form).submit(event => {
+        table.DataTable({
+          autoWidth: false,
+          responsive: {
+            orthogonal: "responsive",
+            details: {
+              type: 'column'
+            }
+          },
+          ajax: {
+            "url": Routing.generate('co1-sampling-query'),
+            "type": "POST",
+            "dataSrc": "",
+            "data": _ => {
+              return $("#main-form").serialize()
+            }
+          },
+          language: dtconfig.language[$("html").attr("lang")],
+          dom: "lfrtipB",
+          buttons: dtbuttons,
+          order: [1, 'asc'],
+          columns: columns,
+
+          drawCallback: drawCallback
+        }) // datatables
+
+        /****************************
+         * Submit form handler
+         ************************** */
+        $("#main-form").submit(event => {
           event.preventDefault()
-          uiWaitResponse()
-          dataTable.ajax.reload()
+          $(this).find("button[type='submit']").button('loading')
+          table.DataTable().ajax.reload()
         })
       })
   }
 }
 
-/**
-   * Initialize datatable on modal table
-   */
-function initModalTable(formData) {
-  return $(ids.details).DataTable({
-    autoWidth: false,
-    responsive: true,
-    ajax: {
-      type: 'POST',
-      url: Routing.generate("motu-modal"),
-      dataSrc: '',
-      data: _ => {
-        return detailsFormData
-      }
-    },
-    language: dtconfig.language[$("html").attr("lang")],
-    columns: [{
-      data: 'code',
-      render: (data, type, row) => {
-        let route = row.type ?
-          'sequenceassembleeext_show' :
-          'sequenceassemblee_show'
-        return linkify(route,
-          { col: 'id', placement: 'right' })(data, type, row)
-      }
-    }, {
-      data: 'acc',
-      render: linkify('https://www.ncbi.nlm.nih.gov/nuccore/',
-        { col: 'acc', ellipsis: false, generateRoute: false })
-    }, {
-      data: 'gene'
-    }, {
-      data: 'type',
-      render: seqType => {
-        return seqType ?
-          Translator.trans("entity.seq.type.externe") :
-          Translator.trans("entity.seq.type.interne")
-      }
-    }, {
-      data: 'motu'
-    }, {
-      data: 'critere'
-    }],
-    dom: "lfrtipB",
-    buttons: dtbuttons,
-    drawCallback: _ => { $('[data-toggle="tooltip"]').tooltip() }
-  })
-}
-
-/**
- * Toggle UI loading mode
- */
-function uiWaitResponse() {
-  $(ids.form).find("button[type='submit']").button('loading')
-}
-
-/**
- * Toggle UI loading done
- */
-function uiReceivedResponse() {
-  $(ids.form).find("button[type='submit']").button('reset')
-}
+export { initDataTable }
