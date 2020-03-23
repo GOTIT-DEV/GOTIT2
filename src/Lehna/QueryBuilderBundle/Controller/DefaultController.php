@@ -52,7 +52,10 @@ class DefaultController extends Controller
     public function indexAction()
     {
         return $this->render('@LehnaQueryBuilder/index.html.twig');
+        
     }
+
+    
 
 
     /**
@@ -144,10 +147,11 @@ class DefaultController extends Controller
         return $this->render('@LehnaQueryBuilder/results.html.twig',['users'=>$users]);
     }
 
+    
 
     /**
      * Lists all station entities. 
-     * @Route("/{table}", name="table_get", methods={"POST"})
+     * @Route("/table", name="table_get", methods={"GET"})
      * 
      */
     public function showStation(Request $request,$table)
@@ -161,6 +165,37 @@ class DefaultController extends Controller
             $id = $entity->getId();
             $user = $entity-> getUserCre();
             $tab_toshow[] = array( "id" => $id, "user" => $user);
+        }
+        $response = new Response ();
+        $response->setContent ( json_encode ( array ( 
+            "rows"  => $tab_toshow       			
+            ) ) );
+        // If it is an Ajax request: returns the content in json format
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;  
+    }
+
+
+    /**
+     * Lists all station entities. 
+     * @Route("/sanscontraintes", name="tablesSans_get", methods={"GET"})
+     * 
+     */
+    public function showStation2(Request $request)
+    {
+        $service = $this->get('bbees_e3s.generic_function_e3s');
+        $em = $this->getDoctrine()->getManager();
+        $tables = $em->getRepository('BbeesE3sBundle:Station')->createQueryBuilder('station')
+            ->leftJoin('BbeesE3sBundle:Pays', 'pays', 'WITH', 'station.paysFk = pays.id')
+            ->getQuery()
+            ->getResult();
+        $tab_toshow =[];
+        foreach($tables as $entity)
+        {
+            $tab_toshow[] = array( "station.id" => $entity->getId(), "station.codeStation" => $entity->getCodeStation(),
+             "station.nomStation" => $entity->getNomStation(),
+             "pays.codePays" => $entity->getPaysFk()->getCodePays());
         }
         $response = new Response ();
         $response->setContent ( json_encode ( array ( 

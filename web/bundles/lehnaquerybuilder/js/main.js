@@ -229,7 +229,6 @@ $(document).ready(_ => {
 
 
 
-
 //Get the button
 var mybutton = document.getElementById("myBtn");
 

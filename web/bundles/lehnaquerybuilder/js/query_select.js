@@ -8,7 +8,7 @@ export class QuerySelector {
      * @param {string} formId Form selector in DOM
      * @param {string} toggleId Checkbox selector to toggle genus/species selection
      */
-    constructor(formId, toggleId = null) {
+    constructor(formId) {
       this.form = $(formId)
   
       this.urls = {
