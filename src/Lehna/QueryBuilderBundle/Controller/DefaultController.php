@@ -55,8 +55,6 @@ class DefaultController extends Controller
         
     }
 
-    
-
 
     /**
      * @Route("/init", name="querybuilder_init", methods={"GET"})
@@ -79,60 +77,6 @@ class DefaultController extends Controller
         return $data;
     }
 
-    /**
-     *  @Route("/response", name="response_test", methods={"POST"})
-     * 
-     */
-    public function indexjsonAction(Request $request)
-    {   
-        // load services
-        $service = $this->get('bbees_e3s.generic_function_e3s');
-        $em = $this->getDoctrine()->getManager();
-        //
-        $rowCount = ($request->get('rowCount')  !== NULL) ? $request->get('rowCount') : 10;
-        $orderBy = ($request->get('sort')  !== NULL) ? $request->get('sort') : array('station.dateMaj' => 'desc', 'station.id' => 'desc');  
-        $minRecord = intval($request->get('current')-1)*$rowCount;
-        $maxRecord = $rowCount;      
-        $tab_toshow =[];
-        $entities_toshow = $em->getRepository("BbeesE3sBundle:Station")->createQueryBuilder('station')
-            ->where('LOWER(station.codeStation) LIKE :criteriaLower')
-            ->setParameter('criteriaLower', strtolower($request->get('searchPhrase')).'%')
-            ->leftJoin('BbeesE3sBundle:Pays', 'pays', 'WITH', 'station.paysFk = pays.id')
-            ->leftJoin('BbeesE3sBundle:Commune', 'commune', 'WITH', 'station.communeFk = commune.id')
-            ->addOrderBy(array_keys($orderBy)[0], array_values($orderBy)[0])
-            ->getQuery()
-            ->getResult();
-        $nb_entities = count($entities_toshow);
-        $entities_toshow = array_slice($entities_toshow, $minRecord, $rowCount); 
-        
-        foreach($entities_toshow as $entity)
-        {
-            $id = $entity->getId();
-            $DateCre = ($entity->getDateCre() !== null) ?  $entity->getDateCre()->format('Y-m-d H:i:s') : null;
-            $DateMaj = ($entity->getDateMaj() !== null) ?  $entity->getDateMaj()->format('Y-m-d H:i:s') : null;
-            $query = $em->createQuery('SELECT collecte.id FROM BbeesE3sBundle:Collecte collecte WHERE collecte.stationFk = '.$id.'')->getResult();
-            $stationFk = (count($query) > 0) ? $id : '';
-            $tab_toshow[] = array( "id" => $id, "station.id" => $id, "station.codeStation" => $entity->getCodeStation(),
-             "station.nomStation" => $entity->getNomStation(),
-             "commune.codeCommune" => $entity->getCommuneFk()->getCodeCommune(),
-             "pays.codePays" => $entity->getPaysFk()->getCodePays(),
-             "station.latDegDec" => $entity->getLatDegDec(), "station.longDegDec" => $entity->getLongDegDec(),
-             "station.dateCre" => $DateCre, "station.dateMaj" => $DateMaj, 
-             "userCreId" => $service->GetUserCreId($entity), "station.userCre" => $service->GetUserCreUsername($entity) ,"station.userMaj" => $service->GetUserMajUsername($entity),
-             "linkCollecte" => $stationFk);
-        }                
-        $response = new Response ();
-        $response->setContent ( json_encode ( array (
-            "current"    => intval( $request->get('current') ), 
-            "rowCount"  => $rowCount,            
-            "rows"     => $tab_toshow, 
-            "total"    => $nb_entities // total data array				
-            ) ) );
-        // If it is an Ajax request: returns the content in json format
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;          
-    }
 
     /**
      * Lists all user entities. 
@@ -145,35 +89,6 @@ class DefaultController extends Controller
         $users = $em->getRepository('BbeesUserBundle:User')->findAll();
         dump($users);
         return $this->render('@LehnaQueryBuilder/results.html.twig',['users'=>$users]);
-    }
-
-    
-
-    /**
-     * Lists all station entities. 
-     * @Route("/table", name="table_get", methods={"GET"})
-     * 
-     */
-    public function showStation(Request $request,$table)
-    {
-        $service = $this->get('bbees_e3s.generic_function_e3s');
-        $em = $this->getDoctrine()->getManager();
-        $tables = $em->getRepository('BbeesE3sBundle:'.$table)->findAll();
-        $tab_toshow =[];
-        foreach($tables as $entity)
-        {
-            $id = $entity->getId();
-            $user = $entity-> getUserCre();
-            $tab_toshow[] = array( "id" => $id, "user" => $user);
-        }
-        $response = new Response ();
-        $response->setContent ( json_encode ( array ( 
-            "rows"  => $tab_toshow       			
-            ) ) );
-        // If it is an Ajax request: returns the content in json format
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;  
     }
 
 
@@ -205,5 +120,63 @@ class DefaultController extends Controller
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;  
+    }
+
+    /**
+    * Lists all station entities. 
+    * @Route("/getgenusset", name="get_json", methods={"GET"})
+    * 
+    */
+    
+
+    public function getGenusSet()
+    {
+        $qb    = $this->entityManager->createQueryBuilder();
+        $query = $qb->select('rt.genus')
+        ->from('BbeesE3sBundle:ReferentielTaxon', 'rt')
+        ->where('rt.genus IS NOT NULL')
+        ->distinct()
+        ->orderBy('rt.genus')
+        ->getQuery();
+        return $query->getResult();
+    }
+
+    /**
+    * Lists all station entities. 
+    * @Route("/getgenusset2", name="get_json2", methods={"GET"})
+    * 
+    */
+
+    public function getGenusSet2(Request $request)
+    {
+        $request->request->get("field");
+        $qb    = $this->entityManager->createQueryBuilder();
+        $query = $qb->from('BbeesE3sBundle:ReferentielTaxon', 'rt');
+        // on tombe sur une contrainte
+        $query = $query->where('rt.genus IS NOT NULL');
+        // etc...
+        $query = $query->select("rt.genus");
+
+        $query->distinct()
+        ->orderBy('rt.genus')
+        ->getQuery();
+        return $query->getResult();
+    }
+
+    /**
+    * Lists all station entities. 
+    * @Route("/searchquery", name="search_query", methods={"GET"})
+    * 
+    */
+    public function searchQuery(Request $request, SpeciesQueryService $service) {
+        # POST parameters
+        $data = $request->request;
+        # execute query
+        $res  = $service->getMotuCountList($data);
+        # return JSON response
+        return new JsonResponse(array(
+        'rows'     => $res,
+        'query'    => $data->all(),
+        ));
     }
 }
