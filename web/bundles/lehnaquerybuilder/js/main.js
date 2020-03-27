@@ -203,19 +203,71 @@ function removeDiv() {
 }*/
 
 /**
- * Returning the recap of the constraint(s) to apply for the first query-builder.
+ * Read and convert the form's fields into json
  */
+
+
 function getTable() {
   
-  if($('#first-constraints').is(":checked")==true){
-    var result1 = document.getElementById("first-table");
-    var valeur = result1.options[result1.selectedIndex].value;
-    var result = $('.builder-basic').eq(0).queryBuilder('getRules');
-    if (!$.isEmptyObject( [valeur ,[result] ])) {
-      alert(JSON.stringify([valeur ,[result] ], null, 2));
-    }
-  };
+  let data_initial = get_form_initial()
+  let data_join_blocks = get_form_block_data()
+
+  var jsonData = JSON.stringify({"initial": data_initial,"joins": data_join_blocks});
+  console.log(jsonData);
+
+  $.ajax({ 
+    url : 'query_test',
+    type: 'POST',
+    data: jsonData,
+    dataType: 'json',
+  });
 }
+
+function get_form_initial() {
+  
+  var table1 = document.getElementById("first-table");
+  var table = table1.options[table1.selectedIndex].value;
+  if($('#first-constraints').is(":checked")==true){
+    var constraintsTable1 = $('.builder-basic').eq(0).queryBuilder('getRules');}
+  else {var constraintsTable1=null};
+  
+  return {table,constraintsTable1}
+
+}
+
+
+function get_form_block_data() {
+
+  let block_list = $(".formBlock")
+  let data = block_list.map(function () {
+    let block = $(this)
+    let adj_table = block.find("#adjacent-tables_id").val()
+    let formerT = block.find("#formerTable").val()
+    let idJoin = block.find("#joint_table").val()
+    if($('#second_constraints').is(":checked")==true){
+      var constraintsTable2 = $('.builder-basic').eq(-1).queryBuilder('getRules');}
+    else {var constraintsTable2=null;};
+    return { 'formerTable' : formerT,'Join' : idJoin, 'adjacent_table' : adj_table, 'constraints':constraintsTable2 }}).toArray()
+    console.log(data)
+    return data 
+}
+
+/*
+
+
+ajax: 
+  }
+  "url": Routing.generate('queryResponse'),
+  "type": "POST",
+  "dataSrc": "",
+  "data": _ => {
+    return $("#main-form").serialize()
+
+  }
+  }
+*/
+
+
 
 // Init the page with the JSON form containing the info of the database
 $(document).ready(_ => {

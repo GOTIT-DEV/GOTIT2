@@ -71,7 +71,7 @@
 
 
 
-	<div class="col-xs-12 btn-group pull-left group-actions">
+	<div class="col-xs-12 btn-group pull-left group-actions" id="add-joint-div">
 		<button class="btn btn-xs btn-basic collapsed" id="add-joint" type="button" >
 			<i class="glyphicon glyphicon-plus-sign" style="font-size:25px"></i>
 		</button>
@@ -79,82 +79,84 @@
 
 
 	<template>	
-	<div class="col-xs-12 col-sm-10" style="padding-left:25px">
-		<div class="panel panel-default ">
-			<div class="panel-heading">
-				<strong>Nouvelle sélection</strong>
-			</div>
-			<div class="panel-body">
-				<div class="row">
-					<div class="col-xs-12 col-sm-4">
-						<div class="form-group">
-							<label for="lot-materiel" class="control-label">
-								Table précédente</label>
-							<select class="previous-table" ></select>
-						</div>
-					</div>
-					<div class="col-xs-12 col-sm-2">
-						<div class="form-group">
-							<label for="individu" class="control-label">
-								Choix jointure
-							</label>
-							<select class="joints" ></select>
-						</div>
-						<!-- <div class="btn-group bootstrap-select form-control concordance"></div> -->
-					</div>
-					<div class="col-xs-12 col-sm-4">
-						<div class="form-group">
-							<label for="sequence" class="control-label">
-								Table adjacente
-							</label>
-							<select class="adjacent-tables" ></select>
-						</div>
-					</div>
-					<div class="col-xs-12 col-sm-2">
-						<div class="form-horizontal">
+	<div class="col-xs-12 col-sm-10" id="newSelection" style="padding-left:25px">
+		<div class="formBlock">
+			<div class="panel panel-default ">
+				<div class="panel-heading">
+					<strong>Nouvelle sélection</strong>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-xs-12 col-sm-4">
 							<div class="form-group">
-								<div class="checkbox checkbox-inline">
-									<label class="control-label" title data-toggle="tooltip" data-placement="right">
-										<input type="checkbox" data-toggle="collapse" class="collapsed new-constraints" aria-expanded="false" data-target=".collapseConstraints2">
-										<strong>
-											Contraintes
-										</strong>
-										<i class="fas fa-spinner fa-spin pull-right hidden"  style="font-size:16px"></i>
-									</label>
+								<label for="lot-materiel" class="control-label">
+									Table précédente</label>
+								<select class="previous-table" id="formerTable" ></select>
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-2">
+							<div class="form-group">
+								<label for="individu" class="control-label" >
+									Choix jointure
+								</label>
+								<select class="joints" id="joint_table" ></select>
+							</div>
+							<!-- <div class="btn-group bootstrap-select form-control concordance"></div> -->
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<div class="form-group">
+								<label for="sequence" class="control-label">
+									Table adjacente
+								</label>
+								<select class="adjacent-tables" id="adjacent-tables_id" ></select>
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-2">
+							<div class="form-horizontal">
+								<div class="form-group">
+									<div class="checkbox checkbox-inline">
+										<label class="control-label" title data-toggle="tooltip" data-placement="right">
+											<input id="second_constraints" type="checkbox" data-toggle="collapse" class="collapsed new-constraints" aria-expanded="false" data-target=".collapseConstraints2">
+											<strong>
+												Contraintes
+											</strong>
+											<i class="fas fa-spinner fa-spin pull-right hidden"  style="font-size:16px"></i>
+										</label>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="panel-collapse collapse col-xs-12 collapseConstraints2" aria-expanded="false">
-				<div class="col-xs-12 col-sm-5 col-sm col-lg-4" style="padding-left:20px">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<strong>
-								Choix des champs
-							</strong>
-						</div>
-						<div class="panel-body">
-							<div class="form-group">
-								<div  class="show-data2">
+				<div class="panel-collapse collapse col-xs-12 collapseConstraints2" aria-expanded="false">
+					<div class="col-xs-12 col-sm-5 col-sm col-lg-4" style="padding-left:20px">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<strong>
+									Choix des champs
+								</strong>
+							</div>
+							<div class="panel-body">
+								<div class="form-group">
+									<div  class="show-data2">
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="col-xs-2 col-sm-8">
-					<div class="builder-basic"></div>
-					<div class="btn-group" >
-      					<button class="btn btn-warning reset" data-target="basic">Reset</button>
-    				</div>
+					<div class="col-xs-2 col-sm-8">
+						<div class="builder-basic"></div>
+						<div class="btn-group" >
+							<button class="btn btn-warning reset" data-target="basic">Reset</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	</template>
 	
-	<div class="col-xs-12 col-sm-10" style="padding-left:25px">
+	<div class="col-xs-12 col-sm-9" style="padding-left:25px">
 		<div>
 			<center>
 				<button type="submit" onclick="getTable()" href="#resultats" value="Rechercher" class="btn btn-primary btn-lg" id="submit-button" style="min-width: 10em" data-loading-text="<i class='fas fa-spinner fa-spin'></i>">

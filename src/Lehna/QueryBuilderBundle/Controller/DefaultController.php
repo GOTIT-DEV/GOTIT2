@@ -77,7 +77,6 @@ class DefaultController extends Controller
         return $data;
     }
 
-
     /**
      * Lists all user entities. 
      * @Route("/ab", name="user_index", methods={"GET"})
