@@ -67,14 +67,14 @@ class DefaultController extends Controller
     }
 
     /**
-     *  @Route("/query", name="query_test", methods={"GET"})
+     *  @Route("/query", name="query_test", methods={"POST"})
      * 
      */
     public function get_query(Request $request)
     {
         $data = $request->request;
         dump($data);
-        return $data;
+        return new JsonResponse(["x"=> "hello"]);
     }
 
     /**

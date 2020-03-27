@@ -46,7 +46,7 @@ $(document).ready(function () {
       showData.empty();
   
       if (items.length) {
-        var content = '<input type="checkbox" >' + items.join('</input><br><input type="checkbox" >') + '</input><br>';
+        var content = '<label><input type="checkbox" name="my_form" value="" >' + items.join('</input></label><br><label><input type="checkbox" name="my_form" >') + '</input></label><br>';
         var list = $('<ul />').html(content);
         showData.append(list);
 
@@ -212,14 +212,17 @@ function getTable() {
   let data_initial = get_form_initial()
   let data_join_blocks = get_form_block_data()
 
-  var jsonData = JSON.stringify({"initial": data_initial,"joins": data_join_blocks});
+  var jsonData = {"initial": data_initial,"joins": data_join_blocks};
   console.log(jsonData);
 
   $.ajax({ 
-    url : 'query_test',
+    url : 'query', //query_test
     type: 'POST',
     data: jsonData,
     dataType: 'json',
+    success : function(response){
+      console.log(response);
+    }
   });
 }
 
@@ -230,7 +233,7 @@ function get_form_initial() {
   if($('#first-constraints').is(":checked")==true){
     var constraintsTable1 = $('.builder-basic').eq(0).queryBuilder('getRules');}
   else {var constraintsTable1=null};
-  
+
   return {table,constraintsTable1}
 
 }
@@ -252,20 +255,6 @@ function get_form_block_data() {
     return data 
 }
 
-/*
-
-
-ajax: 
-  }
-  "url": Routing.generate('queryResponse'),
-  "type": "POST",
-  "dataSrc": "",
-  "data": _ => {
-    return $("#main-form").serialize()
-
-  }
-  }
-*/
 
 
 
