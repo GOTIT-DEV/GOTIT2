@@ -29,7 +29,8 @@ $(document).ready(function () {
   $('#first-table').click(function () {
     
     // Init list of fields
-    var showData = $('#show-data');
+    var showData1 = $('#show-data1');
+    var showData2 = $('#show-data2');
     var liste = document.getElementById("first-table");
     let target_table = $(liste).val();
 
@@ -43,13 +44,17 @@ $(document).ready(function () {
         return item.label;
       });
 
-      showData.empty();
+      showData1.empty();
+      showData2.empty();
   
       if (items.length) {
-        var content = '<label><input type="checkbox" name="my_form" value="" >' + items.join('</input></label><br><label><input type="checkbox" name="my_form" >') + '</input></label><br>';
-        var list = $('<ul />').html(content);
-        showData.append(list);
-
+        
+        var content = '<input type="checkbox" name="my_form" value="' + items.join('"/><br><input type="checkbox" name="my_form" value="') + '"/><br>';
+        var content2= '<label>' + items.join('</label><br><label>') + '</label><br>';
+        var list = $('<ul style="padding-left: 0px;"/>').html(content);
+        var list2= $('<ul />').html(content2);
+        showData1.append(list);
+        showData2.append(list2);
       }
     });
   });
@@ -152,7 +157,8 @@ $('#add-joint').click(function () {
     }
 
     // Init the fields of the chosen adjacent table
-    var showData = $('.show-data2').eq(-1);
+    var showData3 = $('#show-data3').eq(-1);
+    var showData4= $('#show-data4').eq(-1);
     var texte = $('.adjacent-tables').eq(-1).find(':selected').text();
 
     // Init a block of query-builder with the menu of fields and the filters to apply 
@@ -179,15 +185,20 @@ $('#add-joint').click(function () {
         $('.builder-'+target).eq(-1).queryBuilder('reset');
       });
 
+
       var items = data[texte].filters.map(function (item) {
         return item.label;
       });
-      showData.empty();
+      showData3.empty();
+      showData4.empty();
 
       if (items.length) {
-        var content = '<input type="checkbox" >' + items.join('</input><br><input type="checkbox" >') + '</input><br>';
-        var list = $('<ul />').html(content);
-        showData.append(list);
+        var content = '<input type="checkbox" name="my_form2" value="' + items.join('"/><br><input type="checkbox" name="my_form2" value="') + '"/><br>';
+        var content2= '<label>' + items.join('</label><br><label>') + '</label><br>';
+        var list = $('<ul style="padding-left: 0px;"/>').html(content);
+        var list2= $('<ul />').html(content2);
+        showData3.append(list);
+        showData4.append(list2);
       }
     });
   });
@@ -203,7 +214,7 @@ function removeDiv() {
 }*/
 
 /**
- * Read and convert the form's fields into json
+ * Read and convert the form's fields into json when SEARCH is clicked 
  */
 
 
@@ -212,7 +223,7 @@ function getTable() {
   let data_initial = get_form_initial()
   let data_join_blocks = get_form_block_data()
 
-  var jsonData = {"initial": data_initial,"joins": data_join_blocks};
+  var jsonData = JSON.stringify({"initial": data_initial,"joins": data_join_blocks});
   console.log(jsonData);
 
   $.ajax({ 
@@ -233,8 +244,13 @@ function get_form_initial() {
   if($('#first-constraints').is(":checked")==true){
     var constraintsTable1 = $('.builder-basic').eq(0).queryBuilder('getRules');}
   else {var constraintsTable1=null};
+  var fields=[]
+  $('input:checked[name=my_form]').each(function() {
+    fields.push($(this).val());
+    });
+  
 
-  return {table,constraintsTable1}
+  return {table,constraintsTable1,fields}
 
 }
 
@@ -247,13 +263,35 @@ function get_form_block_data() {
     let adj_table = block.find("#adjacent-tables_id").val()
     let formerT = block.find("#formerTable").val()
     let idJoin = block.find("#joint_table").val()
+
+    var sourceField = new Array()
+    var targetField = []
+    $.get("init", function (data) {
+
+      let dataformerT = JSON.stringify(data[formerT]);
+      const obj = JSON.parse(dataformerT);
+      let dataformer2=JSON.stringify(obj.relations[adj_table])
+      const obj2 = JSON.parse(dataformer2);
+      sourceField.push(obj2.from)
+      targetField.push(obj2.to)
+    });
+    console.log(sourceField)
+    
+
     if($('#second_constraints').is(":checked")==true){
       var constraintsTable2 = $('.builder-basic').eq(-1).queryBuilder('getRules');}
     else {var constraintsTable2=null;};
-    return { 'formerTable' : formerT,'Join' : idJoin, 'adjacent_table' : adj_table, 'constraints':constraintsTable2 }}).toArray()
-    console.log(data)
+
+    var fields=[]
+    $('input:checked[name=my_form2]').each(function() {
+      fields.push($(this).val());
+      });
+
+
+    return { 'formerTable' : formerT,'join' : idJoin, 'adjacent_table' : adj_table, 'sourceField': sourceField, 'targetField': targetField,  'constraints':constraintsTable2, 'fields':fields }}).toArray()
     return data 
 }
+
 
 
 
@@ -268,6 +306,10 @@ $(document).ready(_ => {
 })
 
 
+
+/**
+ * functions for the scroll up button
+ */
 
 
 //Get the button
