@@ -72,9 +72,9 @@ class DefaultController extends Controller
      */
     public function get_query(Request $request)
     {
-        $data = $request->request;
+        $data = $request->request->all();
         dump($data);
-        return new JsonResponse(["x"=> "hello"]);
+        return new JsonResponse($data);
     }
 
     /**

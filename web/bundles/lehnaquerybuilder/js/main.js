@@ -217,80 +217,76 @@ function removeDiv() {
  * Read and convert the form's fields into json when SEARCH is clicked 
  */
 
+$.get("init", function(data){
 
-function getTable() {
-  
-  let data_initial = get_form_initial()
-  let data_join_blocks = get_form_block_data()
+  $("#submit-button").click(function(){
+    let data_initial = get_form_initial()
+    let data_join_blocks = get_form_block_data(data)
 
-  var jsonData = JSON.stringify({"initial": data_initial,"joins": data_join_blocks});
-  console.log(jsonData);
+    var jsonData = {"initial": data_initial,"joins": data_join_blocks};
 
-  $.ajax({ 
-    url : 'query', //query_test
-    type: 'POST',
-    data: jsonData,
-    dataType: 'json',
-    success : function(response){
-      console.log(response);
-    }
-  });
-}
-
-function get_form_initial() {
-  
-  var table1 = document.getElementById("first-table");
-  var table = table1.options[table1.selectedIndex].value;
-  if($('#first-constraints').is(":checked")==true){
-    var constraintsTable1 = $('.builder-basic').eq(0).queryBuilder('getRules');}
-  else {var constraintsTable1=null};
-  var fields=[]
-  $('input:checked[name=my_form]').each(function() {
-    fields.push($(this).val());
+    $.ajax({ 
+      url : 'query', //query_test
+      type: 'POST',
+      data: jsonData,
+      dataType: 'json',
+      success : function(response){
+        console.log(response);
+      }
     });
-  
-
-  return {table,constraintsTable1,fields}
-
-}
+    })
+   // fin du callback associé au bouton Search
+ })
 
 
-function get_form_block_data() {
-
-  let block_list = $(".formBlock")
-  let data = block_list.map(function () {
-    let block = $(this)
-    let adj_table = block.find("#adjacent-tables_id").val()
-    let formerT = block.find("#formerTable").val()
-    let idJoin = block.find("#joint_table").val()
-
-    var sourceField = new Array()
-    var targetField = []
-    $.get("init", function (data) {
-
-      let dataformerT = JSON.stringify(data[formerT]);
-      const obj = JSON.parse(dataformerT);
-      let dataformer2=JSON.stringify(obj.relations[adj_table])
-      const obj2 = JSON.parse(dataformer2);
-      sourceField.push(obj2.from)
-      targetField.push(obj2.to)
-    });
-    console.log(sourceField)
+  function get_form_initial() {
     
-
-    if($('#second_constraints').is(":checked")==true){
-      var constraintsTable2 = $('.builder-basic').eq(-1).queryBuilder('getRules');}
-    else {var constraintsTable2=null;};
-
+    var table1 = document.getElementById("first-table");
+    var table = table1.options[table1.selectedIndex].value;
+    if($('#first-constraints').is(":checked")==true){
+      var constraintsTable1 = $('.builder-basic').eq(0).queryBuilder('getRules');}
+    else {var constraintsTable1=null};
     var fields=[]
-    $('input:checked[name=my_form2]').each(function() {
+    $('input:checked[name=my_form]').each(function() {
       fields.push($(this).val());
       });
+    
+
+    return {table,constraintsTable1,fields}
+
+  }
 
 
-    return { 'formerTable' : formerT,'join' : idJoin, 'adjacent_table' : adj_table, 'sourceField': sourceField, 'targetField': targetField,  'constraints':constraintsTable2, 'fields':fields }}).toArray()
-    return data 
-}
+  function get_form_block_data(init_data) {
+
+    let block_list = $(".formBlock")
+    let data = block_list.map(function () {
+      let block = $(this)
+      let adj_table = block.find("#adjacent-tables_id").val()
+      let formerT = block.find("#formerTable").val()
+      let idJoin = block.find("#joint_table").val()
+      
+    var relationAdj= init_data[formerT].relations[adj_table]
+
+    var sourceField = relationAdj.from
+    var targetField = relationAdj.to
+
+
+      if($('#second_constraints').is(":checked")==true){
+        var constraintsTable2 = $('.builder-basic').eq(-1).queryBuilder('getRules');}
+      else {var constraintsTable2=null;};
+
+      var fields=[]
+      $('input:checked[name=my_form2]').each(function() {
+        fields.push($(this).val());
+        });
+
+
+      return { 'formerTable' : formerT,'join' : idJoin, 'adjacent_table' : adj_table, 'sourceField': sourceField, 'targetField': targetField,  'constraints':constraintsTable2, 'fields':fields }}).toArray()
+      return data 
+  }
+
+
 
 
 

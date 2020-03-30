@@ -8,6 +8,7 @@
 */ 
 
 
+
 // Initializing the first query block
 $(document).ready(function () {
   
@@ -28,7 +29,8 @@ $(document).ready(function () {
   $('#first-table').click(function () {
     
     // Init list of fields
-    var showData = $('#show-data');
+    var showData1 = $('#show-data1');
+    var showData2 = $('#show-data2');
     var liste = document.getElementById("first-table");
     let target_table = $(liste).val();
 
@@ -42,13 +44,17 @@ $(document).ready(function () {
         return item.label;
       });
 
-      showData.empty();
+      showData1.empty();
+      showData2.empty();
   
       if (items.length) {
-        var content = '<input type="checkbox" >' + items.join('</input><br><input type="checkbox" >') + '</input><br>';
-        var list = $('<ul />').html(content);
-        showData.append(list);
-
+        
+        var content = '<input type="checkbox" name="my_form" value="' + items.join('"/><br><input type="checkbox" name="my_form" value="') + '"/><br>';
+        var content2= '<label>' + items.join('</label><br><label>') + '</label><br>';
+        var list = $('<ul style="padding-left: 0px;"/>').html(content);
+        var list2= $('<ul />').html(content2);
+        showData1.append(list);
+        showData2.append(list2);
       }
     });
   });
@@ -151,7 +157,8 @@ $('#add-joint').click(function () {
     }
 
     // Init the fields of the chosen adjacent table
-    var showData = $('.show-data2').eq(-1);
+    var showData3 = $('#show-data3').eq(-1);
+    var showData4= $('#show-data4').eq(-1);
     var texte = $('.adjacent-tables').eq(-1).find(':selected').text();
 
     // Init a block of query-builder with the menu of fields and the filters to apply 
@@ -178,15 +185,20 @@ $('#add-joint').click(function () {
         $('.builder-'+target).eq(-1).queryBuilder('reset');
       });
 
+
       var items = data[texte].filters.map(function (item) {
         return item.label;
       });
-      showData.empty();
+      showData3.empty();
+      showData4.empty();
 
       if (items.length) {
-        var content = '<input type="checkbox" >' + items.join('</input><br><input type="checkbox" >') + '</input><br>';
-        var list = $('<ul />').html(content);
-        showData.append(list);
+        var content = '<input type="checkbox" name="my_form2" value="' + items.join('"/><br><input type="checkbox" name="my_form2" value="') + '"/><br>';
+        var content2= '<label>' + items.join('</label><br><label>') + '</label><br>';
+        var list = $('<ul style="padding-left: 0px;"/>').html(content);
+        var list2= $('<ul />').html(content2);
+        showData3.append(list);
+        showData4.append(list2);
       }
     });
   });
@@ -202,17 +214,83 @@ function removeDiv() {
 }*/
 
 /**
- * Returning the recap of the constraint(s) to apply for the first query-builder.
+ * Read and convert the form's fields into json when SEARCH is clicked 
  */
-function getTable() {
-  
-  if($('#first-constraints').is(":checked")==true){
-    var result = $('.builder-basic').eq(0).queryBuilder('getRules');
-    if (!$.isEmptyObject(result)) {
-      alert(JSON.stringify(result, null, 2));
-    }
-  };
-}
+
+$.get("init", function(data){
+
+  $("#submit-button").click(function(){
+    let data_initial = get_form_initial()
+    let data_join_blocks = get_form_block_data(data)
+
+    var jsonData = {"initial": data_initial,"joins": data_join_blocks};
+
+    $.ajax({ 
+      url : 'query', //query_test
+      type: 'POST',
+      data: jsonData,
+      dataType: 'json',
+      success : function(response){
+        console.log(response);
+      }
+    });
+    })
+   // fin du callback associé au bouton Search
+ })
+
+
+  function get_form_initial() {
+    
+    var table1 = document.getElementById("first-table");
+    var table = table1.options[table1.selectedIndex].value;
+    if($('#first-constraints').is(":checked")==true){
+      var constraintsTable1 = $('.builder-basic').eq(0).queryBuilder('getRules');}
+    else {var constraintsTable1=null};
+    var fields=[]
+    $('input:checked[name=my_form]').each(function() {
+      fields.push($(this).val());
+      });
+    
+
+    return {table,constraintsTable1,fields}
+
+  }
+
+
+  function get_form_block_data(init_data) {
+
+    let block_list = $(".formBlock")
+    let data = block_list.map(function () {
+      let block = $(this)
+      let adj_table = block.find("#adjacent-tables_id").val()
+      let formerT = block.find("#formerTable").val()
+      let idJoin = block.find("#joint_table").val()
+      
+    var relationAdj= init_data[formerT].relations[adj_table]
+
+    var sourceField = relationAdj.from
+    var targetField = relationAdj.to
+
+
+      if($('#second_constraints').is(":checked")==true){
+        var constraintsTable2 = $('.builder-basic').eq(-1).queryBuilder('getRules');}
+      else {var constraintsTable2=null;};
+
+      var fields=[]
+      $('input:checked[name=my_form2]').each(function() {
+        fields.push($(this).val());
+        });
+
+
+      return { 'formerTable' : formerT,'join' : idJoin, 'adjacent_table' : adj_table, 'sourceField': sourceField, 'targetField': targetField,  'constraints':constraintsTable2, 'fields':fields }}).toArray()
+      return data 
+  }
+
+
+
+
+
+
 
 // Init the page with the JSON form containing the info of the database
 $(document).ready(_ => {
@@ -223,6 +301,11 @@ $(document).ready(_ => {
     })
 })
 
+
+
+/**
+ * functions for the scroll up button
+ */
 
 
 //Get the button
@@ -244,3 +327,8 @@ function topFunction() {
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
 }
+
+
+
+
+
