@@ -77,7 +77,9 @@ class DefaultController extends Controller
         $qb = $em->createQueryBuilder();
         $query = $this->getFirstFields($data, $qb);
         //$query = $this->getFirstTable($data, $query);
+        //$query = $this->getFirstConstraints($data, $query);
         $q = $query->getQuery();
+        dump($q);
         $results = $q->getArrayResult();
         dump($results);
         return new JsonResponse($results);
@@ -198,6 +200,26 @@ class DefaultController extends Controller
         foreach ($firstFields as $value){
             $query = $query->addSelect($firstTable.".".$value);
         };
+        $firstField = $data["initial"]["constraintsTable1"]["rules"][0]["field"];
+        $firstOperator = $data["initial"]["constraintsTable1"]["rules"][0]["operator"];
+        $firstValue = $data["initial"]["constraintsTable1"]["rules"][0]["value"];
+        $ft = $firstTable.".".$firstField;
+        dump($firstOperator);
+        if ($firstOperator == "equal") {
+            $query = $query->where($ft." = ".$firstValue);
+        } elseif ($firstOperator == "not_equal"){
+            $query = $query->where($ft."!=".$firstValue);
+        } elseif ($firstOperator == "less") {
+            $query = $query->where($ft."<".$firstValue);
+        } elseif ($firstOperator == "less_or_equal") {
+            $query = $query->where($ft."<=".$firstValue);
+        } elseif ($firstOperator == "greater") {
+            $query = $query->where($ft.">".$firstValue);
+        } elseif ($firstOperator == "greater_or_equal") {
+            $query = $query->where($ft.">=".$firstValue);
+        } elseif ($firstOperator == "begins_with") {
+            $query = $query->where($ft." LIKE"." '".$firstValue."%'");
+        }
         return $query;
     }
 
@@ -215,5 +237,31 @@ class DefaultController extends Controller
     }
 */
 
+    /**
+    * Get the first constraints. 
+    * @Route("/query", name="test_query", methods={"POST"})
+    * 
+    */
+    /*
+    public function getFirstConstraints($data, $query) {
+        $firstField = $data["initial"]["constraintsTable1"]["rules"][0]["field"];
+        $firstOperator = $data["initial"]["constraintsTable1"]["rules"][0]["operator"];
+        $firstValue = $data["initial"]["constraintsTable1"]["rules"][0]["value"];
+        if ($firstOperator == "equal") {
+            $query = $query->where($firstField."=".$firstValue);
+        } elseif ($firstOperator == "not equal"){
+            $query = $query->where($firstField."!=".$firstValue);
+        } elseif ($firstOperator == "less") {
+            $query = $query->where($firstField."<".$firstValue);
+        } elseif ($firstOperator == "less or equal") {
+            $query = $query->where($firstField."<=".$firstValue);
+        } elseif ($firstOperator == "greater") {
+            $query = $query->where($firstField.">".$firstValue);
+        } else {
+            $query = $query->where($firstField.">=".$firstValue);
+        }
+        return $query;
+
+    }*/
 
 }
