@@ -73,8 +73,15 @@ class DefaultController extends Controller
     public function get_query(Request $request)
     {
         $data = $request->request->all();
-        dump($data);
-        return new JsonResponse($data);
+        $em = $this->getDoctrine()->getManager();
+        $qb = $em->createQueryBuilder();
+        $query = $this->getFirstFields($data, $qb);
+        //$query = $this->getFirstTable($data, $query);
+        $q = $query->getQuery();
+        $results = $q->getArrayResult();
+        dump($results);
+        return new JsonResponse($results);
+        
     }
 
     /**
@@ -178,4 +185,35 @@ class DefaultController extends Controller
         'query'    => $data->all(),
         ));
     }
+
+    /**
+    * Get the first fields of the first table that we want to return and creates the "select" part of the query. 
+    * @Route("/query", name="test_query", methods={"POST"})
+    * 
+    */
+    public function getFirstFields($data, $query) {
+        $firstTable = $data["initial"]["table"];
+        $query = $query->from('BbeesE3sBundle:'.$firstTable, $firstTable);
+        $firstFields = $data["initial"]["fields"];
+        foreach ($firstFields as $value){
+            $query = $query->addSelect($firstTable.".".$value);
+        };
+        return $query;
+    }
+
+
+    /**
+    * Get the first table. 
+    * @Route("/query", name="test_query", methods={"POST"})
+    * 
+    */
+    /*
+    public function getFirstTable($data, $query) {
+        $firstTable = $data["initial"]["table"];
+        $query = $query->from('BbeesE3sBundle:'.$firstTable, $firstTable);
+        return $query;
+    }
+*/
+
+
 }
