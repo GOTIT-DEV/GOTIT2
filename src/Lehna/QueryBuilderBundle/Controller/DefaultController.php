@@ -87,6 +87,31 @@ class DefaultController extends Controller
         
     }
 
+    /**
+    * Get the level. 
+    * @Route("/query", name="test_query", methods={"POST"})
+    * 
+    */
+    public function constraintsOfLevel($level, $query, $initial, $firstTable, $condition){
+
+        if (strlen($level == 1)) {
+                $query = $this->getFirstConstraints($firstConstraints, $initial, $query, $firstTable, $condition);
+        } elseif (strlen($level > 1)) {
+            foreach ($level as $r) {
+                dump(count($r));
+                if(count($r)==6){
+                    $query = $this->getFirstConstraints($r, $initial, $query, $firstTable, $condition);
+                }
+                elseif(count($r)==2){
+                    dump($condition);
+                    dump($r["condition"]);
+                    $query = $this->constraintsOfLevel($r["rules"], $query, $initial, $firstTable, $r["condition"]);
+                }            
+            }
+        }
+        return $query;
+    }
+
 
     /**
     * Get the first fields of the first table that we want to return and creates the "select" part of the query. 
@@ -105,7 +130,10 @@ class DefaultController extends Controller
             $query = $query->addSelect($firstTable.".".$value);
         };
 
-        if (strlen($initial["constraintsTable1"]["rules"] == 1)) {
+        $query = $this->constraintsOfLevel($initial["constraintsTable1"]["rules"], $query, $initial, $firstTable, $condition);
+
+
+        /* if (strlen($initial["constraintsTable1"]["rules"] == 1)) {
             $query = $this->getFirstConstraints($firstConstraints, $initial, $query, $firstTable, $condition);
         } elseif (strlen($initial["constraintsTable1"]["rules"] > 1)) {
             foreach ($initial["constraintsTable1"]["rules"] as $r) {
@@ -113,7 +141,7 @@ class DefaultController extends Controller
                 $query = $this->getFirstConstraints($r, $initial, $query, $firstTable, $condition);
                 
             }
-        }
+        } */
         return $query;
     }
 
@@ -249,5 +277,7 @@ class DefaultController extends Controller
         return $query;
 
     }
+
+    
 
 }
