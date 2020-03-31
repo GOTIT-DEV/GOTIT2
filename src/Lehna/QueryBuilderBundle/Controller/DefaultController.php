@@ -75,7 +75,8 @@ class DefaultController extends Controller
         $data = $request->request->all();
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
-        $query = $this->getFirstBlock($data, $qb);
+        $initial = $data["initial"];
+        $query = $this->getFirstBlock($initial, $qb);
         //$query = $this->getFirstTable($data, $query);
         //$query = $this->getFirstConstraints($data, $query);
         $q = $query->getQuery();
@@ -193,18 +194,44 @@ class DefaultController extends Controller
     * @Route("/query", name="test_query", methods={"POST"})
     * 
     */
-    public function getFirstBlock($data, $query) {
-        $firstTable = $data["initial"]["table"];
+    public function getFirstBlock($initial, $query) {
+        $firstTable = $initial["table"];
         $query = $query->from('BbeesE3sBundle:'.$firstTable, $firstTable);
-        $firstFields = $data["initial"]["fields"];
+        $firstFields = $initial["fields"];
         foreach ($firstFields as $value){
             $query = $query->addSelect($firstTable.".".$value);
         };
-        $firstField = $data["initial"]["constraintsTable1"]["rules"][0]["field"];
-        $firstOperator = $data["initial"]["constraintsTable1"]["rules"][0]["operator"];
-        $firstValue = $data["initial"]["constraintsTable1"]["rules"][0]["value"];
+        $query = $this->getFirstConstraints($initial, $query, $firstTable);
+
+        return $query;
+    }
+
+
+    /**
+    * Get the first table. 
+    * @Route("/query", name="test_query", methods={"POST"})
+    * 
+    */
+    /*
+    public function getFirstTable($data, $query) {
+        $firstTable = $data["initial"]["table"];
+        $query = $query->from('BbeesE3sBundle:'.$firstTable, $firstTable);
+        return $query;
+    }
+*/
+
+    /**
+    * Get the first constraints. 
+    * @Route("/query", name="test_query", methods={"POST"})
+    * 
+    */
+    
+    public function getFirstConstraints($initial, $query, $firstTable) {
+        $firstConstraints = $initial["constraintsTable1"]["rules"][0];
+        $firstField = $firstConstraints["field"];
+        $firstOperator = $firstConstraints["operator"];
+        $firstValue = $firstConstraints["value"];
         $ft = $firstTable.".".$firstField;
-        dump($firstOperator);
         if ($firstOperator == "equal") {
             $query = $query->where($ft." = ".$firstValue);
         } elseif ($firstOperator == "not_equal"){
@@ -218,7 +245,7 @@ class DefaultController extends Controller
         } elseif ($firstOperator == "greater_or_equal") {
             $query = $query->where($ft.">=".$firstValue);
         } elseif ($firstOperator == "begins_with") {
-            $query = $query->where($ft." LIKE"." '".strtouppser($firstValue)."%'");
+            $query = $query->where($ft." LIKE"." '".strtoupper($firstValue)."%'");
         } elseif ($firstOperator == "not_begins_with") {
             $query = $query->where($ft." NOT LIKE"." '".strtoupper($firstValue)."%'");
         } elseif ($firstOperator == "is_null") {
@@ -251,51 +278,9 @@ class DefaultController extends Controller
                } catch (\Exception $e) {
                 var_dump($e->getMessage());
                }
-
-        }
-
-        return $query;
-    }
-
-
-    /**
-    * Get the first table. 
-    * @Route("/query", name="test_query", methods={"POST"})
-    * 
-    */
-    /*
-    public function getFirstTable($data, $query) {
-        $firstTable = $data["initial"]["table"];
-        $query = $query->from('BbeesE3sBundle:'.$firstTable, $firstTable);
-        return $query;
-    }
-*/
-
-    /**
-    * Get the first constraints. 
-    * @Route("/query", name="test_query", methods={"POST"})
-    * 
-    */
-    /*
-    public function getFirstConstraints($data, $query) {
-        $firstField = $data["initial"]["constraintsTable1"]["rules"][0]["field"];
-        $firstOperator = $data["initial"]["constraintsTable1"]["rules"][0]["operator"];
-        $firstValue = $data["initial"]["constraintsTable1"]["rules"][0]["value"];
-        if ($firstOperator == "equal") {
-            $query = $query->where($firstField."=".$firstValue);
-        } elseif ($firstOperator == "not equal"){
-            $query = $query->where($firstField."!=".$firstValue);
-        } elseif ($firstOperator == "less") {
-            $query = $query->where($firstField."<".$firstValue);
-        } elseif ($firstOperator == "less or equal") {
-            $query = $query->where($firstField."<=".$firstValue);
-        } elseif ($firstOperator == "greater") {
-            $query = $query->where($firstField.">".$firstValue);
-        } else {
-            $query = $query->where($firstField.">=".$firstValue);
         }
         return $query;
 
-    }*/
+    }
 
 }
