@@ -75,7 +75,7 @@ class DefaultController extends Controller
         $data = $request->request->all();
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
-        $query = $this->getFirstFields($data, $qb);
+        $query = $this->getFirstBlock($data, $qb);
         //$query = $this->getFirstTable($data, $query);
         //$query = $this->getFirstConstraints($data, $query);
         $q = $query->getQuery();
@@ -193,7 +193,7 @@ class DefaultController extends Controller
     * @Route("/query", name="test_query", methods={"POST"})
     * 
     */
-    public function getFirstFields($data, $query) {
+    public function getFirstBlock($data, $query) {
         $firstTable = $data["initial"]["table"];
         $query = $query->from('BbeesE3sBundle:'.$firstTable, $firstTable);
         $firstFields = $data["initial"]["fields"];
@@ -218,8 +218,42 @@ class DefaultController extends Controller
         } elseif ($firstOperator == "greater_or_equal") {
             $query = $query->where($ft.">=".$firstValue);
         } elseif ($firstOperator == "begins_with") {
-            $query = $query->where($ft." LIKE"." '".$firstValue."%'");
+            $query = $query->where($ft." LIKE"." '".strtouppser($firstValue)."%'");
+        } elseif ($firstOperator == "not_begins_with") {
+            $query = $query->where($ft." NOT LIKE"." '".strtoupper($firstValue)."%'");
+        } elseif ($firstOperator == "is_null") {
+            $query = $query->where($ft." ".$firstValue." IS NULL");
+        } elseif ($firstOperator == "is_not_null") {
+            $query = $query->where($ft." ".$firstValue." IS NOT NULL");
+        } elseif ($firstOperator == "between") {
+            $lowVal = $firstValue[0];
+            $highVal = $firstValue[1];
+            $query = $query->where($ft." BETWEEN ".$lowVal." AND ".$highVal);
+        } elseif ($firstOperator == "not_between") {
+            $lowVal = $firstValue[0];
+            $highVal = $firstValue[1];
+            $query = $query->where($ft." NOT BETWEEN ".$lowVal." AND ".$highVal);
+        } elseif ($firstOperator == "ends_with") {
+            $query = $query->where($ft." LIKE"." '%".strtouppser($firstValue)."'");
+        } elseif ($firstOperator == "not_ends_with") {
+            $query = $query->where($ft." NOT LIKE"." '%".strtoupper($firstValue)."'");
+        } elseif ($firstOperator == "contains") {
+            $query = $query->where($ft." LIKE"." '%".strtoupper($firstValue)."%'");
+        } elseif ($firstOperator == "not_contains") {
+            $query = $query->where($ft." NOT LIKE"." '%".strtoupper($firstValue)."%'");
+        } elseif ($firstOperator == "is_empty") {
+            $query = $query->where($ft." ".$firstValue."= ''");
+        } elseif ($firstOperator == "is_not_empty") {
+            $query = $query->where($ft." ".$firstValue."!=''");
+        } else {
+            try {
+                throw new Exception('Impossible operation; try another operator');
+               } catch (\Exception $e) {
+                var_dump($e->getMessage());
+               }
+
         }
+
         return $query;
     }
 
