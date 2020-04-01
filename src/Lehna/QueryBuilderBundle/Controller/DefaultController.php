@@ -300,7 +300,7 @@ class DefaultController extends Controller
             $tgtField = $j["targetField"];
             if ($j["constraints"] != "") {
                 $newConstraints = $j["constraints"];
-                dump($newConstraints);
+                $newCondition = $newConstraints["condition"];
             }
             if (count($j) == 7) {
                 $newFields = $j["fields"];
@@ -311,7 +311,7 @@ class DefaultController extends Controller
             $query = $this->makeJoint($joins, $query, $formerTable, $jointtype, $adjTable, $srcField, $tgtField);
                 
 
-            dump($j["formerTable"]); 
+            dump($newCondition); 
         }
         return $query;
     }
@@ -327,17 +327,153 @@ class DefaultController extends Controller
             ->innerJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
             
         } elseif ($jointtype == "left join") {
-            $query = $query->leftJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
+            $query = $query->addSelect($adjTable.'.'.$tgtField)
+            ->leftJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
         } elseif ($jointtype == "right join") {
-            $query = $query->leftJoin('BbeesE3sBundle:'.$formerTable, $formerTable, 'WITH', $adjTable.'.'.$tgtField." = ".$formerTable.'.'.$srcField);
+            $query = $query->addSelect($adjTable.'.'.$tgtField)
+            ->leftJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $adjTable.'.'.$tgtField." = ".$formerTable.'.'.$srcField);
         } elseif ($jointtype == "cross join") {
-            $query = $query->crossJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
+            $query = $query->addSelect($adjTable.'.'.$tgtField)
+            ->crossJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
         } elseif ($jointtype == "full join") {
-            $query = $query->fullJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
+            $query = $query->addSelect($adjTable.'.'.$tgtField)
+            ->fullJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
         }
         dump($query);
         return $query;
     }
+
+    /**
+    * Get the type of joint and returns the query with the appropriate joint. 
+    * 
+    */
+    public function getNewConstraints($newConstraints, $joins, $query, $adjTable, $newCondition) {
+        $newField = $newConstraints["field"];
+        $newOperator = $newConstraints["operator"];
+        $newValue = $newConstraints["value"];
+        $nft = $adjTable.".".$newField;
+        if ($newOperator == "equal") {
+            if ($newCondition == "OR") {
+                $query = $query->orWhere($nft." = ".$newValue);
+            } else {
+                $query = $query->andWhere($nft." = ".$newValue);
+            }
+        } elseif ($newOperator == "not_equal"){
+            if ($newCondition == "OR") {
+                $query = $query->orWhere($nft."!=".$newValue);
+            } else {
+                $query = $query->andWhere($nft."!=".$newValue);
+            }
+        } elseif ($newOperator == "less") {
+            if ($newCondition == "OR") {
+                $query = $query->orWhere($nft."<".$newValue);
+            } else {
+                $query = $query->andWhere($nft."<".$newValue);
+            }
+        } elseif ($newOperator == "less_or_equal") {
+            if ($newCondition == "OR") {
+                $query = $query->orWhere($nft."<=".$newValue);
+            } else {
+                $query = $query->andWhere($nft."<=".$newValue);
+            }
+        } elseif ($newOperator == "greater") {
+            if ($nweCondition == "OR") {
+                $query = $query->orWhere($nft.">".$newValue);
+            } else {
+                $query = $query->andWhere($nft.">".$newValue);
+            }
+        } elseif ($newOperator == "greater_or_equal") {
+            if ($newCondition == "OR") {
+                $query = $query->orWhere($nft.">=".$newValue);
+            } else {
+                $query = $query->andWhere($nft.">=".$newValue);
+            }
+        } elseif ($newOperator == "begins_with") {
+            if ($newCondition == "OR") {
+                $query = $query->orWhere($nft." LIKE"." '".strtoupper($newValue)."%'");
+            } else {
+                $query = $query->andWhere($nft." LIKE"." '".strtoupper($newValue)."%'");
+            }
+        } elseif ($newOperator == "not_begins_with") {
+            if ($newCondition == "OR") {
+                $query = $query->orWhere($nft." NOT LIKE"." '".strtoupper($newValue)."%'");
+            } else {
+                $query = $query->andWhere($nft." NOT LIKE"." '".strtoupper($newValue)."%'");
+            }
+        } elseif ($newOperator == "is_null") {
+            if ($newCondition == "OR") {
+                $query = $query->orWhere($nft." ".$newValue." IS NULL");
+            } else {
+                $query = $query->andWhere($nft." ".$newValue." IS NULL");
+            }
+        } elseif ($newOperator == "is_not_null") {
+            if ($newCondition == "OR") {
+                $query = $query->orWhere($nft." ".$newValue." IS NOT NULL");
+            } else {
+                $query = $query->andWhere($nft." ".$newValue." IS NOT NULL");
+            }
+        } elseif ($newOperator == "between") {
+            $newLowVal = $newValue[0];
+            $newHighVal = $newValue[1];
+            if ($newCondition == "OR") {
+                $query = $query->orWhere($nft." BETWEEN ".$newLowVal." AND ".$newHighVal);
+            } else {
+                $query = $query->andWhere($nft." BETWEEN ".$newLowVal." AND ".$newHighVal);
+            }
+        } elseif ($newOperator == "not_between") {
+            $newLowVal = $newValue[0];
+            $newHighVal = $newValue[1];
+            if ($newCondition == "OR") {
+                $query = $query->orWhere($nft." NOT BETWEEN ".$newLowVal." AND ".$newHighVal);
+            } else {
+                $query = $query->andWhere($nft." NOT BETWEEN ".$newLowVal." AND ".$newHighVal);
+            }
+        } elseif ($newOperator == "ends_with") {
+            if ($newCondition == "OR") {
+                $query = $query->orWhere($nft." LIKE"." '%".strtoupper($newValue)."'");
+            } else {
+                $query = $query->andWhere($nft." LIKE"." '%".strtoupper($newValue)."'");
+            }
+        } elseif ($newOperator == "not_ends_with") {
+            if ($newCondition == "OR") {
+                $query = $query->orWhere($nft." NOT LIKE"." '%".strtoupper($newValue)."'");
+            } else {
+                $query = $query->andWhere($nft." NOT LIKE"." '%".strtoupper($newValue)."'");
+            }
+        } elseif ($newOperator == "contains") {
+            if ($newCondition == "OR") {
+                $query = $query->orWhere($nft." LIKE"." '%".strtoupper($newValue)."%'");
+            } else {
+                $query = $query->andWhere($nft." LIKE"." '%".strtoupper($newValue)."%'");
+            }
+        } elseif ($newOperator == "not_contains") {
+            if ($newCondition == "OR") {
+                $query = $query->orWhere($nft." NOT LIKE"." '%".strtoupper($newValue)."%'");
+            } else {
+                $query = $query->andWhere($nft." NOT LIKE"." '%".strtoupper($newValue)."%'");
+            }
+        } elseif ($newOperator == "is_empty") {
+            if ($newCondition == "OR") {
+                $query = $query->orWhere($nft." ".$newValue."= ''");
+            } else {
+                $query = $query->andWhere($nft." ".$newValue."= ''");
+            }
+        } elseif ($newOperator == "is_not_empty") {
+            if ($newCondition == "OR") {
+                $query = $query->orWhere($nft." ".$newValue."!=''");
+            } else {
+                $query = $query->andWhere($nft." ".$newValue."!=''");
+            }
+        } else {
+            try {
+                throw new Exception('Impossible operation; try another operator');
+               } catch (\Exception $e) {
+                var_dump($e->getMessage());
+               }
+        }
+        return $query;
+
+    } 
 
     
 
