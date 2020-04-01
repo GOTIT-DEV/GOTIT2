@@ -8,14 +8,13 @@
 */
 
 
-
-// Initializing the first query block
+// Initializing the first table query block
 $(document).ready(function () {
-
 
 
   // Filling the menu with all the tables in the database
   $.getJSON("init", function (init_data) {
+
     // Init menu for choosing the first table
     let dropdown = $('#first-table');
     dropdown.empty()
@@ -41,7 +40,7 @@ $(document).ready(function () {
       $(target).queryBuilder('reset')
     })
 
-    // what occurs when you choose a table and maybe change it 
+    // what occurs when you choose a table and/or change it 
     $('#first-table').change(function (event) {
       let target_table = event.target.value
       let table_data = init_data[target_table];
@@ -49,10 +48,14 @@ $(document).ready(function () {
       // Init query-builder with fields and filters
       $('#initial-table-constraints').queryBuilder('setFilters', true, table_data.filters);
 
-      // Init list of fields
+      // Init list of fields ( without the datacre, usercre, datemaj,usermaj)
       $("#first-table-selects").empty()
 
-      var items = table_data.filters.map(function (item) {
+      var items = table_data.filters
+      .filter(function(item){
+        return !(item.label.endsWith("Cre") || item.label.endsWith("Maj"))
+      })
+      .map(function (item) {
         return Mustache.render(
           '<li><input type="checkbox" name="my_form" value="{{label}}" checked/><label>{{label}}</label></li>',
           item
@@ -76,13 +79,10 @@ joints = [
 
 
 /**
- * Adding a full block of query:
- * - choice of a table previously queried
- * - choice of joint
- * - choice of adjacent table of the new chosen table
- * - possibility to choose specific fields to return and constraints to apply
+ * function called when the plus buttom is clicked (using mustache.js)
  */
 function addJoint(block_id) {
+  //making template's block with mustache.js
   let newBlock = Mustache.render(
     $("#form-block-template").html(),
     { id: block_id }
@@ -114,7 +114,10 @@ function addJoint(block_id) {
 
 
 let new_block_id = 0
-// Choosing what joint to make between a table chosen previously and an adjacent table, the fields to return and the constraints to apply
+/**
+ * when you click on the plus buttom;
+ * Choosing what joint to make between a table chosen previously and an adjacent table, the fields to return and the constraints to apply
+ *  */ 
 $('#add-joint').click(function () {
 
   $.getJSON('init', function (init_data) {
@@ -176,7 +179,7 @@ $('#add-joint').click(function () {
       });
     })
 
-    //when you click to select an adjacent table 
+    //when you click to select/or change an adjacent table 
     newBlock.find(".adjacent-tables").change(function (event) {
       let target_table = event.target.value
       let table_data = init_data[target_table];
@@ -188,35 +191,35 @@ $('#add-joint').click(function () {
       // Init list of fields
       let selects_block = newBlock.find(".table-selects")
       selects_block.empty()
-      var items = table_data.filters.map(function (item) {
+      var items = table_data.filters
+      
+      var items = table_data.filters
+      .filter(function(item){
+        return !(item.label.endsWith("Cre") || item.label.endsWith("Maj"))
+      })
+      .map(function (item) {
         return Mustache.render(
           '<li><input type="checkbox" name="my_form2" value="{{label}}"/><label>{{label}}</label></li>',
           item
         )
       })
+
       selects_block.html(items.join(''))
     })
   });
 });
 
 
-// This function will maybe be used later (to remove a full block of query)
-/*
-function removeDiv() {
-  var node = document.getElementById("addConstraints");
-  if (node.parentNode) {
-    node.parentNode.removeChild(node);}
-}*/
 
 /**
- * Read and convert the form's fields into json when SEARCH is clicked 
+ * 3 Fonctions : they read and convert the form's fields filled into json when SEARCH is clicked 
  */
 
 $.get("init", function (data) {
 
   $("#submit-button").click(function () {
-    let data_initial = get_form_initial()
-    let data_join_blocks = get_form_block_data(data)
+    let data_initial = get_form_initial() 
+    let data_join_blocks = get_form_block_data(data) 
 
     var jsonData = { "initial": data_initial, "joins": data_join_blocks };
 
@@ -233,15 +236,19 @@ $.get("init", function (data) {
   // fin du callback associé au bouton Search
 })
 
-
+// get the informations about the first table chosen, the constraints on it, fields to show
 function get_form_initial() {
 
   var table1 = document.getElementById("first-table");
   var table = table1.options[table1.selectedIndex].value;
+
+  //constraints
   if ($('#first-constraints').is(":checked") == true) {
     var constraintsTable1 = $('.builder-basic').eq(0).queryBuilder('getRules');
   }
   else { var constraintsTable1 = null };
+
+  //checked inputs 
   var fields = []
   $('input:checked[name=my_form]').each(function () {
     fields.push($(this).val());
@@ -252,7 +259,7 @@ function get_form_initial() {
 
 }
 
-
+//get the informations about the templates' blocks 
 function get_form_block_data(init_data) {
 
   let block_list = $(".formBlock")
@@ -261,22 +268,21 @@ function get_form_block_data(init_data) {
     let adj_table = block.find("#adjacent-tables_id").val()
     let formerT = block.find("#formerTable").val()
     let idJoin = block.find("#joint_table").val()
-
+    let fields =block.find("#div-checkbox input:checked").map(function(){
+      return $(this).val()
+    }).get() // checked inputs 
+    
+    // obtain the source Field and target field
     var relationAdj = init_data[formerT].relations[adj_table]
-
     var sourceField = relationAdj.from
     var targetField = relationAdj.to
 
-
-    if ($('#second_constraints').is(":checked") == true) {
-      var constraintsTable2 = $('.builder-basic').eq(-1).queryBuilder('getRules');
+    //constraints
+    if (block.find("#second_constraints").is(":checked") == true) {
+      var constraintsTable2 = block.find('.builder-basic').queryBuilder('getRules');
     }
-    else { var constraintsTable2 = null; };
+    else { var constraintsTable2 = null; }
 
-    var fields = []
-    $('input:checked[name=my_form2]').each(function () {
-      fields.push($(this).val());
-    });
 
 
     return { 'formerTable': formerT, 'join': idJoin, 'adjacent_table': adj_table, 'sourceField': sourceField, 'targetField': targetField, 'constraints': constraintsTable2, 'fields': fields }
@@ -287,10 +293,7 @@ function get_form_block_data(init_data) {
 
 
 
-
-
-
-// Init the page with the JSON form containing the info of the database
+// Init the page with the JSON containing the informations about the database
 $(document).ready(_ => {
   fetch("init")
     .then(response => response.json())
@@ -301,8 +304,9 @@ $(document).ready(_ => {
 
 
 
+
 /**
- * functions for the scroll up button
+ * Functions for the scroll up button
  */
 
 
@@ -325,4 +329,3 @@ function topFunction() {
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
 }
-
