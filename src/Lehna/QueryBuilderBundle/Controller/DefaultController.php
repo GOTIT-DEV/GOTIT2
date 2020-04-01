@@ -78,11 +78,11 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
         $initial = $data["initial"];
-        $query = $this->getFirstBlock($initial, $qb);
+        $query = $this->getFirstBlock($data, $initial, $qb);
         if (count($data) > 1) 
             if (strlen($data["joins"] >= 1)) {
                 $joins = $data["joins"];
-                $this->getJoinsTables($joins, $query);
+                $this->getJointsBlocks($joins, $query);
             }
         dump($query);
         $q = $query->getQuery();
@@ -121,26 +121,24 @@ class DefaultController extends Controller
 
     /**
     * Get the first fields of the first table that we want to return and creates the "select" part of the query. 
-    * @Route("/query", name="test_query", methods={"POST"})
     * 
     */
-    public function getFirstBlock($initial, $query) {
+    public function getFirstBlock($data, $initial, $query) {
         
         $firstTable = $initial["table"];
         $query = $query->from('BbeesE3sBundle:'.$firstTable, $firstTable);
         $firstFields = $initial["fields"];
-        $condition = $initial["constraintsTable1"]["condition"];
         
         foreach ($firstFields as $value){
             $query = $query->addSelect($firstTable.".".$value);
         };
 
-        if ($initial["constraintsTable1"] != null) {
+        if ($initial["constraintsTable1"] != "") {
+            $condition = $initial["constraintsTable1"]["condition"];
             $firstConstraints = $initial["constraintsTable1"]["rules"];
             $query = $this->constraintsOfLevel($initial["constraintsTable1"]["rules"], $query, $initial, $firstTable, $condition);
         }
 
-        $query = $this->constraintsOfLevel($initial["constraintsTable1"]["rules"], $query, $initial, $firstTable, $condition);
 
 
         /* if (strlen($initial["constraintsTable1"]["rules"] == 1)) {
@@ -157,7 +155,6 @@ class DefaultController extends Controller
 
     /**
     * Get the first constraints. 
-    * @Route("/query", name="test_query", methods={"POST"})
     * 
     */
     public function getFirstConstraints($firstConstraints, $initial, $query, $firstTable, $condition) {
@@ -290,30 +287,56 @@ class DefaultController extends Controller
 
 
     /**
-    * Get the tables of the joins. 
-    * @Route("/query", name="test_query", methods={"POST"})
+    * Get the info contained in each block of joint. 
     * 
     */
-    public function getJoinsTables($joins, $query) {
-        dump(count($joins));
-        if (count($joins) == 1) {
-            $formerTable = $joins[0]["formerTable"];
-            $joint = $joins[0]["join"];
-            $adjTable = $joins[0]["adjacent_table"];
-            $srcField = $joins[0]["sourceField"];
-            $tgtField = $joins[0]["targetField"];
-            if (count($joins[0]) == 7)
-                $joinsFields = $joins[0]["fields"];
-             
-        } elseif (count($joins) > 1) {
-            for ($i = 0; $i <= count($joins); $i++) {
-                dump($i);
-                $formerTable = $joins[$i]["formerTable"];
-                $formerTable = $formerTable->$joins[$i]["formerTable"];
+    public function getJointsBlocks($joins, $query) {
+
+        foreach ($joins as $j) {
+            $formerTable = $j["formerTable"];
+            $jointtype = $j["join"];
+            $adjTable = $j["adjacent_table"];
+            $srcField = $j["sourceField"];
+            $tgtField = $j["targetField"];
+            if ($j["constraints"] != "") {
+                $newConstraints = $j["constraints"];
+                dump($newConstraints);
             }
+            if (count($j) == 7) {
+                $newFields = $j["fields"];
+                foreach ($newFields as $newValue){
+                    $query = $query->addSelect($adjTable.".".$newValue);
+                };
+            }
+            $query = $this->makeJoint($joins, $query, $formerTable, $jointtype, $adjTable, $srcField, $tgtField);
+                
+
+            dump($j["formerTable"]); 
         }
-        dump($joinsFields);
-        return $formerTable;
+        return $query;
+    }
+
+    /**
+    * Get the type of joint and returns the query with the appropriate joint. 
+    * 
+    */
+    public function makeJoint($joins, $query, $formerTable, $jointtype, $adjTable, $srcField, $tgtField) {
+        // inner, left, right, cross, full
+        if ($jointtype == "inner join") {
+            $query = $query->addSelect($adjTable.'.'.$tgtField)
+            ->innerJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
+            
+        } elseif ($jointtype == "left join") {
+            $query = $query->leftJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
+        } elseif ($jointtype == "right join") {
+            $query = $query->leftJoin('BbeesE3sBundle:'.$formerTable, $formerTable, 'WITH', $adjTable.'.'.$tgtField." = ".$formerTable.'.'.$srcField);
+        } elseif ($jointtype == "cross join") {
+            $query = $query->crossJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
+        } elseif ($jointtype == "full join") {
+            $query = $query->fullJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
+        }
+        dump($query);
+        return $query;
     }
 
     
