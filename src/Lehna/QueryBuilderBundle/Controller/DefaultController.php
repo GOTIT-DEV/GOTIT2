@@ -78,12 +78,14 @@ class DefaultController extends Controller
         $qb = $em->createQueryBuilder();
         $initial = $data["initial"];
         $query = $this->getFirstBlock($initial, $qb);
-        dump($query);
+        
         $q = $query->getQuery();
-        dump($q);
+
         $results = $q->getArrayResult();
-        dump($results);
-        return new JsonResponse($results);
+
+        return $this->render('@LehnaQueryBuilder/fomresults.html.twig', array(
+            "donnees" => $results,
+        ));
         
     }
 

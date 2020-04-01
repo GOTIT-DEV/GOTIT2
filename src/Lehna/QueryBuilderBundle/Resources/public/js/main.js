@@ -230,8 +230,8 @@ $.get("init", function(data){
       type: 'POST',
       data: jsonData,
       dataType: 'json',
-      success : function(response){
-        console.log(response);
+      success: function(reponsehtml){
+        $(".container_form").html(responsehtml);
       }
     });
     })
