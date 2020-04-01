@@ -8,7 +8,6 @@
 */
 
 
-
 // Initializing the first query block
 $(document).ready(function () {
 
