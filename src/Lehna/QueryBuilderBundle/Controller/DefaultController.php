@@ -74,10 +74,16 @@ class DefaultController extends Controller
     public function getRequestBuilder(Request $request) {
         
         $data = $request->request->all();
+        dump($data);
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
         $initial = $data["initial"];
         $query = $this->getFirstBlock($initial, $qb);
+        if (count($data) > 1) 
+            if (strlen($data["joins"] >= 1)) {
+                $joins = $data["joins"];
+                $this->getJoinsTables($joins, $query);
+            }
         dump($query);
         $q = $query->getQuery();
         dump($q);
@@ -124,11 +130,15 @@ class DefaultController extends Controller
         $query = $query->from('BbeesE3sBundle:'.$firstTable, $firstTable);
         $firstFields = $initial["fields"];
         $condition = $initial["constraintsTable1"]["condition"];
-        $firstConstraints = $initial["constraintsTable1"]["rules"];
         
         foreach ($firstFields as $value){
             $query = $query->addSelect($firstTable.".".$value);
         };
+
+        if ($initial["constraintsTable1"] != null) {
+            $firstConstraints = $initial["constraintsTable1"]["rules"];
+            $query = $this->constraintsOfLevel($initial["constraintsTable1"]["rules"], $query, $initial, $firstTable, $condition);
+        }
 
         $query = $this->constraintsOfLevel($initial["constraintsTable1"]["rules"], $query, $initial, $firstTable, $condition);
 
@@ -276,6 +286,34 @@ class DefaultController extends Controller
         }
         return $query;
 
+    }
+
+
+    /**
+    * Get the tables of the joins. 
+    * @Route("/query", name="test_query", methods={"POST"})
+    * 
+    */
+    public function getJoinsTables($joins, $query) {
+        dump(count($joins));
+        if (count($joins) == 1) {
+            $formerTable = $joins[0]["formerTable"];
+            $joint = $joins[0]["join"];
+            $adjTable = $joins[0]["adjacent_table"];
+            $srcField = $joins[0]["sourceField"];
+            $tgtField = $joins[0]["targetField"];
+            if (count($joins[0]) == 7)
+                $joinsFields = $joins[0]["fields"];
+             
+        } elseif (count($joins) > 1) {
+            for ($i = 0; $i <= count($joins); $i++) {
+                dump($i);
+                $formerTable = $joins[$i]["formerTable"];
+                $formerTable = $formerTable->$joins[$i]["formerTable"];
+            }
+        }
+        dump($joinsFields);
+        return $formerTable;
     }
 
     
