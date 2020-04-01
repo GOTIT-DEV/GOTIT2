@@ -83,10 +83,9 @@ class DefaultController extends Controller
 
         $results = $q->getArrayResult();
 
-        return $this->render('@LehnaQueryBuilder/fomresults.html.twig', array(
+        return $this->render('@LehnaQueryBuilder/formResults.html.twig', array(
             "donnees" => $results,
         ));
-        
     }
 
     /**
@@ -117,7 +116,6 @@ class DefaultController extends Controller
 
     /**
     * Get the first fields of the first table that we want to return and creates the "select" part of the query. 
-    * @Route("/query", name="test_query", methods={"POST"})
     * 
     */
     public function getFirstBlock($initial, $query) {
@@ -148,8 +146,7 @@ class DefaultController extends Controller
     }
 
     /**
-    * Get the first constraints. 
-    * @Route("/query", name="test_query", methods={"POST"})
+    * Get the first constraints.
     * 
     */
     public function getFirstConstraints($firstConstraints, $initial, $query, $firstTable, $condition) {
