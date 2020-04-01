@@ -139,7 +139,7 @@ $('#add-joint').click(function () {
 
 
   
-    //previous tables 
+    //previous tables available when you choose a new table to make joints
 
     let all_adj_tables = $(".adjacent-tables").map(function(){
       return $(this).val()
@@ -157,6 +157,7 @@ $('#add-joint').click(function () {
                     dropdown2.append($('<option></option>').attr('value', value).text(value));
               
                   });
+
 
 
     //when you select or change the value of the previous table you want to select 
