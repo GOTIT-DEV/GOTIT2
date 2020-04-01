@@ -1,178 +1,174 @@
-<form id="main-form" action="#">
-	<legend>
-		<h2 style='margin-bottom:18px'>
-			Query fields
-		</h2>
-	</legend>
+
+  <form id="main-form" action="#">
+  <legend>
+      <h2 style='margin-bottom:18px'>
+          Query fields
+      </h2>
+  </legend>
 </div>
 <div class="row">
-	<div class="col-xs-12 col-md-5 col-lg-6" style="padding-left:25px">
-		<div class="panel panel-default">
-			<div class="panel-body">
-				<div class="row">
-					<div class="col-xs-12 col-sm-7" id="firstChosen-selector">
-						<div class="form-group firstChosen2-select">
-							<label class="control-label" for="niveau">
-								Tables
-							</label>
-							<select id="first-table" class="firstChosen2-select" >
-    						</select>
-						</div>
-					</div>
-					<div class="col-xs-12 col-sm-5">
-						<div class="form-horizontal">
-							<div class="form-group">
-								<div class="checkbox checkbox-inline">
-									<label class="control-label" title data-toggle="tooltip" data-placement="right">
-										<input type="checkbox" value="2" data-toggle="collapse" id="first-constraints" class="collapsed" aria-expanded="false" data-target="#collapseConstraints">
-										<strong>
-											Contraintes
-										</strong>
-										<i class="fas fa-spinner fa-spin pull-right hidden" id="method-spinner" style="font-size:16px"></i>
-									</label>
-								</div>
-							</div>
-						</div>
-					</div>
+  <div class="col-xs-12 col-md-5 col-lg-6" style="padding-left:25px">
+      <div class="panel panel-default">
+          <div class="panel-body">
+              <div class="row">
+                  <div class="col-xs-12 col-sm-7" id="firstChosen-selector">
+                      <div class="form-group firstChosen2-select">
+                          <label class="control-label" for="niveau">
+                              Tables
+                          </label>
+                          <select id="first-table" class="firstChosen2-select" >
+                          </select>
+                      </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-5">
+                      <div class="form-horizontal">
+                          <div class="form-group">
+                              <div class="checkbox checkbox-inline">
+                                  <label class="control-label" title data-toggle="tooltip" data-placement="right">
+                                      <input type="checkbox" value="2" data-toggle="collapse" id="first-constraints" class="collapsed" aria-expanded="false" data-target="#collapseConstraints">
+                                      <strong>
+                                          Contraintes
+                                      </strong>
+                                      <i class="fas fa-spinner fa-spin pull-right hidden" id="method-spinner" style="font-size:16px"></i>
+                                  </label>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
 
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="panel-collapse collapse col-xs-11" id="collapseConstraints" aria-expanded="false">
-		<div class="col-xs-12 col-sm-5 col-sm col-lg-3" style="padding-left:20px">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<strong>
-						Choix des champs
-					</strong>
-				</div>
-				<div class="panel-body">
-					<div class="row">
-						<div  id="show-data1" class="col-xs8-sm-3 col-sm col-lg-1" style=" padding-right:0px;">
-						</div>
-						<div  id="show-data2" style="font-size:12px">
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-xs-2 col-sm-7">
-			<div class="builder-basic"></div>
-			<div class="btn-group" >
-      			<button class="btn btn-warning reset" data-target="basic">Reset</button>
-    		</div>
-		</div>
-	</div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="panel-collapse collapse col-xs-11" id="collapseConstraints" aria-expanded="false">
+      <div class="col-xs-12 col-sm-5 col-sm col-lg-3" style="padding-left:20px">
+          <div class="panel panel-default">
+              <div class="panel-heading">
+                  <strong>
+                      Choix des champs
+                  </strong>
+              </div>
+              <div class="panel-body">
+                  <div class="row">
+                      <ul style="padding-left: 0px;list-style:none" id="first-table-selects"></ul>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="col-xs-2 col-sm-7">
+          <div id="initial-table-constraints" class="builder-basic"></div>
+          <div class="btn-group" >
+                <button class="btn btn-warning reset" data-target="#initial-table-constraints">Reset</button>
+          </div>
+      </div>
+  </div>
 
 
 
 
-	<div class="add-constraints" id="add-constraints">
-	</div>
+  <div class="add-constraints" id="add-constraints">
+  </div>
 
 
 
-	<div class="col-xs-12 btn-group pull-left group-actions" id="add-joint-div">
-		<button class="btn btn-xs btn-basic collapsed" id="add-joint" type="button" >
-			<i class="glyphicon glyphicon-plus-sign" style="font-size:25px"></i>
-		</button>
-	</div>
+  <div class="col-xs-12 btn-group pull-left group-actions" id="add-joint-div">
+      <button class="btn btn-xs btn-basic collapsed" id="add-joint" type="button" >
+          <i class="glyphicon glyphicon-plus-sign" style="font-size:25px"></i>
+      </button>
+  </div>
 
-
-	<template>	
-	<div class="col-xs-12 col-sm-10" id="newSelection" style="padding-left:25px">
-		<div class="formBlock">
-			<div class="panel panel-default ">
-				<div class="panel-heading">
-					<strong>Nouvelle sélection</strong>
-				</div>
-				<div class="panel-body">
-					<div class="row">
-						<div class="col-xs-12 col-sm-4">
-							<div class="form-group">
-								<label for="lot-materiel" class="control-label">
-									Table précédente</label>
-								<select class="previous-table" id="formerTable" ></select>
-							</div>
-						</div>
-						<div class="col-xs-12 col-sm-2">
-							<div class="form-group">
-								<label for="individu" class="control-label" >
-									Choix jointure
-								</label>
-								<select class="joints" id="joint_table" ></select>
-							</div>
-							<!-- <div class="btn-group bootstrap-select form-control concordance"></div> -->
-						</div>
-						<div class="col-xs-12 col-sm-4">
-							<div class="form-group">
-								<label for="sequence" class="control-label">
-									Table adjacente
-								</label>
-								<select class="adjacent-tables" id="adjacent-tables_id" ></select>
-							</div>
-						</div>
-						<div class="col-xs-12 col-sm-2">
-							<div class="form-horizontal">
-								<div class="form-group">
-									<div class="checkbox checkbox-inline">
-										<label class="control-label" title data-toggle="tooltip" data-placement="right">
-											<input id="second_constraints" type="checkbox" data-toggle="collapse" class="collapsed new-constraints" aria-expanded="false" data-target=".collapseConstraints2">
-											<strong>
-												Contraintes
-											</strong>
-											<i class="fas fa-spinner fa-spin pull-right hidden"  style="font-size:16px"></i>
-										</label>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="panel-collapse collapse col-xs-12 collapseConstraints2" aria-expanded="false">
-					<div class="col-xs-12 col-sm-5 col-sm col-lg-3" style="padding-left:20px">
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<strong>
-									Choix des champs
-								</strong>
-							</div>
-							<div class="panel-body">
-								<div class="form-group">
-									<div class ="row">
-										<div  id="show-data3" class="col-xs8-sm-3 col-sm col-lg-1" style=" padding-right:0px;">
-										</div>
-										<div id="show-data4" style="font-size:12px">
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-2 col-sm-8">
-						<div class="builder-basic"></div>
-						<div class="btn-group" >
-							<button class="btn btn-warning reset" data-target="basic">Reset</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	</template>
-	
-	<div class="col-xs-12 col-sm-9" style="padding-left:25px">
-		<div>
-			<center>
-				<button type="submit" href="#resultats" value="Rechercher" class="btn btn-primary btn-lg" id="submit-button" style="min-width: 10em" data-loading-text="<i class='fas fa-spinner fa-spin'></i>">
-					{% trans %}
-					Search
-					{% endtrans %}
-				</button>
-				
-			</center>
-		</div>
-	</div>
+{% verbatim %}
+  <template id="form-block-template">	
+  <div class="col-xs-12 col-sm-10" id="form-block-{{id}}" style="padding-left:25px">
+      <div class="formBlock">
+          <div class="panel panel-default ">
+              <div class="panel-heading">
+                  <strong>Nouvelle sélection</strong>
+              </div>
+              <div class="panel-body">
+                  <div class="row">
+                      <div class="col-xs-12 col-sm-4">
+                          <div class="form-group">
+                              <label for="lot-materiel" class="control-label">
+                                  Table précédente</label>
+                              <select class="previous-table" id="formerTable" ></select>
+                          </div>
+                      </div>
+                      <div class="col-xs-12 col-sm-2">
+                          <div class="form-group">
+                              <label for="individu" class="control-label" >
+                                  Choix jointure
+                              </label>
+                              <select class="joints" id="joint_table" ></select>
+                          </div>
+                          <!-- <div class="btn-group bootstrap-select form-control concordance"></div> -->
+                      </div>
+                      <div class="col-xs-12 col-sm-4">
+                          <div class="form-group">
+                              <label for="sequence" class="control-label">
+                                  Table adjacente
+                              </label>
+                              <select class="adjacent-tables" id="adjacent-tables_id" ></select>
+                          </div>
+                      </div>
+                      <div class="col-xs-12 col-sm-2">
+                          <div class="form-horizontal">
+                              <div class="form-group">
+                                  <div class="checkbox checkbox-inline">
+                                      <label class="control-label" title data-toggle="tooltip" data-placement="right">
+                                          <input id="second_constraints" type="checkbox" data-toggle="collapse" class="collapsed new-constraints" aria-expanded="false" data-target="#collapse-constraints-{{id}}">
+                                          <strong>
+                                              Contraintes
+                                          </strong>
+                                          <i class="fas fa-spinner fa-spin pull-right hidden"  style="font-size:16px"></i>
+                                      </label>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div  id="collapse-constraints-{{id}}" class="panel-collapse collapse col-xs-12" aria-expanded="false">
+                  <div class="col-xs-12 col-sm-5 col-sm col-lg-3" style="padding-left:20px">
+                      <div class="panel panel-default">
+                          <div class="panel-heading">
+                              <strong>
+                                  Choix des champs
+                              </strong>
+                          </div>
+                          <div class="panel-body">
+                              <div class="form-group">
+                                  <div class="row">
+                                  <ul style="padding-left: 0px;list-style:none" id="table-selects-{{id}}" class="table-selects"></ul>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-xs-2 col-sm-8">
+                      <div id="builder-constraints-{{id}}" class="builder-basic"></div>
+                      <div class="btn-group" >
+                          <button class="btn btn-warning reset" data-target="#builder-constraints-{{id}}">Reset</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  </template>
+{% endverbatim %}
+  
+  <div class="col-xs-12 col-sm-9" style="padding-left:25px">
+      <div>
+          <center>
+              <button type="submit" href="#resultats" value="Rechercher" class="btn btn-primary btn-lg" id="submit-button" style="min-width: 10em" data-loading-text="<i class='fas fa-spinner fa-spin'></i>">
+                  {% trans %}
+                  Search
+                  {% endtrans %}
+              </button>
+              
+          </center>
+      </div>
+  </div>
 </div>
 </form>
