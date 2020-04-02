@@ -52,8 +52,7 @@ class DefaultController extends Controller
      */
     public function getRequestBuilder(Request $request) {
         
-        $data = $request->request->all();
-        
+        $data = $request->request->all();  
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
         $initial = $data["initial"];
@@ -61,22 +60,23 @@ class DefaultController extends Controller
         if (count($data) > 1) 
             if (strlen($data["joins"] >= 1)) {
                 $joins = $data["joins"];
-                $this->getJointsBlocks($joins, $query);
+                $query = $this->getJointsBlocks($joins, $query);
             }
         
         $q = $query->getQuery();
         
         $results = $q->getArrayResult();
-        
+        dump($results);
+        //return new JsonResponse($results);
         return $this->render('@LehnaQueryBuilder/resultQuery.html.twig', array(
             "donnees" => $results,
         ));
         
     }
 
+
     /**
-    * Get the level. 
-    * @Route("/query", name="test_query", methods={"POST"})
+    * Get the level of the first block of constraints for the querybuilder. 
     * 
     */
     public function constraintsOfLevel($level, $query, $initial, $firstTable, $condition){
@@ -85,17 +85,15 @@ class DefaultController extends Controller
                 $query = $this->getFirstConstraints($firstConstraints, $initial, $query, $firstTable, $condition);
         } elseif (strlen($level > 1)) {
             foreach ($level as $r) {
-                dump(count($r));
                 if(count($r)==6){
                     $query = $this->getFirstConstraints($r, $initial, $query, $firstTable, $condition);
                 }
                 elseif(count($r)==2){
-                    dump($condition);
-                    dump($r["condition"]);
                     $query = $this->constraintsOfLevel($r["rules"], $query, $initial, $firstTable, $r["condition"]);
                 }            
             }
         }
+
         return $query;
     }
 
@@ -120,19 +118,9 @@ class DefaultController extends Controller
             $query = $this->constraintsOfLevel($initial["constraintsTable1"]["rules"], $query, $initial, $firstTable, $condition);
         }
 
-
-
-        /* if (strlen($initial["constraintsTable1"]["rules"] == 1)) {
-            $query = $this->getFirstConstraints($firstConstraints, $initial, $query, $firstTable, $condition);
-        } elseif (strlen($initial["constraintsTable1"]["rules"] > 1)) {
-            foreach ($initial["constraintsTable1"]["rules"] as $r) {
-                dump(count($r));
-                $query = $this->getFirstConstraints($r, $initial, $query, $firstTable, $condition);
-                
-            }
-        } */
         return $query;
     }
+
 
     /**
     * Get the first constraints. 
@@ -262,8 +250,35 @@ class DefaultController extends Controller
                 var_dump($e->getMessage());
                }
         }
+
         return $query;
 
+    }
+
+
+    /**
+    * Get the level in the joint blocks. 
+    * 
+    */
+    public function newConstraintsOfLevel($level, $query, $joins, $adjTable, $newCondition){
+
+        if (strlen($level == 1)) {
+                $query = $this->getNewConstraints($newConstraints, $joins, $query, $adjTable, $newCondition);
+        } elseif (strlen($level > 1)) {
+            foreach ($level as $r) {
+                dump(count($r));
+                if(count($r)==6){
+                    $query = $this->getNewConstraints($r, $joins, $query, $adjTable, $newCondition);
+                }
+                elseif(count($r)==2){
+                    dump($newCondition);
+                    dump($r["condition"]);
+                    $query = $this->newConstraintsOfLevel($r["rules"], $query, $joins, $adjTable, $r["condition"]);
+                }            
+            }
+        }
+        
+        return $query;
     }
 
 
@@ -279,10 +294,6 @@ class DefaultController extends Controller
             $adjTable = $j["adjacent_table"];
             $srcField = $j["sourceField"];
             $tgtField = $j["targetField"];
-            if ($j["constraints"] != "") {
-                $newConstraints = $j["constraints"];
-                $newCondition = $newConstraints["condition"];
-            }
             if (count($j) == 7) {
                 $newFields = $j["fields"];
                 foreach ($newFields as $newValue){
@@ -290,10 +301,13 @@ class DefaultController extends Controller
                 };
             }
             $query = $this->makeJoint($joins, $query, $formerTable, $jointtype, $adjTable, $srcField, $tgtField);
-                
-
-            dump($newCondition); 
+            if ($j["constraints"] != "") {
+                $newConstraints = $j["constraints"]["rules"];
+                $newCondition = $j["constraints"]["condition"];
+                $query = $this->newConstraintsOfLevel($j["constraints"]["rules"], $query, $joins, $adjTable, $newCondition);
+            } 
         }
+
         return $query;
     }
 
@@ -304,28 +318,24 @@ class DefaultController extends Controller
     public function makeJoint($joins, $query, $formerTable, $jointtype, $adjTable, $srcField, $tgtField) {
         // inner, left, right, cross, full
         if ($jointtype == "inner join") {
-            $query = $query->addSelect($adjTable.'.'.$tgtField)
-            ->innerJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
-            
+            $query = $query->innerJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField); 
         } elseif ($jointtype == "left join") {
-            $query = $query->addSelect($adjTable.'.'.$tgtField)
-            ->leftJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
+            $query = $query->leftJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
         } elseif ($jointtype == "right join") {
-            $query = $query->addSelect($adjTable.'.'.$tgtField)
-            ->leftJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $adjTable.'.'.$tgtField." = ".$formerTable.'.'.$srcField);
+            $query = $query->leftJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $adjTable.'.'.$tgtField." = ".$formerTable.'.'.$srcField);
         } elseif ($jointtype == "cross join") {
-            $query = $query->addSelect($adjTable.'.'.$tgtField)
-            ->crossJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
+            $query = $query->crossJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
         } elseif ($jointtype == "full join") {
-            $query = $query->addSelect($adjTable.'.'.$tgtField)
-            ->fullJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
+            $query = $query->fullJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
         }
-        dump($query);
+
         return $query;
+
     }
 
+
     /**
-    * Get the type of joint and returns the query with the appropriate joint. 
+    * Get the new constraints contained in each joint block. 
     * 
     */
     public function getNewConstraints($newConstraints, $joins, $query, $adjTable, $newCondition) {
@@ -358,7 +368,7 @@ class DefaultController extends Controller
                 $query = $query->andWhere($nft."<=".$newValue);
             }
         } elseif ($newOperator == "greater") {
-            if ($nweCondition == "OR") {
+            if ($newCondition == "OR") {
                 $query = $query->orWhere($nft.">".$newValue);
             } else {
                 $query = $query->andWhere($nft.">".$newValue);
@@ -452,6 +462,7 @@ class DefaultController extends Controller
                 var_dump($e->getMessage());
                }
         }
+
         return $query;
 
     } 
