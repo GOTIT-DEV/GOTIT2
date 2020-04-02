@@ -30,7 +30,6 @@ class QueryBuilderService
     $metadata = $this->metadataManager
       ->getBundleMetadata($coreBundle)
       ->getMetadata();
-
     return $this->parse_entities_metadata($metadata);
   }
 
@@ -74,8 +73,8 @@ class QueryBuilderService
   {
     return [
       "entity" => $this->parse_entity_name($mapping["targetEntity"]),
-      "from" => $mapping["joinColumns"][0]["name"],
-      "to" => $mapping["joinColumns"][0]["referencedColumnName"]
+      "from" => $mapping["fieldName"],
+      "to" => "id"
     ];
   }
 
