@@ -25,7 +25,7 @@ $(document).ready(function () {
       dropdown.append($('<option></option>').attr('value', entry.human_readable_name).text(entry.human_readable_name));
     })
 
-    //initialization of the query builder 
+    // Initialization of the query builder 
     $('#initial-table-constraints').queryBuilder({
       plugins: ['bt-tooltip-errors'],
       filters: [
@@ -40,7 +40,7 @@ $(document).ready(function () {
       $(target).queryBuilder('reset')
     })
 
-    // what occurs when you choose a table and/or change it 
+    // What occurs when you choose a table and/or change it 
     $('#first-table').change(function (event) {
       let target_table = event.target.value
       let table_data = init_data[target_table];
@@ -48,7 +48,7 @@ $(document).ready(function () {
       // Init query-builder with fields and filters
       $('#initial-table-constraints').queryBuilder('setFilters', true, table_data.filters);
 
-      // Init list of fields ( without the datacre, usercre, datemaj,usermaj)
+      // Init list of fields ( without the dateCre, userCre, dateMaj, userMaj)
       $("#first-table-selects").empty()
 
       var items = table_data.filters
@@ -68,21 +68,19 @@ $(document).ready(function () {
 });
 
 
-// Init possible joints
+// Init possible JOINs
 joints = [
   'inner join',
-  'left join',
-  'right join',
-  'cross join',
-  'full join'
+  'left join'
 ];
 
 
 /**
- * function called when the plus buttom is clicked (using mustache.js)
+ * Function called when the "plus" button is clicked (using mustache.js)
  */
 function addJoint(block_id) {
-  //making template's block with mustache.js
+
+  // Making template's block with mustache.js
   let newBlock = Mustache.render(
     $("#form-block-template").html(),
     { id: block_id }
@@ -92,7 +90,7 @@ function addJoint(block_id) {
 
   newBlock = $("#form-block-" + block_id)
 
-  // query builder initialization 
+  // Query builder initialization 
   newBlock.find(".builder-basic").queryBuilder({
     plugins: ['bt-tooltip-errors'],
     filters: [{
@@ -101,7 +99,8 @@ function addJoint(block_id) {
         type: "integer"
     }]
   })
-  //reset buttom
+
+  // Reset button
   newBlock.find('.reset').click(function () {
     let target = $(this).data('target')
     $(target).queryBuilder('reset')
@@ -114,20 +113,23 @@ function addJoint(block_id) {
 
 
 let new_block_id = 0
+
 /**
- * when you click on the plus buttom;
- * Choosing what joint to make between a table chosen previously and an adjacent table, the fields to return and the constraints to apply
- *  */ 
+ * when you click on the plus button.
+ * Choosing what joint to make between a table chosen previously and an adjacent table, the fields to return and the constraints to apply.
+ *  
+ */ 
 $('#add-joint').click(function () {
 
   $.getJSON('init', function (init_data) {
-    // add 1 at each click on add-joint
+
+    // Adding 1 at each click on add-joint
     new_block_id += 1
 
     // Adding a block of query
     let newBlock = addJoint(new_block_id)
 
-    // Filling the menu containing the possible joints
+    // Filling the menu containing the possible joins
     let dropdown = newBlock
       .find('.joints')
       .empty()
@@ -142,7 +144,7 @@ $('#add-joint').click(function () {
 
 
   
-    //previous tables available when you choose a new table to make joints
+    // Previous tables available when you choose a new table to make joints
 
     let all_adj_tables = $(".adjacent-tables").map(function(){
       return $(this).val()
@@ -163,9 +165,11 @@ $('#add-joint').click(function () {
 
 
 
-    //when you select or change the value of the previous table you want to select 
+    // When you select or change the value of the previous table you want to select 
     newBlock.find(".previous-table").change(function (event) {
+
       let target_table = event.target.value
+
       // Init the menu 
       let dropdown = newBlock
         .find('.adjacent-tables')
@@ -179,7 +183,7 @@ $('#add-joint').click(function () {
       });
     })
 
-    //when you click to select/or change an adjacent table 
+    // When you click to select/or change an adjacent table 
     newBlock.find(".adjacent-tables").change(function (event) {
       let target_table = event.target.value
       let table_data = init_data[target_table];
@@ -212,10 +216,10 @@ $('#add-joint').click(function () {
 
 
 /**
- * 3 Fonctions : they read and convert the form's fields filled into json when SEARCH is clicked 
+ * 3 Fonctions : they read and convert the form's fields filled into JSON when SEARCH is clicked 
  */
 
-$.get("init", function(data){
+$.get("init", function (data) {
 
   $("#submit-button").click(function () {
     let data_initial = get_form_initial() 
@@ -226,36 +230,33 @@ $.get("init", function(data){
     // fot the button GetSQL 
     $('#getSqlButton').attr("disabled", false);
 
-    //communication with server 
     $.ajax({
       url: 'query', //query_test
       type: 'POST',
       data: jsonData,
-      // dataType: 'json',
+      dataType: 'json',
       success: function (response) {
-        $("#contentModalQuery").html(response.dql);
-        $("#result-container").html(response.results);
-        console.log(response.results);
-
+          $("#contentModalQuery").html(response.dql);
+          $("#result-container").html(response.results);
       }
     });
-    })
-   // fin du callback associé au bouton Search
- })
+  })
+  // End of callback associated with the "Search" button
+})
 
-// get the informations about the first table chosen, the constraints on it, fields to show
+// Get the information about the first table chosen, the constraints on it, fields to show
 function get_form_initial() {
 
   var table1 = document.getElementById("first-table");
   var table = table1.options[table1.selectedIndex].value;
 
-  //constraints
+  // Constraints
   if ($('#first-constraints').is(":checked") == true) {
     var constraintsTable1 = $('.builder-basic').eq(0).queryBuilder('getRules');
   }
   else { var constraintsTable1 = null };
 
-  //checked inputs 
+  // Checked inputs 
   var fields = []
   $('input:checked[name=my_form]').each(function () {
     fields.push($(this).val());
@@ -266,7 +267,7 @@ function get_form_initial() {
 
 }
 
-//get the informations about the templates' blocks 
+// Get the information about the templates' blocks 
 function get_form_block_data(init_data) {
 
   let block_list = $(".formBlock")
@@ -277,14 +278,14 @@ function get_form_block_data(init_data) {
     let idJoin = block.find("#joint_table").val()
     let fields =block.find("#div-checkbox input:checked").map(function(){
       return $(this).val()
-    }).get() // checked inputs 
+    }).get() // Checked inputs 
     
-    // obtain the source Field and target field
+    // Obtaining the source field and target field
     var relationAdj = init_data[formerT].relations[adj_table]
     var sourceField = relationAdj.from
     var targetField = relationAdj.to
 
-    //constraints
+    // Constraints
     if (block.find("#second_constraints").is(":checked") == true) {
       var constraintsTable2 = block.find('.builder-basic').queryBuilder('getRules');
     }
@@ -300,7 +301,7 @@ function get_form_block_data(init_data) {
 
 
 
-// Init the page with the JSON containing the informations about the database
+// Init the page with the JSON containing the information about the database
 $(document).ready(_ => {
   fetch("init")
     .then(response => response.json())
@@ -317,10 +318,10 @@ $(document).ready(_ => {
  */
 
 
-//Get the button
+// Get the button
 var mybutton = document.getElementById("myBtn");
 
-// When the user scrolls down 50px from the top of the document, show the button
+// When the user scrolls down 50px from the top of the document, shows the button
 window.onscroll = function () { scrollFunction() };
 
 function scrollFunction() {
@@ -331,9 +332,9 @@ function scrollFunction() {
   }
 }
 
-// When the user clicks on the button, scroll to the top of the document
+// When the user clicks on the button, scrolls to the top of the document
 function topFunction() {
+
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
 }
-

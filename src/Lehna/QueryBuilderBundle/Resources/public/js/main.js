@@ -227,15 +227,17 @@ $.get("init", function (data) {
 
     var jsonData = { "initial": data_initial, "joins": data_join_blocks };
 
+    // fot the button GetSQL 
+    $('#getSqlButton').attr("disabled", false);
+
     $.ajax({
       url: 'query', //query_test
       type: 'POST',
       data: jsonData,
-      // dataType: 'json',
+      dataType: 'json',
       success: function (response) {
           $("#contentModalQuery").html(response.dql);
           $("#result-container").html(response.results);
-          console.log(response.results);
       }
     });
   })
