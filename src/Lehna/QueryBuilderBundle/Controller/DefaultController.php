@@ -18,7 +18,7 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 
 
 /**
- * Controller for querying COI sampling coverage
+ * Controller for querying the GOTIT database.
  *
  * @Route("/")
  * @Security("has_role('ROLE_INVITED')")
@@ -49,6 +49,9 @@ class DefaultController extends Controller
     /**
      *  @Route("/query", name="query_test", methods={"POST"})
      * 
+     *  Main function to query the database. 
+     *  Creates a QueryBuilder with Doctrine.
+     *  Returns the response of the query.
      */
     public function getRequestBuilder(Request $request) {
         
@@ -56,11 +59,13 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
         $initial = $data["initial"];
-        $query = $this->getFirstBlock($data, $initial, $qb);
+        $query = $this->getFirstBlock($data, $initial, $qb); // Getting the info of the first block. 
+        
+        // If $data is longer than 1, it means there are one or more JOIN(s) in the query.
         if (count($data) > 1) 
             if (strlen($data["joins"] >= 1)) {
                 $joins = $data["joins"];
-                $query = $this->getJointsBlocks($joins, $query);
+                $query = $this->getJointsBlocks($joins, $query); // Getting the info on each block containing a JOIN. 
             }
         
         $q = $query->getQuery();
@@ -73,26 +78,28 @@ class DefaultController extends Controller
         return $this->render('@LehnaQueryBuilder/resultQuery.html.twig', array(
             "dql" => $dqlresults, "results" => $results
         ));
-        //return new JsonResponse(["dql" => $ton_dql, "results" => $results])
-        
+        //return new JsonResponse(["dql" => $ton_dql, "results" => $results])        
         
     }
 
 
     /**
     * Get the level of the first block of constraints for the querybuilder. 
-    * 
+    * Receives : the current level in the array, the current state of the query, the first block of the querybuilder, the first chosen table and the 
+    *            condition to apply on the constraints.
+    * Returns : the query with the constraints added in it.  
+    * Warning : doesn't work properly when clicking ond the 'add-group' on the form.    
     */
     public function constraintsOfLevel($level, $query, $initial, $firstTable, $condition){
 
-        if (strlen($level == 1)) {
+        if (strlen($level == 1)) { // If we are on the first level, we can use the 'simple' function to get the constraints. 
                 $query = $this->getFirstConstraints($firstConstraints, $initial, $query, $firstTable, $condition);
-        } elseif (strlen($level > 1)) {
+        } elseif (strlen($level > 1)) { // If we are on a deeper level : 
             foreach ($level as $r) {
-                if(count($r)==6){
+                if(count($r)==6){ // If there are no more constraints after we use the 'simple' function. 
                     $query = $this->getFirstConstraints($r, $initial, $query, $firstTable, $condition);
                 }
-                elseif(count($r)==2){
+                elseif(count($r)==2){ // If there are multiple constraints, we use this function on itself. 
                     $query = $this->constraintsOfLevel($r["rules"], $query, $initial, $firstTable, $r["condition"]);
                 }            
             }
@@ -103,7 +110,10 @@ class DefaultController extends Controller
 
 
     /**
-    * Get the first fields of the first table that we want to return and creates the "select" part of the query. 
+    * Get the full first block of querybuilder.
+    * Receives : the full array containing the info in the form, the first block of querybuilder and the current state of the query.
+    * Returns : the query with the added chosen table, the fields and the constraints if the user choses to apply some constraints.
+    * Warning : by default, all fields are checked for the first table, please keep at least one box checked.   
     * 
     */
     public function getFirstBlock($data, $initial, $query) {
@@ -127,10 +137,14 @@ class DefaultController extends Controller
 
 
     /**
-    * Get the first constraints. 
+    * Get the first constraints (simple function that is used on each constraint). 
+    * Receives : the array containing the constraints in the form, the inital block of querybuilder, the current state of the query,
+    *            the first chosen table and the condition to apply on the constraints. 
+    * Returns : the query with the 'WHERE' constraints added. 
     * 
     */
     public function getFirstConstraints($firstConstraints, $initial, $query, $firstTable, $condition) {
+
         $firstField = $firstConstraints["field"];
         $firstOperator = $firstConstraints["operator"];
         $firstValue = $firstConstraints["value"];
@@ -261,22 +275,23 @@ class DefaultController extends Controller
 
 
     /**
-    * Get the level in the joint blocks. 
+    * Get the current level in the JOIN blocks (recursive function).
+    * Receives : the current level in the array of constraints, the current state of the query, a block containing a JOIN, 
+    *            the adjacent table of one of the former tables and the condition to apply on the constraints.
+    * Returns : the query with the constraints added in it.  
+    * Warning : doesn't work properly when clicking ond the 'add-group' on the form. 
     * 
     */
     public function newConstraintsOfLevel($level, $query, $joins, $adjTable, $newCondition){
 
-        if (strlen($level == 1)) {
-                $query = $this->getNewConstraints($newConstraints, $joins, $query, $adjTable, $newCondition);
-        } elseif (strlen($level > 1)) {
+        if (strlen($level == 1)) { // If we are on the first level, we can use the 'simple' function to get the constraints. 
+                $query = $this->getNewConstraints($newConstraints, $joins, $query, $adjTable, $newCondition); 
+        } elseif (strlen($level > 1)) { // If we are on a deeper level :
             foreach ($level as $r) {
-                dump(count($r));
-                if(count($r)==6){
+                if(count($r)==6){ // If there are no more constraints after we use the 'simple' function.
                     $query = $this->getNewConstraints($r, $joins, $query, $adjTable, $newCondition);
                 }
-                elseif(count($r)==2){
-                    dump($newCondition);
-                    dump($r["condition"]);
+                elseif(count($r)==2){ // If there are multiple constraints, we use this function on itself.
                     $query = $this->newConstraintsOfLevel($r["rules"], $query, $joins, $adjTable, $r["condition"]);
                 }            
             }
@@ -287,25 +302,27 @@ class DefaultController extends Controller
 
 
     /**
-    * Get the info contained in each block of joint. 
-    * 
+    * Get the info contained in each block of JOIN. 
+    * Receives : the array containing the joins in the form and the current state of the query. 
+    * Returns : the query with the JOIN(s) added. 
+    * Warning : by default, no fields are selected, the user is free to return no field for a JOIN. 
     */
     public function getJointsBlocks($joins, $query) {
 
         foreach ($joins as $j) {
             $formerTable = $j["formerTable"];
-            $jointtype = $j["join"];
+            $jointype = $j["join"];
             $adjTable = $j["adjacent_table"];
             $srcField = $j["sourceField"];
             $tgtField = $j["targetField"];
-            if (count($j) == 7) {
+            if (count($j) == 7) { // If the user chooses to return some fields.
                 $newFields = $j["fields"];
                 foreach ($newFields as $newValue){
                     $query = $query->addSelect($adjTable.".".$newValue);
                 };
             }
-            $query = $this->makeJoint($joins, $query, $formerTable, $jointtype, $adjTable, $srcField, $tgtField);
-            if ($j["constraints"] != "") {
+            $query = $this->makeJoin($joins, $query, $formerTable, $jointype, $adjTable, $srcField, $tgtField);
+            if ($j["constraints"] != "") { // If the user chooses to apply constraints on some fields in the JOIN part. 
                 $newConstraints = $j["constraints"]["rules"];
                 $newCondition = $j["constraints"]["condition"];
                 $query = $this->newConstraintsOfLevel($j["constraints"]["rules"], $query, $joins, $adjTable, $newCondition);
@@ -316,22 +333,26 @@ class DefaultController extends Controller
     }
 
     /**
-    * Get the type of joint and returns the query with the appropriate joint. 
+    * Get the type of JOIN and makes the appropriate query.
+    * Receives : the array containing the JOIN info, the current state of the query, the chosen former table, the JOIN type, 
+    *            the source and the target fields. 
+    * Returns : the query with JOIN added. 
+    * Warning : the right, cross and full joins were added, but they are not supported by the QueryBuilder yet. Please keep them commented. 
     * 
     */
-    public function makeJoint($joins, $query, $formerTable, $jointtype, $adjTable, $srcField, $tgtField) {
-        // inner, left, right, cross, full
-        if ($jointtype == "inner join") {
+    public function makeJoin($joins, $query, $formerTable, $jointype, $adjTable, $srcField, $tgtField) {
+        // 
+        if ($jointype == "inner join") {
             $query = $query->innerJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField); 
-        } elseif ($jointtype == "left join") {
+        } elseif ($jointype == "left join") {
             $query = $query->leftJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
-        } elseif ($jointtype == "right join") {
-            $query = $query->leftJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $adjTable.'.'.$tgtField." = ".$formerTable.'.'.$srcField);
-        } elseif ($jointtype == "cross join") {
+        } /* elseif ($jointype == "right join") {
+            $query = $query->rightJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
+        } elseif ($jointype == "cross join") {
             $query = $query->crossJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
-        } elseif ($jointtype == "full join") {
+        } elseif ($jointype == "full join") {
             $query = $query->fullJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
-        }
+        } */
 
         return $query;
 
@@ -339,8 +360,11 @@ class DefaultController extends Controller
 
 
     /**
-    * Get the new constraints contained in each joint block. 
-    * 
+    * Get the new constraints contained in each JOIN block. 
+    * Receives : the array containing the constraints in the form, a JOIN block, the current state of the query,
+    *            the current adjacent and the condition to apply on the constraints. 
+    * Returns : the query with the 'WHERE' constraints added. 
+    *
     */
     public function getNewConstraints($newConstraints, $joins, $query, $adjTable, $newCondition) {
         $newField = $newConstraints["field"];
