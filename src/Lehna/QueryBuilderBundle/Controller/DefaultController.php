@@ -14,28 +14,7 @@ use Bbees\E3sBundle\Services\GenericFunctionService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
-use Bbees\E3sBundle\Entity\ACibler;
-use Bbees\E3sBundle\Entity\Adn;
-use Bbees\E3sBundle\Entity\AdnEstRealisePar;
-use Bbees\E3sBundle\Entity\APourFixateur;
-use Bbees\E3sBundle\Entity\APourSamplingMethod;
-use Bbees\E3sBundle\Entity\Assigne;
-use Bbees\E3sBundle\Entity\Commune;
-use Bbees\E3sBundle\Entity\CompositionLotMateriel;
-use Bbees\E3sBundle\Entity\EspeceIdentifiee;
-use Bbees\E3sBundle\Entity\Collecte;
-use Bbees\E3sBundle\Entity\Station;
-use Bbees\E3sBundle\Entity\LotMateriel;
-use Bbees\E3sBundle\Entity\LotMaterielExt;
-use Bbees\E3sBundle\Entity\Individu;
-use Bbees\E3sBundle\Entity\IndividuLame;
-use Bbees\E3sBundle\Entity\Pcr;
-use Bbees\E3sBundle\Entity\Chromatogramme;
-use Bbees\E3sBundle\Entity\SequenceAssemblee;
-use Bbees\E3sBundle\Entity\SequenceAssembleeExt;
-use Bbees\E3sBundle\Entity\Motu;
-use Bbees\E3sBundle\Entity\Boite;
-use Bbees\E3sBundle\Entity\Source;
+
 
 
 /**
