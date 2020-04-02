@@ -223,13 +223,15 @@ $.get("init", function (data) {
 
     var jsonData = { "initial": data_initial, "joins": data_join_blocks };
 
+    $('#getSqlButton').attr("disabled", false);
+
     $.ajax({
       url: 'query', //query_test
       type: 'POST',
       data: jsonData,
       dataType: 'json',
       success: function (response) {
-        console.log(response);
+        $("#contentModalQuery").html(response.dql);
       }
     });
   })
@@ -329,3 +331,4 @@ function topFunction() {
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
 }
+

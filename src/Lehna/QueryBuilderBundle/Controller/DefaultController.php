@@ -64,13 +64,14 @@ class DefaultController extends Controller
             }
         
         $q = $query->getQuery();
-        
+        dump($q);
+        $dqlresults = $q->getDql();
+        dump($dqlresults);
         $results = $q->getArrayResult();
         dump($results);
         //return new JsonResponse($results);
-        return $this->render('@LehnaQueryBuilder/resultQuery.html.twig', array(
-            "donnees" => $results,
-        ));
+        return new JsonResponse(["dql" => $dqlresults, "results" => $results]);
+        
         
     }
 
