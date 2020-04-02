@@ -215,7 +215,7 @@ $('#add-joint').click(function () {
  * 3 Fonctions : they read and convert the form's fields filled into json when SEARCH is clicked 
  */
 
-$.get("init", function (data) {
+$.get("init", function(data){
 
   $("#submit-button").click(function () {
     let data_initial = get_form_initial() 
@@ -223,20 +223,20 @@ $.get("init", function (data) {
 
     var jsonData = { "initial": data_initial, "joins": data_join_blocks };
 
-    $('#getSqlButton').attr("disabled", false);
-
     $.ajax({
       url: 'query', //query_test
       type: 'POST',
       data: jsonData,
-      dataType: 'json',
+      // dataType: 'json',
       success: function (response) {
-        $("#contentModalQuery").html(response.dql);
+        console.log("RESPONSE RECEIVED")
+        $("#result-container").html(response);
+        console.log(response);
       }
     });
-  })
-  // fin du callback associé au bouton Search
-})
+    })
+   // fin du callback associé au bouton Search
+ })
 
 // get the informations about the first table chosen, the constraints on it, fields to show
 function get_form_initial() {
