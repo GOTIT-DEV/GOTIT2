@@ -229,7 +229,9 @@ $.get("init", function (data) {
       data: jsonData,
       dataType: 'json',
       success: function (response) {
-        console.log(response);
+        
+        $("$result-container").html(response);
+        console.log(Response);
       }
     });
   })

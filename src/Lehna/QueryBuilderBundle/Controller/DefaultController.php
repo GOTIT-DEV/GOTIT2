@@ -53,7 +53,7 @@ class DefaultController extends Controller
     public function getRequestBuilder(Request $request) {
         
         $data = $request->request->all();
-        dump($data);
+        
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
         $initial = $data["initial"];
@@ -63,12 +63,14 @@ class DefaultController extends Controller
                 $joins = $data["joins"];
                 $this->getJointsBlocks($joins, $query);
             }
-        dump($query);
+        
         $q = $query->getQuery();
-        dump($q);
+        
         $results = $q->getArrayResult();
-        dump($results);
-        return new JsonResponse($results);
+        
+        return $this->render('@LehnaQueryBuilder/resultQuery.html.twig', array(
+            "donnees" => $results,
+        ));
         
     }
 
