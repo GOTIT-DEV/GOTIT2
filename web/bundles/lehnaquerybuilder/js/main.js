@@ -7,6 +7,7 @@
  * Authors : Thierno Diallo, Maud Ferrer and Elsa Mendes. 
 */
 
+import {dtconfig} from '../../lehnaspeciessearch/js/datatables_utils.js' 
 
 // Initializing the first table query block
 $(document).ready(function () {
@@ -52,15 +53,15 @@ $(document).ready(function () {
       $("#first-table-selects").empty()
 
       var items = table_data.filters
-      .filter(function(item){
-        return !(item.label.endsWith("Cre") || item.label.endsWith("Maj"))
-      })
-      .map(function (item) {
-        return Mustache.render(
-          '<li><input type="checkbox" name="my_form" value="{{label}}" checked/><label>{{label}}</label></li>',
-          item
-        )
-      })
+        .filter(function (item) {
+          return !(item.label.endsWith("Cre") || item.label.endsWith("Maj"))
+        })
+        .map(function (item) {
+          return Mustache.render(
+            '<li><input type="checkbox" name="my_form" value="{{label}}" checked/><label>{{label}}</label></li>',
+            item
+          )
+        })
 
       $("#first-table-selects").html(items.join(''))
     });
@@ -69,7 +70,7 @@ $(document).ready(function () {
 
 
 // Init possible JOINs
-joints = [
+const joints = [
   'inner join',
   'left join'
 ];
@@ -94,9 +95,9 @@ function addJoint(block_id) {
   newBlock.find(".builder-basic").queryBuilder({
     plugins: ['bt-tooltip-errors'],
     filters: [{
-        id: "empty",
-        label: "empty",
-        type: "integer"
+      id: "empty",
+      label: "empty",
+      type: "integer"
     }]
   })
 
@@ -118,7 +119,7 @@ let new_block_id = 0
  * when you click on the plus button.
  * Choosing what joint to make between a table chosen previously and an adjacent table, the fields to return and the constraints to apply.
  *  
- */ 
+ */
 $('#add-joint').click(function () {
 
   $.getJSON('init', function (init_data) {
@@ -143,10 +144,10 @@ $('#add-joint').click(function () {
     });
 
 
-  
+
     // Previous tables available when you choose a new table to make joints
 
-    let all_adj_tables = $(".adjacent-tables").map(function(){
+    let all_adj_tables = $(".adjacent-tables").map(function () {
       return $(this).val()
     }).get()
 
@@ -156,12 +157,12 @@ $('#add-joint').click(function () {
     all_adj_tables = [... new Set(all_adj_tables)]
 
     let dropdown2 = newBlock.find('.previous-table').empty()
-        dropdown2.append('<option selected="true" disabled>Choose one previous table</option>')
-                  .prop('selectedIndex', 0)
-                  $.each(all_adj_tables, function (index, value) {
-                    dropdown2.append($('<option></option>').attr('value', value).text(value));
-              
-                  });
+    dropdown2.append('<option selected="true" disabled>Choose one previous table</option>')
+      .prop('selectedIndex', 0)
+    $.each(all_adj_tables, function (index, value) {
+      dropdown2.append($('<option></option>').attr('value', value).text(value));
+
+    });
 
 
 
@@ -196,17 +197,17 @@ $('#add-joint').click(function () {
       let selects_block = newBlock.find(".table-selects")
       selects_block.empty()
       var items = table_data.filters
-      
+
       var items = table_data.filters
-      .filter(function(item){
-        return !(item.label.endsWith("Cre") || item.label.endsWith("Maj"))
-      })
-      .map(function (item) {
-        return Mustache.render(
-          '<li><input type="checkbox" name="my_form2" value="{{label}}"/><label>{{label}}</label></li>',
-          item
-        )
-      })
+        .filter(function (item) {
+          return !(item.label.endsWith("Cre") || item.label.endsWith("Maj"))
+        })
+        .map(function (item) {
+          return Mustache.render(
+            '<li><input type="checkbox" name="my_form2" value="{{label}}"/><label>{{label}}</label></li>',
+            item
+          )
+        })
 
       selects_block.html(items.join(''))
     })
@@ -222,8 +223,8 @@ $('#add-joint').click(function () {
 $.get("init", function (data) {
 
   $("#submit-button").click(function () {
-    let data_initial = get_form_initial() 
-    let data_join_blocks = get_form_block_data(data) 
+    let data_initial = get_form_initial()
+    let data_join_blocks = get_form_block_data(data)
 
     var jsonData = { "initial": data_initial, "joins": data_join_blocks };
 
@@ -236,8 +237,12 @@ $.get("init", function (data) {
       data: jsonData,
       dataType: 'json',
       success: function (response) {
-          $("#contentModalQuery").html(response.dql);
-          $("#result-container").html(response.results);
+        $("#contentModalQuery").html(response.dql);
+        $("#result-container").html(response.results);
+        $("#result-table").dataTable(
+          Object.assign(
+            {dom:"lfrtipB"},
+            dtconfig));
       }
     });
   })
@@ -276,10 +281,10 @@ function get_form_block_data(init_data) {
     let adj_table = block.find("#adjacent-tables_id").val()
     let formerT = block.find("#formerTable").val()
     let idJoin = block.find("#joint_table").val()
-    let fields =block.find("#div-checkbox input:checked").map(function(){
+    let fields = block.find("#div-checkbox input:checked").map(function () {
       return $(this).val()
     }).get() // Checked inputs 
-    
+
     // Obtaining the source field and target field
     var relationAdj = init_data[formerT].relations[adj_table]
     var sourceField = relationAdj.from

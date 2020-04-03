@@ -7,6 +7,7 @@
  * Authors : Thierno Diallo, Maud Ferrer and Elsa Mendes. 
 */
 
+import {dtconfig} from '../../lehnaspeciessearch/js/datatables_utils.js' 
 
 // Initializing the first table query block
 $(document).ready(function () {
@@ -69,7 +70,7 @@ $(document).ready(function () {
 
 
 // Init possible JOINs
-joints = [
+const joints = [
   'inner join',
   'left join'
 ];
@@ -238,7 +239,10 @@ $.get("init", function (data) {
       success: function (response) {
         $("#contentModalQuery").html(response.dql);
         $("#result-container").html(response.results);
-        $("#result-table").dataTable();
+        $("#result-table").dataTable(
+          Object.assign(
+            {dom:"lfrtipB"},
+            dtconfig));
       }
     });
   })
