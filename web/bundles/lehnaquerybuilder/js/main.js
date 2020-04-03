@@ -242,7 +242,8 @@ $.get("init", function (data) {
         $("#result-container").html(response.results);
         $("#result-table").dataTable(
           Object.assign(
-            { dom: "lfrtipB" },
+            { dom: "lfrtipB" ,
+            responsive : true },
             dtconfig));
       }
     });
