@@ -20,8 +20,14 @@ The **JQuery Query Builder** module allows to define constraints and logical lin
 
 We used it because the structure fits well. The constraints are made for a single table. So we reused several times queryBuilder blocks and we manipulated it to introduce fields according to the chosen table. 
 
+## Results 
+
+The user can get a summary of the SQL query. 
+Also, he can donwload the results.
 
 
+
+![picture](./Capture2_interface.png)
 
 
 ## Treeview of files created for the *Query Builder* bundle
