@@ -32,7 +32,6 @@ class DefaultController extends Controller
     public function indexAction()
     {
         return $this->render('@LehnaQueryBuilder/index.html.twig');
-        
     }
 
 
@@ -53,23 +52,24 @@ class DefaultController extends Controller
      *  Creates a QueryBuilder with Doctrine.
      *  Returns the response of the query.
      */
-    public function getRequestBuilder(Request $request) {
-        
-    
-        $data = $request->request->all();  
+    public function getRequestBuilder(Request $request)
+    {
+
+
+        $data = $request->request->all();
         $selectedFields = $this->getSelectFields($data);
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
         $initial = $data["initial"];
         $query = $this->getFirstBlock($data, $initial, $qb); // Getting the info of the first block. 
-        
+
         // If $data is longer than 1, it means there are one or more JOIN(s) in the query.
-        if (count($data) > 1) 
+        if (count($data) > 1)
             if (strlen($data["joins"] >= 1)) {
                 $joins = $data["joins"];
                 $query = $this->getJointsBlocks($joins, $query); // Getting the info on each block containing a JOIN. 
             }
-        
+
         $q = $query->getQuery();
         dump($q);
         $dqlresults = $q->getDql();
@@ -78,18 +78,21 @@ class DefaultController extends Controller
         dump($results);
         dump($selectedFields);
         //return new JsonResponse($results);
-        return new JsonResponse(["dql" => $dqlresults, 
-        "results" => $this->renderView('@LehnaQueryBuilder/resultQuery.html.twig', array("results" => $results, "selectedFields" => $selectedFields))]);
-        
-               
-        
+        return new JsonResponse([
+            "dql" => $dqlresults,
+            "results" => $this->renderView(
+                '@LehnaQueryBuilder/resultQuery.html.twig',
+                ["results" => $results, "selectedFields" => $selectedFields]
+            )
+        ]);
     }
 
     /** 
      * 
      * 
-     */ 
-    public function getSelectFields($data) {
+     */
+    public function getSelectFields($data)
+    {
         $initialTable = $data["initial"]["table"];
         $initialFields = $data["initial"]["fields"];
         $tab = [$initialTable => $initialFields];
@@ -97,34 +100,32 @@ class DefaultController extends Controller
             foreach ($data["joins"] as $joins) {
                 $adjTable = $joins["adjacent_table"];
                 $joinsFields = $joins["fields"];
-                $tab[$adjTable] = $joinsFields; 
+                $tab[$adjTable] = $joinsFields;
             }
-        } 
+        }
 
         return $tab;
-        
-        
     }
 
     /**
-    * Get the level of the first block of constraints for the querybuilder. 
-    * Receives : the current level in the array, the current state of the query, the first block of the querybuilder, the first chosen table and the 
-    *            condition to apply on the constraints.
-    * Returns : the query with the constraints added in it.  
-    * Warning : doesn't work properly when clicking ond the 'add-group' on the form.    
-    */
-    public function constraintsOfLevel($level, $query, $initial, $firstTable, $condition){
+     * Get the level of the first block of constraints for the querybuilder. 
+     * Receives : the current level in the array, the current state of the query, the first block of the querybuilder, the first chosen table and the 
+     *            condition to apply on the constraints.
+     * Returns : the query with the constraints added in it.  
+     * Warning : doesn't work properly when clicking ond the 'add-group' on the form.    
+     */
+    public function constraintsOfLevel($level, $query, $initial, $firstTable, $condition)
+    {
 
         if (strlen($level == 1)) { // If we are on the first level, we can use the 'simple' function to get the constraints. 
-                $query = $this->getFirstConstraints($firstConstraints, $initial, $query, $firstTable, $condition);
+            $query = $this->getFirstConstraints($firstConstraints, $initial, $query, $firstTable, $condition);
         } elseif (strlen($level > 1)) { // If we are on a deeper level : 
             foreach ($level as $r) {
-                if(count($r)==6){ // If there are no more constraints after we use the 'simple' function. 
+                if (count($r) == 6) { // If there are no more constraints after we use the 'simple' function. 
                     $query = $this->getFirstConstraints($r, $initial, $query, $firstTable, $condition);
-                }
-                elseif(count($r)==2){ // If there are multiple constraints, we use this function on itself. 
+                } elseif (count($r) == 2) { // If there are multiple constraints, we use this function on itself. 
                     $query = $this->constraintsOfLevel($r["rules"], $query, $initial, $firstTable, $r["condition"]);
-                }            
+                }
             }
         }
 
@@ -133,20 +134,21 @@ class DefaultController extends Controller
 
 
     /**
-    * Get the full first block of querybuilder.
-    * Receives : the full array containing the info in the form, the first block of querybuilder and the current state of the query.
-    * Returns : the query with the added chosen table, the fields and the constraints if the user choses to apply some constraints.
-    * Warning : by default, all fields are checked for the first table, please keep at least one box checked.   
-    * 
-    */
-    public function getFirstBlock($data, $initial, $query) {
-        
+     * Get the full first block of querybuilder.
+     * Receives : the full array containing the info in the form, the first block of querybuilder and the current state of the query.
+     * Returns : the query with the added chosen table, the fields and the constraints if the user choses to apply some constraints.
+     * Warning : by default, all fields are checked for the first table, please keep at least one box checked.   
+     * 
+     */
+    public function getFirstBlock($data, $initial, $query)
+    {
+
         $firstTable = $initial["table"];
-        $query = $query->from('BbeesE3sBundle:'.$firstTable, $firstTable);
+        $query = $query->from('BbeesE3sBundle:' . $firstTable, $firstTable);
         $firstFields = $initial["fields"];
-        
-        foreach ($firstFields as $value){
-            $query = $query->addSelect($firstTable.".".$value);
+
+        foreach ($firstFields as $value) {
+            $query = $query->addSelect($firstTable . "." . $value);
         };
 
         if ($initial["constraintsTable1"] != "") {
@@ -160,177 +162,178 @@ class DefaultController extends Controller
 
 
     /**
-    * Get the first constraints (simple function that is used on each constraint). 
-    * Receives : the array containing the constraints in the form, the inital block of querybuilder, the current state of the query,
-    *            the first chosen table and the condition to apply on the constraints. 
-    * Returns : the query with the 'WHERE' constraints added. 
-    * 
-    */
-    public function getFirstConstraints($firstConstraints, $initial, $query, $firstTable, $condition) {
+     * Get the first constraints (simple function that is used on each constraint). 
+     * Receives : the array containing the constraints in the form, the inital block of querybuilder, the current state of the query,
+     *            the first chosen table and the condition to apply on the constraints. 
+     * Returns : the query with the 'WHERE' constraints added. 
+     * 
+     */
+    public function getFirstConstraints($firstConstraints, $initial, $query, $firstTable, $condition)
+    {
 
         $firstField = $firstConstraints["field"];
         $firstOperator = $firstConstraints["operator"];
         $firstValue = $firstConstraints["value"];
-        $ft = $firstTable.".".$firstField;
+        $ft = $firstTable . "." . $firstField;
         if ($firstOperator == "equal") {
             if ($condition == "OR") {
-                $query = $query->orWhere($ft." = ".$firstValue);
+                $query = $query->orWhere($ft . " = " . $firstValue);
             } else {
-                $query = $query->andWhere($ft." = ".$firstValue);
+                $query = $query->andWhere($ft . " = " . $firstValue);
             }
-        } elseif ($firstOperator == "not_equal"){
+        } elseif ($firstOperator == "not_equal") {
             if ($condition == "OR") {
-                $query = $query->orWhere($ft."!=".$firstValue);
+                $query = $query->orWhere($ft . "!=" . $firstValue);
             } else {
-                $query = $query->andWhere($ft."!=".$firstValue);
+                $query = $query->andWhere($ft . "!=" . $firstValue);
             }
         } elseif ($firstOperator == "less") {
             if ($condition == "OR") {
-                $query = $query->orWhere($ft."<".$firstValue);
+                $query = $query->orWhere($ft . "<" . $firstValue);
             } else {
-                $query = $query->andWhere($ft."<".$firstValue);
+                $query = $query->andWhere($ft . "<" . $firstValue);
             }
         } elseif ($firstOperator == "less_or_equal") {
             if ($condition == "OR") {
-                $query = $query->orWhere($ft."<=".$firstValue);
+                $query = $query->orWhere($ft . "<=" . $firstValue);
             } else {
-                $query = $query->andWhere($ft."<=".$firstValue);
+                $query = $query->andWhere($ft . "<=" . $firstValue);
             }
         } elseif ($firstOperator == "greater") {
             if ($condition == "OR") {
-                $query = $query->orWhere($ft.">".$firstValue);
+                $query = $query->orWhere($ft . ">" . $firstValue);
             } else {
-                $query = $query->andWhere($ft.">".$firstValue);
+                $query = $query->andWhere($ft . ">" . $firstValue);
             }
         } elseif ($firstOperator == "greater_or_equal") {
             if ($condition == "OR") {
-                $query = $query->orWhere($ft.">=".$firstValue);
+                $query = $query->orWhere($ft . ">=" . $firstValue);
             } else {
-                $query = $query->andWhere($ft.">=".$firstValue);
+                $query = $query->andWhere($ft . ">=" . $firstValue);
             }
         } elseif ($firstOperator == "begins_with") {
             if ($condition == "OR") {
-                $query = $query->orWhere($ft." LIKE"." '".strtoupper($firstValue)."%'");
+                $query = $query->orWhere($ft . " LIKE" . " '" . strtoupper($firstValue) . "%'");
             } else {
-                $query = $query->andWhere($ft." LIKE"." '".strtoupper($firstValue)."%'");
+                $query = $query->andWhere($ft . " LIKE" . " '" . strtoupper($firstValue) . "%'");
             }
         } elseif ($firstOperator == "not_begins_with") {
             if ($condition == "OR") {
-                $query = $query->orWhere($ft." NOT LIKE"." '".strtoupper($firstValue)."%'");
+                $query = $query->orWhere($ft . " NOT LIKE" . " '" . strtoupper($firstValue) . "%'");
             } else {
-                $query = $query->andWhere($ft." NOT LIKE"." '".strtoupper($firstValue)."%'");
+                $query = $query->andWhere($ft . " NOT LIKE" . " '" . strtoupper($firstValue) . "%'");
             }
         } elseif ($firstOperator == "is_null") {
             if ($condition == "OR") {
-                $query = $query->orWhere($ft." ".$firstValue." IS NULL");
+                $query = $query->orWhere($ft . " " . $firstValue . " IS NULL");
             } else {
-                $query = $query->andWhere($ft." ".$firstValue." IS NULL");
+                $query = $query->andWhere($ft . " " . $firstValue . " IS NULL");
             }
         } elseif ($firstOperator == "is_not_null") {
             if ($condition == "OR") {
-                $query = $query->orWhere($ft." ".$firstValue." IS NOT NULL");
+                $query = $query->orWhere($ft . " " . $firstValue . " IS NOT NULL");
             } else {
-                $query = $query->andWhere($ft." ".$firstValue." IS NOT NULL");
+                $query = $query->andWhere($ft . " " . $firstValue . " IS NOT NULL");
             }
         } elseif ($firstOperator == "between") {
             $lowVal = $firstValue[0];
             $highVal = $firstValue[1];
             if ($condition == "OR") {
-                $query = $query->orWhere($ft." BETWEEN ".$lowVal." AND ".$highVal);
+                $query = $query->orWhere($ft . " BETWEEN " . $lowVal . " AND " . $highVal);
             } else {
-                $query = $query->andWhere($ft." BETWEEN ".$lowVal." AND ".$highVal);
+                $query = $query->andWhere($ft . " BETWEEN " . $lowVal . " AND " . $highVal);
             }
         } elseif ($firstOperator == "not_between") {
             $lowVal = $firstValue[0];
             $highVal = $firstValue[1];
             if ($condition == "OR") {
-                $query = $query->orWhere($ft." NOT BETWEEN ".$lowVal." AND ".$highVal);
+                $query = $query->orWhere($ft . " NOT BETWEEN " . $lowVal . " AND " . $highVal);
             } else {
-                $query = $query->andWhere($ft." NOT BETWEEN ".$lowVal." AND ".$highVal);
+                $query = $query->andWhere($ft . " NOT BETWEEN " . $lowVal . " AND " . $highVal);
             }
         } elseif ($firstOperator == "ends_with") {
             if ($condition == "OR") {
-                $query = $query->orWhere($ft." LIKE"." '%".strtoupper($firstValue)."'");
+                $query = $query->orWhere($ft . " LIKE" . " '%" . strtoupper($firstValue) . "'");
             } else {
-                $query = $query->andWhere($ft." LIKE"." '%".strtoupper($firstValue)."'");
+                $query = $query->andWhere($ft . " LIKE" . " '%" . strtoupper($firstValue) . "'");
             }
         } elseif ($firstOperator == "not_ends_with") {
             if ($condition == "OR") {
-                $query = $query->orWhere($ft." NOT LIKE"." '%".strtoupper($firstValue)."'");
+                $query = $query->orWhere($ft . " NOT LIKE" . " '%" . strtoupper($firstValue) . "'");
             } else {
-                $query = $query->andWhere($ft." NOT LIKE"." '%".strtoupper($firstValue)."'");
+                $query = $query->andWhere($ft . " NOT LIKE" . " '%" . strtoupper($firstValue) . "'");
             }
         } elseif ($firstOperator == "contains") {
             if ($condition == "OR") {
-                $query = $query->orWhere($ft." LIKE"." '%".strtoupper($firstValue)."%'");
+                $query = $query->orWhere($ft . " LIKE" . " '%" . strtoupper($firstValue) . "%'");
             } else {
-                $query = $query->andWhere($ft." LIKE"." '%".strtoupper($firstValue)."%'");
+                $query = $query->andWhere($ft . " LIKE" . " '%" . strtoupper($firstValue) . "%'");
             }
         } elseif ($firstOperator == "not_contains") {
             if ($condition == "OR") {
-                $query = $query->orWhere($ft." NOT LIKE"." '%".strtoupper($firstValue)."%'");
+                $query = $query->orWhere($ft . " NOT LIKE" . " '%" . strtoupper($firstValue) . "%'");
             } else {
-                $query = $query->andWhere($ft." NOT LIKE"." '%".strtoupper($firstValue)."%'");
+                $query = $query->andWhere($ft . " NOT LIKE" . " '%" . strtoupper($firstValue) . "%'");
             }
         } elseif ($firstOperator == "is_empty") {
             if ($condition == "OR") {
-                $query = $query->orWhere($ft." ".$firstValue."= ''");
+                $query = $query->orWhere($ft . " " . $firstValue . "= ''");
             } else {
-                $query = $query->andWhere($ft." ".$firstValue."= ''");
+                $query = $query->andWhere($ft . " " . $firstValue . "= ''");
             }
         } elseif ($firstOperator == "is_not_empty") {
             if ($condition == "OR") {
-                $query = $query->orWhere($ft." ".$firstValue."!=''");
+                $query = $query->orWhere($ft . " " . $firstValue . "!=''");
             } else {
-                $query = $query->andWhere($ft." ".$firstValue."!=''");
+                $query = $query->andWhere($ft . " " . $firstValue . "!=''");
             }
         } else {
             try {
                 throw new Exception('Impossible operation; try another operator');
-               } catch (\Exception $e) {
+            } catch (\Exception $e) {
                 var_dump($e->getMessage());
-               }
-        }
-
-        return $query;
-
-    }
-
-
-    /**
-    * Get the current level in the JOIN blocks (recursive function).
-    * Receives : the current level in the array of constraints, the current state of the query, a block containing a JOIN, 
-    *            the adjacent table of one of the former tables and the condition to apply on the constraints.
-    * Returns : the query with the constraints added in it.  
-    * Warning : doesn't work properly when clicking ond the 'add-group' on the form. 
-    * 
-    */
-    public function newConstraintsOfLevel($level, $query, $joins, $adjTable, $newCondition){
-
-        if (strlen($level == 1)) { // If we are on the first level, we can use the 'simple' function to get the constraints. 
-                $query = $this->getNewConstraints($newConstraints, $joins, $query, $adjTable, $newCondition); 
-        } elseif (strlen($level > 1)) { // If we are on a deeper level :
-            foreach ($level as $r) {
-                if(count($r)==6){ // If there are no more constraints after we use the 'simple' function.
-                    $query = $this->getNewConstraints($r, $joins, $query, $adjTable, $newCondition);
-                }
-                elseif(count($r)==2){ // If there are multiple constraints, we use this function on itself.
-                    $query = $this->newConstraintsOfLevel($r["rules"], $query, $joins, $adjTable, $r["condition"]);
-                }            
             }
         }
-        
+
         return $query;
     }
 
 
     /**
-    * Get the info contained in each block of JOIN. 
-    * Receives : the array containing the joins in the form and the current state of the query. 
-    * Returns : the query with the JOIN(s) added. 
-    * Warning : by default, no fields are selected, the user is free to return no field for a JOIN. 
-    */
-    public function getJointsBlocks($joins, $query) {
+     * Get the current level in the JOIN blocks (recursive function).
+     * Receives : the current level in the array of constraints, the current state of the query, a block containing a JOIN, 
+     *            the adjacent table of one of the former tables and the condition to apply on the constraints.
+     * Returns : the query with the constraints added in it.  
+     * Warning : doesn't work properly when clicking ond the 'add-group' on the form. 
+     * 
+     */
+    public function newConstraintsOfLevel($level, $query, $joins, $adjTable, $newCondition)
+    {
+
+        if (strlen($level == 1)) { // If we are on the first level, we can use the 'simple' function to get the constraints. 
+            $query = $this->getNewConstraints($newConstraints, $joins, $query, $adjTable, $newCondition);
+        } elseif (strlen($level > 1)) { // If we are on a deeper level :
+            foreach ($level as $r) {
+                if (count($r) == 6) { // If there are no more constraints after we use the 'simple' function.
+                    $query = $this->getNewConstraints($r, $joins, $query, $adjTable, $newCondition);
+                } elseif (count($r) == 2) { // If there are multiple constraints, we use this function on itself.
+                    $query = $this->newConstraintsOfLevel($r["rules"], $query, $joins, $adjTable, $r["condition"]);
+                }
+            }
+        }
+
+        return $query;
+    }
+
+
+    /**
+     * Get the info contained in each block of JOIN. 
+     * Receives : the array containing the joins in the form and the current state of the query. 
+     * Returns : the query with the JOIN(s) added. 
+     * Warning : by default, no fields are selected, the user is free to return no field for a JOIN. 
+     */
+    public function getJointsBlocks($joins, $query)
+    {
 
         foreach ($joins as $j) {
             $formerTable = $j["formerTable"];
@@ -340,8 +343,8 @@ class DefaultController extends Controller
             $tgtField = $j["targetField"];
             if (count($j) == 7) { // If the user chooses to return some fields.
                 $newFields = $j["fields"];
-                foreach ($newFields as $newValue){
-                    $query = $query->addSelect($adjTable.".".$newValue);
+                foreach ($newFields as $newValue) {
+                    $query = $query->addSelect($adjTable . "." . $newValue);
                 };
             }
             $query = $this->makeJoin($joins, $query, $formerTable, $jointype, $adjTable, $srcField, $tgtField);
@@ -349,26 +352,27 @@ class DefaultController extends Controller
                 $newConstraints = $j["constraints"]["rules"];
                 $newCondition = $j["constraints"]["condition"];
                 $query = $this->newConstraintsOfLevel($j["constraints"]["rules"], $query, $joins, $adjTable, $newCondition);
-            } 
+            }
         }
 
         return $query;
     }
 
     /**
-    * Get the type of JOIN and makes the appropriate query.
-    * Receives : the array containing the JOIN info, the current state of the query, the chosen former table, the JOIN type, 
-    *            the source and the target fields. 
-    * Returns : the query with JOIN added. 
-    * Warning : the right, cross and full joins were added, but they are not supported by the QueryBuilder yet. Please keep them commented. 
-    * 
-    */
-    public function makeJoin($joins, $query, $formerTable, $jointype, $adjTable, $srcField, $tgtField) {
+     * Get the type of JOIN and makes the appropriate query.
+     * Receives : the array containing the JOIN info, the current state of the query, the chosen former table, the JOIN type, 
+     *            the source and the target fields. 
+     * Returns : the query with JOIN added. 
+     * Warning : the right, cross and full joins were added, but they are not supported by the QueryBuilder yet. Please keep them commented. 
+     * 
+     */
+    public function makeJoin($joins, $query, $formerTable, $jointype, $adjTable, $srcField, $tgtField)
+    {
         // 
         if ($jointype == "inner join") {
-            $query = $query->innerJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField); 
+            $query = $query->innerJoin('BbeesE3sBundle:' . $adjTable, $adjTable, 'WITH', $formerTable . '.' . $srcField . " = " . $adjTable . '.' . $tgtField);
         } elseif ($jointype == "left join") {
-            $query = $query->leftJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
+            $query = $query->leftJoin('BbeesE3sBundle:' . $adjTable, $adjTable, 'WITH', $formerTable . '.' . $srcField . " = " . $adjTable . '.' . $tgtField);
         } /* elseif ($jointype == "right join") {
             $query = $query->rightJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
         } elseif ($jointype == "cross join") {
@@ -378,146 +382,142 @@ class DefaultController extends Controller
         } */
 
         return $query;
-
     }
 
 
     /**
-    * Get the new constraints contained in each JOIN block. 
-    * Receives : the array containing the constraints in the form, a JOIN block, the current state of the query,
-    *            the current adjacent and the condition to apply on the constraints. 
-    * Returns : the query with the 'WHERE' constraints added. 
-    *
-    */
-    public function getNewConstraints($newConstraints, $joins, $query, $adjTable, $newCondition) {
+     * Get the new constraints contained in each JOIN block. 
+     * Receives : the array containing the constraints in the form, a JOIN block, the current state of the query,
+     *            the current adjacent and the condition to apply on the constraints. 
+     * Returns : the query with the 'WHERE' constraints added. 
+     *
+     */
+    public function getNewConstraints($newConstraints, $joins, $query, $adjTable, $newCondition)
+    {
         $newField = $newConstraints["field"];
         $newOperator = $newConstraints["operator"];
         $newValue = $newConstraints["value"];
-        $nft = $adjTable.".".$newField;
+        $nft = $adjTable . "." . $newField;
         if ($newOperator == "equal") {
             if ($newCondition == "OR") {
-                $query = $query->orWhere($nft." = ".$newValue);
+                $query = $query->orWhere($nft . " = " . $newValue);
             } else {
-                $query = $query->andWhere($nft." = ".$newValue);
+                $query = $query->andWhere($nft . " = " . $newValue);
             }
-        } elseif ($newOperator == "not_equal"){
+        } elseif ($newOperator == "not_equal") {
             if ($newCondition == "OR") {
-                $query = $query->orWhere($nft."!=".$newValue);
+                $query = $query->orWhere($nft . "!=" . $newValue);
             } else {
-                $query = $query->andWhere($nft."!=".$newValue);
+                $query = $query->andWhere($nft . "!=" . $newValue);
             }
         } elseif ($newOperator == "less") {
             if ($newCondition == "OR") {
-                $query = $query->orWhere($nft."<".$newValue);
+                $query = $query->orWhere($nft . "<" . $newValue);
             } else {
-                $query = $query->andWhere($nft."<".$newValue);
+                $query = $query->andWhere($nft . "<" . $newValue);
             }
         } elseif ($newOperator == "less_or_equal") {
             if ($newCondition == "OR") {
-                $query = $query->orWhere($nft."<=".$newValue);
+                $query = $query->orWhere($nft . "<=" . $newValue);
             } else {
-                $query = $query->andWhere($nft."<=".$newValue);
+                $query = $query->andWhere($nft . "<=" . $newValue);
             }
         } elseif ($newOperator == "greater") {
             if ($newCondition == "OR") {
-                $query = $query->orWhere($nft.">".$newValue);
+                $query = $query->orWhere($nft . ">" . $newValue);
             } else {
-                $query = $query->andWhere($nft.">".$newValue);
+                $query = $query->andWhere($nft . ">" . $newValue);
             }
         } elseif ($newOperator == "greater_or_equal") {
             if ($newCondition == "OR") {
-                $query = $query->orWhere($nft.">=".$newValue);
+                $query = $query->orWhere($nft . ">=" . $newValue);
             } else {
-                $query = $query->andWhere($nft.">=".$newValue);
+                $query = $query->andWhere($nft . ">=" . $newValue);
             }
         } elseif ($newOperator == "begins_with") {
             if ($newCondition == "OR") {
-                $query = $query->orWhere($nft." LIKE"." '".strtoupper($newValue)."%'");
+                $query = $query->orWhere($nft . " LIKE" . " '" . strtoupper($newValue) . "%'");
             } else {
-                $query = $query->andWhere($nft." LIKE"." '".strtoupper($newValue)."%'");
+                $query = $query->andWhere($nft . " LIKE" . " '" . strtoupper($newValue) . "%'");
             }
         } elseif ($newOperator == "not_begins_with") {
             if ($newCondition == "OR") {
-                $query = $query->orWhere($nft." NOT LIKE"." '".strtoupper($newValue)."%'");
+                $query = $query->orWhere($nft . " NOT LIKE" . " '" . strtoupper($newValue) . "%'");
             } else {
-                $query = $query->andWhere($nft." NOT LIKE"." '".strtoupper($newValue)."%'");
+                $query = $query->andWhere($nft . " NOT LIKE" . " '" . strtoupper($newValue) . "%'");
             }
         } elseif ($newOperator == "is_null") {
             if ($newCondition == "OR") {
-                $query = $query->orWhere($nft." ".$newValue." IS NULL");
+                $query = $query->orWhere($nft . " " . $newValue . " IS NULL");
             } else {
-                $query = $query->andWhere($nft." ".$newValue." IS NULL");
+                $query = $query->andWhere($nft . " " . $newValue . " IS NULL");
             }
         } elseif ($newOperator == "is_not_null") {
             if ($newCondition == "OR") {
-                $query = $query->orWhere($nft." ".$newValue." IS NOT NULL");
+                $query = $query->orWhere($nft . " " . $newValue . " IS NOT NULL");
             } else {
-                $query = $query->andWhere($nft." ".$newValue." IS NOT NULL");
+                $query = $query->andWhere($nft . " " . $newValue . " IS NOT NULL");
             }
         } elseif ($newOperator == "between") {
             $newLowVal = $newValue[0];
             $newHighVal = $newValue[1];
             if ($newCondition == "OR") {
-                $query = $query->orWhere($nft." BETWEEN ".$newLowVal." AND ".$newHighVal);
+                $query = $query->orWhere($nft . " BETWEEN " . $newLowVal . " AND " . $newHighVal);
             } else {
-                $query = $query->andWhere($nft." BETWEEN ".$newLowVal." AND ".$newHighVal);
+                $query = $query->andWhere($nft . " BETWEEN " . $newLowVal . " AND " . $newHighVal);
             }
         } elseif ($newOperator == "not_between") {
             $newLowVal = $newValue[0];
             $newHighVal = $newValue[1];
             if ($newCondition == "OR") {
-                $query = $query->orWhere($nft." NOT BETWEEN ".$newLowVal." AND ".$newHighVal);
+                $query = $query->orWhere($nft . " NOT BETWEEN " . $newLowVal . " AND " . $newHighVal);
             } else {
-                $query = $query->andWhere($nft." NOT BETWEEN ".$newLowVal." AND ".$newHighVal);
+                $query = $query->andWhere($nft . " NOT BETWEEN " . $newLowVal . " AND " . $newHighVal);
             }
         } elseif ($newOperator == "ends_with") {
             if ($newCondition == "OR") {
-                $query = $query->orWhere($nft." LIKE"." '%".strtoupper($newValue)."'");
+                $query = $query->orWhere($nft . " LIKE" . " '%" . strtoupper($newValue) . "'");
             } else {
-                $query = $query->andWhere($nft." LIKE"." '%".strtoupper($newValue)."'");
+                $query = $query->andWhere($nft . " LIKE" . " '%" . strtoupper($newValue) . "'");
             }
         } elseif ($newOperator == "not_ends_with") {
             if ($newCondition == "OR") {
-                $query = $query->orWhere($nft." NOT LIKE"." '%".strtoupper($newValue)."'");
+                $query = $query->orWhere($nft . " NOT LIKE" . " '%" . strtoupper($newValue) . "'");
             } else {
-                $query = $query->andWhere($nft." NOT LIKE"." '%".strtoupper($newValue)."'");
+                $query = $query->andWhere($nft . " NOT LIKE" . " '%" . strtoupper($newValue) . "'");
             }
         } elseif ($newOperator == "contains") {
             if ($newCondition == "OR") {
-                $query = $query->orWhere($nft." LIKE"." '%".strtoupper($newValue)."%'");
+                $query = $query->orWhere($nft . " LIKE" . " '%" . strtoupper($newValue) . "%'");
             } else {
-                $query = $query->andWhere($nft." LIKE"." '%".strtoupper($newValue)."%'");
+                $query = $query->andWhere($nft . " LIKE" . " '%" . strtoupper($newValue) . "%'");
             }
         } elseif ($newOperator == "not_contains") {
             if ($newCondition == "OR") {
-                $query = $query->orWhere($nft." NOT LIKE"." '%".strtoupper($newValue)."%'");
+                $query = $query->orWhere($nft . " NOT LIKE" . " '%" . strtoupper($newValue) . "%'");
             } else {
-                $query = $query->andWhere($nft." NOT LIKE"." '%".strtoupper($newValue)."%'");
+                $query = $query->andWhere($nft . " NOT LIKE" . " '%" . strtoupper($newValue) . "%'");
             }
         } elseif ($newOperator == "is_empty") {
             if ($newCondition == "OR") {
-                $query = $query->orWhere($nft." ".$newValue."= ''");
+                $query = $query->orWhere($nft . " " . $newValue . "= ''");
             } else {
-                $query = $query->andWhere($nft." ".$newValue."= ''");
+                $query = $query->andWhere($nft . " " . $newValue . "= ''");
             }
         } elseif ($newOperator == "is_not_empty") {
             if ($newCondition == "OR") {
-                $query = $query->orWhere($nft." ".$newValue."!=''");
+                $query = $query->orWhere($nft . " " . $newValue . "!=''");
             } else {
-                $query = $query->andWhere($nft." ".$newValue."!=''");
+                $query = $query->andWhere($nft . " " . $newValue . "!=''");
             }
         } else {
             try {
                 throw new Exception('Impossible operation; try another operator');
-               } catch (\Exception $e) {
+            } catch (\Exception $e) {
                 var_dump($e->getMessage());
-               }
+            }
         }
 
         return $query;
-
-    } 
-
-    
-
+    }
 }

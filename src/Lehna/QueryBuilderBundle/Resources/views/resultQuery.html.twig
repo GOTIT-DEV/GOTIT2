@@ -1,8 +1,25 @@
-<h1>Selection</h1>
-<ul>
-    {% for key, value in donnees %}
-        {% for i in value %}
-            <li> {{ key }} : {{ i }} </li>
-        {% endfor %}
-    {% endfor %}
-</ul>
+<table id="result-table">
+
+	<thead>
+		{# selectedFields #}
+
+		{% for table, fields in selectedFields %}
+			{% for f in fields %}
+				<th>{{table}}.{{f}}</th>
+			{% endfor %}
+		{% endfor %}
+	</thead>
+
+	<tbody>
+		{# results #}
+		{% for row in results %}
+			<tr>
+				{% for table, fields in selectedFields %}
+					{% for f in fields %}
+						<td>{{attribute(row, f)}}</td>
+					{% endfor %}
+				{% endfor %}
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
