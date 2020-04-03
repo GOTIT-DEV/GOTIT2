@@ -55,7 +55,9 @@ class DefaultController extends Controller
      */
     public function getRequestBuilder(Request $request) {
         
+    
         $data = $request->request->all();  
+        $selectedFields = $this->getSelectFields($data);
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
         $initial = $data["initial"];
@@ -74,14 +76,35 @@ class DefaultController extends Controller
         dump($dqlresults);
         $results = $q->getArrayResult();
         dump($results);
+        dump($selectedFields);
         //return new JsonResponse($results);
         return new JsonResponse(["dql" => $dqlresults, 
-        "results" => $this->renderView('@LehnaQueryBuilder/resultQuery.html.twig', array("donnees" => $results))]);
+        "results" => $this->renderView('@LehnaQueryBuilder/resultQuery.html.twig', array("results" => $results, "selectedFields" => $selectedFields))]);
         
                
         
     }
 
+    /** 
+     * 
+     * 
+     */ 
+    public function getSelectFields($data) {
+        $initialTable = $data["initial"]["table"];
+        $initialFields = $data["initial"]["fields"];
+        $tab = [$initialTable => $initialFields];
+        if (array_key_exists("joins", $data)) {
+            foreach ($data["joins"] as $joins) {
+                $adjTable = $joins["adjacent_table"];
+                $joinsFields = $joins["fields"];
+                $tab[$adjTable] = $joinsFields; 
+            }
+        } 
+
+        return $tab;
+        
+        
+    }
 
     /**
     * Get the level of the first block of constraints for the querybuilder. 
