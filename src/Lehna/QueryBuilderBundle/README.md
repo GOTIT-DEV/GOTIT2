@@ -18,6 +18,9 @@ For each selected table, the user can put **constraints** and **select the field
 >-`The Constraints`: 
 The **JQuery Query Builder** module allows to define constraints and logical links (AND,OR ...). It uses the fields of the selected adjacent table. Link: [https://querybuilder.js.org/](https://querybuilder.js.org/)
 
+We used it because the structure fits well. The constraints are made for a single table. So we reused several times queryBuilder blocks and we manipulated it to introduce fields according to the chosen table. 
+
+
 
 
 
