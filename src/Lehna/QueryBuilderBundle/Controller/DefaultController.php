@@ -87,8 +87,10 @@ class DefaultController extends Controller
         ]);
     }
 
-    /** 
-     * 
+   /** 
+     * Get the selected fields of the query to create a table for the results. 
+     * Receives : the array containing the info for the query. 
+     * Returns : the array with the itial tables and the adjacent tables as keys and the corresponding fields as values. 
      * 
      */
     public function getSelectFields($data)
@@ -97,10 +99,12 @@ class DefaultController extends Controller
         $initialFields = $data["initial"]["fields"];
         $tab = [$initialTable => $initialFields];
         if (array_key_exists("joins", $data)) {
-            foreach ($data["joins"] as $joins) {
-                $adjTable = $joins["adjacent_table"];
-                $joinsFields = $joins["fields"];
-                $tab[$adjTable] = $joinsFields;
+            if (strlen($data["joins"] == 7)) {
+                foreach ($data["joins"] as $joins) {
+                    $adjTable = $joins["adjacent_table"];
+                    $joinsFields = $joins["fields"];
+                    $tab[$adjTable] = $joinsFields;
+                }
             }
         }
 
