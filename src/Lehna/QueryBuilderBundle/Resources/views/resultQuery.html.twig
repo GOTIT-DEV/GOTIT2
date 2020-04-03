@@ -2,12 +2,13 @@
 
 	<thead>
 		{# selectedFields #}
-
+		<tr>
 		{% for table, fields in selectedFields %}
 			{% for f in fields %}
 				<th>{{table}}.{{f}}</th>
 			{% endfor %}
 		{% endfor %}
+		</tr>
 	</thead>
 
 	<tbody>

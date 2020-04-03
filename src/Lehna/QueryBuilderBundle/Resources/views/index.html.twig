@@ -14,23 +14,12 @@
 {% endblock %}
 
 {% block body %}
-
-
 	<div class='row'>
-		<div
-			class="col-xs-12">
-			{# Formulaire #}
+		<div class="col-xs-12">
 			{% include '@LehnaQueryBuilder/form.html.twig' %}
 		</div>
 		<hr>
-		<div>
-			<h2 id="results-title">
-				<span>
-					Results
-				</span>
-			</h2>
-			{% include '@LehnaQueryBuilder/results.html.twig' %}
-		</div>
+		{% include '@LehnaQueryBuilder/results.html.twig' %}
 		<button class="help-btn btn btn-info pull-right" onclick="topFunction()" id="myBtn" title="Go to top">
 			<i class="glyphicon glyphicon-menu-up" style="font-size:20px"></i>
 		</button>
