@@ -70,7 +70,7 @@ $(document).ready(function () {
 
 
 // Init possible JOINs
-const joints = [
+const joins = [
   'inner join',
   'left join'
 ];
@@ -79,7 +79,7 @@ const joints = [
 /**
  * Function called when the "plus" button is clicked (using mustache.js)
  */
-function addJoint(block_id) {
+function addJoin(block_id) {
 
   // Making template's block with mustache.js
   let newBlock = Mustache.render(
