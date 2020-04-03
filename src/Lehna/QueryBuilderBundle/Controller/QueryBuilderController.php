@@ -180,6 +180,10 @@ class QueryBuilderController extends Controller
         $firstOperator = $firstConstraints["operator"];
         $firstValue = $firstConstraints["value"];
         $ft = $firstTable . "." . $firstField;
+        if ((preg_match('#^date#', $firstField) === 1)) {
+            $firstValue = \DateTime::createFromFormat("Y-m-d", $firstValue)->format("Y-m-d");
+            $firstValue = "'".$firstValue."'";
+        }
         if ($firstOperator == "equal") {
             if ($condition == "OR") {
                 $query = $query->orWhere($ft . " = " . $firstValue);
@@ -403,6 +407,10 @@ class QueryBuilderController extends Controller
         $newOperator = $newConstraints["operator"];
         $newValue = $newConstraints["value"];
         $nft = $adjTable . "." . $newField;
+        if ((preg_match('#^date#', $newField) === 1)) {
+            $newValue = \DateTime::createFromFormat("Y-m-d", $newValue)->format("Y-m-d");
+            $newValue = "'".$newValue."'";
+        }
         if ($newOperator == "equal") {
             if ($newCondition == "OR") {
                 $query = $query->orWhere($nft . " = " . $newValue);
