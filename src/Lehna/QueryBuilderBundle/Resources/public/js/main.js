@@ -7,7 +7,7 @@
  * Authors : Thierno Diallo, Maud Ferrer and Elsa Mendes. 
 */
 
-import {dtconfig} from '../../lehnaspeciessearch/js/datatables_utils.js' 
+import { dtconfig } from '../../lehnaspeciessearch/js/datatables_utils.js'
 
 // Initializing the first table query block
 $(document).ready(function () {
@@ -70,7 +70,7 @@ $(document).ready(function () {
 
 
 // Init possible JOINs
-const joins = [
+const joints = [
   'inner join',
   'left join'
 ];
@@ -79,7 +79,7 @@ const joins = [
 /**
  * Function called when the "plus" button is clicked (using mustache.js)
  */
-function addJoin(block_id) {
+function addJoint(block_id) {
 
   // Making template's block with mustache.js
   let newBlock = Mustache.render(
@@ -159,9 +159,9 @@ $('#add-join').click(function () {
     dropdown2.append('<option selected="true" disabled>Choose one previous table</option>')
       .prop('selectedIndex', 0)
     $.each(all_adj_tables, function (index, value) {
-      dropdown2.append($('<option></option>').attr('value', value).text(value));
-
+      dropdown2.append($('<option></option>').attr('value', value).text(value))
     });
+    dropdown2.val(dropdown2.find("option:enabled:first").val())
 
 
 
@@ -181,7 +181,7 @@ $('#add-join').click(function () {
       $.each(table_data.relations, function (key, value) {
         dropdown.append($('<option></option>').attr('value', key).text(key));
       });
-    })
+    }).change()
 
     // When you click to select/or change an adjacent table 
     newBlock.find(".adjacent-tables").change(function (event) {
@@ -221,7 +221,8 @@ $('#add-join').click(function () {
 
 $.get("init", function (data) {
 
-  $("#submit-button").click(function () {
+  $("#main-form").submit(function (event) {
+    event.preventDefault()
     let data_initial = get_form_initial()
     let data_join_blocks = get_form_block_data(data)
 
@@ -241,8 +242,7 @@ $.get("init", function (data) {
         $("#result-container").html(response.results);
         $("#result-table").dataTable(
           Object.assign(
-            {dom:"lfrtipB",
-            responsive:true},
+            { dom: "lfrtipB" },
             dtconfig));
       }
     });
@@ -284,7 +284,7 @@ function get_form_block_data(init_data) {
     let idJoin = block.find("#join_table").val()
     let fields = block.find("#div-checkbox input:checked").map(function () {
       return $(this).val()
-    }).get() // Checked inputs 
+    }).get() // Checked inputs
 
     // Obtaining the source field and target field
     var relationAdj = init_data[formerT].relations[adj_table]
