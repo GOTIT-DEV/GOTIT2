@@ -17,7 +17,7 @@ Tutors: Louis Duchemin et Florian Malard
 ### Form interface
 
 >
->![picture](./Capture_interface.png)
+>![picture](./CaptureInterface.png)
 >
 >- **How queries work :**
 >
@@ -39,7 +39,7 @@ Tutors: Louis Duchemin et Florian Malard
 
 ### Results 
 
->![picture](./Capture2_interface.png)
+>![picture](./Capture2Interface.png)
 >
 >The user can :
 >
