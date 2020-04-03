@@ -1,28 +1,27 @@
 # GOTIT2 - v2.x of GOTIT
+GOTIT is a software package that facilitates the monitoring of species samples taken at collection stations, both for the management of occurrence data and for the molecular analysis of these species. The initial web interface is currently accessible on [https://gotit.cnrs.fr/index.htm](https://gotit.cnrs.fr/index.htm).
 
-GOTIT est un progiciel qui permet de faciliter le suivi de prélèvements d’espèces effectués dans des stations de collecte, à la fois pour la gestion des données d’occurrences et pour l’analyse moléculaire de ces espèces. L'interface web initiale est actuellement accessible sur [https://gotit.cnrs.fr/index.htm](https://gotit.cnrs.fr/index.htm).
+This prototype is an enhancement of the web interface to allow, via the **Query Builder** bundle, flexible queries on the database to allow collaborators not using SQL to view and export the results of custom queries.
 
-Ce prototype est une amélioration de l'interface web pour permettre, via le bundle **Query Builder**, des requêtes flexibles sur la base de données afin de permettre à des collaborateurs n’utilisant pas le SQL de consulter et d’exporter les résultats des requêtes personnalisées. 
- 
-## Fonctionnalitées du Bundle
+
+## Bundle Features
 >
 >![picture](./Capture_interface.png)
 >
->-`Fonctionnement des requêtes` : 
-Pour chaque table choisie, l'utilisateur peut lui mettre des **contraintes** et **choisir les champs** à afficher pour le résultat de la requête. 
+>-`How queries work` : 
+For each selected table, the user can put **constraints** and **select the fields** to be displayed for the query result. 
 >
->Par défaut pour la première table choisie, même si l'utilisateur ne coche pas les contraintes, tous les champs sont selectionnés par défaut. 
+>For the first chosen table, even if the user does not check the constraints, all fields are selected by default. 
 >
->Ensuite, on peut faire des **jointures** (left,right,full join ...) entre une table choisie précedemment et une des ses tables adjacentes en appuyant sur le bouton **+**. On peut aussi ajouter des contraintes. 
+>Next, you can make **joints** (left,right,full join ...) between a previously selected table and one of its adjacent tables by pressing the **+** button. Constraints can also be added. 
 >
->-`Les contraintes`: 
-Le module **JQuery Query Builder** permet de définir les contraines et des liens logiques (AND,OR ...). Il utilise les champs de la table adjacente choisie. Lien: [https://querybuilder.js.org/](https://querybuilder.js.org/)
+>-`The Constraints`: 
+The **JQuery Query Builder** module allows to define constraints and logical links (AND,OR ...). It uses the fields of the selected adjacent table. Link: [https://querybuilder.js.org/](https://querybuilder.js.org/)
 
 
 
 
-
-## Arborescence des fichiers crées pour le bundle *Query Builder*
+## Treeview of files created for the *Query Builder* bundle
 
 
  * [src]()
@@ -50,28 +49,26 @@ Le module **JQuery Query Builder** permet de définir les contraines et des lien
          
 
  
+ ## General file operation 
  
+- The **views** folder contains the **html.twig** files that make up the user interface. The index consists of **form** and **results**. Thus, the user constitutes his form and then gets his result by clicking on SEARCH. 
 
-## Fonctionnement général des fichiers 
- 
-- Le dossier **views** contient les fichiers **html.twig** qui constituent l'interface utilisateur. L'index est constitué de **form** et **results**. Ainsi, l'utilisateur constitue son formulaire puis obtient son résultat en cliquant sur SEARCH. 
+- The script **main.js** contains the code that :
+>- describes the behaviors on the html page. 
+>- reads the **JSON** (loaded when the page is loaded) which describes the links in the database. This way, there is no round trip to the server each time the user chooses tables and/or fields. 
+>- makes the link to the **DefaultController.php** when clicking on **SEARCH**. **The JS script summarizes the information entered in the form.**
 
-- Le script **main.js** contient le code qui :
->- décrit les comportements sur la page html. 
->- lit le **JSON** (chargé quand la page est chargée) qui décrit les liens dans la base de données. Ainsi, il n'y a pas d'aller-retour vers le serveur à chaque fois que l'utilisateur choisi des tables et/ou champs. 
->- fait le lien vers le **DefaultController.php** quand on clique sur **SEARCH**. **Le script JS permet de résumer l'information saisie dans le formulaire.**
+- **DefaultController.php** allows you to make requests to the server using the information retrieved with **main.js**. 
 
-- **DefaultController.php** permet de faire les requêtes sur le serveur grâce aux informations récupérées avec **main.js**. 
-
-- Le module JQuery Builder est dans le dossier vendors.
+- The JQuery Builder module is in the vendors folder.
 
 
-### Pour tester le code niveau interface web ( Symfony )
+### To test the web interface code ( Symfony )
  
 ```
-$ docker start gotit-db  ## lancer la base de données
+$ docker start gotit-db ## launch database
 
-$ php bin/console server:run  ## lancer le serveur
+$ php bin/console server:run ## start server
 
 
 ```
