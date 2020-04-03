@@ -81,3 +81,8 @@ $ php bin/console server:run ## start server
 
 
 ```
+
+## Tools used 
+
+>- Symfony ( version 3.4 )
+>- Javascript, CSS, HTML, PHP
