@@ -3,13 +3,13 @@
 
 GOTIT is a software package that facilitates the monitoring of species samples taken at collection sites, both for the management of occurrence data and for the molecular analysis of these species. The initial web interface is currently accessible on [https://gotit.cnrs.fr/index.htm](https://gotit.cnrs.fr/index.htm).
 
-This prototype is an enhancement of the web interface to allow flexible queries on the database to allow collaborators not using SQL to view and export the results of custom queries. This extension comes as an additionnal module in the project, the **QueryBuilder bundle**
+This prototype is an enhancement of the web interface to allow flexible queries on the database to make it possible for collaborators not using SQL to view and export the results of custom queries. This extension comes as an additionnal module in the project, the **QueryBuilder bundle**
 
 ### Developers 
 
-Elsa Mendes, Maud Ferrer et Thierno Diallo 
+Elsa Mendes, Maud Ferrer and Thierno Diallo 
 >
-Tutors: Louis Duchemin et Florian Malard
+Tutors: Louis Duchemin and Florian Malard
 
 
 ## Bundle Features
@@ -21,17 +21,17 @@ Tutors: Louis Duchemin et Florian Malard
 >
 >- **How queries work :**
 >
->For each selected table, users may set **constraints** and **select the fields** to be displayed in the query result. 
+>For each selected table, users may set **constraints** and **select the fields** to be displayed in the query results. 
 >
->For the first chosen table, even if the user does not check the constraints, all fields are selected by default. If necessary, add constraints to the selected fields and logical links between constraints.
+>For the first chosen table, even if the user does not check the constraints, all fields are selected by default. If necessary, the user may apply constraints to the selected fields and logical links between these constraints.
 >
->Users may add **joins** (left,right,full join ...) between a previously selected table and one of its adjacent tables (within the logical database model) by pressing the **+** button. Select fields to be displayed and, if necessary, constraints and links.
+>Users may add **JOINs** (left and inner join only for the moment) between a previously selected table and one of its adjacent tables (within the logical database model) by pressing the **+** button. The users can additionally select fields to be displayed and, if necessary, constraints and links.
 >
->-Pressing the search button will display the results 
+>-Pressing the search button will display the results on the form page.
 >
 >- **The Constraints :** 
 >
-> The [**JQuery Query Builder**](https://querybuilder.js.org/) module allows to define SQL constraints (such as `where`, `like`...) bounded by logical links (`AND`, `OR` ...). It uses the fields of the selected adjacent table. 
+> The [**JQuery Query Builder**](https://querybuilder.js.org/) module allows to define SQL constraints (such as `where`, `like`...) bounded by logical links (`AND`, `OR`). It uses the fields of the selected adjacent table. 
   This module is only one element in the workflow we implemented, allowing to define search constraints on one table at a time. 
 
 
@@ -43,9 +43,9 @@ Tutors: Louis Duchemin et Florian Malard
 >
 >The user can :
 >
->- get a summary of the SQL and DQL query
+>- get a summary of the SQL and DQL query;
 >
->- browse or export the result table 
+>- browse or export the results table.
 
 
 
@@ -79,25 +79,25 @@ Tutors: Louis Duchemin et Florian Malard
 - **QueryBuilderController.php** allows you to make requests to the server using the information retrieved with **main.js**. 
 
 - The script **main.js** contains the code that :
-	- describes the behaviors on the HTML page. 
-	- reads the **JSON** (loaded when the page is loaded) which describes the structure of the database in the database. This way, there is no round trip to the server each time the user chooses tables and/or fields. 
+	- describes the behaviors on the HTML page;
+	- reads the **JSON** (loaded at the same time as the page) which describes the structure of the database in the database. This way, there is no round trip to the server each time the user chooses tables and/or fields;
 	- makes the link to the **QueryBuilderController.php** when clicking on **SEARCH**. **The JS script summarizes the information entered in the form.**
 
-- The **views** folder contains the **html.twig** files that make up the user interface. The index consists of **form** and **results**. Thus, the user constitutes his form and then gets his result by clicking on SEARCH. 
+- The **views** folder contains the **html.twig** files that make up the user interface. The index consists of **form** and **results**. Thus, the user constitutes his form and then gets his results by clicking on SEARCH. 
 
 
 ## Tools used 
 
-- Programming languages used :  
+- Programming languages :  
 	*Javascript, CSS, HTML, PHP, Twig*
 - Framework Symfony (version 3.4) with Doctrine ORM
-- Javascript module : jQuery QueryBuilder, Mustache.JS, DataTable module 
+- Javascript modules and plugins : jQuery QueryBuilder, mustache.js, DataTables 
 
 
 ## RoadMap 
 
-- Increment other join functions (right join, full join and cross join)
-- Finalize bilingual version of Query Builder
-- Allow more advanced queries ( with order by ...)
+- Implement other JOIN functions (right join, full join and cross join).
+- Finalize the bilingual version of Query Builder.
+- Allow more advanced queries (ORDER BY, GROUP BY, DISTINCT, ...)
 
 
