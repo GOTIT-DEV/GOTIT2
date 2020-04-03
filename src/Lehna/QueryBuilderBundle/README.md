@@ -58,7 +58,7 @@ Tutors: Florian Malard et Louis Duchemin
     * [Lehna]()
       * [QueryBuilderBundle]()
         * [Controller]()
-          * [DefaultController.php]()
+          * [QueryBuilderController.php]()
         * [Resources]()
             * [public/js]()
               * [main.js]()
