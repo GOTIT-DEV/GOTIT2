@@ -1,7 +1,7 @@
 # GOTIT2 - v2.x of GOTIT
 
 
-GOTIT is a software package that facilitates the monitoring of species samples taken at collection stations, both for the management of occurrence data and for the molecular analysis of these species. The initial web interface is currently accessible on [https://gotit.cnrs.fr/index.htm](https://gotit.cnrs.fr/index.htm).
+GOTIT is a software package that facilitates the monitoring of species samples taken at collection sites, both for the management of occurrence data and for the molecular analysis of these species. The initial web interface is currently accessible on [https://gotit.cnrs.fr/index.htm](https://gotit.cnrs.fr/index.htm).
 
 This prototype is an enhancement of the web interface to allow flexible queries on the database to allow collaborators not using SQL to view and export the results of custom queries. This extension comes as an additionnal module in the project, the **QueryBuilder bundle**
 
@@ -9,7 +9,7 @@ This prototype is an enhancement of the web interface to allow flexible queries 
 
 Elsa Mendes, Maud Ferrer et Thierno Diallo 
 >
-Tutors: Florian Malard et Louis Duchemin
+Tutors: Louis Duchemin et Florian Malard
 
 
 ## Bundle Features
@@ -101,11 +101,3 @@ Tutors: Florian Malard et Louis Duchemin
 - Allow more advanced queries ( with order by ...)
 
 
-#### To test the web interface code ( Symfony )
- 
-```
-$ docker start gotit-db ## launch database
-
-$ php bin/console server:run ## start server
-
-```
