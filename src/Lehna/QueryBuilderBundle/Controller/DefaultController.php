@@ -73,10 +73,11 @@ class DefaultController extends Controller
         $q = $query->getQuery();
         dump($q);
         $dqlresults = $q->getDql();
-        dump($dqlresults);
+        $sql = $q->getSql();
+        dump($sql);
+        $param = $q->getParameters();
         $results = $q->getArrayResult();
         dump($results);
-        dump($selectedFields);
         //return new JsonResponse($results);
         return new JsonResponse([
             "dql" => $dqlresults,
@@ -99,10 +100,13 @@ class DefaultController extends Controller
         $initialFields = $data["initial"]["fields"];
         $tab = [$initialTable => $initialFields];
         if (array_key_exists("joins", $data)) {
-            foreach ($data["joins"] as $joins) {
-                $adjTable = $joins["adjacent_table"];
-                $joinsFields = $joins["fields"];
-                $tab[$adjTable] = $joinsFields;   
+            $joins = $data["joins"];
+            foreach ($joins as $j) {
+                if (count($j) == 7) {
+                    $adjTable = $j["adjacent_table"];
+                    $joinsFields = $j["fields"];
+                    $tab[$adjTable] = $joinsFields;
+                } 
             }
         }
 
