@@ -23,7 +23,7 @@ use Symfony\Component\Config\Definition\Exception\Exception;
  * @Route("/")
  * @Security("has_role('ROLE_INVITED')")
  */
-class DefaultController extends Controller
+class QueryBuilderController extends Controller
 {
     /**
      * @Route("/", name="query_builder_index")
@@ -67,20 +67,19 @@ class DefaultController extends Controller
         if (count($data) > 1)
             if (strlen($data["joins"] >= 1)) {
                 $joins = $data["joins"];
-                $query = $this->getJointsBlocks($joins, $query); // Getting the info on each block containing a JOIN. 
+                $query = $this->getJoinsBlocks($joins, $query); // Getting the info on each block containing a JOIN. 
             }
 
         $q = $query->getQuery();
         dump($q);
         $dqlresults = $q->getDql();
-        $sql = $q->getSql();
-        dump($sql);
-        $param = $q->getParameters();
+        $sqlresults = $q->getSql();
+        dump($sqlresults);
         $results = $q->getArrayResult();
         dump($results);
         //return new JsonResponse($results);
         return new JsonResponse([
-            "dql" => $dqlresults,
+            "dql" => $dqlresults, "sql" => $sqlresults,
             "results" => $this->renderView(
                 '@LehnaQueryBuilder/resultQuery.html.twig',
                 ["results" => $results, "selectedFields" => $selectedFields]
@@ -338,7 +337,7 @@ class DefaultController extends Controller
      * Returns : the query with the JOIN(s) added. 
      * Warning : by default, no fields are selected, the user is free to return no field for a JOIN. 
      */
-    public function getJointsBlocks($joins, $query)
+    public function getJoinsBlocks($joins, $query)
     {
 
         foreach ($joins as $j) {

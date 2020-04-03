@@ -70,7 +70,7 @@ $(document).ready(function () {
 
 
 // Init possible JOINs
-const joints = [
+const joins = [
   'inner join',
   'left join'
 ];
@@ -79,7 +79,7 @@ const joints = [
 /**
  * Function called when the "plus" button is clicked (using mustache.js)
  */
-function addJoint(block_id) {
+function addJoin(block_id) {
 
   // Making template's block with mustache.js
   let newBlock = Mustache.render(
@@ -117,34 +117,34 @@ let new_block_id = 0
 
 /**
  * when you click on the plus button.
- * Choosing what joint to make between a table chosen previously and an adjacent table, the fields to return and the constraints to apply.
+ * Choosing what join to make between a table chosen previously and an adjacent table, the fields to return and the constraints to apply.
  *  
  */
-$('#add-joint').click(function () {
+$('#add-join').click(function () {
 
   $.getJSON('init', function (init_data) {
 
-    // Adding 1 at each click on add-joint
+    // Adding 1 at each click on add-join
     new_block_id += 1
 
     // Adding a block of query
-    let newBlock = addJoint(new_block_id)
+    let newBlock = addJoin(new_block_id)
 
     // Filling the menu containing the possible joins
     let dropdown = newBlock
-      .find('.joints')
+      .find('.joins')
       .empty()
       .prop('selectedIndex', 0);
 
 
-    $.each(joints, function (index, value) {
+    $.each(joins, function (index, value) {
       dropdown.append($('<option></option>').attr('value', value).text(value));
 
     });
 
 
 
-    // Previous tables available when you choose a new table to make joints
+    // Previous tables available when you choose a new table to make joins
 
     let all_adj_tables = $(".adjacent-tables").map(function () {
       return $(this).val()
@@ -237,6 +237,7 @@ $.get("init", function (data) {
       dataType: 'json',
       success: function (response) {
         $("#contentModalQuery").html(response.dql);
+        $("#contentModalQuerySql").html(response.sql);
         $("#result-container").html(response.results);
         $("#result-table").dataTable(
           Object.assign(
@@ -280,7 +281,7 @@ function get_form_block_data(init_data) {
     let block = $(this)
     let adj_table = block.find("#adjacent-tables_id").val()
     let formerT = block.find("#formerTable").val()
-    let idJoin = block.find("#joint_table").val()
+    let idJoin = block.find("#join_table").val()
     let fields = block.find("#div-checkbox input:checked").map(function () {
       return $(this).val()
     }).get() // Checked inputs 
