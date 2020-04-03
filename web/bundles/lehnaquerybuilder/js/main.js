@@ -134,7 +134,6 @@ $('#add-joint').click(function () {
     let dropdown = newBlock
       .find('.joints')
       .empty()
-      .append('<option selected="true" disabled>Choose join</option>')
       .prop('selectedIndex', 0);
 
 
@@ -326,11 +325,11 @@ $(document).ready(_ => {
 // Get the button
 var mybutton = document.getElementById("myBtn");
 
-// When the user scrolls down 50px from the top of the document, shows the button
+// When the user scrolls down 30px from the top of the document, shows the button
 window.onscroll = function () { scrollFunction() };
 
 function scrollFunction() {
-  if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+  if (document.body.scrollTop > 30 || document.documentElement.scrollTop > 30) {
     mybutton.style.display = "block";
   } else {
     mybutton.style.display = "none";

@@ -99,12 +99,10 @@ class DefaultController extends Controller
         $initialFields = $data["initial"]["fields"];
         $tab = [$initialTable => $initialFields];
         if (array_key_exists("joins", $data)) {
-            if (strlen($data["joins"] == 7)) {
-                foreach ($data["joins"] as $joins) {
-                    $adjTable = $joins["adjacent_table"];
-                    $joinsFields = $joins["fields"];
-                    $tab[$adjTable] = $joinsFields;
-                }
+            foreach ($data["joins"] as $joins) {
+                $adjTable = $joins["adjacent_table"];
+                $joinsFields = $joins["fields"];
+                $tab[$adjTable] = $joinsFields;   
             }
         }
 
