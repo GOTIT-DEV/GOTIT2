@@ -1,6 +1,8 @@
 <h1>Selection</h1>
 <ul>
-    {% for donnee in donnees %}
-        <li>{{ donnee.id }}</li>
+    {% for key, value in donnees %}
+        {% for i in value %}
+            <li> {{ key }} : {{ i }} </li>
+        {% endfor %}
     {% endfor %}
 </ul>
