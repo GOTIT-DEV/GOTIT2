@@ -1,173 +1,57 @@
-  <form id="main-form" action="#">
-  <legend>
-      <h2 style='margin-bottom:18px'>
-          Query fields
-      </h2>
-  </legend>
-</div>
-<div class="row">
-  <div class="col-xs-12 col-md-5 col-lg-6" style="padding-left:25px">
-      <div class="panel panel-default">
-          <div class="panel-body">
-              <div class="row">
-                  <div class="col-xs-12 col-sm-7" id="firstChosen-selector">
-                      <div class="form-group firstChosen2-select">
-                          <label class="control-label" for="niveau">
-                              Tables
-                          </label>
-                          <select id="first-table" class="firstChosen2-select" >
-                          </select>
-                      </div>
-                  </div>
-                  <div class="col-xs-12 col-sm-5">
-                      <div class="form-horizontal">
-                          <div class="form-group">
-                              <div class="checkbox checkbox-inline">
-                                  <label class="control-label" title data-toggle="tooltip" data-placement="right">
-                                      <input type="checkbox" value="2" data-toggle="collapse" id="first-constraints" class="collapsed" aria-expanded="false" data-target="#collapseConstraints" autocomplete="off">
-                                      <strong>
-                                          Constraints
-                                      </strong>
-                                      <i class="fas fa-spinner fa-spin pull-right hidden" id="method-spinner" style="font-size:16px"></i>
-                                  </label>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
+{# QueryBuilder form template #}  
 
-              </div>
-          </div>
-      </div>
-  </div>
-  <div class="panel-collapse collapse col-xs-11" id="collapseConstraints" aria-expanded="false">
-      <div class="col-xs-12 col-sm-5 col-sm col-lg-3" style="padding-left:20px">
-          <div class="panel panel-default">
-              <div class="panel-heading">
-                  <strong>
-                      Fields selection
-                  </strong>
-              </div>
-              <div class="panel-body">
-                  <div class="row">
-                      <ul style="padding-left: 0px;list-style:none" id="first-table-selects"></ul>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <div class="col-xs-2 col-sm-7">
-          <div id="initial-table-constraints" class="builder-basic"></div>
-          <div class="btn-group" >
-                <button class="btn btn-warning reset" data-target="#initial-table-constraints">Reset</button>
-          </div>
-      </div>
-  </div>
-
-
-
-
-  <div class="add-constraints" id="add-constraints">
-  </div>
-
-
-
-  <div class="col-xs-12 btn-group pull-left group-actions" id="add-join-div">
-      <button class="btn btn-xs btn-basic collapsed" id="add-join" type="button" >
-          <i class="glyphicon glyphicon-plus-sign" style="font-size:25px"></i>
-      </button>
-  </div>
-
-{% verbatim %}
-  <template id="form-block-template">	
-  <div class="col-xs-12 col-sm-10" id="form-block-{{id}}" style="padding-left:25px">
-      <div class="formBlock">
-          <div class="panel panel-default ">
-              <div class="panel-heading">
-                  <strong>New selection</strong>
-              </div>
-              <div class="panel-body">
-                  <div class="row">
-                      <div class="col-xs-12 col-sm-4">
-                          <div class="form-group">
-                              <label for="lot-materiel" class="control-label">
-                                  Previous table</label>
-                              <select class="previous-table" id="formerTable" ></select>
-                          </div>
-                      </div>
-                      <div class="col-xs-12 col-sm-2">
-                          <div class="form-group">
-                              <label for="individu" class="control-label" >
-                                  Join selection
-                              </label>
-                              <select class="joins" id="join_table" ></select>
-                          </div>
-                          <!-- <div class="btn-group bootstrap-select form-control concordance"></div> -->
-                      </div>
-                      <div class="col-xs-12 col-sm-4">
-                          <div class="form-group">
-                              <label for="sequence" class="control-label">
-                                  Adjacent table
-                              </label>
-                              <select class="adjacent-tables" id="adjacent-tables_id" ></select>
-                          </div>
-                      </div>
-                      <div class="col-xs-12 col-sm-2">
-                          <div class="form-horizontal">
-                              <div class="form-group">
-                                  <div class="checkbox checkbox-inline">
-                                      <label class="control-label" title data-toggle="tooltip" data-placement="right">
-                                          <input id="second_constraints" type="checkbox" data-toggle="collapse" class="collapsed new-constraints" aria-expanded="false" data-target="#collapse-constraints-{{id}}" autocomplete="off">
-                                          <strong>
-                                              Constraints
-                                          </strong>
-                                          <i class="fas fa-spinner fa-spin pull-right hidden"  style="font-size:16px"></i>
-                                      </label>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              <div  id="collapse-constraints-{{id}}" class="panel-collapse collapse col-xs-11" aria-expanded="false">
-                  <div class="col-xs-12 col-sm-5 col-sm col-lg-4" >
-                      <div class="panel panel-default">
-                          <div class="panel-heading">
-                              <strong>
-                                  Fields selection
-                              </strong>
-                          </div>
-                          <div class="panel-body">
-                              <div class="form-group">
-                                  <div class="row" id="div-checkbox">
-                                  <ul style="padding-left: 0px;list-style:none" id="table-selects-{{id}}" class="table-selects"></ul>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="col-xs-2 col-sm-8">
-                      <div id="builder-constraints-{{id}}" class="builder-basic"></div>
-                      <div class="btn-group" >
-                          <button class="btn btn-warning reset" data-target="#builder-constraints-{{id}}">Reset</button>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
-  </template>
-{% endverbatim %}
+{% trans_default_domain 'queries' %}
   
-  <div class="col-xs-12 col-sm-9" style="padding-left:25px">
-      <div>
-          <center>
-              <button type="submit" href="#resultats" value="Rechercher" class="btn btn-primary btn-lg" id="submit-button" style="min-width: 10em" data-loading-text="<i class='fas fa-spinner fa-spin'></i>">
-                  {% trans %}
-                  Search
-                  {% endtrans %}
-              </button>
-              
-          </center>
-      </div>
-  </div>
-</div>
+<form id="main-form" action="#">
+    <legend>
+        <h2 style='margin-bottom:18px'>
+            {% trans %}
+            Query fields
+            {% endtrans %}
+        </h2>
+    </legend>
+    <div class="row">
+        <div class="col-xs-12 col-sm-10" style="padding-left:25px">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    {% include '@LehnaQueryBuilder/forms/initial.block.html.twig' %}
+                </div>
+            </div>
+        </div>
+    </div>
+        <div 
+        class="add-constraints" 
+        id="add-constraints">
+    </div>
+    <div 
+        class="col-xs-12 btn-group pull-left group-actions" 
+        id="add-join-div">
+        <button 
+            class="btn btn-xs btn-basic collapsed" 
+            id="add-join" 
+            type="button" >
+            <i 
+                class="glyphicon glyphicon-plus-sign" 
+                style="font-size:25px">
+            </i>
+        </button>
+    </div>
+    <div class="row">
+        {% include '@LehnaQueryBuilder/forms/join.blocks.html.twig' %}
+    </div>
+        
+    <center>
+        <button type="submit" 
+            href="#resultats" 
+            value="Rechercher" 
+            class="btn btn-primary btn-lg" 
+            id="submit-button" 
+            style="min-width: 10em" 
+            data-loading-text="<i class='fas fa-spinner fa-spin'></i>">
+            {% trans %}
+            Search
+            {% endtrans %}
+        </button>    
+    </center>
 </form>
+

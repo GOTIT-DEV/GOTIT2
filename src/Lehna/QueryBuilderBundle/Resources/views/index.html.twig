@@ -1,6 +1,5 @@
 {% extends '@LehnaQueryBuilder/base.queries.html.twig' %}
 
-
 {% block stylesheets %}
 	{{parent()}}
 	<!-- Modal window styles -->
@@ -14,19 +13,24 @@
 {% endblock %}
 
 {% block body %}
+
 	<div class='row'>
-		<div class="col-xs-12">
+		<div 
+			class="col-xs-12">
+			{#Form #}
 			{% include '@LehnaQueryBuilder/form.html.twig' %}
 		</div>
-		<hr>
+	</div>
+	<hr>
+	<div>
 		{% include '@LehnaQueryBuilder/results.html.twig' %}
 		<button class="help-btn btn btn-info pull-right" onclick="topFunction()" id="myBtn" title="Go to top">
 			<i class="glyphicon glyphicon-menu-up" style="font-size:20px"></i>
 		</button>
 	</div>
 
-
 {% endblock %}
+
 {% block scripts %}
 	{{ parent() }}
 	<!-- Query Builder -->

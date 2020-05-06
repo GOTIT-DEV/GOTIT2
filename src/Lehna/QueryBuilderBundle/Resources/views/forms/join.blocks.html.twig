@@ -1,0 +1,120 @@
+{# Form component to be used for each block of join #}
+
+{% trans_default_domain 'queries' %}
+
+{% verbatim %}
+
+<template id="form-block-template">	
+    <div class="col-xs-12 col-sm-10" id="form-block-{{id}}" style="padding-left:25px">
+        <div class="formBlock">
+            <div class="panel panel-default ">
+                <div class="panel-heading">
+                    <strong>
+                        New selection
+                    </strong>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="form-group">
+                            <label 
+                                for="lot-materiel" 
+                                class="control-label">
+                                Previous table
+                            </label>
+                            <select 
+                                class="previous-table" 
+                                id="formerTable" >
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-2">
+                        <div class="form-group">
+                            <label 
+                                for="individu" 
+                                class="control-label" >
+                                Join selection
+                            </label>
+                            <select 
+                                class="joins" 
+                                id="join_table" >
+                            </select>
+                        </div>
+                        <!-- <div class="btn-group bootstrap-select form-control concordance"></div> -->
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="form-group">
+                            <label 
+                                for="sequence" 
+                                class="control-label">
+                                Adjacent table
+                            </label>
+                            <select 
+                                class="adjacent-tables" 
+                                id="adjacent-tables_id" >
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-2">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="checkbox checkbox-inline">
+                                    <label class="control-label" title data-toggle="tooltip" data-placement="right">
+                                        <input id="second_constraints" type="checkbox" data-toggle="collapse" class="collapsed new-constraints" aria-expanded="false" data-target="#collapse-constraints-{{id}}" autocomplete="off">
+                                        <strong>
+                                            Constraints
+                                        </strong>
+                                        <i 
+                                            class="fas fa-spinner fa-spin pull-right hidden"  
+                                            style="font-size:16px">
+                                        </i>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div  
+                        id="collapse-constraints-{{id}}" 
+                        class="panel-collapse collapse col-xs-11" 
+                        aria-expanded="false">
+                        <div class="col-xs-12 col-sm-5 col-sm col-lg-4" >
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <strong>
+                                        Fields selection
+                                    </strong>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <div 
+                                            class="row" 
+                                            id="div-checkbox">
+                                        <ul 
+                                            style="padding-left: 0px;list-style:none" 
+                                            id="table-selects-{{id}}" 
+                                            class="table-selects">
+                                        </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-2 col-sm-8">
+                            <div 
+                                id="builder-constraints-{{id}}" 
+                                class="builder-basic">
+                            </div>
+                            <div class="btn-group" >
+                                <button 
+                                    class="btn btn-warning reset" 
+                                    data-target="#builder-constraints-{{id}}">Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+{% endverbatim %}
