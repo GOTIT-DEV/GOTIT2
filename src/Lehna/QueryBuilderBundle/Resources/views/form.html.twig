@@ -10,6 +10,7 @@
 			{% endtrans %}
 		</h2>
 	</legend>
+  {# Initial Block #}
 	<div class="row">
 		<div class="panel panel-default">
 			<div class="panel-body">
@@ -17,14 +18,24 @@
 			</div>
 		</div>
 	</div>
-	{# Adding a block of join #}
-	<div class="add-constraints" id="add-constraints"></div>
-	<div class="btn-group pull-left group-actions" id="add-join-div">
-		<button class="btn btn-xs btn-basic collapsed" id="add-join" type="button">
-			<i class="glyphicon glyphicon-plus-sign" style="font-size:25px"></i>
-		</button>
-	</div>
-
+	{# Join Div and Button #}
+  <div>
+	  <div
+		  class="add-constraints" id="add-constraints">
+	  </div>
+    {# Join Blocks #}
+    <div class="row">
+      {% include '@LehnaQueryBuilder/forms/join.blocks.html.twig' %}
+    </div>
+  </div>
+  <div class="row">
+    <div class="add-join-div btn-group pull-left group-actions" id="add-join-div">
+      <button class="btn btn-xs btn-basic collapsed" id="add-join" type="button">
+        <i class="glyphicon glyphicon-plus-sign" style="font-size:25px"></i>
+      </button>
+    </div>
+  </div>
+  
 	<center>
 		<button type="submit" href="#resultats" value="Rechercher" class="btn btn-primary btn-lg" id="submit-button" style="min-width: 10em" data-loading-text="<i class='fas fa-spinner fa-spin'></i>">
 			{% trans %}
@@ -34,5 +45,3 @@
 	</center>
 </form>
 
-<!-- Template for Join Blocks -->
-{% include '@LehnaQueryBuilder/forms/join.blocks.html.twig' %}

@@ -3,7 +3,7 @@ div.initial-container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: auto 1fr;
-  grid-template-areas: 
+  grid-template-areas:
     "first-chosen-selector      first-selected-fields      ."
     "first-collapse-constraints first-collapse-constraints first-collapse-constraints";
 
@@ -33,13 +33,13 @@ div.initial-container {
   }
 
   @media (max-width: 1000px) {
-      div.first-check-constraints {
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr;
-        grid-template-areas:
+    div.first-check-constraints {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr 1fr;
+      grid-template-areas:
         "first-check-constraints"
         "first-applied-constraints";
-      }
+    }
   }
 }
 
@@ -53,5 +53,30 @@ div.initial-container {
       "first-collapse-constraints"
       "first-collapse-constraints"
       "first-collapse-constraints";
+  }
+}
+
+div.add-join-div {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  display: grid;
+  grid-template-areas:
+    "add-btn";
+
+  button#add-join {
+    grid-area: add-btn;
+  }
+}
+
+center {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas:
+    ". . results-btn . .";
+
+  button#submit-button {
+    grid-area: results-btn;
+    justify-items: center;
   }
 }
