@@ -3,86 +3,86 @@
 {% trans_default_domain 'queries' %}
 
 <div class="initial-container">
-    <div class="first-chosen-selector">
-        <div class="form-group first-chosen2-select">
-            <label 
-                class="control-label" 
-                for="niveau">
-                {% trans %}
-                Tables
-                {% endtrans %}
-            </label>
-            <select 
-                id="first-table" 
-                class="first-chosen2-select" >
-            </select>
-        </div>
-    </div>
-    <div 
-        class="first-selected-fields" 
-        style="padding-left:20px">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <strong>
-                    {% trans %}
-                    Fields selection
-                    {% endtrans %}
-                </strong>
-            </div>
-            <div class="panel-body">
-                <div class="row">
-                    <ul 
-                        style="padding-left: 0px;list-style:none" 
-                        id="first-table-selects">
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="first-check-constraints">
-        <div class="form-horizontal">
-            <div class="form-group">
-                <div class="checkbox checkbox-inline">
-                    <label 
-                        class="control-label" 
-                        title data-toggle="tooltip" 
-                        data-placement="right">
-                        <input 
-                        type="checkbox" 
-                        value="2" 
-                        data-toggle="collapse" 
-                        id="first-constraints" 
-                        class="collapsed" 
-                        aria-expanded="false" 
-                        data-target="#collapseConstraints" 
-                        autocomplete="off">
-                        <strong>
-                            {% trans %}
-                            Constraints
-                            {% endtrans %}
-                        </strong>
-                        <i class="fas fa-spinner fa-spin pull-right hidden" id="method-spinner" style="font-size:16px"></i>
-                    </label>
-                </div>
-            </div>
-        </div>
-         <div
-            class="panel-collapse collapse"
-            id="collapseConstraints" 
-            aria-expanded="false">
-            <div class="first-applied-constraints">
-                <div 
-                    id="initial-table-constraints" 
-                    class="builder-basic">
-                </div>
-                <div class="btn-group" >
-                    <button 
-                        class="btn btn-warning reset" 
-                        data-target="#initial-table-constraints">Reset
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="first-chosen-selector">
+		<div class="form-group first-chosen2-select">
+			<label 
+				class="control-label" 
+				for="niveau">
+				{% trans %}
+				Tables
+				{% endtrans %}
+			</label>
+			<select 
+				id="first-table" 
+				class="first-chosen2-select" >
+			</select>
+		</div>
+	</div>
+	<div 
+		class="first-selected-fields" 
+		style="padding-left:20px">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<strong>
+					{% trans %}
+					Fields selection
+					{% endtrans %}
+				</strong>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<ul 
+						style="padding-left: 0px;list-style:none" 
+						id="first-table-selects">
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="first-check-constraints">
+		<div class="form-horizontal">
+			<div class="form-group">
+				<div class="checkbox checkbox-inline">
+					<label 
+						class="control-label" 
+						title data-toggle="tooltip" 
+						data-placement="right">
+						<input 
+						type="checkbox" 
+						value="2" 
+						data-toggle="collapse" 
+						id="first-constraints" 
+						class="collapsed" 
+						aria-expanded="false" 
+						data-target="#collapseConstraints" 
+						autocomplete="off">
+						<strong>
+							{% trans %}
+							Constraints
+							{% endtrans %}
+						</strong>
+						<i class="fas fa-spinner fa-spin pull-right hidden" id="method-spinner" style="font-size:16px"></i>
+					</label>
+				</div>
+			</div>
+		</div>
+		<div
+			class="panel-collapse collapse"
+			id="collapseConstraints" 
+			aria-expanded="false">
+			<div class="first-applied-constraints">
+				<div 
+					id="initial-table-constraints" 
+					class="builder-basic">
+				</div>
+				<div class="btn-group" >
+					<button 
+						class="btn btn-warning reset" 
+						data-target="#initial-table-constraints">Reset
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
     
