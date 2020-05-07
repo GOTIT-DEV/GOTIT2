@@ -1,55 +1,38 @@
-{# QueryBuilder form template #}  
+{# QueryBuilder form template #}
 
 {% trans_default_domain 'queries' %}
-  
+
 <form id="main-form" action="#">
-    <legend>
-        <h2 style='margin-bottom:18px'>
-            {% trans %}
-            Query fields
-            {% endtrans %}
-        </h2>
-    </legend>
-    <div class="row">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                {% include '@LehnaQueryBuilder/forms/initial.block.html.twig' %}
-            </div>
-        </div>
-    </div>
-        <div 
-        class="add-constraints" 
-        id="add-constraints">
-    </div>
-    <div 
-        class="col-xs-12 btn-group pull-left group-actions" 
-        id="add-join-div">
-        <button 
-            class="btn btn-xs btn-basic collapsed" 
-            id="add-join" 
-            type="button" >
-            <i 
-                class="glyphicon glyphicon-plus-sign" 
-                style="font-size:25px">
-            </i>
-        </button>
-    </div>
-    <div class="row">
-        {% include '@LehnaQueryBuilder/forms/join.blocks.html.twig' %}
-    </div>
-        
-    <center>
-        <button type="submit" 
-            href="#resultats" 
-            value="Rechercher" 
-            class="btn btn-primary btn-lg" 
-            id="submit-button" 
-            style="min-width: 10em" 
-            data-loading-text="<i class='fas fa-spinner fa-spin'></i>">
-            {% trans %}
-            Search
-            {% endtrans %}
-        </button>    
-    </center>
+	<legend>
+		<h2 style='margin-bottom:18px'>
+			{% trans %}
+			Query fields
+			{% endtrans %}
+		</h2>
+	</legend>
+	<div class="row">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				{% include '@LehnaQueryBuilder/forms/initial.block.html.twig' %}
+			</div>
+		</div>
+	</div>
+	{# Adding a block of join #}
+	<div class="add-constraints" id="add-constraints"></div>
+	<div class="btn-group pull-left group-actions" id="add-join-div">
+		<button class="btn btn-xs btn-basic collapsed" id="add-join" type="button">
+			<i class="glyphicon glyphicon-plus-sign" style="font-size:25px"></i>
+		</button>
+	</div>
+
+	<center>
+		<button type="submit" href="#resultats" value="Rechercher" class="btn btn-primary btn-lg" id="submit-button" style="min-width: 10em" data-loading-text="<i class='fas fa-spinner fa-spin'></i>">
+			{% trans %}
+			Search
+			{% endtrans %}
+		</button>
+	</center>
 </form>
 
+<!-- Template for Join Blocks -->
+{% include '@LehnaQueryBuilder/forms/join.blocks.html.twig' %}
