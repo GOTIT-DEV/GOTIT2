@@ -4,7 +4,7 @@
 
 <form id="main-form" action="#">
 	<legend>
-		<h2 style='margin-bottom:18px'>
+		<h2 class="h2-query-fields">
 			{% trans %}
 			Query fields
 			{% endtrans %}
@@ -31,13 +31,13 @@
   <div class="row">
     <div class="add-join-div btn-group pull-left group-actions" id="add-join-div">
       <button class="btn btn-xs btn-basic collapsed" id="add-join" type="button">
-        <i class="glyphicon glyphicon-plus-sign" style="font-size:25px"></i>
+        <i class="glyphicon glyphicon-plus-sign"></i>
       </button>
     </div>
   </div>
   
 	<center>
-		<button type="submit" href="#resultats" value="Rechercher" class="btn btn-primary btn-lg" id="submit-button" style="min-width: 10em" data-loading-text="<i class='fas fa-spinner fa-spin'></i>">
+		<button type="submit" href="#resultats" value="Rechercher" class="btn btn-primary btn-lg" id="submit-button" data-loading-text="<i class='fas fa-spinner fa-spin'></i>">
 			{% trans %}
 			Search
 			{% endtrans %}

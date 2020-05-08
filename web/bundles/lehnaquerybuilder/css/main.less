@@ -1,3 +1,12 @@
+h2.h2-query-fields {
+  margin-bottom:18px;
+}
+
+i.glyphicon-plus-sign {
+  font-size:25px;
+}
+
+
 div.initial-container {
   padding-left: 20px;
   display: grid;
@@ -13,6 +22,7 @@ div.initial-container {
 
   div.first-selected-fields {
     grid-area: first-selected-fields;
+    padding-left:20px;
   }
 
   div.first-check-constraints {
@@ -54,6 +64,15 @@ div.initial-container {
       "first-collapse-constraints"
       "first-collapse-constraints";
   }
+}
+
+ul#first-table-selects {
+  padding-left: 0px;
+  list-style:none;
+}
+
+i#method-spinner {
+  font-size:16px;
 }
 
 div.add-join-div {
@@ -130,6 +149,15 @@ div.join-check-constraints {
   }
 }
 
+ul.table-selects {
+  padding-left: 0px;
+  list-style:none;
+}
+
+i.i-constraints {
+  font-size:16px;
+}
+
 center {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
@@ -139,5 +167,6 @@ center {
   button#submit-button {
     grid-area: results-btn;
     justify-items: center;
+    min-width: 10em;
   }
 }

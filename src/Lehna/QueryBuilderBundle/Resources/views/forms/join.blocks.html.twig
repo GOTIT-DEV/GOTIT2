@@ -14,7 +14,7 @@
               <label for="lot-materiel" class="control-label">
                 Previous table
               </label>
-              <select class="previous-table" id="formerTable"></select>
+              <select class="previous-table" id="formerTable" data-live-search="true"></select>
             </div>
           </div>
           <div class="join-type-choice">
@@ -22,7 +22,7 @@
               <label for="individu" class="control-label">
                 Join selection
               </label>
-              <select class="joins" id="join_table"></select>
+              <select class="joins" id="join_table" data-live-search="true"></select>
             </div>
           </div>
           <div class="adj-table-choice">
@@ -30,7 +30,7 @@
               <label for="sequence" class="control-label">
                 Adjacent table
               </label>
-              <select class="adjacent-tables" id="adjacent-tables_id"></select>
+              <select class="adjacent-tables" id="adjacent-tables_id" data-live-search="true"></select>
             </div>
           </div>
           <div class="join-selected-fields">
@@ -43,7 +43,7 @@
               <div class="panel-body">
                 <div class="form-group">
                   <div class="row" id="div-checkbox">
-                    <ul style="padding-left: 0px;list-style:none" id="table-selects-{{id}}" class="table-selects"></ul>
+                    <ul id="table-selects-{{id}}" class="table-selects"></ul>
                   </div>
                 </div>
               </div>
@@ -59,7 +59,7 @@
                   <strong>
                     Constraints
                   </strong>
-                  <i class="fas fa-spinner fa-spin pull-right hidden" style="font-size:16px"></i>
+                  <i class="fas fa-spinner fa-spin pull-right hidden i-constraints"></i>
                 </label>
               </div>
             </div>
