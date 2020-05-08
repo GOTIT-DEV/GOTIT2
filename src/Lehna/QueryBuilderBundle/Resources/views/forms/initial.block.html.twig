@@ -14,7 +14,7 @@
 			</label>
 			<select 
 				id="first-table" 
-				class="first-chosen-tab"
+				class="first-chosen-tab selectpicker"
 				data-live-search="true">
 			</select>
 		</div>
@@ -42,6 +42,11 @@
 		<div class="form-horizontal">
 			<div class="form-group">
 				<div class="checkbox checkbox-inline">
+					<strong>
+						{% trans %}
+						Constraints
+						{% endtrans %}
+					</strong>
 					<label 
 						class="control-label" 
 						title data-toggle="tooltip" 
@@ -55,11 +60,6 @@
 						aria-expanded="false" 
 						data-target="#collapseConstraints" 
 						autocomplete="off">
-						<strong>
-							{% trans %}
-							Constraints
-							{% endtrans %}
-						</strong>
 						<i class="fas fa-spinner fa-spin pull-right hidden" id="method-spinner"></i>
 					</label>
 				</div>
