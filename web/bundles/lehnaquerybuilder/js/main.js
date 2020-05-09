@@ -21,7 +21,7 @@ $(document).ready(function () {
       .prop("selectedIndex", 0)
       .selectpicker();
 
-    $.each(init_data, function (key, entry) {
+    $.each(init_data, function (_key, entry) {
       dropdown.append(
         $("<option></option>")
           .attr("value", entry.human_readable_name)
@@ -60,20 +60,34 @@ $(document).ready(function () {
       );
 
       // Init list of fields ( without the dateCre, userCre, dateMaj, userMaj)
-      $("#first-table-selects").empty();
 
       var items = table_data.filters
         .filter(function (item) {
           return !(item.label.endsWith("Cre") || item.label.endsWith("Maj"));
-        })
-        .map(function (item) {
-          return Mustache.render(
-            '<li><input type="checkbox" name="my_form" value="{{label}}" checked/><label>{{label}}</label></li>',
-            item
-          );
         });
+      
+      let dropdown = $("#first-fields");
+      dropdown.empty();
 
-      $("#first-table-selects").html(items.join(""));
+      $.each(items, function (item) {
+        dropdown.append(
+          $("<option></option>")
+            .attr("value", items[item].label)
+            .text(items[item].label)
+        );
+      });
+
+
+      dropdown.multiselect({
+        includeSelectAllOption: true,
+        allSelectedText: 'All fields selected',
+        nonSelectedText: 'No field(s) selected',
+      });
+      dropdown.multiselect('rebuild');
+      dropdown.multiselect('selectAll', false);
+      dropdown.multiselect('updateButtonText');
+
+
     });
   });
 });
@@ -169,6 +183,7 @@ $("#add-join").click(function () {
     // When you select or change the value of the previous table you want to select
     newBlock
       .find(".previous-table")
+      .selectpicker()
       .change(function (event) {
         let target_table = event.target.value;
 
@@ -188,7 +203,7 @@ $("#add-join").click(function () {
         });
         dropdown.selectpicker('refresh');
       })
-      .change().selectpicker('refresh');
+      .selectpicker('refresh').trigger("change");
 
     // When you click to select/or change an adjacent table
     newBlock.find(".adjacent-tables").change(function (event) {
@@ -201,22 +216,35 @@ $("#add-join").click(function () {
         .queryBuilder("setFilters", true, table_data.filters);
 
       // Init list of fields
+      var items = table_data.filters
+        .filter(function (item) {
+          return !(item.label.endsWith("Cre") || item.label.endsWith("Maj"));
+        });
+
       let selects_block = newBlock.find(".table-selects");
       selects_block.empty();
-      var items = table_data.filters;
 
       var items = table_data.filters
         .filter(function (item) {
           return !(item.label.endsWith("Cre") || item.label.endsWith("Maj"));
-        })
-        .map(function (item) {
-          return Mustache.render(
-            '<li><input type="checkbox" name="my_form2" value="{{label}}"/><label>{{label}}</label></li>',
-            item
-          );
-        });
+      });
 
-      selects_block.html(items.join(""));
+      $.each(items, function (item) {
+        selects_block.append(
+          $("<option></option>")
+            .attr("value", items[item].label)
+            .text(items[item].label)
+        );
+      });
+
+      selects_block.multiselect({
+        includeSelectAllOption: true,
+        allSelectedText: 'All fields selected',
+        nonSelectedText: 'No field(s) selected',
+      });
+      selects_block.multiselect('rebuild');
+      selects_block.multiselect('updateButtonText');
+
     });
   });
 });
@@ -267,10 +295,13 @@ function get_form_initial() {
   }
 
   // Checked inputs
-  var fields = [];
-  $("input:checked[name=my_form]").each(function () {
-    fields.push($(this).val());
-  });
+  
+
+    var fieldsSelected = $("#first-fields").find("option:selected");
+    var fields = [];
+    fieldsSelected.each(function(){
+      fields.push($(this).val());
+    });
 
   return { table, constraintsTable1, fields };
 }
@@ -284,10 +315,12 @@ function get_form_block_data(init_data) {
       let adj_table = block.find("#adjacent-tables_id").val();
       let formerT = block.find("#formerTable").val();
       let idJoin = block.find("#join_table").val();
+      var f = [];
       let fields = block
-        .find("#div-checkbox input:checked")
+        .find(".table-selects option:selected")
         .map(function () {
-          return $(this).val();
+          f.push($(this).val());
+          return f;
         })
         .get(); // Checked inputs
 

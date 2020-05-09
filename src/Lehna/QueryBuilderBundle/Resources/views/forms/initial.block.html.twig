@@ -5,37 +5,22 @@
 <div class="initial-container">
 	<div class="first-chosen-selector">
 		<div class="form-group first-chosen2-select">
-			<label 
-				class="control-label" 
-				for="niveau">
+			<label class="control-label" for="niveau">
 				{% trans %}
 				Tables
 				{% endtrans %}
 			</label>
-			<select 
-				id="first-table" 
-				class="first-chosen-tab selectpicker"
-				data-live-search="true">
-			</select>
+			<select id="first-table" class="first-chosen-tab selectpicker" data-live-search="true"></select>
 		</div>
 	</div>
-	<div 
-		class="first-selected-fields">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<strong>
-					{% trans %}
-					Fields selection
-					{% endtrans %}
-				</strong>
-			</div>
-			<div class="panel-body">
-				<div class="row">
-					<ul  
-						id="first-table-selects">
-					</ul>
-				</div>
-			</div>
+	<div class="first-selected-fields">
+		<div class="form-group first-fields2-select">
+			<label class="control-label">
+				{% trans %}
+				Fields selection
+				{% endtrans %}
+      </label>
+      <select id="first-fields" multiple="multiple"></select>
 		</div>
 	</div>
 	<div class="first-check-constraints">
@@ -47,41 +32,21 @@
 						Constraints
 						{% endtrans %}
 					</strong>
-					<label 
-						class="control-label" 
-						title data-toggle="tooltip" 
-						data-placement="right">
-						<input 
-						type="checkbox" 
-						value="2" 
-						data-toggle="collapse" 
-						id="first-constraints" 
-						class="collapsed" 
-						aria-expanded="false" 
-						data-target="#collapseConstraints" 
-						autocomplete="off">
+					<label class="control-label" title data-toggle="tooltip" data-placement="right">
+						<input type="checkbox" value="2" data-toggle="collapse" id="first-constraints" class="collapsed" aria-expanded="false" data-target="#collapseConstraints" autocomplete="off">
 						<i class="fas fa-spinner fa-spin pull-right hidden" id="method-spinner"></i>
 					</label>
 				</div>
 			</div>
 		</div>
-		<div
-			class="panel-collapse collapse"
-			id="collapseConstraints" 
-			aria-expanded="false">
+		<div class="panel-collapse collapse" id="collapseConstraints" aria-expanded="false">
 			<div class="first-applied-constraints">
-				<div 
-					id="initial-table-constraints" 
-					class="builder-basic">
-				</div>
-				<div class="btn-group" >
-					<button 
-						class="btn btn-warning reset" 
-						data-target="#initial-table-constraints">Reset
+				<div id="initial-table-constraints" class="builder-basic"></div>
+				<div class="btn-group">
+					<button class="btn btn-warning reset" data-target="#initial-table-constraints">Reset
 					</button>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-    

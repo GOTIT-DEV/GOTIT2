@@ -14,7 +14,7 @@
 								<label for="lot-materiel" class="control-label">
 									Previous table
 								</label>
-								<select class="previous-table {#selectpicker#}" id="formerTable" data-live-search="true"></select>
+								<select class="previous-table selectpicker" id="formerTable" data-live-search="true"></select>
 							</div>
 						</div>
 						<div class="join-type-choice">
@@ -34,21 +34,13 @@
 							</div>
 						</div>
 						<div class="join-selected-fields">
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<strong>
-										Fields selection
-									</strong>
-								</div>
-								<div class="panel-body">
-									<div class="form-group">
-										<div class="row" id="div-checkbox">
-											<ul id="table-selects-{{id}}" class="table-selects"></ul>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
+              <div class="form-group join-fields2-select">
+                <label class="control-label">
+                  Fields selection
+                </label>
+                <select id="table-selects-{{id}}" class="table-selects" multiple="multiple"></select>
+              </div>
+            </div>
 					</div>
 					<div class="join-check-constraints">
 						<div class="form-horizontal">

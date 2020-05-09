@@ -55,7 +55,6 @@ class QueryBuilderController extends Controller
     public function getRequestBuilder(Request $request)
     {
 
-
         $data = $request->request->all();
         $selectedFields = $this->getSelectFields($data);
         $em = $this->getDoctrine()->getManager();
@@ -378,9 +377,9 @@ class QueryBuilderController extends Controller
     public function makeJoin($joins, $query, $formerTable, $jointype, $adjTable, $srcField, $tgtField)
     {
         // 
-        if ($jointype == "inner join") {
+        if ($jointype == "Inner Join") {
             $query = $query->innerJoin('BbeesE3sBundle:' . $adjTable, $adjTable, 'WITH', $formerTable . '.' . $srcField . " = " . $adjTable . '.' . $tgtField);
-        } elseif ($jointype == "left join") {
+        } elseif ($jointype == "Left Join") {
             $query = $query->leftJoin('BbeesE3sBundle:' . $adjTable, $adjTable, 'WITH', $formerTable . '.' . $srcField . " = " . $adjTable . '.' . $tgtField);
         } /* elseif ($jointype == "right join") {
             $query = $query->rightJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
