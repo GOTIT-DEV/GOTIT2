@@ -18,8 +18,7 @@ $(document).ready(function () {
     dropdown
       .empty()
       .append('<option selected="true" disabled>Choose table</option>')
-      .prop("selectedIndex", 0)
-      .selectpicker();
+      .prop("selectedIndex", 0);
 
     $.each(init_data, function (_key, entry) {
       dropdown.append(
@@ -135,11 +134,7 @@ $("#add-join").click(function () {
     let newBlock = addJoin(new_block_id);
 
     // Filling the menu containing the possible joins
-    let dropdown = newBlock
-      .find(".joins")
-      .empty()
-      .prop("selectedIndex", 0)
-      .selectpicker();
+    let dropdown = newBlock.find(".joins").empty().prop("selectedIndex", 0);
 
     $.each(joins, function (index, value) {
       dropdown.append($("<option></option>").attr("value", value).text(value));
@@ -160,24 +155,28 @@ $("#add-join").click(function () {
     all_adj_tables.push(first_selection);
     all_adj_tables = [...new Set(all_adj_tables)];
 
-    let dropdown2 = newBlock.find(".previous-table").empty();
-    dropdown2
+    newBlock
+      .find(".previous-table")
+      .empty()
       .append(
         '<option selected="true" disabled>Choose one previous table</option>'
       )
-      // .selectpicker()
       .prop("selectedIndex", 0);
 
     $.each(all_adj_tables, function (index, value) {
-      dropdown2.append($("<option></option>").attr("value", value).text(value));
+      if (value != "") {
+        newBlock
+          .find(".previous-table")
+          .append($("<option></option>").attr("value", value).text(value));
+      }
     });
-    dropdown2.val(dropdown2.find("option:enabled:first").val());
-    //dropdown2.selectpicker('refresh');
+    newBlock
+      .find(".previous-table")
+      .val(newBlock.find(".previous-table").find("option:enabled:first").val());
 
     // When you select or change the value of the previous table you want to select
     newBlock
       .find(".previous-table")
-      // .selectpicker()
       .change(function (event) {
         let target_table = event.target.value;
 
@@ -188,7 +187,6 @@ $("#add-join").click(function () {
           .append(
             '<option selected="true" disabled>Choose adjacent table</option>'
           )
-          .selectpicker()
           .prop("selectedIndex", 0);
 
         var table_data = init_data[target_table];
@@ -198,7 +196,7 @@ $("#add-join").click(function () {
         dropdown.selectpicker("refresh");
       })
       .selectpicker("refresh")
-      .trigger("change");
+      .change();
 
     // When you click to select/or change an adjacent table
     newBlock.find(".adjacent-tables").change(function (event) {
