@@ -29,7 +29,7 @@ $(document).ready(function () {
       );
     });
 
-    dropdown.selectpicker('refresh');
+    dropdown.selectpicker("refresh");
 
     // Initialization of the query builder
     $("#initial-table-constraints").queryBuilder({
@@ -61,11 +61,10 @@ $(document).ready(function () {
 
       // Init list of fields ( without the dateCre, userCre, dateMaj, userMaj)
 
-      var items = table_data.filters
-        .filter(function (item) {
-          return !(item.label.endsWith("Cre") || item.label.endsWith("Maj"));
-        });
-      
+      var items = table_data.filters.filter(function (item) {
+        return !(item.label.endsWith("Cre") || item.label.endsWith("Maj"));
+      });
+
       $("#first-fields").empty();
 
       $.each(items, function (item) {
@@ -76,9 +75,9 @@ $(document).ready(function () {
         );
       });
 
-      $("#first-fields").multiselect('rebuild');
-      $("#first-fields").multiselect('selectAll', false);
-      $("#first-fields").multiselect('updateButtonText');
+      $("#first-fields").multiselect("rebuild");
+      $("#first-fields").multiselect("selectAll", false);
+      $("#first-fields").multiselect("updateButtonText");
     });
   });
 });
@@ -136,13 +135,17 @@ $("#add-join").click(function () {
     let newBlock = addJoin(new_block_id);
 
     // Filling the menu containing the possible joins
-    let dropdown = newBlock.find(".joins").empty().prop("selectedIndex", 0).selectpicker();
+    let dropdown = newBlock
+      .find(".joins")
+      .empty()
+      .prop("selectedIndex", 0)
+      .selectpicker();
 
     $.each(joins, function (index, value) {
       dropdown.append($("<option></option>").attr("value", value).text(value));
     });
 
-    dropdown.selectpicker('refresh');
+    dropdown.selectpicker("refresh");
 
     // Previous tables available when you choose a new table to make joins
 
@@ -192,9 +195,10 @@ $("#add-join").click(function () {
         $.each(table_data.relations, function (key, value) {
           dropdown.append($("<option></option>").attr("value", key).text(key));
         });
-        dropdown.selectpicker('refresh');
+        dropdown.selectpicker("refresh");
       })
-      .selectpicker('refresh').trigger("change");
+      .selectpicker("refresh")
+      .trigger("change");
 
     // When you click to select/or change an adjacent table
     newBlock.find(".adjacent-tables").change(function (event) {
@@ -207,33 +211,37 @@ $("#add-join").click(function () {
         .queryBuilder("setFilters", true, table_data.filters);
 
       // Init list of fields
-      var items = table_data.filters
-        .filter(function (item) {
-          return !(item.label.endsWith("Cre") || item.label.endsWith("Maj"));
-        });
+      var items = table_data.filters.filter(function (item) {
+        return !(item.label.endsWith("Cre") || item.label.endsWith("Maj"));
+      });
 
-      let selects_block = newBlock.find(".table-selects");
-      selects_block.empty();
+      newBlock.find(".table-selects").empty();
 
-      var items = table_data.filters
-        .filter(function (item) {
-          return !(item.label.endsWith("Cre") || item.label.endsWith("Maj"));
+      var items = table_data.filters.filter(function (item) {
+        return !(item.label.endsWith("Cre") || item.label.endsWith("Maj"));
       });
 
       $.each(items, function (item) {
-        selects_block.append(
-          $("<option></option>")
-            .attr("value", items[item].label)
-            .text(items[item].label)
-        );
+        newBlock
+          .find(".table-selects")
+          .append(
+            $("<option></option>")
+              .attr("value", items[item].label)
+              .text(items[item].label)
+          );
       });
-      
-      selects_block.multiselect('rebuild');
-      selects_block.multiselect('updateButtonText');
-
+      newBlock.find(".table-selects").multiselect("rebuild");
+      newBlock.find(".table-selects").multiselect("updateButtonText");
     });
-    newBlock.find(".table-selects").multiselect('rebuild');
-    newBlock.find(".table-selects").multiselect('updateButtonText');
+    newBlock
+      .find(".table-selects")
+      .multiselect({
+        includeSelectAllOption: true,
+        allSelectedText: "All fields selected",
+        nonSelectedText: "No field(s) selected",
+      });
+    newBlock.find(".table-selects").multiselect("rebuild");
+    newBlock.find(".table-selects").multiselect("updateButtonText");
   });
 });
 
@@ -283,13 +291,12 @@ function get_form_initial() {
   }
 
   // Checked inputs
-  
 
-    var fieldsSelected = $("#first-fields").find("option:selected");
-    var fields = [];
-    fieldsSelected.each(function(){
-      fields.push($(this).val());
-    });
+  var fieldsSelected = $("#first-fields").find("option:selected");
+  var fields = [];
+  fieldsSelected.each(function () {
+    fields.push($(this).val());
+  });
 
   return { table, constraintsTable1, fields };
 }
