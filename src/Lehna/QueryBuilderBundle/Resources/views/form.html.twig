@@ -10,32 +10,25 @@
 			{% endtrans %}
 		</h2>
 	</legend>
-  {# Initial Block #}
-	<div class="row">
-		<div class="panel panel-default">
-			<div class="panel-body">
-				{% include '@LehnaQueryBuilder/forms/initial.block.html.twig' %}
-			</div>
+	{# Initial Block #}
+	{% include '@LehnaQueryBuilder/forms/initial.block.html.twig' %}
+	{# Join Div and Button #}
+  
+	<div>
+		<div class="add-constraints" id="add-constraints"></div>
+		{# Join Blocks #}
+		<div class="row">
+			{% include '@LehnaQueryBuilder/forms/join.blocks.html.twig' %}
 		</div>
 	</div>
-	{# Join Div and Button #}
-  <div>
-	  <div
-		  class="add-constraints" id="add-constraints">
-	  </div>
-    {# Join Blocks #}
-    <div class="row">
-      {% include '@LehnaQueryBuilder/forms/join.blocks.html.twig' %}
-    </div>
-  </div>
-  <div class="row">
-    <div class="add-join-div btn-group pull-left group-actions" id="add-join-div">
-      <button class="btn btn-xs btn-basic collapsed" id="add-join" type="button">
-        <i class="glyphicon glyphicon-plus-sign"></i>
-      </button>
-    </div>
-  </div>
-  
+	<div class="row">
+		<div class="add-join-div btn-group pull-left group-actions" id="add-join-div">
+			<button class="btn btn-xs btn-basic collapsed" id="add-join" type="button">
+				<i class="glyphicon glyphicon-plus-sign add-join-block"></i>
+			</button>
+		</div>
+	</div>
+
 	<center>
 		<button type="submit" href="#resultats" value="Rechercher" class="btn btn-primary btn-lg" id="submit-button" data-loading-text="<i class='fas fa-spinner fa-spin'></i>">
 			{% trans %}
@@ -44,5 +37,3 @@
 		</button>
 	</center>
 </form>
-
-

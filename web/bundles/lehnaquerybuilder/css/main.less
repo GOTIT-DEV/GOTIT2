@@ -1,20 +1,17 @@
 h2.h2-query-fields {
-  margin-bottom:18px;
+  margin-bottom: 18px;
 }
 
-i.glyphicon-plus-sign {
-  font-size:25px;
+i.add-join-block {
+  font-size: 30px;
 }
-
 
 div.initial-container {
   padding-left: 20px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: auto 1fr;
-  grid-template-areas:
-    "first-chosen-selector      first-selected-fields      ."
-    "first-collapse-constraints first-collapse-constraints first-collapse-constraints";
+  grid-template-rows: auto;
+  grid-template-areas: "first-chosen-selector      first-selected-fields      .";
 
   div.first-chosen-selector {
     grid-area: first-chosen-selector;
@@ -22,57 +19,53 @@ div.initial-container {
 
   div.first-selected-fields {
     grid-area: first-selected-fields;
-    padding-left:20px;
+    padding-left: 20px;
+  }
+}
+
+div.first-check-constraints {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: 1fr;
+  column-gap: 5px;
+  grid-template-areas: "first-check-constraints first-applied-constraints";
+
+  div#collapseConstraints {
+    grid-area: first-applied-constraints;
   }
 
+  div.first-applied-constraints {
+    grid-area: first-check-constraints;
+  }
+}
+
+@media (max-width: 1000px) {
   div.first-check-constraints {
-    grid-area: first-collapse-constraints;
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    grid-template-rows: 1fr;
-    column-gap: 5px;
-    grid-template-areas: "first-check-constraints first-applied-constraints";
-
-    div#collapseConstraints {
-      grid-area: first-applied-constraints;
-    }
-
-    div.first-applied-constraints {
-      grid-area: first-check-constraints;
-    }
-  }
-
-  @media (max-width: 1000px) {
-    div.first-check-constraints {
-      grid-template-columns: 1fr;
-      grid-template-rows: 1fr 1fr;
-      grid-template-areas:
-        "first-check-constraints"
-        "first-applied-constraints";
-    }
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+      "first-check-constraints"
+      "first-applied-constraints";
   }
 }
 
 @media (max-width: 1000px) {
   div.initial-container {
     grid-template-columns: auto;
-    grid-template-rows: auto auto auto auto 0.5fr;
+    grid-template-rows: auto auto;
     grid-template-areas:
       "first-chosen-selector"
-      "first-selected-fields"
-      "first-collapse-constraints"
-      "first-collapse-constraints"
-      "first-collapse-constraints";
+      "first-selected-fields";
   }
 }
 
 ul#first-table-selects {
   padding-left: 0px;
-  list-style:none;
+  list-style: none;
 }
 
 i#method-spinner {
-  font-size:16px;
+  font-size: 16px;
 }
 
 div.add-join-div {
@@ -151,11 +144,11 @@ div.join-check-constraints {
 
 ul.table-selects {
   padding-left: 0px;
-  list-style:none;
+  list-style: none;
 }
 
 i.i-constraints {
-  font-size:16px;
+  font-size: 16px;
 }
 
 center {
