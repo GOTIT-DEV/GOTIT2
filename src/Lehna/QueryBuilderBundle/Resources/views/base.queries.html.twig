@@ -1,44 +1,47 @@
 {% extends 'base.html.twig' %}
 
 {% block stylesheets %}
-  {{ parent() }}
-  <!-- Bootstrap toggle -->
-  <link
-  href="{{ asset('e3s/vendors/bootstrap-toggle/css/bootstrap-toggle.min.css') }}" rel="stylesheet">
-  <!-- Bootstrap select -->
-  <link
-  href="{{ asset('e3s/vendors/bootstrap-select/dist/css/bootstrap-select.min.css') }}" rel="stylesheet">
-   <!-- Bootstrap Multiselect -->
-  <link
-  href="{{ asset('e3s/vendors/bootstrap-multiselect/dist/css/bootstrap-multiselect.css') }}" rel="stylesheet">
-  <!-- Datatables -->
-  <link
-  href="{{ asset('e3s/vendors/datatables/datatables.min.css') }}" rel="stylesheet">
-  <!-- Custom Theme Style -->
-  <link
-  href="{{ asset('bundles/lehnaspeciessearch/css/common.css') }}" rel="stylesheet">
-  <!-- Datatables Style -->
-  <link href="{{ asset('bundles/lehnaspeciessearch/css/datatables-custom.css') }}" rel="stylesheet">
+	{{ parent() }}
+	<!-- Bootstrap toggle -->
+	<link
+	href="{{ asset('e3s/vendors/bootstrap-toggle/css/bootstrap-toggle.min.css') }}" rel="stylesheet">
+	<!-- Bootstrap select -->
+	<link
+	href="{{ asset('e3s/vendors/bootstrap-select/dist/css/bootstrap-select.min.css') }}" rel="stylesheet">
+	<!-- Bootstrap Multiselect -->
+	<link
+	href="{{ asset('e3s/vendors/bootstrap-multiselect/dist/css/bootstrap-multiselect.css') }}" rel="stylesheet">
+	<!-- Datatables -->
+	<link
+	href="{{ asset('e3s/vendors/datatables/datatables.min.css') }}" rel="stylesheet">
+	<!-- Custom Theme Style -->
+	<link
+	href="{{ asset('bundles/lehnaspeciessearch/css/common.css') }}" rel="stylesheet">
+	<!-- Datatables Style -->
+	<link
+	href="{{ asset('bundles/lehnaspeciessearch/css/datatables-custom.css') }}" rel="stylesheet">
+	<!-- Main QuerBuilder Style -->
+	<link href="{{ asset('bundles/lehnaquerybuilder/css/main.css') }}" rel="stylesheet">
 {% endblock %}
 
-{% block headincl %}
-{% endblock %}
+{% block headincl %}{% endblock %}
 
 {% block titlepage %}
-  <div class="clearfix"></div>
+	<div class="clearfix"></div>
 {% endblock %}
 
 {% block action %}
-  {{ parent() }}
+	{{ parent() }}
 {% endblock %}
 
 {% block body %}
-  <div class="clearfix"></div>
+	<div class="clearfix"></div>
 {% endblock %}
 
 {% block link %}
-  <div class="clearfix"></div>
+	<div class="clearfix"></div>
 {% endblock %}
+
 
 {% block scripts %}
   {{ parent() }}
@@ -55,32 +58,16 @@
   <script src="{{ asset('e3s/vendors/bootstrap-toggle/js/bootstrap-toggle.min.js') }}"></script>
   <!-- Bootstrap select -->
   <script src="{{ asset('e3s/vendors/bootstrap-select/dist/js/bootstrap-select.min.js') }}"></script>
-   <!-- Bootstrap Multiselect -->
+  <!-- Bootstrap Multiselect -->
   <script src="{{ asset('e3s/vendors/bootstrap-multiselect/dist/js/bootstrap-multiselect.js') }}"></script>
   <script type="text/javascript">
     $(document).ready(function() {
-      $("#first-fields").multiselect({
-        includeSelectAllOption: true,
-        allSelectedText: 'All fields selected',
-        nonSelectedText: 'No field(s) selected',
-      });
-      $("#first-fields").multiselect('rebuild');
-      $("#first-fields").multiselect('selectAll', false);
-      $("#first-fields").multiselect('updateButtonText');
-
+      $("#first-fields").multiselect({includeSelectAllOption: true, allSelectedText: 'All fields selected', nonSelectedText: 'No field(s) selected'});
     });
-  </script> 
-  {# <script type="text/javascript">
-    {% verbatim %}
-      $(document).ready(function() {
-        $("#table-selects-{{id}}").multiselect({
-          includeSelectAllOption: true,
-          allSelectedText: 'All fields selected',
-          nonSelectedText: 'No field(s) selected',
-        });
-      });
-    {% endverbatim %}
-  </script> #}
-
-
+  </script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(".table-selects").multiselect({includeSelectAllOption: true, allSelectedText: 'All fields selected', nonSelectedText: 'No field(s) selected'}); 
+    })
+  </script>
 {% endblock %}

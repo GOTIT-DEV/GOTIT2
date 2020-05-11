@@ -75,6 +75,10 @@ $(document).ready(function () {
             .text(items[item].label)
         );
       });
+
+      $("#first-fields").multiselect('rebuild');
+      $("#first-fields").multiselect('selectAll', false);
+      $("#first-fields").multiselect('updateButtonText');
     });
   });
 });
@@ -223,7 +227,13 @@ $("#add-join").click(function () {
             .text(items[item].label)
         );
       });
+      
+      selects_block.multiselect('rebuild');
+      selects_block.multiselect('updateButtonText');
+
     });
+    newBlock.find(".table-selects").multiselect('rebuild');
+    newBlock.find(".table-selects").multiselect('updateButtonText');
   });
 });
 
