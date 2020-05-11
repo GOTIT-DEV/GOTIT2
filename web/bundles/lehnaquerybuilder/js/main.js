@@ -66,28 +66,15 @@ $(document).ready(function () {
           return !(item.label.endsWith("Cre") || item.label.endsWith("Maj"));
         });
       
-      let dropdown = $("#first-fields");
-      dropdown.empty();
+      $("#first-fields").empty();
 
       $.each(items, function (item) {
-        dropdown.append(
+        $("#first-fields").append(
           $("<option></option>")
             .attr("value", items[item].label)
             .text(items[item].label)
         );
       });
-
-
-      dropdown.multiselect({
-        includeSelectAllOption: true,
-        allSelectedText: 'All fields selected',
-        nonSelectedText: 'No field(s) selected',
-      });
-      dropdown.multiselect('rebuild');
-      dropdown.multiselect('selectAll', false);
-      dropdown.multiselect('updateButtonText');
-
-
     });
   });
 });
@@ -236,15 +223,6 @@ $("#add-join").click(function () {
             .text(items[item].label)
         );
       });
-
-      selects_block.multiselect({
-        includeSelectAllOption: true,
-        allSelectedText: 'All fields selected',
-        nonSelectedText: 'No field(s) selected',
-      });
-      selects_block.multiselect('rebuild');
-      selects_block.multiselect('updateButtonText');
-
     });
   });
 });
