@@ -2,27 +2,29 @@
 
 {% trans_default_domain 'queries' %}
 
-<div class="initial-container">
-	<div class="first-chosen-selector">
-		<div class="form-group first-chosen2-select">
-			<label class="control-label" for="niveau">
-				{% trans %}
-				Tables
-				{% endtrans %}
-			</label>
-			<select id="first-table" class="first-chosen-tab selectpicker" data-live-search="true"></select>
-		</div>
-	</div>
-	<div class="first-selected-fields">
-		<div class="form-group first-fields2-select">
-			<label class="control-label">
-				{% trans %}
-				Fields selection
-				{% endtrans %}
-      </label>
-      <select id="first-fields" multiple="multiple"></select>
-		</div>
-	</div>
+<div class="panel panel-default">
+  <div class="panel-heading initial-container">
+    <div class="first-chosen-selector">
+      <div class="form-group first-chosen2-select">
+        <label class="control-label" for="niveau">
+          {% trans %}
+          Tables
+          {% endtrans %}
+        </label>
+        <select id="first-table" class="first-chosen-tab selectpicker" data-live-search="true"></select>
+      </div>
+    </div>
+    <div class="first-selected-fields">
+      <div class="form-group first-fields2-select">
+        <label class="control-label">
+          {% trans %}
+          Fields selection
+          {% endtrans %}
+        </label>
+        <select id="first-fields" multiple="multiple"></select>
+      </div>
+    </div>
+  </div>
 	<div class="first-check-constraints">
 		<div class="form-horizontal">
 			<div class="form-group">
@@ -30,7 +32,7 @@
 					<strong>
 						{% trans %}
 						Constraints
-						{% endtrans %}s
+						{% endtrans %}
 					</strong>
 					<label class="control-label" title data-toggle="tooltip" data-placement="right">
 						<input type="checkbox" value="2" data-toggle="collapse" id="first-constraints" class="collapsed" aria-expanded="false" data-target="#collapseConstraints" autocomplete="off">

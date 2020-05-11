@@ -177,7 +177,7 @@ $("#add-join").click(function () {
     // When you select or change the value of the previous table you want to select
     newBlock
       .find(".previous-table")
-      .selectpicker()
+      // .selectpicker()
       .change(function (event) {
         let target_table = event.target.value;
 
@@ -233,13 +233,11 @@ $("#add-join").click(function () {
       newBlock.find(".table-selects").multiselect("rebuild");
       newBlock.find(".table-selects").multiselect("updateButtonText");
     });
-    newBlock
-      .find(".table-selects")
-      .multiselect({
-        includeSelectAllOption: true,
-        allSelectedText: "All fields selected",
-        nonSelectedText: "No field(s) selected",
-      });
+    newBlock.find(".table-selects").multiselect({
+      includeSelectAllOption: true,
+      allSelectedText: "All fields selected",
+      nonSelectedText: "No field(s) selected",
+    });
     newBlock.find(".table-selects").multiselect("rebuild");
     newBlock.find(".table-selects").multiselect("updateButtonText");
   });
