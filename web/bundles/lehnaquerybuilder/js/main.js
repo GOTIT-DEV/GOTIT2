@@ -179,21 +179,24 @@ $("#add-join").click(function () {
       .find(".previous-table")
       .change(function (event) {
         let target_table = event.target.value;
+        var table_data = init_data[target_table];
 
         // Init the menu
-        let dropdown = newBlock
-          .find(".adjacent-tables")
+        newBlock
+          .find("#adjacent-tables_id")
           .empty()
           .append(
             '<option selected="true" disabled>Choose adjacent table</option>'
           )
           .prop("selectedIndex", 0);
 
-        var table_data = init_data[target_table];
         $.each(table_data.relations, function (key, value) {
-          dropdown.append($("<option></option>").attr("value", key).text(key));
+          newBlock
+            .find("#adjacent-tables_id")
+            .append($("<option></option>").attr("value", key).text(key));
         });
-        dropdown.selectpicker("refresh");
+
+        newBlock.find("#adjacent-tables_id").selectpicker("refresh");
       })
       .selectpicker("refresh")
       .change();
@@ -209,10 +212,6 @@ $("#add-join").click(function () {
         .queryBuilder("setFilters", true, table_data.filters);
 
       // Init list of fields
-      var items = table_data.filters.filter(function (item) {
-        return !(item.label.endsWith("Cre") || item.label.endsWith("Maj"));
-      });
-
       newBlock.find(".table-selects").empty();
 
       var items = table_data.filters.filter(function (item) {
@@ -231,6 +230,7 @@ $("#add-join").click(function () {
       newBlock.find(".table-selects").multiselect("rebuild");
       newBlock.find(".table-selects").multiselect("updateButtonText");
     });
+
     newBlock.find(".table-selects").multiselect({
       includeSelectAllOption: true,
       allSelectedText: "All fields selected",
