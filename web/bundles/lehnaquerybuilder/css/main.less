@@ -6,56 +6,55 @@ i.add-join-block {
   font-size: 30px;
 }
 
-div.initial-container {
+div.initial-header {
   padding-left: 20px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: auto;
-  grid-template-areas: "first-chosen-selector      first-selected-fields      .";
+  grid-template-areas: "first-table-selection      first-selected-fields      .";
 
-  div.first-chosen-selector {
-    grid-area: first-chosen-selector;
+  div.first-table-selection {
+    grid-area: first-table-selection;
   }
 
   div.first-selected-fields {
     grid-area: first-selected-fields;
-    padding-left: 20px;
   }
 }
 
-div.first-check-constraints {
+@media (max-width: 1000px) {
+  div.initial-header {
+    grid-template-columns: auto;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "first-table-selection"
+      "first-selected-fields";
+  }
+}
+
+div.first-applied-constraints {
   display: grid;
   grid-template-columns: 1fr 2fr;
   grid-template-rows: 1fr;
   column-gap: 5px;
-  grid-template-areas: "first-check-constraints first-applied-constraints";
+  grid-template-areas: "first-checked-constraints first-collapsed-constraints";
+
+  div.first-checked-constraints {
+    grid-area: first-checked-constraints;
+  }
 
   div#collapseConstraints {
-    grid-area: first-applied-constraints;
+    grid-area: first-collapsed-constraints;
   }
+}
 
+@media (max-width: 1000px) {
   div.first-applied-constraints {
-    grid-area: first-check-constraints;
-  }
-}
-
-@media (max-width: 1000px) {
-  div.first-check-constraints {
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 0.5fr 1fr;
     grid-template-areas:
-      "first-check-constraints"
-      "first-applied-constraints";
-  }
-}
-
-@media (max-width: 1000px) {
-  div.initial-container {
-    grid-template-columns: auto;
-    grid-template-rows: auto auto;
-    grid-template-areas:
-      "first-chosen-selector"
-      "first-selected-fields";
+      "first-checked-constraints"
+      "first-collapsed-constraints";
   }
 }
 
@@ -80,7 +79,6 @@ div.add-join-div {
 }
 
 div.join-header {
-  grid-area: join-header;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr;
@@ -115,30 +113,29 @@ div.join-header {
   }
 }
 
-div.join-check-constraints {
-  grid-area: join-check-constraints;
+div.join-applied-constraints {
   display: grid;
   grid-template-columns: 1fr 3fr;
   grid-template-rows: 1fr;
   column-gap: 5px;
-  grid-template-areas: "join-collapsed-constraints join-applied-constraints";
+  grid-template-areas: "join-checked-constraints join-collapsed-constraints";
 
-  div.join-collapsed-constraints {
-    grid-area: join-applied-constraints;
+  div.join-checked-constraints {
+    grid-area: join-checked-constraints;
   }
 
-  div.join-applied-constraints {
+  div.join-collapsed-constraints {
     grid-area: join-collapsed-constraints;
   }
 }
 
 @media (max-width: 1000px) {
-  div.join-check-constraints {
+  div.join-applied-constraints {
     grid-template-columns: 1fr;
     grid-template-rows: 0.5fr 1fr;
     grid-template-areas:
-      "join-collapsed-constraints"
-      "join-applied-constraints";
+      "join-checked-constraints"
+      "join-collapsed-constraints";
   }
 }
 

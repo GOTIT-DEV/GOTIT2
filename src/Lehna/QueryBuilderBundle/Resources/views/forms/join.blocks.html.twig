@@ -7,7 +7,7 @@
 	<template id="form-block-template">
 		<div id="form-block-{{id}}">
 			<div class="formBlock">
-				<div class="panel panel-default join-panel">
+				<div class="panel panel-default">
 					<div class="panel-heading join-header">
 						<div class="former-table-choice">
 							<div class="form-group">
@@ -34,7 +34,7 @@
 							</div>
 						</div>
 						<div class="join-selected-fields">
-              <div class="form-group join-fields2-select">
+              <div class="form-group">
                 <label class="control-label">
                   Fields selection
                 </label>
@@ -42,7 +42,7 @@
               </div>
             </div>
 					</div>
-					<div class="join-check-constraints">
+					<div class="join-applied-constraints">
 						<div class="form-horizontal">
 							<div class="form-group">
 								<div class="checkbox checkbox-inline">
@@ -57,7 +57,7 @@
 							</div>
 						</div>
 						<div id="collapse-constraints-{{id}}" class="panel-collapse collapse join-collapsed-constraints" aria-expanded="false">
-							<div class="join-applied-constraints">
+							<div class="join-checked-constraints">
 								<div id="builder-constraints-{{id}}" class="builder-basic"></div>
 								<div class="btn-group">
 									<button class="btn btn-warning reset" data-target="#builder-constraints-{{id}}">Reset

@@ -3,9 +3,9 @@
 {% trans_default_domain 'queries' %}
 
 <div class="panel panel-default">
-  <div class="panel-heading initial-container">
-    <div class="first-chosen-selector">
-      <div class="form-group first-chosen2-select">
+  <div class="panel-heading initial-header">
+    <div class="first-table-selection">
+      <div class="form-group">
         <label class="control-label" for="niveau">
           {% trans %}
           Tables
@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="first-selected-fields">
-      <div class="form-group first-fields2-select">
+      <div class="form-group">
         <label class="control-label">
           {% trans %}
           Fields selection
@@ -25,7 +25,7 @@
       </div>
     </div>
   </div>
-	<div class="first-check-constraints">
+	<div class="first-applied-constraints">
 		<div class="form-horizontal">
 			<div class="form-group">
 				<div class="checkbox checkbox-inline">
@@ -42,7 +42,7 @@
 			</div>
 		</div>
 		<div class="panel-collapse collapse" id="collapseConstraints" aria-expanded="false">
-			<div class="first-applied-constraints">
+			<div class="first-checked-constraints">
 				<div id="initial-table-constraints" class="builder-basic"></div>
 				<div class="btn-group">
 					<button class="btn btn-warning reset" data-target="#initial-table-constraints">Reset
