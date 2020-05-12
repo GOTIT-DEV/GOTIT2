@@ -238,6 +238,12 @@ $("#add-join").click(function () {
     });
     newBlock.find(".table-selects").multiselect("rebuild");
     newBlock.find(".table-selects").multiselect("updateButtonText");
+
+    $("#first-table").change(function (event) {
+      event.preventDefault();
+      newBlock.find("#add-constraints").empty();
+      console.log($("#first-table").val());
+    });
   });
 });
 
