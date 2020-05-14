@@ -14,21 +14,27 @@ $(document).ready(function () {
   // Filling the menu with all the tables in the database
   $.getJSON("init", function (init_data) {
     // Init menu for choosing the first table
-    let dropdown = $("#first-table");
-    dropdown
+    $("#first-table")
       .empty()
       .append('<option selected="true" disabled>Choose table</option>')
       .prop("selectedIndex", 0);
 
-    $.each(init_data, function (_key, entry) {
-      dropdown.append(
-        $("<option></option>")
-          .attr("value", entry.human_readable_name)
-          .text(entry.human_readable_name)
+    // Making sure we have a list with the tables sorted by alphabetical order
+    let table_list = [];
+    $.each(init_data, function (key, _entry) {
+      table_list.push(key);
+    });
+    let sorted_table_list = table_list.sort();
+
+    // Adding every single table to the dropdown
+    $.each(sorted_table_list, function (_key, entry) {
+      $("#first-table").append(
+        $("<option></option>").attr("value", entry).text(entry)
       );
     });
 
-    dropdown.selectpicker("refresh");
+    // Redbuilding the dropdown with the new info in it
+    $("#first-table").selectpicker("refresh");
 
     // Initialization of the query builder
     $("#initial-table-constraints").queryBuilder({
@@ -154,6 +160,7 @@ $("#add-join").click(function () {
 
     all_adj_tables.push(first_selection);
     all_adj_tables = [...new Set(all_adj_tables)];
+    all_adj_tables = all_adj_tables.sort();
 
     newBlock
       .find(".previous-table")
@@ -190,10 +197,18 @@ $("#add-join").click(function () {
           )
           .prop("selectedIndex", 0);
 
-        $.each(table_data.relations, function (key, value) {
+        // Making sure we have a list of adjacent tables sorted by alphabetical order
+        let adj_tables_list = [];
+        $.each(table_data.relations, function (key, _entry) {
+          adj_tables_list.push(key);
+        });
+        let sorted_adj_tables_list = adj_tables_list.sort();
+        console.log(sorted_adj_tables_list);
+
+        $.each(sorted_adj_tables_list, function (_key, value) {
           newBlock
             .find("#adjacent-tables_id")
-            .append($("<option></option>").attr("value", key).text(key));
+            .append($("<option></option>").attr("value", value).text(value));
         });
 
         newBlock.find("#adjacent-tables_id").selectpicker("refresh");
@@ -236,12 +251,11 @@ $("#add-join").click(function () {
       allSelectedText: "All fields selected",
       nonSelectedText: "No field(s) selected",
       numberDisplayed: 7,
-      buttonWidth: '225',
+      buttonWidth: "225",
     });
-    
+
     newBlock.find(".table-selects").multiselect("rebuild");
     newBlock.find(".table-selects").multiselect("updateButtonText");
-
   });
 });
 
