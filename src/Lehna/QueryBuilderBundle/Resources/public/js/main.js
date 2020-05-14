@@ -235,6 +235,8 @@ $("#add-join").click(function () {
       includeSelectAllOption: true,
       allSelectedText: "All fields selected",
       nonSelectedText: "No field(s) selected",
+      numberDisplayed: 7,
+      buttonWidth: '225',
     });
     
     newBlock.find(".table-selects").multiselect("rebuild");
