@@ -28,18 +28,16 @@
     </div>
     <div class="form-horizontal first-checked-constraints">
 			<div class="form-group">
-				<div class="checkbox checkbox-inline">
-					<strong>
-						{% trans %}
-						Constraints
-						{% endtrans %}
-					</strong>
-          <br>
-					<label class="control-label" title data-toggle="tooltip" data-placement="right">
-						<input type="checkbox" value="2" data-toggle="collapse" id="first-constraints" class="collapsed" aria-expanded="false" data-target="#collapseConstraints" autocomplete="off">
-						<i class="fas fa-spinner fa-spin pull-right hidden" id="method-spinner"></i>
-					</label>
-				</div>
+        <strong>
+          {% trans %}
+          Constraints
+          {% endtrans %}
+        </strong>
+        <br>
+        <label class="control-label" title data-toggle="tooltip" data-placement="right">
+          <input type="checkbox" data-toggle="toggle" data-onstyle="success" data-size="normal" id="first-constraints" class="collapsed" aria-expanded="false" data-target="#collapseConstraints" autocomplete="off">
+          <i class="fas fa-spinner fa-spin pull-right hidden" id="method-spinner"></i>
+        </label>
 			</div>
 		</div>
   </div>

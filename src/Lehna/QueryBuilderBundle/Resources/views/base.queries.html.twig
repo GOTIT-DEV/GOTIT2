@@ -61,6 +61,9 @@
   <!-- Bootstrap Multiselect -->
   <script src="{{ asset('e3s/vendors/bootstrap-multiselect/dist/js/bootstrap-multiselect.js') }}"></script>
   <script type="text/javascript">
+    $(function() {$('#first-constraints').change(function() {$('#collapseConstraints').collapse('toggle')})})
+  </script>
+  <script type="text/javascript">
     $(document).ready(function() {
       $("#first-fields").multiselect({includeSelectAllOption: true, allSelectedText: 'All fields selected', nonSelectedText: 'No field(s) selected', numberDisplayed: 7,
       buttonWidth: 225,});
