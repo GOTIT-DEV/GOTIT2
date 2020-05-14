@@ -14,12 +14,14 @@
 								<label for="lot-materiel" class="control-label">
 									FROM
 								</label>
+                <br>
 								<select class="previous-table selectpicker" id="formerTable" data-live-search="true"></select>
 							</div>
 						</div>
 						<div class="join-type-choice">
 							<div class="form-group">
-								<label for="individu" class="control-label"></label>
+								<label for="individu" class="control-label">JOIN</label>
+                <br>
 								<select class="joins selectpicker" id="join_table" data-live-search="true"></select>
 							</div>
 						</div>
@@ -28,6 +30,7 @@
 								<label for="sequence" class="control-label">
 									TO
 								</label>
+                <br>
 								<select class="adjacent-tables selectpicker" id="adjacent-tables_id" data-live-search="true"></select>
 							</div>
 						</div>
@@ -36,17 +39,17 @@
                 <label class="control-label">
                   Select Field(s)
                 </label>
+                <br>
                 <select id="table-selects-{{id}}" class="table-selects" multiple="multiple"></select>
               </div>
             </div>
-					</div>
-					<div class="join-applied-constraints">
-						<div class="form-horizontal">
+            <div class="form-horizontal join-checked-constraints">
 							<div class="form-group">
 								<div class="checkbox checkbox-inline">
 									<strong>
 										Constraints
 									</strong>
+                  <br>
 									<label class="control-label" title data-toggle="tooltip" data-placement="right">
 										<input id="second_constraints" type="checkbox" data-toggle="collapse" class="collapsed new-constraints" aria-expanded="false" data-target="#collapse-constraints-{{id}}" autocomplete="off">
 										<i class="fas fa-spinner fa-spin pull-right hidden i-constraints"></i>
@@ -54,14 +57,14 @@
 								</div>
 							</div>
 						</div>
+					</div>
+					<div class="join-applied-constraints">
 						<div id="collapse-constraints-{{id}}" class="panel-collapse collapse join-collapsed-constraints" aria-expanded="false">
-							<div class="join-checked-constraints">
-								<div id="builder-constraints-{{id}}" class="builder-basic"></div>
-								<div class="btn-group">
-									<button class="btn btn-warning reset" data-target="#builder-constraints-{{id}}">Reset
-									</button>
-								</div>
-							</div>
+              <div id="builder-constraints-{{id}}" class="builder-basic"></div>
+              <div class="btn-group">
+                <button class="btn btn-warning reset" data-target="#builder-constraints-{{id}}">Reset
+                </button>
+              </div>
 						</div>
 					</div>
 				</div>

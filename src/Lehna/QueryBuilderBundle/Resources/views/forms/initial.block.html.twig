@@ -11,6 +11,7 @@
           Tables
           {% endtrans %}
         </label>
+		    <br>
         <select id="first-table" class="first-chosen-tab selectpicker" data-live-search="true"></select>
       </div>
     </div>
@@ -21,12 +22,11 @@
           Select Field(s)
           {% endtrans %}
         </label>
+		    <br>
         <select id="first-fields" multiple="multiple"></select>
       </div>
     </div>
-  </div>
-	<div class="first-applied-constraints">
-		<div class="form-horizontal">
+    <div class="form-horizontal first-checked-constraints">
 			<div class="form-group">
 				<div class="checkbox checkbox-inline">
 					<strong>
@@ -34,6 +34,7 @@
 						Constraints
 						{% endtrans %}
 					</strong>
+          <br>
 					<label class="control-label" title data-toggle="tooltip" data-placement="right">
 						<input type="checkbox" value="2" data-toggle="collapse" id="first-constraints" class="collapsed" aria-expanded="false" data-target="#collapseConstraints" autocomplete="off">
 						<i class="fas fa-spinner fa-spin pull-right hidden" id="method-spinner"></i>
@@ -41,14 +42,14 @@
 				</div>
 			</div>
 		</div>
+  </div>
+	<div class="first-applied-constraints">
 		<div class="panel-collapse collapse" id="collapseConstraints" aria-expanded="false">
-			<div class="first-checked-constraints">
-				<div id="initial-table-constraints" class="builder-basic"></div>
-				<div class="btn-group">
-					<button class="btn btn-warning reset" data-target="#initial-table-constraints">Reset
-					</button>
-				</div>
-			</div>
+      <div id="initial-table-constraints" class="builder-basic"></div>
+      <div class="btn-group">
+        <button class="btn btn-warning reset" data-target="#initial-table-constraints">Reset
+        </button>
+      </div>
 		</div>
 	</div>
 </div>
