@@ -121,6 +121,14 @@ function addJoin(block_id) {
     $(target).queryBuilder("reset");
   });
 
+  $("[data-toggle='toggle']").bootstrapToggle("destroy");
+  $("[data-toggle='toggle']").bootstrapToggle();
+  $(function () {
+    newBlock.find("#second_constraints").change(function () {
+      newBlock.find(".join-collapsed-constraints").collapse("toggle");
+    });
+  });
+
   return newBlock;
 }
 
