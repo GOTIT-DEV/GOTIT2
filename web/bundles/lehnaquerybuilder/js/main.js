@@ -13,6 +13,10 @@ import { dtconfig } from "../../lehnaspeciessearch/js/datatables_utils.js";
 $(document).ready(function () {
   // Filling the menu with all the tables in the database
   $.getJSON("init", function (init_data) {
+    $(document).ready(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+
     // Init menu for choosing the first table
     $("#first-table")
       .empty()
@@ -142,6 +146,9 @@ let new_block_id = 0;
 $("#add-join").click(function () {
   $.getJSON("init", function (init_data) {
     // Adding 1 at each click on add-join
+    $(document).ready(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
     new_block_id += 1;
 
     // Adding a block of query
