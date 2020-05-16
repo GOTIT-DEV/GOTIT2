@@ -15,6 +15,7 @@ $(document).ready(function () {
   $.getJSON("init", function (init_data) {
     // Making sure the add-join button is disabled on reload
     document.getElementById("add-join").disabled = true;
+    document.getElementById("submit-button").disabled = true;
 
     $('[data-toggle="tooltip"]').tooltip();
 
@@ -92,6 +93,7 @@ $(document).ready(function () {
       // Enables the plus button to add a join block when the first table is chosen (Disabled by default)
 
       document.getElementById("add-join").disabled = false;
+      document.getElementById("submit-button").disabled = false;
     });
   });
 });
@@ -137,8 +139,11 @@ function addJoin(block_id) {
       newBlock.find(".join-collapsed-constraints").collapse("toggle");
     });
   });
+
   $('[data-toggle="tooltip"]').tooltip();
+
   document.getElementById("add-join").disabled = true;
+  document.getElementById("submit-button").disabled = true;
 
   return newBlock;
 }
@@ -223,7 +228,6 @@ $("#add-join").click(function () {
           adj_tables_list.push(key);
         });
         let sorted_adj_tables_list = adj_tables_list.sort();
-        console.log(sorted_adj_tables_list);
 
         $.each(sorted_adj_tables_list, function (_key, value) {
           newBlock
@@ -232,6 +236,10 @@ $("#add-join").click(function () {
         });
 
         newBlock.find("#adjacent-tables_id").selectpicker("refresh");
+
+        // Disabled the plus button and the submit button when the former table is changed and therefore no adjacent table is selected
+        document.getElementById("add-join").disabled = true;
+        document.getElementById("submit-button").disabled = true;
       })
       .selectpicker("refresh")
       .change();
@@ -266,6 +274,7 @@ $("#add-join").click(function () {
       newBlock.find(".table-selects").multiselect("updateButtonText");
 
       document.getElementById("add-join").disabled = false;
+      document.getElementById("submit-button").disabled = false;
     });
 
     newBlock.find(".table-selects").multiselect({
