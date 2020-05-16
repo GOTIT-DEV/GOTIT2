@@ -290,6 +290,10 @@ $("#add-join").click(function () {
   });
 });
 
+document.getElementById("clear").onclick = function () {
+  location.reload(true);
+};
+
 /**
  * 3 Fonctions : they read and convert the form's fields filled into JSON when SEARCH is clicked
  */
@@ -355,7 +359,7 @@ function get_form_block_data(init_data) {
       let adj_table = block.find("#adjacent-tables_id").val();
       let formerT = block.find("#formerTable").val();
       let idJoin = block.find("#join_table").val();
-      var f = [];
+      let f = [];
       let fields = block
         .find(".table-selects option:selected")
         .map(function () {

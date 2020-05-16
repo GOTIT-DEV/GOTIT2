@@ -10,26 +10,35 @@
 			{% endtrans %}
 		</h2>
 	</legend>
-	{# Initial Block #}
-	{% include '@LehnaQueryBuilder/forms/initial.block.html.twig' %}
-	{# Join Div and Button #}
-  
-	<div>
-		<div class="add-constraints" id="add-constraints"></div>
-		{# Join Blocks #}
-		<div class="row">
-			{% include '@LehnaQueryBuilder/forms/join.blocks.html.twig' %}
-		</div>
-	</div>
-	<div class="row">
-		<div class="add-join-div btn-group pull-left group-actions" id="add-join-div">
-			<button class="btn btn-xs btn-basic collapsed" id="add-join" type="button" disabled>
-				<i class="glyphicon glyphicon-plus-sign add-join-block"  data-toggle="tooltip" data-placement="right" title="Add a join block"></i>
-			</button>
-		</div>
-	</div>
+
+  {# Initial Block #}
+  {% include '@LehnaQueryBuilder/forms/initial.block.html.twig' %}
+
+  {# Join Div #}
+  <div>
+    <div class="add-constraints" id="add-constraints"></div>
+    {# Join Blocks #}
+    <div class="row">
+      {% include '@LehnaQueryBuilder/forms/join.blocks.html.twig' %}
+    </div>
+  </div>
+
+  {# Button to Add a Join Div #}
+  <div class="row">
+    <div class="add-join-div btn-group pull-left group-actions" id="add-join-div">
+      <button class="btn btn-xs btn-basic collapsed" id="add-join" type="button" disabled>
+        <i class="glyphicon glyphicon-plus-sign add-join-block"  data-toggle="tooltip" data-placement="right" title="Add a join block"></i>
+      </button>
+    </div>
+  </div>
+
 
 	<center>
+    <button type="reset" value="Reset" class="btn btn-warning btn-lg reset-form" id="clear">
+      {% trans %}
+			Clear
+			{% endtrans %}
+    </button>
 		<button type="submit" href="#resultats" value="Rechercher" class="btn btn-primary btn-lg" id="submit-button" disabled data-loading-text="<i class='fas fa-spinner fa-spin'></i>">
 			{% trans %}
 			Search

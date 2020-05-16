@@ -39,11 +39,11 @@ div.initial-header {
     div.first-table-selection {
       grid-area: first-table-selection;
     }
-  
+
     div.first-selected-fields {
       grid-area: first-selected-fields;
     }
-  
+
     div.first-checked-constraints {
       grid-area: first-checked-constraints;
       justify-self: start;
@@ -59,17 +59,17 @@ div.initial-header {
       "first-table-selection"
       "first-selected-fields"
       "first-checked-constraints";
-    
+
     div.first-table-selection {
       grid-area: first-table-selection;
       justify-self: center;
     }
-  
+
     div.first-selected-fields {
       grid-area: first-selected-fields;
       justify-self: center;
     }
-  
+
     div.first-checked-constraints {
       grid-area: first-checked-constraints;
       justify-self: center;
@@ -160,20 +160,20 @@ div.join-header {
     div.former-table-choice {
       grid-area: former-table-choice;
     }
-  
+
     div.join-type-choice {
       grid-area: join-type-choice;
     }
-  
+
     div.adj-table-choice {
       grid-area: adj-table-choice;
     }
-  
+
     div.join-selected-fields {
       grid-area: join-selected-fields;
       justify-self: start;
     }
-  
+
     div.join-checked-constraints {
       grid-area: join-checked-constraints;
       justify-self: start;
@@ -194,22 +194,22 @@ div.join-header {
       grid-area: former-table-choice;
       justify-self: start;
     }
-  
+
     div.join-type-choice {
       grid-area: join-type-choice;
       justify-self: start;
     }
-  
+
     div.adj-table-choice {
       grid-area: adj-table-choice;
       justify-self: start;
     }
-  
+
     div.join-selected-fields {
       grid-area: join-selected-fields;
       justify-self: start;
     }
-  
+
     div.join-checked-constraints {
       grid-area: join-checked-constraints;
       justify-self: start;
@@ -225,36 +225,35 @@ div.join-header {
       "former-table-choice"
       "join-type-choice"
       "adj-table-choice"
-      "join-selected-fields" 
+      "join-selected-fields"
       "join-checked-constraints";
 
     div.former-table-choice {
       grid-area: former-table-choice;
       justify-self: center;
     }
-  
+
     div.join-type-choice {
       grid-area: join-type-choice;
       justify-self: center;
     }
-  
+
     div.adj-table-choice {
       grid-area: adj-table-choice;
       justify-self: center;
     }
-  
+
     div.join-selected-fields {
       grid-area: join-selected-fields;
       justify-self: center;
     }
-  
+
     div.join-checked-constraints {
       grid-area: join-checked-constraints;
       justify-self: center;
     }
   }
 }
-
 
 div.join-applied-constraints {
   display: grid;
@@ -293,13 +292,19 @@ i.i-constraints {
 
 center {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 0.5fr 1fr 0.5fr 1fr 1fr 1fr;
   grid-template-rows: 1fr;
-  grid-template-areas: ". . results-btn . .";
+  grid-template-areas: ". reset-button . results-btn . .";
+
+  button#clear {
+    grid-area: reset-button;
+    justify-self: start;
+    min-width: 10em;
+  }
 
   button#submit-button {
     grid-area: results-btn;
-    justify-items: center;
+    justify-self: center;
     min-width: 10em;
   }
 }
