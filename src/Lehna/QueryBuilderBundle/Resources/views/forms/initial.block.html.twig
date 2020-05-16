@@ -6,24 +6,24 @@
 	<div class="panel-heading initial-header">
 		<div class="first-table-selection">
 			<div class="form-group">
-				<label class="control-label" for="niveau">
+				<label class="control-label" for="niveau" data-toggle="tooltip" data-placement="top" title="Select the first table">
 					{% trans %}
 					Select Table
 					{% endtrans %}
 				</label>
 				<br>
-				<select id="first-table" class="first-chosen-tab selectpicker" data-toggle="tooltip" data-placement="top" title="Select the first table" data-live-search="true" ></select>
+				<select name="first-table" id="first-table" class="first-chosen-tab selectpicker" data-live-search="true"></select>
 			</div>
 		</div>
 		<div class="first-selected-fields">
 			<div class="form-group">
-				<label class="control-label">
+				<label class="control-label" data-toggle="tooltip" title="Select fields from the first table (All selected by default)" data-placement="top">
 					{% trans %}
 					Select Field(s)
 					{% endtrans %}
 				</label>
 				<br>
-				<select id="first-fields" multiple="multiple" data-toggle="tooltip" title="Select fields" data-placement="top"></select>
+				<select name="first-fields" id="first-fields" multiple="multiple"></select>
 			</div>
 		</div>
 		<div class="form-horizontal first-checked-constraints">
