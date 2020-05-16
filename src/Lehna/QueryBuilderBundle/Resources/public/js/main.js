@@ -13,6 +13,9 @@ import { dtconfig } from "../../lehnaspeciessearch/js/datatables_utils.js";
 $(document).ready(function () {
   // Filling the menu with all the tables in the database
   $.getJSON("init", function (init_data) {
+    // Making sure the add-join button is disabled on reload
+    document.getElementById("add-join").disabled = true;
+
     $('[data-toggle="tooltip"]').tooltip();
 
     // Init menu for choosing the first table
@@ -85,6 +88,10 @@ $(document).ready(function () {
       $("#first-fields").multiselect("rebuild");
       $("#first-fields").multiselect("selectAll", false);
       $("#first-fields").multiselect("updateButtonText");
+
+      // Enables the plus button to add a join block when the first table is chosen (Disabled by default)
+
+      document.getElementById("add-join").disabled = false;
     });
   });
 });
@@ -131,6 +138,7 @@ function addJoin(block_id) {
     });
   });
   $('[data-toggle="tooltip"]').tooltip();
+  document.getElementById("add-join").disabled = true;
 
   return newBlock;
 }
@@ -256,6 +264,8 @@ $("#add-join").click(function () {
       });
       newBlock.find(".table-selects").multiselect("rebuild");
       newBlock.find(".table-selects").multiselect("updateButtonText");
+
+      document.getElementById("add-join").disabled = false;
     });
 
     newBlock.find(".table-selects").multiselect({
