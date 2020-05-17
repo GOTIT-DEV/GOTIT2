@@ -456,3 +456,29 @@ function topFunction() {
 document.getElementById("myBtn").onclick = function () {
   topFunction();
 };
+
+
+let modal = document.getElementById("logigal-database-model");
+
+// Get the image and insert it inside the modal - use its "alt" text as a caption
+let img = document.getElementById("myImg");
+let modalImg = document.getElementById("img01");
+let captionText = document.getElementById("caption");
+img.onclick = function(){
+  modal.style.display = "block";
+  modalImg.src = this.src;
+  console.log(this.src);
+  captionText.innerHTML = this.alt;
+}
+
+let closeImg = document.getElementsByClassName("close")[0];
+
+closeImg.onclick = function() {
+  modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+} 

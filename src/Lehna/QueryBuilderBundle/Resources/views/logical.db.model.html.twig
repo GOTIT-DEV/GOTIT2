@@ -1,18 +1,13 @@
 {% trans_default_domain 'queries' %}
 
+<img id="myImg" src="{{ asset('bundles/lehnaquerybuilder/image/S1_Gotitdb_V2_logical_model_en.jpg') }}" alt="Logical Model">
+
 <!-- Modal -->
-<div class="modal fade" id="logigal-database-modal" role="dialog">
-	<div
-		class="modal-dialog">
-		<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title">GOTIT Database Logical Model</h4>
-			</div>
-			<div class="modal-body" id="contentModalQuery"></div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
+<div class="modal" id="logigal-database-model">
+	
+  <!-- Modal content-->
+  <span class="close">&times;</span>
+  <img class="modal-content" id="img01">
+  <div id="caption"></div>
 </div>
+
