@@ -79,13 +79,19 @@ div.initial-header {
 
 div.first-applied-constraints {
   display: grid;
-  grid-template-columns: 1fr 0.4fr;
+  grid-template-columns: 1fr 0.5fr;
   grid-template-rows: auto;
   column-gap: 5px;
-  grid-template-areas: "first-collapsed-constraints .";
+  grid-template-areas: "first-collapsed-constraints warning-msg";
 
   div#collapseConstraints {
     grid-area: first-collapsed-constraints;
+    padding-left: 5px;
+    padding-bottom: 5px;
+  }
+
+  div#warning-msg {
+    grid-area: warning-msg;
   }
 }
 
@@ -99,6 +105,8 @@ div.first-applied-constraints {
 
     div#collapseConstraints {
       grid-area: first-collapsed-constraints;
+      padding-left: 5px;
+      padding-bottom: 5px;
     }
   }
 }
@@ -257,13 +265,21 @@ div.join-header {
 
 div.join-applied-constraints {
   display: grid;
-  grid-template-columns: 1fr 0.4fr;
+  grid-template-columns: 1fr 0.5fr;
   grid-template-rows: auto;
   column-gap: 5px;
-  grid-template-areas: "join-collapsed-constraints .";
+  grid-template-areas: "join-collapsed-constraints warning-message";
 
   div.join-collapsed-constraints {
     grid-area: join-collapsed-constraints;
+    padding-left: 5px;
+    padding-bottom: 5px;
+  }
+
+  div.warning-msg-join {
+    grid-area: warning-message;
+    padding-left: 5px;
+    padding-bottom: 5px;
   }
 }
 
@@ -277,6 +293,8 @@ div.join-applied-constraints {
 
     div.join-collapsed-constraints {
       grid-area: join-collapsed-constraints;
+      padding-left: 5px;
+      padding-bottom: 5px;
     }
   }
 }
