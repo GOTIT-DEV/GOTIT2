@@ -115,7 +115,7 @@ function addJoin(block_id) {
   newBlock = $("#form-block-" + block_id);
 
   // Query builder initialization
-  newBlock.find(".builder-basic").queryBuilder({
+  newBlock.find(".collapsed-query-builder").queryBuilder({
     plugins: ["bt-tooltip-errors"],
     filters: [
       {
@@ -251,7 +251,7 @@ $("#add-join").click(function () {
 
       // Init query-builder with fields and filters of the selected table
       newBlock
-        .find(".builder-basic")
+        .find(".collapsed-query-builder")
         .queryBuilder("setFilters", true, table_data.filters);
 
       // Init list of fields
@@ -334,7 +334,9 @@ function get_form_initial() {
 
   // Constraints
   if ($("#first-constraints").is(":checked") == true) {
-    var constraintsTable1 = $(".builder-basic").eq(0).queryBuilder("getRules");
+    var constraintsTable1 = $(".collapsed-query-builder")
+      .eq(0)
+      .queryBuilder("getRules");
   } else {
     var constraintsTable1 = null;
   }
@@ -376,7 +378,7 @@ function get_form_block_data(init_data) {
       // Constraints
       if (block.find("#second_constraints").is(":checked") == true) {
         var constraintsTable2 = block
-          .find(".builder-basic")
+          .find(".collapsed-query-builder")
           .queryBuilder("getRules");
       } else {
         var constraintsTable2 = null;
@@ -457,27 +459,26 @@ document.getElementById("myBtn").onclick = function () {
   topFunction();
 };
 
-
-let modal = document.getElementById("logigal-database-model");
+let myModal = document.getElementById("logigal-database-model");
 
 // Get the image and insert it inside the modal - use its "alt" text as a caption
-let img = document.getElementById("logical-db-img");
-let modalImg = document.getElementById("db-img");
+let dbImg = document.getElementById("logical-db-img");
+let myModalImg = document.getElementById("db-img");
 let captionText = document.getElementById("caption");
-img.onclick = function(){
-  modal.style.display = "block";
-  modalImg.src = this.src;
+dbImg.onclick = function () {
+  myModal.style.display = "block";
+  myModalImg.src = this.src;
   captionText.innerHTML = this.alt;
-}
+};
 
 let closeImg = document.getElementsByClassName("close")[0];
 
-closeImg.onclick = function() {
-  modal.style.display = "none";
-}
+closeImg.onclick = function () {
+  myModal.style.display = "none";
+};
 
-window.onclick = function(event) {
+window.onclick = function (event) {
   if (event.target == modal) {
-    modal.style.display = "none";
+    myModal.style.display = "none";
   }
-} 
+};
