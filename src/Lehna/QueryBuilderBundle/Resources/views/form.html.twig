@@ -3,13 +3,20 @@
 {% trans_default_domain 'queries' %}
 
 <form id="main-form" action="#">
-	<legend>
-		<h2 class="h2-query-fields">
+	<legend id="logical-container">
+    <h2 id="logical-model-div">
+      {% trans %}
+			GOTIT Database Logical Model
+			{% endtrans %}
+    </h2>
+    <div id="img-container">
+      {% include '@LehnaQueryBuilder/logical.db.model.html.twig' %}
+    </div>
+    <h2 class="h2-query-fields">
 			{% trans %}
 			Query fields
 			{% endtrans %}
 		</h2>
-    {% include '@LehnaQueryBuilder/logical.db.model.html.twig' %}
 	</legend>
 
 

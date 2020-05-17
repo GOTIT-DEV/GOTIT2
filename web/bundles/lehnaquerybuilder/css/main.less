@@ -1,5 +1,25 @@
-h2.h2-query-fields {
-  margin-bottom: 18px;
+legend#logical-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+  ". img-container" 
+  "query-fields logical-h2";
+
+  div#img-container {
+    grid-area: img-container;
+  }
+
+  h2.h2-query-fields {
+    grid-area: query-fields;
+    margin-bottom: 10px;
+  }
+
+  h2#logical-model-div {
+    grid-area: logical-h2;
+    margin-bottom: 10px;
+  }
+
 }
 
 i.add-join-block {
@@ -328,15 +348,17 @@ center {
 }
 
 
- #myImg {
+ #logical-db-img {
   border-radius: 5px;
   cursor: pointer;
   transition: 0.5s;
+  width:100%;
+  max-width:200px;
 }
 
-#myImg:hover {opacity: 0.8;}
+#logical-db-img:hover {opacity: 0.8;}
 
-.modal {
+.logical-modal-content {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
@@ -351,7 +373,7 @@ center {
 }
 
 /* Modal Content (Image) */
-.modal-content {
+.logical-img-modal-content {
   margin: auto;
   display: block;
   width: 100%;
@@ -369,7 +391,7 @@ center {
   height: 150px;
 }
 
-.modal-content, #caption {
+.logical-img-modal-content, #caption {
   animation-name: zoom;
   animation-duration: 0.5s;
 }
@@ -398,12 +420,8 @@ center {
 }
 
 @media (max-width: 700px){
-  .modal-content {
+  .logical-img-modal-content {
     width: 100%;
   }
 }
 
-img#myImg {
-  width:100%;
-  max-width:200px;
-}

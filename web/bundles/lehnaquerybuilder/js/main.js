@@ -461,13 +461,12 @@ document.getElementById("myBtn").onclick = function () {
 let modal = document.getElementById("logigal-database-model");
 
 // Get the image and insert it inside the modal - use its "alt" text as a caption
-let img = document.getElementById("myImg");
-let modalImg = document.getElementById("img01");
+let img = document.getElementById("logical-db-img");
+let modalImg = document.getElementById("db-img");
 let captionText = document.getElementById("caption");
 img.onclick = function(){
   modal.style.display = "block";
   modalImg.src = this.src;
-  console.log(this.src);
   captionText.innerHTML = this.alt;
 }
 
