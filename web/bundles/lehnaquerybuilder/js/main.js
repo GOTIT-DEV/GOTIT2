@@ -396,6 +396,28 @@ function get_form_block_data(init_data) {
   return data;
 }
 
+/* Function to copy the SQL query to the clipboard */
+
+function copySQLFunction() {
+  let hiddenSQL = document.createElement("textarea"); // Init a new hidden textarea
+  hiddenSQL.value = document.getElementById("contentModalQuerySql").innerHTML; // Setting the value of the textarea to the SQL Query
+
+  // Making sure we won't see the textarea on the page and making sure we cannot write in it anyway
+  hiddenSQL.setAttribute("readonly", "");
+  hiddenSQL.style.position = "absolute";
+  hiddenSQL.style.left = "-9999px";
+
+  document.querySelector("body").appendChild(hiddenSQL);
+  hiddenSQL.select(); // Selecting the text
+  document.execCommand("copy"); // Copying what is in the textarea
+  document.body.removeChild(hiddenSQL);
+  alert("Copied to clipboard: " + hiddenSQL.value); // Alert showing just to check we copied the right text
+}
+
+document.getElementById("copySQL").onclick = function () {
+  copySQLFunction();
+};
+
 // Init the page with the JSON containing the information about the database
 $(document).ready((_) => {
   fetch("init")
@@ -430,3 +452,7 @@ function topFunction() {
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
 }
+
+document.getElementById("myBtn").onclick = function () {
+  topFunction();
+};
