@@ -20,7 +20,7 @@ $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
 
     // Init menu for choosing the first table
-    $("#first-table")
+    $("#initial-table")
       .empty()
       .append('<option selected="true" disabled>Choose table</option>')
       .prop("selectedIndex", 0);
@@ -34,16 +34,16 @@ $(document).ready(function () {
 
     // Adding every single table to the dropdown
     $.each(sorted_table_list, function (_key, entry) {
-      $("#first-table").append(
+      $("#initial-table").append(
         $("<option></option>").attr("value", entry).text(entry)
       );
     });
 
     // Redbuilding the dropdown with the new info in it
-    $("#first-table").selectpicker("refresh");
+    $("#initial-table").selectpicker("refresh");
 
     // Initialization of the query builder
-    $("#initial-table-constraints").queryBuilder({
+    $("#initial-query-builder").queryBuilder({
       plugins: ["bt-tooltip-errors"],
       filters: [
         {
@@ -59,12 +59,12 @@ $(document).ready(function () {
     });
 
     // What occurs when you choose a table and/or change it
-    $("#first-table").change(function (event) {
+    $("#initial-table").change(function (event) {
       let target_table = event.target.value;
       let table_data = init_data[target_table];
 
       // Init query-builder with fields and filters
-      $("#initial-table-constraints").queryBuilder(
+      $("#initial-query-builder").queryBuilder(
         "setFilters",
         true,
         table_data.filters
@@ -76,19 +76,19 @@ $(document).ready(function () {
         return !(item.label.endsWith("Cre") || item.label.endsWith("Maj"));
       });
 
-      $("#first-fields").empty();
+      $("#initial-fields").empty();
 
       $.each(items, function (item) {
-        $("#first-fields").append(
+        $("#initial-fields").append(
           $("<option></option>")
             .attr("value", items[item].label)
             .text(items[item].label)
         );
       });
 
-      $("#first-fields").multiselect("rebuild");
-      $("#first-fields").multiselect("selectAll", false);
-      $("#first-fields").multiselect("updateButtonText");
+      $("#initial-fields").multiselect("rebuild");
+      $("#initial-fields").multiselect("selectAll", false);
+      $("#initial-fields").multiselect("updateButtonText");
 
       // Enables the plus button to add a join block when the first table is chosen (Disabled by default)
 
@@ -135,8 +135,8 @@ function addJoin(block_id) {
   $("[data-toggle='toggle']").bootstrapToggle("destroy");
   $("[data-toggle='toggle']").bootstrapToggle();
   $(function () {
-    newBlock.find("#second_constraints").change(function () {
-      newBlock.find(".join-collapsed-constraints").collapse("toggle");
+    newBlock.find("#join-constraints-switchbox").change(function () {
+      newBlock.find(".join-collapse-constraints").collapse("toggle");
     });
   });
 
@@ -165,7 +165,7 @@ $("#add-join").click(function () {
     let newBlock = addJoin(new_block_id);
 
     // Filling the menu containing the possible joins
-    let dropdown = newBlock.find(".joins").empty().prop("selectedIndex", 0);
+    let dropdown = newBlock.find("#join-type").empty().prop("selectedIndex", 0);
 
     $.each(joins, function (index, value) {
       dropdown.append($("<option></option>").attr("value", value).text(value));
@@ -175,20 +175,20 @@ $("#add-join").click(function () {
 
     // Previous tables available when you choose a new table to make joins
 
-    let all_adj_tables = $(".adjacent-tables")
+    let all_adj_tables = $("#adjacent-tables")
       .map(function () {
         return $(this).val();
       })
       .get();
 
-    let first_selection = $("#first-table").val();
+    let first_selection = $("#initial-table").val();
 
     all_adj_tables.push(first_selection);
     all_adj_tables = [...new Set(all_adj_tables)];
     all_adj_tables = all_adj_tables.sort();
 
     newBlock
-      .find(".previous-table")
+      .find("#former-table")
       .empty()
       .append(
         '<option selected="true" disabled>Choose one previous table</option>'
@@ -198,24 +198,24 @@ $("#add-join").click(function () {
     $.each(all_adj_tables, function (index, value) {
       if (value != "") {
         newBlock
-          .find(".previous-table")
+          .find("#former-table")
           .append($("<option></option>").attr("value", value).text(value));
       }
     });
     newBlock
-      .find(".previous-table")
-      .val(newBlock.find(".previous-table").find("option:enabled:first").val());
+      .find("#former-table")
+      .val(newBlock.find("#former-table").find("option:enabled:first").val());
 
     // When you select or change the value of the previous table you want to select
     newBlock
-      .find(".previous-table")
+      .find("#former-table")
       .change(function (event) {
         let target_table = event.target.value;
         var table_data = init_data[target_table];
 
         // Init the menu
         newBlock
-          .find("#adjacent-tables_id")
+          .find("#adjacent-tables")
           .empty()
           .append(
             '<option selected="true" disabled>Choose adjacent table</option>'
@@ -231,11 +231,11 @@ $("#add-join").click(function () {
 
         $.each(sorted_adj_tables_list, function (_key, value) {
           newBlock
-            .find("#adjacent-tables_id")
+            .find("#adjacent-tables")
             .append($("<option></option>").attr("value", value).text(value));
         });
 
-        newBlock.find("#adjacent-tables_id").selectpicker("refresh");
+        newBlock.find("#adjacent-tables").selectpicker("refresh");
 
         // Disabled the plus button and the submit button when the former table is changed and therefore no adjacent table is selected
         document.getElementById("add-join").disabled = true;
@@ -245,7 +245,7 @@ $("#add-join").click(function () {
       .change();
 
     // When you click to select/or change an adjacent table
-    newBlock.find(".adjacent-tables").change(function (event) {
+    newBlock.find("#adjacent-tables").change(function (event) {
       let target_table = event.target.value;
       let table_data = init_data[target_table];
 
@@ -329,11 +329,11 @@ $.get("init", function (data) {
 
 // Get the information about the first table chosen, the constraints on it, fields to show
 function get_form_initial() {
-  var table1 = document.getElementById("first-table");
+  var table1 = document.getElementById("initial-table");
   var table = table1.options[table1.selectedIndex].value;
 
   // Constraints
-  if ($("#first-constraints").is(":checked") == true) {
+  if ($("#initial-constraints-switchbox").is(":checked") == true) {
     var constraintsTable1 = $(".collapsed-query-builder")
       .eq(0)
       .queryBuilder("getRules");
@@ -343,7 +343,7 @@ function get_form_initial() {
 
   // Checked inputs
 
-  var fieldsSelected = $("#first-fields").find("option:selected");
+  var fieldsSelected = $("#initial-fields").find("option:selected");
   var fields = [];
   fieldsSelected.each(function () {
     fields.push($(this).val());
@@ -354,13 +354,13 @@ function get_form_initial() {
 
 // Get the information about the templates' blocks
 function get_form_block_data(init_data) {
-  let block_list = $(".formBlock");
+  let block_list = $(".form-block");
   let data = block_list
     .map(function () {
       let block = $(this);
-      let adj_table = block.find("#adjacent-tables_id").val();
-      let formerT = block.find("#formerTable").val();
-      let idJoin = block.find("#join_table").val();
+      let adj_table = block.find("#adjacent-tables").val();
+      let formerT = block.find("#former-table").val();
+      let idJoin = block.find("#join-type").val();
       let f = [];
       let fields = block
         .find(".table-selects option:selected")
@@ -376,7 +376,7 @@ function get_form_block_data(init_data) {
       var targetField = relationAdj.to;
 
       // Constraints
-      if (block.find("#second_constraints").is(":checked") == true) {
+      if (block.find("#join-constraints-switchbox").is(":checked") == true) {
         var constraintsTable2 = block
           .find(".collapsed-query-builder")
           .queryBuilder("getRules");
@@ -413,21 +413,12 @@ function copySQLFunction() {
   hiddenSQL.select(); // Selecting the text
   document.execCommand("copy"); // Copying what is in the textarea
   document.body.removeChild(hiddenSQL);
-  alert("Copied to clipboard: " + hiddenSQL.value); // Alert showing just to check we copied the right text
+  alert("COPIED TO CLIPBOARD:\n" + hiddenSQL.value); // Alert showing just to check we copied the right text
 }
 
 document.getElementById("copySQL").onclick = function () {
   copySQLFunction();
 };
-
-// Init the page with the JSON containing the information about the database
-$(document).ready((_) => {
-  fetch("init")
-    .then((response) => response.json())
-    .then((qb_config) => {
-      console.log(qb_config);
-    });
-});
 
 /**
  * Functions for the scroll up button

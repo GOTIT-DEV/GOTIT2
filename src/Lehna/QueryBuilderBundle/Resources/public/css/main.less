@@ -26,107 +26,111 @@ i.add-join-block {
   font-size: 30px;
 }
 
-div.initial-header {
+div#initial-header {
   padding-left: 20px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: auto;
-  grid-template-areas: "first-table-selection      first-selected-fields      first-checked-constraints";
+  grid-template-areas: "initial-table-selection      initial-selected-fields      initial-checked-constraints";
 
-  div.first-table-selection {
-    grid-area: first-table-selection;
+  div#initial-table-selection {
+    grid-area: initial-table-selection;
   }
 
-  div.first-selected-fields {
-    grid-area: first-selected-fields;
+  div#initial-selected-fields {
+    grid-area: initial-selected-fields;
     justify-self: end;
   }
 
-  div.first-checked-constraints {
-    grid-area: first-checked-constraints;
+  div#initial-checked-constraints {
+    grid-area: initial-checked-constraints;
     justify-self: end;
   }
 }
 
 @media (max-width: 600px) {
-  div.initial-header {
+  div#initial-header {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto;
     grid-template-areas:
-      "first-table-selection first-selected-fields"
-      "first-checked-constraints .";
+      "initial-table-selection initial-selected-fields"
+      "initial-checked-constraints .";
 
-    div.first-table-selection {
-      grid-area: first-table-selection;
+    div#initial-table-selection {
+      grid-area: initial-table-selection;
     }
 
-    div.first-selected-fields {
-      grid-area: first-selected-fields;
+    div#initial-selected-fields {
+      grid-area: initial-selected-fields;
     }
 
-    div.first-checked-constraints {
-      grid-area: first-checked-constraints;
+    div#initial-checked-constraints {
+      grid-area: initial-checked-constraints;
       justify-self: start;
     }
   }
 }
 
 @media (max-width: 500px) {
-  div.initial-header {
+  div#initial-header {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
     grid-template-areas:
-      "first-table-selection"
-      "first-selected-fields"
-      "first-checked-constraints";
+      "initial-table-selection"
+      "initial-selected-fields"
+      "initial-checked-constraints";
 
-    div.first-table-selection {
-      grid-area: first-table-selection;
+    div#initial-table-selection {
+      grid-area: initial-table-selection;
       justify-self: center;
     }
 
-    div.first-selected-fields {
-      grid-area: first-selected-fields;
+    div#initial-selected-fields {
+      grid-area: initial-selected-fields;
       justify-self: center;
     }
 
-    div.first-checked-constraints {
-      grid-area: first-checked-constraints;
+    div#initial-checked-constraints {
+      grid-area: initial-checked-constraints;
       justify-self: center;
     }
   }
 }
 
-div.first-applied-constraints {
+div#initial-applied-constraints {
   display: grid;
   grid-template-columns: 1fr 0.5fr;
   grid-template-rows: auto;
   column-gap: 5px;
-  grid-template-areas: "first-collapsed-constraints warning-msg";
+  grid-template-areas: "initial-collapse-constraints initial-warning-msg";
 
-  div#collapseConstraints {
-    grid-area: first-collapsed-constraints;
+  div#initial-collapse-constraints {
+    grid-area: initial-collapse-constraints;
     padding-left: 5px;
     padding-bottom: 5px;
   }
 
-  div#warning-msg {
-    grid-area: warning-msg;
+  div#initial-warning-msg {
+    grid-area: initial-warning-msg;
   }
 }
 
 @media (max-width: 600px) {
-  div.first-applied-constraints {
+  div#initial-applied-constraints {
     grid-template-columns: 1fr;
     grid-template-rows: 0.5fr auto;
     grid-template-areas:
-      "first-collapsed-constraints"
-      ".";
+      "initial-collapsed-constraints"
+      "initial-warning-msg";
 
-    div#collapseConstraints {
-      grid-area: first-collapsed-constraints;
+    div#initial-collapse-constraints {
+      grid-area: initial-collapsed-constraints;
       padding-left: 5px;
       padding-bottom: 5px;
+    }
+
+    div#initial-warning-msg {
+      grid-area: initial-warning-msg;
     }
   }
 }
@@ -147,62 +151,62 @@ div.add-join-div {
   }
 }
 
-div.join-header {
+div#join-header {
   display: grid;
   grid-template-columns: 0.5fr 0.5fr 0.5fr 0.06fr 1fr 1fr;
   grid-template-rows: 1fr;
   column-gap: 10px;
   grid-template-areas: "former-table-choice join-type-choice adj-table-choice . join-selected-fields join-checked-constraints";
 
-  div.former-table-choice {
+  div#former-table-choice {
     grid-area: former-table-choice;
   }
 
-  div.join-type-choice {
+  div#join-type-choice {
     grid-area: join-type-choice;
   }
 
-  div.adj-table-choice {
+  div#adj-table-choice {
     grid-area: adj-table-choice;
   }
 
-  div.join-selected-fields {
+  div#join-selected-fields {
     grid-area: join-selected-fields;
     justify-self: start;
   }
 
-  div.join-checked-constraints {
+  div#join-checked-constraints {
     grid-area: join-checked-constraints;
     justify-self: end;
   }
 }
 
 @media (max-width: 1300px) {
-  div.join-header {
+  div#join-header {
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: auto auto;
     grid-template-areas:
       "former-table-choice join-type-choice adj-table-choice"
       "join-selected-fields join-checked-constraints .";
 
-    div.former-table-choice {
+    div#former-table-choice {
       grid-area: former-table-choice;
     }
 
-    div.join-type-choice {
+    div#join-type-choice {
       grid-area: join-type-choice;
     }
 
-    div.adj-table-choice {
+    div#adj-table-choice {
       grid-area: adj-table-choice;
     }
 
-    div.join-selected-fields {
+    div#join-selected-fields {
       grid-area: join-selected-fields;
       justify-self: start;
     }
 
-    div.join-checked-constraints {
+    div#join-checked-constraints {
       grid-area: join-checked-constraints;
       justify-self: start;
     }
@@ -210,7 +214,7 @@ div.join-header {
 }
 
 @media (max-width: 980px) {
-  div.join-header {
+  div#join-header {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto auto;
     grid-template-areas:
@@ -218,27 +222,27 @@ div.join-header {
       "join-type-choice ."
       "adj-table-choice join-checked-constraints";
 
-    div.former-table-choice {
+    div#former-table-choice {
       grid-area: former-table-choice;
       justify-self: start;
     }
 
-    div.join-type-choice {
+    div#join-type-choice {
       grid-area: join-type-choice;
       justify-self: start;
     }
 
-    div.adj-table-choice {
+    div#adj-table-choice {
       grid-area: adj-table-choice;
       justify-self: start;
     }
 
-    div.join-selected-fields {
+    div#join-selected-fields {
       grid-area: join-selected-fields;
       justify-self: start;
     }
 
-    div.join-checked-constraints {
+    div#join-checked-constraints {
       grid-area: join-checked-constraints;
       justify-self: start;
     }
@@ -246,7 +250,7 @@ div.join-header {
 }
 
 @media (max-width: 500px) {
-  div.join-header {
+  div#join-header {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto auto auto;
     grid-template-areas:
@@ -256,27 +260,27 @@ div.join-header {
       "join-selected-fields"
       "join-checked-constraints";
 
-    div.former-table-choice {
+    div#former-table-choice {
       grid-area: former-table-choice;
       justify-self: center;
     }
 
-    div.join-type-choice {
+    div#join-type-choice {
       grid-area: join-type-choice;
       justify-self: center;
     }
 
-    div.adj-table-choice {
+    div#adj-table-choice {
       grid-area: adj-table-choice;
       justify-self: center;
     }
 
-    div.join-selected-fields {
+    div#join-selected-fields {
       grid-area: join-selected-fields;
       justify-self: center;
     }
 
-    div.join-checked-constraints {
+    div#join-checked-constraints {
       grid-area: join-checked-constraints;
       justify-self: center;
     }
@@ -288,16 +292,16 @@ div.join-applied-constraints {
   grid-template-columns: 1fr 0.5fr;
   grid-template-rows: auto;
   column-gap: 5px;
-  grid-template-areas: "join-collapsed-constraints warning-message";
+  grid-template-areas: "join-collapse-constraints join-warning-msg";
 
-  div.join-collapsed-constraints {
-    grid-area: join-collapsed-constraints;
+  div.join-collapse-constraints {
+    grid-area: join-collapse-constraints;
     padding-left: 5px;
     padding-bottom: 5px;
   }
 
-  div.warning-msg-join {
-    grid-area: warning-message;
+  div#join-warning-msg {
+    grid-area: join-warning-msg;
     padding-left: 5px;
     padding-bottom: 5px;
   }
@@ -308,11 +312,17 @@ div.join-applied-constraints {
     grid-template-columns: 1fr;
     grid-template-rows: 0.5fr auto;
     grid-template-areas:
-      "join-collapsed-constraints"
-      ".";
+      "join-collapse-constraints"
+      "join-warning-msg";
 
-    div.join-collapsed-constraints {
-      grid-area: join-collapsed-constraints;
+    div.join-collapse-constraints {
+      grid-area: join-collapse-constraints;
+      padding-left: 5px;
+      padding-bottom: 5px;
+    }
+
+    div#join-warning-msg {
+      grid-area: join-warning-msg;
       padding-left: 5px;
       padding-bottom: 5px;
     }
