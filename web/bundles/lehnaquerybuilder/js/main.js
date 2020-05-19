@@ -174,7 +174,6 @@ $("#add-join").click(function () {
     dropdown.selectpicker("refresh");
 
     // Previous tables available when you choose a new table to make joins
-
     let all_adj_tables = $("#adjacent-tables")
       .map(function () {
         return $(this).val();
@@ -237,7 +236,7 @@ $("#add-join").click(function () {
 
         newBlock.find("#adjacent-tables").selectpicker("refresh");
 
-        // Disabled the plus button and the submit button when the former table is changed and therefore no adjacent table is selected
+        // Disabling the plus button and the submit button when the former table is changed and therefore no adjacent table is selected
         document.getElementById("add-join").disabled = true;
         document.getElementById("submit-button").disabled = true;
       })
@@ -303,6 +302,7 @@ $.get("init", function (data) {
     event.preventDefault();
     let data_initial = get_form_initial();
     let data_join_blocks = get_form_block_data(data);
+    console.log(data_join_blocks);
 
     var jsonData = { initial: data_initial, joins: data_join_blocks };
 
@@ -361,19 +361,16 @@ function get_form_block_data(init_data) {
       let adj_table = block.find("#adjacent-tables").val();
       let formerT = block.find("#former-table").val();
       let idJoin = block.find("#join-type").val();
-      let f = [];
-      let fields = block
-        .find(".table-selects option:selected")
-        .map(function () {
-          f.push($(this).val());
-          return f;
-        })
-        .get(); // Checked inputs
+      let selectedFields = block.find(".table-selects option:selected");
+      let fields = [];
+      selectedFields.each(function () {
+        fields.push($(this).val());
+      });
 
       // Obtaining the source field and target field
-      var relationAdj = init_data[formerT].relations[adj_table];
-      var sourceField = relationAdj.from;
-      var targetField = relationAdj.to;
+      let relationAdj = init_data[formerT].relations[adj_table];
+      let sourceField = relationAdj.from;
+      let targetField = relationAdj.to;
 
       // Constraints
       if (block.find("#join-constraints-switchbox").is(":checked") == true) {
@@ -395,6 +392,7 @@ function get_form_block_data(init_data) {
       };
     })
     .toArray();
+
   return data;
 }
 
