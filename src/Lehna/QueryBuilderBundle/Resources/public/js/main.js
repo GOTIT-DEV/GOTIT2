@@ -174,7 +174,7 @@ $("#add-join").click(function () {
     dropdown.selectpicker("refresh");
 
     // Previous tables available when you choose a new table to make joins
-    let all_adj_tables = $("#adjacent-tables")
+    let all_adj_tables = $(".adjacent-tables")
       .map(function () {
         return $(this).val();
       })
@@ -201,6 +201,8 @@ $("#add-join").click(function () {
           .append($("<option></option>").attr("value", value).text(value));
       }
     });
+
+    console.log(all_adj_tables);
     newBlock
       .find("#former-table")
       .val(newBlock.find("#former-table").find("option:enabled:first").val());
@@ -244,7 +246,7 @@ $("#add-join").click(function () {
       .change();
 
     // When you click to select/or change an adjacent table
-    newBlock.find("#adjacent-tables").change(function (event) {
+    newBlock.find(".adjacent-tables").change(function (event) {
       let target_table = event.target.value;
       let table_data = init_data[target_table];
 
