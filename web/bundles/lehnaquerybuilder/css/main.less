@@ -3,8 +3,8 @@ legend#logical-container {
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto 1fr;
   grid-template-areas:
-  ". img-container" 
-  "query-fields logical-h2";
+    ". img-container"
+    "query-fields logical-h2";
 
   div#img-container {
     grid-area: img-container;
@@ -19,7 +19,6 @@ legend#logical-container {
     grid-area: logical-h2;
     margin-bottom: 10px;
   }
-
 }
 
 i.add-join-block {
@@ -153,10 +152,13 @@ div.add-join-div {
 
 div#join-header {
   display: grid;
-  grid-template-columns: 0.5fr 0.5fr 0.5fr 0.06fr 1fr 1fr;
-  grid-template-rows: 1fr;
+  grid-template-columns: 0.5fr 0.5fr 0.5fr 0.04fr 1fr 1fr;
+  grid-template-rows: 1fr auto;
   column-gap: 10px;
-  grid-template-areas: "former-table-choice join-type-choice adj-table-choice . join-selected-fields join-checked-constraints";
+  row-gap: 10px;
+  grid-template-areas:
+    "former-table-choice join-type-choice adj-table-choice . join-selected-fields join-checked-constraints"
+    ". remove-join . . . .";
 
   div#former-table-choice {
     grid-area: former-table-choice;
@@ -179,15 +181,22 @@ div#join-header {
     grid-area: join-checked-constraints;
     justify-self: end;
   }
+
+  div#remove-btn {
+    grid-area: remove-join;
+    justify-self: center;
+    padding-bottom: 5px;
+  }
 }
 
 @media (max-width: 1300px) {
   div#join-header {
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: auto auto;
+    grid-template-rows: auto auto auto;
     grid-template-areas:
       "former-table-choice join-type-choice adj-table-choice"
-      "join-selected-fields join-checked-constraints .";
+      "join-selected-fields join-checked-constraints ."
+      ". remove-join .";
 
     div#former-table-choice {
       grid-area: former-table-choice;
@@ -210,17 +219,24 @@ div#join-header {
       grid-area: join-checked-constraints;
       justify-self: start;
     }
+
+    div#remove-btn {
+      grid-area: remove-join;
+      justify-self: center;
+      padding-bottom: 5px;
+    }
   }
 }
 
-@media (max-width: 980px) {
+@media (max-width: 1010px) {
   div#join-header {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto auto;
     grid-template-areas:
       "former-table-choice join-selected-fields"
       "join-type-choice ."
-      "adj-table-choice join-checked-constraints";
+      "adj-table-choice join-checked-constraints"
+      "remove-join .";
 
     div#former-table-choice {
       grid-area: former-table-choice;
@@ -245,6 +261,12 @@ div#join-header {
     div#join-checked-constraints {
       grid-area: join-checked-constraints;
       justify-self: start;
+    }
+
+    div#remove-btn {
+      grid-area: remove-join;
+      justify-self: start;
+      padding-bottom: 5px;
     }
   }
 }
@@ -258,7 +280,8 @@ div#join-header {
       "join-type-choice"
       "adj-table-choice"
       "join-selected-fields"
-      "join-checked-constraints";
+      "join-checked-constraints"
+      "remove-join";
 
     div#former-table-choice {
       grid-area: former-table-choice;
@@ -283,6 +306,12 @@ div#join-header {
     div#join-checked-constraints {
       grid-area: join-checked-constraints;
       justify-self: center;
+    }
+
+    div#remove-btn {
+      grid-area: remove-join;
+      justify-self: center;
+      padding-bottom: 5px;
     }
   }
 }
@@ -357,16 +386,17 @@ center {
   }
 }
 
-
- #logical-db-img {
+#logical-db-img {
   border-radius: 5px;
   cursor: pointer;
   transition: 0.5s;
-  width:100%;
-  max-width:200px;
+  width: 100%;
+  max-width: 200px;
 }
 
-#logical-db-img:hover {opacity: 0.8;}
+#logical-db-img:hover {
+  opacity: 0.8;
+}
 
 .logical-modal-content {
   display: none; /* Hidden by default */
@@ -378,8 +408,8 @@ center {
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.9); /* Black w/ opacity */
 }
 
 /* Modal Content (Image) */
@@ -401,14 +431,19 @@ center {
   height: 150px;
 }
 
-.logical-img-modal-content, #caption {
+.logical-img-modal-content,
+#caption {
   animation-name: zoom;
   animation-duration: 0.5s;
 }
 
 @keyframes zoom {
-  from {transform:scale(0)}
-  to {transform:scale(1)}
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
 }
 
 /* The Close Button */
@@ -429,9 +464,8 @@ center {
   cursor: pointer;
 }
 
-@media (max-width: 700px){
+@media (max-width: 700px) {
   .logical-img-modal-content {
     width: 100%;
   }
 }
-

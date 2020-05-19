@@ -202,7 +202,6 @@ $("#add-join").click(function () {
       }
     });
 
-    console.log(all_adj_tables);
     newBlock
       .find("#former-table")
       .val(newBlock.find("#former-table").find("option:enabled:first").val());
@@ -288,6 +287,15 @@ $("#add-join").click(function () {
 
     newBlock.find(".table-selects").multiselect("rebuild");
     newBlock.find(".table-selects").multiselect("updateButtonText");
+
+    $(function () {
+      newBlock.find(".remove").click(function () {
+        newBlock.find(".form-block").remove();
+        alert(
+          "Removed Join Block Successfully!\nBe warned : you might need to make changes accordingly on the remaining Join Blocks!"
+        );
+      });
+    });
   });
 });
 
@@ -304,7 +312,6 @@ $.get("init", function (data) {
     event.preventDefault();
     let data_initial = get_form_initial();
     let data_join_blocks = get_form_block_data(data);
-    console.log(data_join_blocks);
 
     var jsonData = { initial: data_initial, joins: data_join_blocks };
 
