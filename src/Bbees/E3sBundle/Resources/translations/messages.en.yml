@@ -169,11 +169,30 @@ Une dizaine d'individus (6-10): TEN SPECIMENS (6-10)
 Plusierus dizaines d'individus (11-100): SEVERAL TENS OF SPECIMENS (11-100)
 Centaine d'individus (>100): HUNDRED SPECIMENS (>100)
 Nombre inconnu: NUMBER NOT KNOWN
-# 1 - END OF DELETE THE FIRST PART OF THAT FILE IF ENGLISH IS USED AS A PRIMARY LANGAGE #
+# 1 - END OF DELETE THE FIRST PART OF THAT FILE IF ENGLISH IS USED AS A PRIMARY LANGAGE
 
+# 
+list.linkSequenceassemblee: Seq(s)
+alert.codeIndBiomol empty: specimen molecular code is empty. You have to enter first in the form Specimen
+alert.codeIndTriMorpho empty: specimen morphological code is empty. You have to enter first in the form Specimen
+    
 # autocomplete field form
-Individu typeahead: Specimen [af]
-Individu typeahead placeholder: Type the first letter of the Code Ind Biomol
+Chromatogramme typeahead placeholder: Type the first letter of the Code chromatogram
+Chromatogramme typeahead: Chromatogram
+Pcr typeahead placeholder: Type the first letter of the Code Pcr
+Pcr typeahead: Pcr
+Adn typeahead placeholder: Type the first letter of the Code DNA
+Adn typeahead: DNA
+Individu typeahead placeholder: Type the first letter of the Code Specimen Biomol
+Individu typeahead: Specimen 
+Lotmateriel typeahead placeholder: Type the first letter of the Code Internal biological material
+Lotmateriel typeahead: Internal biological material
+Lotmaterielext typeahead placeholder: Type the first letter of the Code External biological material
+Lotmaterielext typeahead: External biological material
+Collecte typeahead placeholder: Type the first letter of the Code Sampling
+Collecte typeahead: Sampling
+Station typeahead placeholder: Type the first letter of the Code Station 
+Station typeahead: Station
 
 # Class of vocabulary (table = Voc , field = parent)
 vocParent.typeMaterial: Material type

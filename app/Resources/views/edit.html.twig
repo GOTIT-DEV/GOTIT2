@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 {% form_theme edit_form 'form-theme.html.twig'   %}
 
-{# initialization of TWIG general variables#}
+{# initialization of TWIG general variables #}
 {% set route = app.request.attributes.get('_route') %}
 {% set entityname = route|split('_')[0] %}
 {% set action = route|split('_')[1] %}
@@ -60,10 +60,13 @@
 	</h1>
 {% endblock %}
 
+
+
 {% block body %}
 	<div class="col-md-12 col-sm-12 col-xs-12">
 		<div class="x_panel">
 			<div class="x_content">
+                           {# {{ dump(edit_form) }} #}
 				<br/>
 				{% set dateNow = "now"|date('Y-m-d H:i:s',timezone="Europe/Paris")  %}
 				{{ form_start(edit_form) }}
@@ -75,16 +78,18 @@
 				{% if edit_form.userMaj and app.user.id is defined %}
 					{{ form_widget(edit_form.userMaj, {'value' : app.user.id  }) }}
 				{% endif %}
-				{% if edit_form.dateMaj %}
-					{{ form_widget(edit_form.dateMaj, {'value' : dateNow ,'attr': {'style': 'display:none '} }) }}
-				{% endif %}
-				{% if edit_form.dateCre and edit_form.dateCre.vars.value is empty  %}
-					{{ form_widget(edit_form.dateCre, {'value' : dateNow ,'attr': {'style': 'display:none '} }) }}
-				{% else %}
-					{{ form_widget(edit_form.dateCre, {'attr': {'style': 'display:none '} }) }}
-				{% endif %}
-				{% if nameFk is defined and action == 'new' and formNameFk %}
-					{{  form_row( attribute(edit_form, nameFk), {'value' : idFk  } ) }}
+                                {% if  action != 'show'  %} 
+                                    {% if edit_form.dateMaj %}
+                                            {{ form_widget(edit_form.dateMaj, {'value' : dateNow ,'attr': {'style': 'display:none '} }) }}
+                                    {% endif %}
+                                    {% if edit_form.dateCre and edit_form.dateCre.vars.value is empty  %}
+                                            {{ form_widget(edit_form.dateCre, {'value' : dateNow ,'attr': {'style': 'display:none '} }) }}
+                                    {% else %}
+                                            {{ form_widget(edit_form.dateCre, {'attr': {'style': 'display:none '} }) }}
+                                    {% endif %} 
+                                {% endif %}
+				{% if nameFk is defined and action == 'new'  and  edit_form[nameFk] is defined  %}
+                                    {{  form_row( attribute(edit_form, nameFk), {'value' : idFk  } ) }}
 				{% endif %}
 				{{ form_widget(edit_form) }}
 			</br>
@@ -92,13 +97,15 @@
 			<div class="form-group">
 				<div class="col-sm-2"></div>
 				<div class="col-sm-10">
-					<button type="submit" class="btn btn-round btn-success " value="Create">{{'buton.Valid'|trans}}</button>
-					{% if ( backbutton == 0 )%}
+                                        {% if  action != 'show'  %} 
+                                            <button type="submit" class="btn btn-round btn-success " value="Create">{{'buton.Valid'|trans}}</button>
+					{% endif %}
+                                        {% if ( backbutton == 0 )%}
 						{# cas d une validation en mode CREATE #}
 						<a href="{{ path_route_index }}" class="btn btn-round btn-primary">{{'buton.BackToTheList'|trans}}</a>
 					{% else %}
 						{# case of mode Edit /edit  #}
-						<a href="#" onclick="window.history.go(-{{comptvalid}});return false;" class="btn btn-round btn-primary  ">{{'buton.BackToTheList'|trans}}</a>
+						<a href="#" onclick="window.history.go(-{{comptvalid}}); return false;" class="btn btn-round btn-primary  ">{{'buton.BackToTheList'|trans}}</a>
 					{% endif %}
 				</div>
 			</div>
@@ -106,7 +113,10 @@
 		</div>
 
 	</div>
-</div>{% endblock %}{% block scripts %}
+</div>
+{% endblock %}
+
+{% block scripts %}
 <script type="text/javascript">
 	var addButon = {
 "Add a SamplingMethod":"{{ 'buton.Add a SamplingMethod'|trans }}",
@@ -123,4 +133,16 @@
 }
 </script>
 
-{{ parent() }}{% endblock %}
+{{ parent() }}
+
+{% if  action == 'show'  %} 
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(" :input").prop("disabled", true);
+            $('button[class="btn btn-info pull-right"]').prop("disabled", false).css("background-color", "WhiteSmoke");
+            $('input[id$="Typeahead"]').attr("disabled", true).css("background-color", "WhiteSmoke");
+        });
+    </script>
+{% endif %}
+
+{% endblock %}

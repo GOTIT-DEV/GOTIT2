@@ -35,6 +35,8 @@ use Bbees\E3sBundle\Services\GenericFunctionService;
  */
 class StationController extends Controller
 {
+    const MAX_RESULTS_TYPEAHEAD   = 20;
+        
     /**
      * Lists all station entities.
      *
@@ -51,6 +53,31 @@ class StationController extends Controller
         ));
     }
 
+     /**
+     * @Route("/search/{q}", requirements={"q"=".+"}, name="station_search")
+     */
+    public function searchAction($q)
+    {
+        $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
+        $qb->select('station.id, station.codeStation as code')
+            ->from('BbeesE3sBundle:Station', 'station');
+        $query = explode(' ', strtolower(trim(urldecode($q))));
+        $and = [];
+        for($i=0; $i<count($query); $i++) {
+            $and[] = '(LOWER(station.codeStation) like :q'.$i.')';
+        }
+        $qb->where(implode(' and ', $and));
+        for($i=0; $i<count($query); $i++) {
+            $qb->setParameter('q'.$i, $query[$i].'%');
+        }
+        $qb->setMaxResults(self::MAX_RESULTS_TYPEAHEAD);
+        $results = $qb->getQuery()->getResult();      
+        // Ajax answer
+        return $this->json(
+            $results
+        );
+    }
+    
       /**
      * Retourne au format json un ensemble de champs à afficher tab_station_toshow avec les critères suivant :  
      * a) 1 search criterion ($ request-> get ('searchPhrase')) insensitive to the case and  applied to a field
@@ -79,8 +106,7 @@ class StationController extends Controller
             ->getQuery()
             ->getResult();
         $nb_entities = count($entities_toshow);
-        $entities_toshow = array_slice($entities_toshow, $minRecord, $rowCount); 
-        
+        $entities_toshow = ($request->get('rowCount') > 0 ) ? array_slice($entities_toshow, $minRecord, $rowCount) : array_slice($entities_toshow, $minRecord);        
         foreach($entities_toshow as $entity)
         {
             $id = $entity->getId();
@@ -197,7 +223,7 @@ class StationController extends Controller
         $deleteForm = $this->createDeleteForm($station);
         
         $editForm = $this->createForm('Bbees\E3sBundle\Form\StationType', $station);
-        return $this->render('show.html.twig', array(
+        return $this->render('station/edit.html.twig', array(
             'station' => $station,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),

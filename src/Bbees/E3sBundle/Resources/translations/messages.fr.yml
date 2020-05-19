@@ -5,10 +5,28 @@ Assignation moleculaire temporaire: ASSIGNATION MOLÉCULAIRE TEMPORAIRE
 Delimitation moleculaire: DÉLIMITATION MOLÉCULAIRE
 Inconnu: INCONNU
 
-# autocomplete field form
-Individu typeahead: Individu [af]
-Individu typeahead placeholder: Taper les première lettres du Code Ind Biomol 
+#
+list.linkSequenceassemblee: Seq(s)
+alert.codeIndBiomol empty: le code moléculaire est vide , vous devez le renseigner dans le formulaire Individu
+alert.codeIndTriMorpho empty: le code morphologique est vide , vous devez le renseigner dans le formulaire Individu
 
+# autocomplete field form
+Chromatogramme typeahead placeholder: Taper les première lettres du Code chromatogramme
+Chromatogramme typeahead: Chromatogramme
+Pcr typeahead placeholder: Taper les première lettres du Code Pcr
+Pcr typeahead: Pcr
+Adn typeahead placeholder: Taper les première lettres du Code Adn
+Adn typeahead: Adn
+Individu typeahead placeholder: Taper les première lettres du Code Ind Biomol
+Individu typeahead: Individu 
+Lotmateriel typeahead placeholder: Taper les première lettres du Code lot materiel
+Lotmateriel typeahead: Lot
+Lotmaterielext typeahead placeholder: Taper les première lettres du Code lot materiel externe
+Lotmaterielext typeahead: Lot externe
+Collecte typeahead placeholder: Taper les première lettres du Code Collecte
+Collecte typeahead: Collecte
+Station typeahead placeholder: Taper les première lettres du Code Station 
+Station typeahead: Station
 
 # class of vocabulary (table = Voc , field = parent)
 vocParent.typeMaterial: type Materiel

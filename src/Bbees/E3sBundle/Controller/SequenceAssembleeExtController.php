@@ -84,7 +84,7 @@ class SequenceAssembleeExtController extends Controller
         }
         // Search for the list to show EstAligneEtTraite
         $tab_toshow =[];
-        $toshow = $em->getRepository("BbeesE3sBundle:SequenceAssembleeExt")->createQueryBuilder('sequenceAssembleeExt')
+        $entities_toshow = $em->getRepository("BbeesE3sBundle:SequenceAssembleeExt")->createQueryBuilder('sequenceAssembleeExt')
             ->where($where)
             ->setParameter('criteriaLower', strtolower($searchPhrase).'%')
             ->leftJoin('BbeesE3sBundle:Voc', 'vocStatutSqcAss', 'WITH', 'sequenceAssembleeExt.statutSqcAssVocFk = vocStatutSqcAss.id')
@@ -93,10 +93,10 @@ class SequenceAssembleeExtController extends Controller
             ->addOrderBy(array_keys($orderBy)[0], array_values($orderBy)[0])
             ->getQuery()
             ->getResult();
-        $nb = count($toshow);
-        $toshow = array_slice($toshow, $minRecord, $rowCount);  
+        $nb = count($entities_toshow);
+        $entities_toshow = ($request->get('rowCount') > 0 ) ? array_slice($entities_toshow, $minRecord, $rowCount) : array_slice($entities_toshow, $minRecord);
         $lastTaxname = '';
-        foreach($toshow as $entity)
+        foreach($entities_toshow as $entity)
         {
             $id = $entity->getId();
             $dateCreationSqcAssExt = ($entity->getdateCreationSqcAssExt() !== null) ?  $entity->getdateCreationSqcAssExt()->format('Y-m-d') : null;
@@ -164,11 +164,22 @@ class SequenceAssembleeExtController extends Controller
     public function newAction(Request $request)
     {
         $sequenceAssembleeExt = new Sequenceassembleeext();
+        $em = $this->getDoctrine()->getManager();
+        // check if the relational Entity (Collecte) is given and set the RelationalEntityFk for the new Entity
+        if ($request->get('idFk') !== null && $request->get('idFk') !== '') {
+            $RelEntityId = $request->get('idFk');
+            $RelEntity = $em->getRepository('BbeesE3sBundle:Collecte')->find($RelEntityId);
+            $sequenceAssembleeExt->setCollecteFk($RelEntity);
+        }
         $form = $this->createForm('Bbees\E3sBundle\Form\SequenceAssembleeExtType', $sequenceAssembleeExt, ['refTaxonLabel' => 'codeTaxon']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();            
+            // (i) load the id  the relational Entity (Collecte) from typeahead input field and (ii) set the foreign key 
+            $RelEntityId = $form->get('collecteId');
+            $RelEntity = $em->getRepository('BbeesE3sBundle:Collecte')->find($RelEntityId->getData());
+            $sequenceAssembleeExt->setCollecteFk($RelEntity);
+            // persist
             $em->persist($sequenceAssembleeExt);
             try {
                 $em->flush();
@@ -196,7 +207,7 @@ class SequenceAssembleeExtController extends Controller
         $deleteForm = $this->createDeleteForm($sequenceAssembleeExt);
         $editForm = $this->createForm('Bbees\E3sBundle\Form\SequenceAssembleeExtType', $sequenceAssembleeExt);
 
-        return $this->render('show.html.twig', array(
+        return $this->render('sequenceassembleeext/edit.html.twig', array(
             'sequenceAssembleeExt' => $sequenceAssembleeExt,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -236,6 +247,12 @@ class SequenceAssembleeExtController extends Controller
             $service->DelArrayCollectionEmbed('EspeceIdentifiees','EstIdentifiePars',$sequenceAssembleeExt, $especeIdentifiees);
             $service->DelArrayCollection('SqcExtEstReferenceDanss',$sequenceAssembleeExt, $sqcExtEstReferenceDanss);
             $service->DelArrayCollection('SqcExtEstRealisePars',$sequenceAssembleeExt, $sqcExtEstRealisePars);
+            // (i) load the id of relational Entity (Collecte) from typeahead input field  (ii) set the foreign key
+            $em = $this->getDoctrine()->getManager();
+            $RelEntityId = $editForm->get('collecteId');;
+            $RelEntity = $em->getRepository('BbeesE3sBundle:Collecte')->find($RelEntityId->getData());
+            $sequenceAssembleeExt->setCollecteFk($RelEntity);
+            // persist
             $em->persist($sequenceAssembleeExt);
             // flush
             try {

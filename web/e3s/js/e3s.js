@@ -339,15 +339,26 @@ function maj($container) {
   })
 }
 
-// function to Add a Back to Button to the entityform
-function addBackToRelatedRecord(entityform, entityRel, nameButonBack) {
+// function to Add a Back to Button to the entityform Typeahead
+function addBackToRelatedRecord(entityform, entityRel, nameButonBack, TypeaheadField = 0, action = 'edit') {
   var entityrel_lowercase = entityRel.toLowerCase();
-  var entityRelSelected = $('#bbees_e3sbundle_' + entityform + '_' + entityRel + 'Fk option:selected').val();
+  if (TypeaheadField) {
+    var entityRelSelected = $('#bbees_e3sbundle_' + entityform + '_' + entityRel + 'Id').val();
+  } else {
+    var entityRelSelected = $('#bbees_e3sbundle_' + entityform + '_' + entityRel + 'Fk option:selected').val();      
+  }
+  
   //if(!nameEntityRel) nameEntityRel = entityRel.toUpperCase();
-  //alert(CollecteSelected);
+  //alert("entityRelSelected="+entityRelSelected);
   if (typeof entityRelSelected !== 'undefined' && entityRelSelected != null && entityRelSelected != '') {
+    if (action=='edit'){
     var $addBouton = $('<span>&nbsp;<a href="../../' + entityrel_lowercase + '/' + entityRelSelected + '/edit" class="btn btn-round btn-primary"> ' + nameButonBack + '</a><span> ');
-    $('.title_left h1').append($addBouton);
+    $('.main-header h1').append($addBouton);
+    } 
+    if (action=='show'){
+    var $addBouton = $('<span>&nbsp;<a href="../' + entityrel_lowercase + '/' + entityRelSelected + '" class="btn btn-round btn-primary"> ' + nameButonBack + '</a><span> ');
+    $('.main-header h1').append($addBouton);
+    } 
   }
 }
 
@@ -706,3 +717,130 @@ function stationsMap(json_stations, latGPS = undefined, longGPS = undefined) {
 
   return gd // Return objet plotly
 }
+
+
+// function that automatically generates the codeSqcAssExt
+function setCodeSqcAssExt(CodePlaceholder = {"statut" : "Statut", "RefTaxonSelected" : "RefTaxonSelected", "numIndividu" : "numIndividu", "accessionNumber" : "accessionNumber" }) {
+    var code = '';
+    var RefTaxonSelected = $('#bbees_e3sbundle_sequenceassembleeext_especeIdentifiees_0_referentielTaxonFk option:selected').text();
+    var statut = $('#bbees_e3sbundle_sequenceassembleeext_statutSqcAssVocFk option:selected').text();
+    //var codeCollecte = $('#bbees_e3sbundle_sequenceassembleeext_collecteFk option:selected').text();
+    var codeCollecte = $('#bbees_e3sbundle_sequenceassembleeext_collecteTypeahead').val();
+    var origine = $('#bbees_e3sbundle_sequenceassembleeext_origineSqcAssExtVocFk option:selected').text();
+    var numIndividu = $('#bbees_e3sbundle_sequenceassembleeext_numIndividuSqcAssExt').val();
+    var accessionNumber = $('#bbees_e3sbundle_sequenceassembleeext_accessionNumberSqcAssExt').val();               
+    if (statut == '') statut = CodePlaceholder["statut"];
+    if (RefTaxonSelected == '') RefTaxonSelected = CodePlaceholder["RefTaxonSelected"];
+    if (numIndividu == '') numIndividu = CodePlaceholder["numIndividu"];
+    if (accessionNumber == '') accessionNumber = CodePlaceholder["accessionNumber"];
+    //alert(RefTaxonSelected);
+    if (statut=='VALIDEE'){
+        code =  RefTaxonSelected+'_'+codeCollecte+'_'+numIndividu+'_'+accessionNumber+'|'+origine ;
+    } else {
+        code =  statut+'_'+RefTaxonSelected+'_'+codeCollecte+'_'+numIndividu+'_'+accessionNumber+'|'+origine ;
+    }
+    $('#bbees_e3sbundle_sequenceassembleeext_codeSqcAssExt').val(code);
+    $('#bbees_e3sbundle_sequenceassembleeext_codeSqcAssExtAlignement').val(code);
+}
+
+// function that automatically generates the codeCollection
+function setCodeCollecte(CodePlaceholder = {"INCONNU" : "INCONNU", "ANNEE" : "ANNEE","MOIS" : "MOIS","JOUR" : "JOUR","NOT KNOWN" : "NOT KNOWN","YEAR" : "YEAR","MONTH" : "MONTH","DAY" : "DAY", }) {
+    var codeCollecte = '';
+    //var nomStation = $('#bbees_e3sbundle_collecte_stationFk option:selected').text();
+    var nomStation = $('#bbees_e3sbundle_collecte_stationTypeahead').val();
+    if(nomStation == '') nomStation = "Code";
+    codeCollecte = nomStation + '_';
+    var valueDatePrecision = $('input:checked').val();
+    var datePrecision = $('label[for=bbees_e3sbundle_collecte_datePrecisionVocFk_'+valueDatePrecision+']').text().trim();
+    var dateCollecteMonth = parseInt($('#bbees_e3sbundle_collecte_dateCollecte_month').val());
+    dateCollecteMonth =  (dateCollecteMonth < 10) ? '0'+dateCollecteMonth.toString() : dateCollecteMonth.toString();
+    var dateCollecteYear = $('#bbees_e3sbundle_collecte_dateCollecte_year').val();
+    if (datePrecision == CodePlaceholder["INCONNU"] || datePrecision == CodePlaceholder["NOT KNOWN"] ) {codeCollecte = codeCollecte + '000000';}
+    if (datePrecision == CodePlaceholder["ANNEE"] || datePrecision == CodePlaceholder["YEAR"] ) {  codeCollecte = codeCollecte + dateCollecteYear + '00';  }         
+    if (datePrecision == CodePlaceholder["MOIS"] || datePrecision == CodePlaceholder["JOUR"] || datePrecision == CodePlaceholder["MONTH"] || datePrecision == CodePlaceholder["DAY"] ) {codeCollecte = codeCollecte + dateCollecteYear + dateCollecteMonth;}                
+    if(datePrecision == '') { codeCollecte = codeCollecte +'Date info'}
+    //alert('change on click: '+datePrecision+'-'+valueDatePrecision);
+    $('#bbees_e3sbundle_collecte_codeCollecte').val(codeCollecte);
+}
+
+// function that automatically generates the codeLot
+function setCodeLot(CodePlaceholder = {"RefTaxonSelected" : "RefTaxonSelected"}) {
+    var code = '';
+    var RefTaxonSelected = $('#bbees_e3sbundle_lotmateriel_especeIdentifiees_0_referentielTaxonFk option:selected').text();
+    //var codeCollecte = $('#bbees_e3sbundle_lotmateriel_collecteFk option:selected').text();
+    var codeCollecte = $('#bbees_e3sbundle_lotmateriel_collecteTypeahead').val();
+    if (RefTaxonSelected == '') RefTaxonSelected = CodePlaceholder["RefTaxonSelected"] ;
+    if(codeCollecte == '') codeCollecte = "Code";
+    code = RefTaxonSelected + '|' + codeCollecte ;
+    $('#bbees_e3sbundle_lotmateriel_codeLotMateriel').val(code);
+}
+
+// function that automatically generates the codeLotExt
+function setCodeLotExt(CodePlaceholder = {"RefTaxonSelected" : "RefTaxonSelected"}) {
+    var code = '';
+    var RefTaxonSelected = $('#bbees_e3sbundle_lotmaterielext_especeIdentifiees_0_referentielTaxonFk option:selected').text();
+//    var codeCollecte = $('#bbees_e3sbundle_lotmaterielext_collecteFk option:selected').text();
+    var codeCollecte = $('#bbees_e3sbundle_lotmaterielext_collecteTypeahead').val();
+    if (RefTaxonSelected == '') RefTaxonSelected = CodePlaceholder["RefTaxonSelected"] ;
+    if(codeCollecte == '') codeCollecte = "Code";
+    code = RefTaxonSelected + '|' + codeCollecte ;
+    $('#bbees_e3sbundle_lotmaterielext_codeLotMaterielExt').val(code);
+}
+
+// function that automatically generates the CodeIndBiomol
+    function setCodeIndBiomol(CodePlaceholder = {"RefTaxonSelected" : "RefTaxonSelected"}) {
+        var code = '';
+        var RefTaxonSelected = $('#bbees_e3sbundle_individu_especeIdentifiees_0_referentielTaxonFk option:selected').text();
+        // var codeLot = $('#bbees_e3sbundle_individu_lotMaterielFk option:selected').text();
+        var codeLot = $('#bbees_e3sbundle_individu_lotmaterielTypeahead').val();
+        var codeCollecte = codeLot;
+        if (codeLot.split("|").length >1) codeCollecte = codeLot.split("|")[1];
+        var numIndBiomol = $('#bbees_e3sbundle_individu_numIndBiomol').val();
+        if (RefTaxonSelected == '') RefTaxonSelected = CodePlaceholder["RefTaxonSelected"] ;
+        if (numIndBiomol != '') {
+            code = RefTaxonSelected + '_' + codeCollecte + '_' + numIndBiomol;
+        }
+        //alert('change on click: '+code);
+        $('#bbees_e3sbundle_individu_codeIndBiomol').val(code);
+    }
+            
+// function that automatically generates the CodeIndTriMorpho
+function setCodeIndTriMorpho(CodePlaceholder = {"codeTube" : "codeTube", "RefTaxonSelected" : "RefTaxonSelected"}) {
+    var code = '';
+    var RefTaxonSelected = $('#bbees_e3sbundle_individu_especeIdentifiees_0_referentielTaxonFk option:selected').text();
+    //var codeLot = $('#bbees_e3sbundle_individu_lotMaterielFk option:selected').text();
+    var codeLot = $('#bbees_e3sbundle_individu_lotmaterielTypeahead').val();
+    var codeCollecte = codeLot;
+    if (codeLot.split("|").length >1) codeCollecte = codeLot.split("|")[1];
+    var codeTube = $('#bbees_e3sbundle_individu_codeTube').val();
+    if (RefTaxonSelected == '') RefTaxonSelected = CodePlaceholder["RefTaxonSelected"] ;
+    if (codeTube == '' ) codeTube = CodePlaceholder["codeTube"] ; 
+    code = RefTaxonSelected + '|' + codeCollecte + '[' + codeTube + ']';
+    //alert('change on click: '+datePrecision+'-'+dateCollecteYear);
+    $('#bbees_e3sbundle_individu_codeIndTriMorpho').val(code);
+}
+
+// function that automatically generates the codeChromato of the chromatogram
+function setCodeChromato(CodePlaceholder = []) {
+    var code = '';
+    var primerSelected = $('#bbees_e3sbundle_chromatogramme_primerChromatoVocFk option:selected').text();
+    var numYAS = $('#bbees_e3sbundle_chromatogramme_numYas').val();
+    if(numYAS == '') numYAS = CodePlaceholder["numYAS"];
+    code = numYAS + '|'+ primerSelected ;
+    $('#bbees_e3sbundle_chromatogramme_codeChromato').val(code);
+}
+
+/**
+ * Set automaticaly the codePcr in form PCR
+ */
+function setCodePcr(CodePlaceholder = []) {
+     var code = '';
+     var adnSelected = $('#bbees_e3sbundle_pcr_adnTypeahead').val();
+     var primerPcrStartSelected = $('#bbees_e3sbundle_pcr_primerPcrStartVocFk option:selected').text();
+     var primerPcrEndSelected = $('#bbees_e3sbundle_pcr_primerPcrEndVocFk option:selected').text();
+     var numPcr = $('#bbees_e3sbundle_pcr_numPcr').val();
+     if(numPcr == '') numPcr = CodePlaceholder["numPcr"];
+     if(adnSelected == '') adnSelected = "DNA code";
+     code = adnSelected + '_' + numPcr + '_'+ primerPcrStartSelected + '_'+ primerPcrEndSelected;
+     $('#bbees_e3sbundle_pcr_codePcr').val(code);
+ }

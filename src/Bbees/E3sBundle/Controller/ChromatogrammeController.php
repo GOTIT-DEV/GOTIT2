@@ -35,6 +35,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
  */
 class ChromatogrammeController extends Controller
 {
+  
     /**
      * Lists all chromatogramme entities.
      *
@@ -80,7 +81,7 @@ class ChromatogrammeController extends Controller
         }
         // Search for the list to show EstAligneEtTraite
         $tab_toshow =[];
-        $toshow = $em->getRepository("BbeesE3sBundle:Chromatogramme")->createQueryBuilder('chromatogramme')
+        $entities_toshow = $em->getRepository("BbeesE3sBundle:Chromatogramme")->createQueryBuilder('chromatogramme')
             ->where($where)
             ->setParameter('criteriaLower', strtolower($searchPhrase).'%')
             ->leftJoin('BbeesE3sBundle:Pcr', 'pcr', 'WITH', 'chromatogramme.pcrFk = pcr.id')
@@ -91,10 +92,10 @@ class ChromatogrammeController extends Controller
             ->addOrderBy(array_keys($orderBy)[0], array_values($orderBy)[0])
             ->getQuery()
             ->getResult();
-        $nb = count($toshow);
-        $toshow = array_slice($toshow, $minRecord, $rowCount);  
+        $nb = count($entities_toshow);
+        $entities_toshow = ($request->get('rowCount') > 0 ) ? array_slice($entities_toshow, $minRecord, $rowCount) : array_slice($entities_toshow, $minRecord);
         $lastTaxname = '';
-        foreach($toshow as $entity)
+        foreach($entities_toshow as $entity)
         {
             $id = $entity->getId();
             $DateMaj = ($entity->getDateMaj() !== null) ?  $entity->getDateMaj()->format('Y-m-d H:i:s') : null;
@@ -105,7 +106,7 @@ class ChromatogrammeController extends Controller
             $lastCodeSeqAlignement = (count($query) > 0) ? $query[0]['code_sqc_alignement'] : '';
             $lastStatutSeqAss = (count($query) > 0) ? $query[0]['statut'] : '';
             $lastDateSeqAss = (count($query) > 0 && $query[0]['date_sqc_ass']!== null ) ? $query[0]['date_sqc_ass']->format('Y-m-d') : '';
-            $linkSqcAss = (count($query) > 0) ?  $query[0]['id_sqc_ass'] : '';
+            $linkSqcAss = (count($query) > 0) ?  $id : '';
             //
             $tab_toshow[] = array("id" => $id, "chromatogramme.id" => $id, 
              "individu.codeIndBiomol" => $entity->getPcrFk()->getAdnFk()->getIndividuFk()->getCodeIndBiomol(),
@@ -119,8 +120,7 @@ class ChromatogrammeController extends Controller
              "userCreId" => $service->GetUserCreId($entity), "chromatogramme.userCre" => $service->GetUserCreUsername($entity) ,"chromatogramme.userMaj" => $service->GetUserMajUsername($entity),
              "lastCodeSeqAss" => $lastCodeSeqAss,"lastStatutSeqAss" => $lastStatutSeqAss,"lastCodeSeqAlignement" => $lastCodeSeqAlignement,"lastDateSeqAss" => $lastDateSeqAss,
              "linkSequenceassemblee" => $linkSqcAss,);
-        }    
- 
+        }     
         // Ajax answer
         $response = new Response ();
         $response->setContent ( json_encode ( array (
@@ -146,11 +146,22 @@ class ChromatogrammeController extends Controller
     public function newAction(Request $request)
     {
         $chromatogramme = new Chromatogramme();
+        $em = $this->getDoctrine()->getManager();
+        // check if the relational Entity (Pcr) is given and set the RelationalEntityFk for the new Entity
+        if ($request->get('idFk') !== null && $request->get('idFk') !== '') {
+            $RelEntityId = $request->get('idFk');
+            $RelEntity = $em->getRepository('BbeesE3sBundle:Pcr')->find($RelEntityId);
+            $chromatogramme->setPcrFk($RelEntity);
+        }
         $form = $this->createForm('Bbees\E3sBundle\Form\ChromatogrammeType', $chromatogramme);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            // (i) load the id of relational Entity (Pcr) from typeahead input field and (ii) set the foreign key
+            $RelEntityId = $form->get('pcrId');
+            $RelEntity = $em->getRepository('BbeesE3sBundle:Pcr')->find($RelEntityId->getData());
+            $chromatogramme->setPcrFk($RelEntity);
+            // persist Entity
             $em->persist($chromatogramme);
             try {
                 $em->flush();
@@ -178,7 +189,7 @@ class ChromatogrammeController extends Controller
         $deleteForm = $this->createDeleteForm($chromatogramme);
         $editForm = $this->createForm('Bbees\E3sBundle\Form\ChromatogrammeType', $chromatogramme);
 
-        return $this->render('show.html.twig', array(
+        return $this->render('chromatogramme/edit.html.twig', array(
             'chromatogramme' => $chromatogramme,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -205,6 +216,11 @@ class ChromatogrammeController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
+            // (i) load the id of relational Entity (Pcr) from typeahead input field  (ii) set the foreign key
+            $em = $this->getDoctrine()->getManager();
+            $RelEntityId = $editForm->get('pcrId');
+            $RelEntity = $em->getRepository('BbeesE3sBundle:Pcr')->find($RelEntityId->getData());
+            $chromatogramme->setPcrFk($RelEntity);
             // flush
             $this->getDoctrine()->getManager()->persist($chromatogramme);                       
             try {

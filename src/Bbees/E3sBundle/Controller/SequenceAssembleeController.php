@@ -91,13 +91,16 @@ class SequenceAssembleeController extends Controller
         if ( $request->get('searchPatern') !== null && $request->get('searchPatern') !== '' && $searchPhrase == '') {
             $searchPhrase = $request->get('searchPatern');
         }
+        if ( $request->get('idFk') !== null && $request->get('idFk') !== '') {
+            $where .= ' AND chromatogramme.id = '.$request->get('idFk');
+        }
         // Search for the list to show EstAligneEtTraite
         $tab_toshow =[];
-        $toshow = $em->getRepository("BbeesE3sBundle:SequenceAssemblee")->createQueryBuilder('sequenceAssemblee')
+        $entities_toshow = $em->getRepository("BbeesE3sBundle:SequenceAssemblee")->createQueryBuilder('sequenceAssemblee')
             ->where($where)
             ->setParameter('criteriaLower', strtolower($searchPhrase).'%')
             ->leftJoin('BbeesE3sBundle:Voc', 'vocStatutSqcAss', 'WITH', 'sequenceAssemblee.statutSqcAssVocFk = vocStatutSqcAss.id')
-            ->leftJoin('BbeesE3sBundle:EstAligneEtTraite', 'eaet', 'WITH', 'eaet.sequenceAssembleeFk = sequenceAssemblee.id')
+            ->leftJoin('BbeesE3sBundle:EstAligneEtTraite', 'eaet', 'WITH', 'eaet.sequenceAssembleeFk = sequenceAssemblee.id') 
             ->leftJoin('BbeesE3sBundle:Chromatogramme', 'chromatogramme', 'WITH', 'eaet.chromatogrammeFk = chromatogramme.id')
             ->leftJoin('BbeesE3sBundle:Pcr', 'pcr', 'WITH', 'chromatogramme.pcrFk = pcr.id')
             ->leftJoin('BbeesE3sBundle:Voc', 'vocGene', 'WITH', 'pcr.geneVocFk = vocGene.id')
@@ -114,10 +117,10 @@ class SequenceAssembleeController extends Controller
             ->addOrderBy(array_keys($orderBy)[0], array_values($orderBy)[0])
             ->getQuery()
             ->getResult();
-        $nb = count($toshow);
-        $toshow = array_slice($toshow, $minRecord, $rowCount);  
+        $nb = count($entities_toshow);
+        $entities_toshow = ($request->get('rowCount') > 0 ) ? array_slice($entities_toshow, $minRecord, $rowCount) : array_slice($entities_toshow, $minRecord); 
         $lastTaxname = '';
-        foreach($toshow as $entity)
+        foreach($entities_toshow as $entity)
         {
             $id = $entity->getId();
             $DateCreationSqcAss = ($entity->getDateCreationSqcAss() !== null) ?  $entity->getDateCreationSqcAss()->format('Y-m-d') : null;

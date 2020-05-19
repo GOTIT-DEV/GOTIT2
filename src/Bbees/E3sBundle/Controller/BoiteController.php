@@ -85,7 +85,7 @@ class BoiteController extends Controller
         }
         // Search for the list to show EstAligneEtTraite
         $tab_toshow =[];
-        $toshow = $em->getRepository("BbeesE3sBundle:Boite")->createQueryBuilder('boite')
+        $entities_toshow = $em->getRepository("BbeesE3sBundle:Boite")->createQueryBuilder('boite')
             ->where($where)
             ->setParameter('criteriaLower', strtolower($searchPhrase).'%')
             ->leftJoin('BbeesE3sBundle:Voc', 'vocCodeCollection', 'WITH', 'boite.codeCollectionVocFk = vocCodeCollection.id')
@@ -93,10 +93,10 @@ class BoiteController extends Controller
             ->addOrderBy(array_keys($orderBy)[0], array_values($orderBy)[0])
             ->getQuery()
             ->getResult();
-        $nb = count($toshow);
-        $toshow = array_slice($toshow, $minRecord, $rowCount);  
+        $nb = count($entities_toshow);
+        $entities_toshow = ($request->get('rowCount') > 0 ) ? array_slice($entities_toshow, $minRecord, $rowCount) : array_slice($entities_toshow, $minRecord);
         $lastTaxname = '';
-        foreach($toshow as $entity)
+        foreach($entities_toshow as $entity)
         {
             $id = $entity->getId();
             $DateMaj = ($entity->getDateMaj() !== null) ?  $entity->getDateMaj()->format('Y-m-d H:i:s') : null;

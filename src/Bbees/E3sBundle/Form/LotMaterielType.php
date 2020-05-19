@@ -35,12 +35,8 @@ class LotMaterielType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('collecteFk',EntityType::class, array('class' => 'BbeesE3sBundle:Collecte',
-                      'query_builder' => function (EntityRepository $er) {
-                            return $er->createQueryBuilder('collecte')
-                                    ->orderBy('collecte.codeCollecte', 'ASC');
-                        },
-                    'placeholder' => 'Choose a Collecte', 'choice_label' => 'codeCollecte', 'multiple' => false, 'expanded' => false))
+        $builder->add('collecteTypeahead', null, ['mapped' => false, 'attr' => ['class' => 'typeahead typeahead-collecte', 'data-target_id' => "bbees_e3sbundle_lotmateriel_collecteId", 'name' => "where", 'placeholder' => "Collecte typeahead placeholder",  "maxlength" => "255"], 'required' => true, ])
+                ->add('collecteId', HiddenType::class, array( 'mapped' => false, 'required' => true, ))  
                 ->add('codeLotMateriel')
                 ->add('dateLotMateriel', DateType::class, array('widget' => 'text','format' => 'dd-MM-yyyy', 'required' => false, ))
                 ->add('datePrecisionVocFk', EntityType::class, array('class' => 'BbeesE3sBundle:Voc', 

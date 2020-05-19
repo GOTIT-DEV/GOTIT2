@@ -71,8 +71,7 @@ class IndividuController extends Controller
             $qb->setParameter('q'.$i, $query[$i].'%');
         }
         $qb->setMaxResults(self::MAX_RESULTS_TYPEAHEAD);
-        $results = $qb->getQuery()->getResult();
-       
+        $results = $qb->getQuery()->getResult();       
         // Ajax answer
         return $this->json(
             $results
@@ -108,7 +107,7 @@ class IndividuController extends Controller
         }
         // Search for the list to show
         $tab_toshow =[];
-        $toshow = $em->getRepository("BbeesE3sBundle:Individu")->createQueryBuilder('individu')
+        $entities_toshow = $em->getRepository("BbeesE3sBundle:Individu")->createQueryBuilder('individu')
             ->where($where)
             ->setParameter('criteriaLower', strtolower($searchPhrase).'%')
             ->leftJoin('BbeesE3sBundle:LotMateriel', 'lot', 'WITH', 'individu.lotMaterielFk = lot.id')
@@ -117,10 +116,11 @@ class IndividuController extends Controller
             ->addOrderBy(array_keys($orderBy)[0], array_values($orderBy)[0])
             ->getQuery()
             ->getResult();
-        $nb = count($toshow);
-        $toshow = array_slice($toshow, $minRecord, $rowCount);  
+        $nb = count($entities_toshow);
+        // $entities_toshow = array_slice($entities_toshow, $minRecord, $rowCount); 
+        $entities_toshow = ($request->get('rowCount') > 0 ) ? array_slice($entities_toshow, $minRecord, $rowCount) : array_slice($entities_toshow, $minRecord);
         $lastTaxname = '';
-        foreach($toshow as $entity)
+        foreach($entities_toshow as $entity)
         {
             $id = $entity->getId();
             $DateMaj = ($entity->getDateMaj() !== null) ?  $entity->getDateMaj()->format('Y-m-d H:i:s') : null;
@@ -176,11 +176,22 @@ class IndividuController extends Controller
     public function newAction(Request $request)
     {
         $individu = new Individu();
+        $em = $this->getDoctrine()->getManager();
+        // check if the relational Entity (LotMateriel) is given and set the RelationalEntityFk for the new Entity
+        if ($request->get('idFk') !== null && $request->get('idFk') !== '') {
+            $RelEntityId = $request->get('idFk');
+            $RelEntity = $em->getRepository('BbeesE3sBundle:LotMateriel')->find($RelEntityId);
+            $individu->setLotMaterielFk($RelEntity);
+        } 
         $form = $this->createForm('Bbees\E3sBundle\Form\IndividuType', $individu);
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            // (i) load the id  the relational Entity (LotMateriel) from typeahead input field and (ii) set the foreign key 
+            $RelEntityId = $form->get('lotmaterielId');
+            $RelEntity = $em->getRepository('BbeesE3sBundle:LotMateriel')->find($RelEntityId->getData());
+            $individu->setLotMaterielFk($RelEntity);
+            // persist Entity
             $em->persist($individu);
             try {
                 $em->flush();
@@ -209,7 +220,7 @@ class IndividuController extends Controller
         $deleteForm = $this->createDeleteForm($individu);
         $editForm = $this->createForm('Bbees\E3sBundle\Form\IndividuType', $individu);
 
-        return $this->render('show.html.twig', array(
+        return $this->render('individu/edit.html.twig', array(
             'individu' => $individu,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -246,11 +257,15 @@ class IndividuController extends Controller
             $editForm = $this->createForm('Bbees\E3sBundle\Form\IndividuType', $individu);
         }
         $editForm->handleRequest($request);
-
         
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             // delete ArrayCollection
             $service->DelArrayCollectionEmbed('EspeceIdentifiees','EstIdentifiePars',$individu, $especeIdentifiees);
+            // (i) load the id of relational Entity (LotMateriel) from typeahead input field  (ii) set the foreign key
+            $em = $this->getDoctrine()->getManager();
+            $RelEntityId = $editForm->get('lotmaterielId');;
+            $RelEntity = $em->getRepository('BbeesE3sBundle:LotMateriel')->find($RelEntityId->getData());
+            $individu->setLotMaterielFk($RelEntity);
             // flush
             $this->getDoctrine()->getManager()->persist($individu);                       
             try {

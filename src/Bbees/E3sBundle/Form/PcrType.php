@@ -35,14 +35,8 @@ class PcrType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $id = !is_null($builder->getData()->getAdnFk()) ? $builder->getData()->getAdnFk()->getId() : null;
-        $builder->add('adnFk',EntityType::class, array('class' => 'BbeesE3sBundle:Adn',
-                       'query_builder' => function (EntityRepository $er) use ($id) {
-                            return $er->createQueryBuilder('adn')
-                                    ->where('adn.id = :id')
-                                    ->setParameter('id', $id);
-                       }, 'placeholder' => 'CodeAdn :'.$id , 'choice_label' => 'codeAdn', 'multiple' => false, 'expanded' => false,  'disabled'=> false))  
-                ->add('adn', null, ['mapped' => false, 'attr' => ['class' => 'typeahead typeahead-adn', 'data-target_id' => "bbees_e3sbundle_pcr_adnId", 'name' => "where", 'placeholder' => "Where...",  "maxlength" => "255"], ])
+        // $id = !is_null($builder->getData()->getAdnFk()) ? $builder->getData()->getAdnFk()->getId() : null;
+        $builder->add('adnTypeahead', null, ['mapped' => false, 'attr' => ['class' => 'typeahead typeahead-adn', 'data-target_id' => "bbees_e3sbundle_pcr_adnId", 'name' => "where", 'placeholder' => "Adn typeahead placeholder",  "maxlength" => "255"], 'required' => true, ])
                 ->add('adnId', HiddenType::class, array( 'mapped' => false, 'required' => true, ))
                 ->add('codePcr')
                 ->add('numPcr')

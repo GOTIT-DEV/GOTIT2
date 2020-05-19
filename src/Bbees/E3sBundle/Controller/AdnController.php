@@ -68,11 +68,10 @@ class AdnController extends Controller
         }
         $qb->where(implode(' and ', $and));
         for($i=0; $i<count($query); $i++) {
-            $qb->setParameter('q'.$i, '%'.$query[$i].'%');
+            $qb->setParameter('q'.$i, $query[$i].'%');
         }
         $qb->setMaxResults(self::MAX_RESULTS_TYPEAHEAD);
-        $results = $qb->getQuery()->getResult();
-       
+        $results = $qb->getQuery()->getResult();           
         // Ajax answer
         return $this->json(
             $results
@@ -109,7 +108,7 @@ class AdnController extends Controller
         }
         // Search for the list to show
         $tab_toshow =[];
-        $toshow = $em->getRepository("BbeesE3sBundle:Adn")->createQueryBuilder('adn')
+        $entities_toshow = $em->getRepository("BbeesE3sBundle:Adn")->createQueryBuilder('adn')
             ->where($where)
             ->setParameter('criteriaLower', strtolower($searchPhrase).'%')
             ->leftJoin('BbeesE3sBundle:Individu', 'individu', 'WITH', 'adn.individuFk = individu.id')
@@ -117,10 +116,10 @@ class AdnController extends Controller
             ->addOrderBy(array_keys($orderBy)[0], array_values($orderBy)[0])
             ->getQuery()
             ->getResult();
-        $nb = count($toshow);
-        $toshow = array_slice($toshow, $minRecord, $rowCount);  
+        $nb = count($entities_toshow);
+        $entities_toshow = ($request->get('rowCount') > 0 ) ? array_slice($entities_toshow, $minRecord, $rowCount) : array_slice($entities_toshow, $minRecord);
         $lastTaxname = '';
-        foreach($toshow as $entity)
+        foreach($entities_toshow as $entity)
         {
             $id = $entity->getId();
             $DateAdn = ($entity->getDateAdn() !== null) ?  $entity->getDateAdn()->format('Y-m-d') : null;
@@ -147,8 +146,7 @@ class AdnController extends Controller
              "adn.dateCre" => $DateCre, "adn.dateMaj" => $DateMaj,
              "userCreId" => $service->GetUserCreId($entity), "adn.userCre" => $service->GetUserCreUsername($entity) ,"adn.userMaj" => $service->GetUserMajUsername($entity),
              "linkPcr" => $linkPcr,);
-        }    
- 
+        }     
         // Ajax answer
         $response = new Response ();
         $response->setContent ( json_encode ( array (
@@ -174,17 +172,22 @@ class AdnController extends Controller
     public function newAction(Request $request)
     {
         $adn = new Adn();
+        $em = $this->getDoctrine()->getManager();
+        // check if the relational Entity (Individu) is given and set the RelationalEntityFk for the new Entity
+        if ($request->get('idFk') !== null && $request->get('idFk') !== '') {
+            $RelEntityId = $request->get('idFk');
+            $RelEntity = $em->getRepository('BbeesE3sBundle:Individu')->find($RelEntityId);
+            $adn->setIndividuFk($RelEntity);
+        }
         $form = $this->createForm('Bbees\E3sBundle\Form\AdnType', $adn);
         $form->handleRequest($request);
                 
-        if ($form->isSubmitted() && $form->isValid() && $form->get('individuId')->getData() !== null) {
-            $em = $this->getDoctrine()->getManager();
-            // load (i) the id of specimen from typeahead input field  (ii) the specimen entity
-            $em = $this->getDoctrine()->getManager();
-            $numIndId = $form->get('individuId');
-            $individuId = $em->getRepository('BbeesE3sBundle:Individu')->find($numIndId->getData());
-            $adn->setIndividuFk($individuId);
-            //
+        if ($form->isSubmitted() && $form->isValid()) {
+            // (i) load the id of relational Entity (Individu) from typeahead input field and (ii) set the foreign key
+            $RelEntityId = $form->get('individuId');
+            $RelEntity = $em->getRepository('BbeesE3sBundle:Individu')->find($RelEntityId->getData());
+            $adn->setIndividuFk($RelEntity);
+            // persist
             $em->persist($adn);
             try {
                 $em->flush();
@@ -212,7 +215,7 @@ class AdnController extends Controller
         $deleteForm = $this->createDeleteForm($adn);
         $editForm = $this->createForm('Bbees\E3sBundle\Form\AdnType', $adn);
 
-        return $this->render('show.html.twig', array(
+        return $this->render('adn/edit.html.twig', array(
             'adn' => $adn,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -242,17 +245,16 @@ class AdnController extends Controller
         $editForm = $this->createForm('Bbees\E3sBundle\Form\AdnType', $adn);
         $editForm->handleRequest($request);
 
-        if ($editForm->isSubmitted() && $editForm->isValid() && $editForm->get('individuId')->getData() !== null) {
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
             // delete ArrayCollection
             $service->DelArrayCollection('AdnEstRealisePars',$adn, $adnEstRealisePars);            
-            // load (i) the id of specimen from typeahead input field  (ii) the specimen entity
+            // (i) load the id of relational Entity (Individu) from typeahead input field  (ii) set the foreign key
             $em = $this->getDoctrine()->getManager();
-            $numIndId = $editForm->get('individuId');
-            $individuId = $em->getRepository('BbeesE3sBundle:Individu')->find($numIndId->getData());
-            $adn->setIndividuFk($individuId);
-            //
-            $this->getDoctrine()->getManager()->persist($adn); 
+            $RelEntityId = $editForm->get('individuId');
+            $RelEntity = $em->getRepository('BbeesE3sBundle:Individu')->find($RelEntityId->getData());
+            $adn->setIndividuFk($RelEntity);
             // flush
+            $this->getDoctrine()->getManager()->persist($adn); 
             try {
                 $this->getDoctrine()->getManager()->flush();
             } 

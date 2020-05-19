@@ -34,6 +34,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class PcrController extends Controller
 {
+    const MAX_RESULTS_TYPEAHEAD   = 20;
+    
     /**
      * Lists all pcr entities.
      *
@@ -51,6 +53,32 @@ class PcrController extends Controller
         ));
     }
 
+    
+    /**
+     * @Route("/search/{q}", requirements={"q"=".+"}, name="pcr_search")
+     */
+    public function searchAction($q)
+    {
+        $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
+        $qb->select('pcr.id, pcr.codePcr as code')
+            ->from('BbeesE3sBundle:Pcr', 'pcr');
+        $query = explode(' ', strtolower(trim(urldecode($q))));
+        $and = [];
+        for($i=0; $i<count($query); $i++) {
+            $and[] = '(LOWER(pcr.codePcr) like :q'.$i.')';
+        }
+        $qb->where(implode(' and ', $and));
+        for($i=0; $i<count($query); $i++) {
+            $qb->setParameter('q'.$i, $query[$i].'%');
+        }
+        $qb->setMaxResults(self::MAX_RESULTS_TYPEAHEAD);
+        $results = $qb->getQuery()->getResult();         
+        // Ajax answer
+        return $this->json(
+            $results
+        );
+    }
+    
     /**
      * Returns in json format a set of fields to display (tab_toshow) with the following criteria: 
      * a) 1 search criterion ($ request-> get ('searchPhrase')) insensitive to the case and  applied to a field
@@ -80,7 +108,7 @@ class PcrController extends Controller
         }
         // Search for the list to show
         $tab_toshow = [];
-        $toshow = $em->getRepository("BbeesE3sBundle:Pcr")->createQueryBuilder('pcr')
+        $entities_toshow = $em->getRepository("BbeesE3sBundle:Pcr")->createQueryBuilder('pcr')
             ->where($where)
             ->setParameter('criteriaLower', strtolower($searchPhrase) . '%')
             ->leftJoin('BbeesE3sBundle:Adn', 'adn', 'WITH', 'pcr.adnFk = adn.id')
@@ -91,10 +119,10 @@ class PcrController extends Controller
             ->addOrderBy(array_keys($orderBy)[0], array_values($orderBy)[0])
             ->getQuery()
             ->getResult();
-        $nb = count($toshow);
-        $toshow = array_slice($toshow, $minRecord, $rowCount);
+        $nb = count($entities_toshow);
+        $entities_toshow = ($request->get('rowCount') > 0 ) ? array_slice($entities_toshow, $minRecord, $rowCount) : array_slice($entities_toshow, $minRecord);
         $lastTaxname = '';
-        foreach ($toshow as $entity) {
+        foreach ($entities_toshow as $entity) {
             $id = $entity->getId();
             $DatePcr = ($entity->getDatePcr() !== null) ?  $entity->getDatePcr()->format('Y-m-d') : null;
             $DateMaj = ($entity->getDateMaj() !== null) ?  $entity->getDateMaj()->format('Y-m-d H:i:s') : null;
@@ -148,13 +176,22 @@ class PcrController extends Controller
     public function newAction(Request $request)
     {
         $pcr = new Pcr();
+        $em = $this->getDoctrine()->getManager();
+        // check if the relational Entity (Adn) is given and set the RelationalEntityFk for the new Entity
+        if ($request->get('idFk') !== null && $request->get('idFk') !== '') {
+            $RelEntityId = $request->get('idFk');
+            $RelEntity = $em->getRepository('BbeesE3sBundle:Adn')->find($RelEntityId);
+            $pcr->setAdnFk($RelEntity);
+        }
         $form = $this->createForm('Bbees\E3sBundle\Form\PcrType', $pcr);
         $form->handleRequest($request);
-        $numid_adnFk = $form->get('adnFk')->getData();
-        $numid_adnId = $form->get('adnId')->getData();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+        if ($form->isSubmitted() && $form->isValid() && $form->get('adnId')->getData() !== null) {
+            // (i) load the id of relational Entity (Adn) from typeahead input field and (ii) set the foreign key
+            $RelEntityId = $form->get('adnId');
+            $RelEntity = $em->getRepository('BbeesE3sBundle:Adn')->find($RelEntityId->getData());
+            $pcr->setAdnFk($RelEntity);
+            // persist Entity
             $em->persist($pcr);
             try {
                 $em->flush();
@@ -181,7 +218,7 @@ class PcrController extends Controller
         $deleteForm = $this->createDeleteForm($pcr);
         $editForm = $this->createForm('Bbees\E3sBundle\Form\PcrType', $pcr);
 
-        return $this->render('show.html.twig', array(
+        return $this->render('pcr/edit.html.twig', array(
             'pcr' => $pcr,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -215,6 +252,11 @@ class PcrController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             // delete ArrayCollection
             $service->DelArrayCollection('PcrEstRealisePars', $pcr, $pcrEstRealisePars);
+            // (i) load the id of relational Entity (Adn) from typeahead input field  (ii) set the foreign key
+            $em = $this->getDoctrine()->getManager();
+            $RelEntityId = $editForm->get('adnId');
+            $RelEntity = $em->getRepository('BbeesE3sBundle:Adn')->find($RelEntityId->getData());
+            $pcr->setAdnFk($RelEntity);
             // flush
             $this->getDoctrine()->getManager()->persist($pcr);
             try {

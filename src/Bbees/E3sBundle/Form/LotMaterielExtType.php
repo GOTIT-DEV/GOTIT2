@@ -35,12 +35,8 @@ class LotMaterielExtType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('collecteFk',EntityType::class, array('class' => 'BbeesE3sBundle:Collecte',
-                      'query_builder' => function (EntityRepository $er) {
-                            return $er->createQueryBuilder('collecte')
-                                    ->orderBy('collecte.codeCollecte', 'ASC');
-                        },
-                    'placeholder' => 'Choose a Collecte', 'choice_label' => 'codeCollecte', 'multiple' => false, 'expanded' => false))
+        $builder->add('collecteTypeahead', null, ['mapped' => false, 'attr' => ['class' => 'typeahead typeahead-collecte', 'data-target_id' => "bbees_e3sbundle_lotmaterielext_collecteId", 'name' => "where", 'placeholder' => "Collecte typeahead placeholder",  "maxlength" => "255"], 'required' => true, ])
+                ->add('collecteId', HiddenType::class, array( 'mapped' => false, 'required' => true, ))  
                 ->add('codeLotMaterielExt')
                 ->add('pigmentationVocFk', EntityType::class, array('class' => 'BbeesE3sBundle:Voc', 
                        'query_builder' => function (EntityRepository $er) {

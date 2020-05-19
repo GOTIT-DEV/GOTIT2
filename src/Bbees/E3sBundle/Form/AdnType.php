@@ -37,7 +37,7 @@ class AdnType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $id = !is_null($builder->getData()->getIndividuFk()) ? $builder->getData()->getIndividuFk()->getId() : null;
+        //$id = !is_null($builder->getData()->getIndividuFk()) ? $builder->getData()->getIndividuFk()->getId() : null;
         $builder->add('individuTypeahead', null, ['mapped' => false, 'attr' => ['class' => 'typeahead typeahead-individu', 'data-target_id' => "bbees_e3sbundle_adn_individuId", 'name' => "where", 'placeholder' => "Individu typeahead placeholder",  "maxlength" => "255"], 'required' => true, ])
                 ->add('individuId', HiddenType::class, array( 'mapped' => false, 'required' => true, ))
                 ->add('codeAdn')

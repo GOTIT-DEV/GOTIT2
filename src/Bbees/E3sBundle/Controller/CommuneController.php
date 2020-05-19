@@ -76,16 +76,16 @@ class CommuneController extends Controller
         }
         // Search for the list to show
         $tab_toshow =[];
-        $toshow = $em->getRepository("BbeesE3sBundle:Commune")->createQueryBuilder('commune')
+        $entities_toshow = $em->getRepository("BbeesE3sBundle:Commune")->createQueryBuilder('commune')
             ->where($where)
             ->setParameter('criteriaLower', strtolower($searchPhrase).'%')
             ->leftJoin('BbeesE3sBundle:Pays', 'pays', 'WITH', 'commune.paysFk = pays.id')
             ->addOrderBy(array_keys($orderBy)[0], array_values($orderBy)[0])
             ->getQuery()
             ->getResult();
-        $nb = count($toshow);
-        $toshow = array_slice($toshow, $minRecord, $rowCount);          
-        foreach($toshow as $entity)
+        $nb = count($entities_toshow);
+        $entities_toshow = ($request->get('rowCount') > 0 ) ? array_slice($entities_toshow, $minRecord, $rowCount) : array_slice($entities_toshow, $minRecord);
+        foreach($entities_toshow as $entity)
         {
             $id = $entity->getId();
             $DateCre = ($entity->getDateCre() !== null) ?  $entity->getDateCre()->format('Y-m-d H:i:s') : null;

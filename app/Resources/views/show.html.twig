@@ -73,13 +73,17 @@
 			</div>
 		</div>
 	</div>
-</div>{% endblock %}{% block scripts %}
+</div>
+{% endblock %}
+
+{% block scripts %}
 
 {{ parent() }}
 
 <script type="text/javascript">
-	$(document).ready(function () {
-$(" :input").prop("disabled", true);
-$('button[class="btn btn-info pull-right"]').prop("disabled", false);
-});
-</script>{% endblock %}
+    $(document).ready(function () {
+        $(" :input").prop("disabled", true);
+        $('button[class="btn btn-info pull-right"]').prop("disabled", false);
+    });
+</script>
+{% endblock %}

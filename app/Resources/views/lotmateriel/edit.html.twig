@@ -2,6 +2,24 @@
 
 {# EDIT : MATERIAL #}
 
+{#  Typehead : initialisation of typeahead EntityRelationalId field  #} 
+{% set route = app.request.attributes.get('_route') %}
+{% set action = route|split('_')[1] %}
+    {% set codeCollecte = '' %}
+    {% set idCollecte = '' %}
+{% if (lotMateriel.collecteFk.codeCollecte is defined )%}
+    {#  case of an existing record #} 
+    {% set codeCollecte = lotMateriel.collecteFk.codeCollecte %}
+    {% set idCollecte = lotMateriel.collecteFk.id %}
+{% elseif app.request.query.get('idFk') is defined  and action == 'new'  %}
+    {#  case of a new record with  a preselected relational entity #} 
+    {% set idCollecte = app.request.query.get('idFk') %}
+    {% if app.request.query.get('idFk') is not empty %}
+            {% set codeCollecte = lotMateriel.collecteFk.codeCollecte %}
+    {% endif %}       
+{% endif %}
+
+
 {% block body %}
     
     {{ parent() }}   
@@ -32,6 +50,7 @@
 {{ parent() }}
 {% if exception_message is defined %} <script type="text/javascript"> alert("{{exception_message|raw}}"); </script> {% endif %}
 
+{% if action != 'show'  %}
 <script type="text/javascript">  
 // Person Modal Actions 
     $('#myModalPersonne').on('show.bs.modal', function (e) {
@@ -73,6 +92,7 @@
         addCollectionButtonsEmbed('bbees_e3sbundle_lotmateriel_especeIdentifiees','EspeceIdentifiee',false,true,'estIdentifiePars','Personne'); 
     });
  </script>
+{% endif %}
  
 <script type="text/javascript">  
 // Form actions
@@ -90,18 +110,22 @@ $(document).ready(function(){
         }) 
         $('[for^=bbees_e3sbundle_lotmateriel_especeIdentifiees_0_datePrecisionVocFk]').click(function (e) { 
             dateDateprecision('bbees_e3sbundle_lotmateriel_especeIdentifiees_0', 'dateIdentification', message);
-        })
+        })        
+        // General action on form: form lock (default) / user role: app.user ...
+        {% if action == 'show'  %}  
+           // Adding a Back to Button to Specimen
+            addBackToRelatedRecord('lotmateriel', 'collecte', "{{'buton.Back to collecte'|trans}}", 1, 'show');
+        {% endif %}
         {% if action == 'edit'  %}  
             // Adding a Back to Button to collecte
-            addBackToRelatedRecord('lotmateriel', 'collecte', "{{'buton.Back to collecte'|trans}}");
+            addBackToRelatedRecord('lotmateriel', 'collecte', "{{'buton.Back to collecte'|trans}}", 1);
             // General action on form: form lock (default) / user role: app.user ...
             {% if not is_granted('ROLE_ADMIN') %}  
                 // Locking fields: Station; Code collecte; Date collecte
-                $('#bbees_e3sbundle_lotmateriel_collecteFk').attr("disabled", true); 
+                $('#bbees_e3sbundle_lotmateriel_collecteTypeahead').attr("disabled", true); 
                 $(document).on('submit','form[name="bbees_e3sbundle_lotmateriel"]',function(ev){
-                    // Unlocking fields to allow registration
-                    $('#bbees_e3sbundle_lotmateriel_collecteFk').attr("disabled", false); 
-                 }); 
+                    $('#bbees_e3sbundle_lotmateriel_collecteTypeahead').attr("disabled", false); 
+                 });
                 $('#bbees_e3sbundle_lotmateriel_codeLotMateriel').attr("disabled", true); 
                 $(document).on('submit','form[name="bbees_e3sbundle_lotmateriel"]',function(ev){
                     $('#bbees_e3sbundle_lotmateriel_codeLotMateriel').attr("disabled", false); 
@@ -114,23 +138,81 @@ $(document).ready(function(){
             $(document).on('submit','form[name="bbees_e3sbundle_lotmateriel"]',function(ev){
                 // Unlocking fields to allow registration
                 $('#bbees_e3sbundle_lotmateriel_codeLotMateriel').attr("disabled", false); 
-             });         
+             }); 
+            // case where a sampling is yet selected : Locked field: collecteTypeahead
+            {% if app.request.query.get('idFk') is defined and app.request.query.get('idFk') is not empty %}
+                $('#bbees_e3sbundle_lotmateriel_collecteTypeahead').attr("disabled", true).css("background-color", "WhiteSmoke");
+            {% endif %}
             // specific features: automatically generate codeLot
-            setCodeLot();
-            $('#bbees_e3sbundle_lotmateriel_especeIdentifiees').change(function (e) { setCodeLot();})
-            $('#bbees_e3sbundle_lotmateriel_collecteFk').change(function (e) { setCodeLot();})
-            // function that automatically generates the codeLot
-            function setCodeLot() {
-                var code = '';
-                var RefTaxonSelected = $('#bbees_e3sbundle_lotmateriel_especeIdentifiees_0_referentielTaxonFk option:selected').text();
-                var codeCollecte = $('#bbees_e3sbundle_lotmateriel_collecteFk option:selected').text();
-                if (RefTaxonSelected == '') RefTaxonSelected = "{{'Choose a Taxon'|trans}}" ;
-                code = RefTaxonSelected + '|' + codeCollecte ;
-                $('#bbees_e3sbundle_lotmateriel_codeLotMateriel').val(code);
-            }
+            setCodeLot({"RefTaxonSelected" : "{{'RefTaxonSelected'|trans}}"});
+            $('#bbees_e3sbundle_lotmateriel_especeIdentifiees').change(function (e) { setCodeLot({"RefTaxonSelected" : "{{'RefTaxonSelected'|trans}}"});})
+            $('#bbees_e3sbundle_lotmateriel_collecteFk').change(function (e) { setCodeLot({"RefTaxonSelected" : "{{'RefTaxonSelected'|trans}}"});})
         {% endif %}
-
     });
+</script>
+
+
+<script>
+//// Typeahead 
+// Constructing the suggestion engine
+    var collectes = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.whitespace,
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        remote: {
+           url : '{{ path("collecte_search", { 'q':"QUERY"}) |replace({"QUERY": "%QUERY"}) }}',
+           wildcard: '%QUERY'
+        }
+    });
+
+    // Initializing the typeahead fields
+    var selectedTypeahead = 0; /* flag to know if there is a Typeahead selected value  */
+    $('input.typeahead').val( "{{codeCollecte}}" );
+    $('#bbees_e3sbundle_lotmateriel_collecteId').val( {{idCollecte}} );
+    $('.typeahead-collecte').typeahead(
+        {
+            hint: true,
+            highlight: false, /* Enable substring highlighting */
+            minLength: 1 /* Specify minimum characters required for showing result */
+        },
+        {
+            name: 'collectes',
+            source: collectes,
+            displayKey: "code",
+            limit: 40
+        }
+    ).on('keyup', this, function (event) {
+        selectedTypeahead = 0;
+    }
+    ).bind('typeahead:select', function(ev, item) {
+        var $this = $(this);
+        var codeTypeaheadSelect = item.code;
+        var idTypeaheadSelect = item.id;
+        //alert(codeTypeaheadSelect);
+        $('#'+$this.attr('data-target_id')).val(item.id);
+        $collecte = $this.parents('.form-group').find('input.bbees_e3sbundle_lotmateriel[collecteId]');
+        if ($collecte.length===1) {
+            $collecte.val(item.id);
+        }
+        selectedTypeahead = 1;
+        // set auto-generated code if needed
+        setCodeLot({"RefTaxonSelected" : "{{'RefTaxonSelected'|trans}}"});
+    }
+    ).bind('typeahead:close', function(ev, item) {
+        if (selectedTypeahead == 0) { /* if there is no Typeahead selected value fields are reinitialized */
+            $('input.typeahead').val( "{{codeCollecte}}" ) ;
+            $('#bbees_e3sbundle_lotmateriel_collecteId').val( {{idCollecte}} ) ;
+            setCodeLot({"RefTaxonSelected" : "{{'RefTaxonSelected'|trans}}"});
+            }
+        var $this = $(this);
+        if ($.trim($this.val())==='') {
+            $this.val('');
+            $collecte = $this.parents('.form-group').find('input.bbees_e3sbundle_lotmateriel[collecteId]');
+            if ($collecte.length===1) {
+                $collecte.val('');
+            }
+        }
+    }
+    );
 </script>
 
 {% endblock %}

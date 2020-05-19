@@ -35,6 +35,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
  */
 class CollecteController extends Controller
 {
+    const MAX_RESULTS_TYPEAHEAD   = 20;
+    
     /**
      * Lists all collecte entities.
      *
@@ -52,6 +54,32 @@ class CollecteController extends Controller
             'collectes' => $collectes,));                
 
      }
+     
+             
+    /**
+     * @Route("/search/{q}", requirements={"q"=".+"}, name="collecte_search")
+     */
+    public function searchAction($q)
+    {
+        $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
+        $qb->select('collecte.id, collecte.codeCollecte as code')
+            ->from('BbeesE3sBundle:Collecte', 'collecte');
+        $query = explode(' ', strtolower(trim(urldecode($q))));
+        $and = [];
+        for($i=0; $i<count($query); $i++) {
+            $and[] = '(LOWER(collecte.codeCollecte) like :q'.$i.')';
+        }
+        $qb->where(implode(' and ', $and));
+        for($i=0; $i<count($query); $i++) {
+            $qb->setParameter('q'.$i, $query[$i].'%');
+        }
+        $qb->setMaxResults(self::MAX_RESULTS_TYPEAHEAD);
+        $results = $qb->getQuery()->getResult();        
+        // Ajax answer
+        return $this->json(
+            $results
+        );
+    }
 
     /**
      * Returns in json format a set of fields to display (tab_toshow) with the following criteria: 
@@ -94,7 +122,7 @@ class CollecteController extends Controller
             ->getQuery()
             ->getResult();
         $nb_entities  = count($entities_toshow);
-        $entities_toshow = array_slice($entities_toshow, $minRecord, $rowCount);       
+        $entities_toshow = ($request->get('rowCount')  > 0 ) ? array_slice($entities_toshow, $minRecord, $rowCount) : array_slice($entities_toshow, $minRecord);       
         foreach($entities_toshow as $entity)
         {
             $id = $entity->getId();
@@ -153,11 +181,22 @@ class CollecteController extends Controller
     public function newAction(Request $request)
     {
         $collecte = new Collecte();
+        $em = $this->getDoctrine()->getManager();
+        // check if the relational Entity (Station) is given and set the RelationalEntityFk for the new Entity
+        if ($request->get('idFk') !== null && $request->get('idFk') !== '') {
+            $RelEntityId = $request->get('idFk');
+            $RelEntity = $em->getRepository('BbeesE3sBundle:Station')->find($RelEntityId);
+            $collecte->setStationFk($RelEntity);
+        }
         $form = $this->createForm('Bbees\E3sBundle\Form\CollecteType', $collecte);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            // (i) load the id of the relational Entity (Station) from typeahead input field and (ii) set the foreign key
+            $RelEntityId = $form->get('stationId');
+            $RelEntity = $em->getRepository('BbeesE3sBundle:Station')->find($RelEntityId->getData());
+            $collecte->setStationFk($RelEntity);
+            // persist Entity
             $em->persist($collecte);          
             try {
                 $em->flush();
@@ -185,7 +224,7 @@ class CollecteController extends Controller
         $deleteForm = $this->createDeleteForm($collecte);
         $editForm = $this->createForm('Bbees\E3sBundle\Form\CollecteType', $collecte);
 
-        return $this->render('show.html.twig', array(
+        return $this->render('collecte/edit.html.twig', array(
             'collecte' => $collecte,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -229,6 +268,11 @@ class CollecteController extends Controller
             $service->DelArrayCollection('EstFinancePars',$collecte, $originalEstFinancePars);
             $service->DelArrayCollection('EstEffectuePars',$collecte, $originalEstEffectuePars);
             $service->DelArrayCollection('ACiblers',$collecte, $originalACiblers);
+            // (i) load the id of relational Entity (Station) from typeahead input field  (ii) set the foreign key
+            $em = $this->getDoctrine()->getManager();
+            $numStationId = $editForm->get('stationId');
+            $stationId = $em->getRepository('BbeesE3sBundle:Station')->find($numStationId->getData());
+            $collecte->setStationFk($stationId);
             // flush
             $this->getDoctrine()->getManager()->persist($collecte);                       
             try {

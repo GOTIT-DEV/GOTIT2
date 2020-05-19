@@ -5,7 +5,7 @@
 {# initialize the array of linked entities ([entity1, entity2 ...]) to which we wish to make a link-shortcuts
 1) The table of results should include a collumn of the type: <th data-column-id = "linkEntity" data-formatter = "linkEntity" data-sortable = "false"> Col. </ Th>
 2) the controller will have to return in the table rows the colloids of the type: "linkEntity1" => "patern1", "linkeEntity2" => "patern2" ... #}
-{% set links = [] %}
+{% set links = ['sequenceassemblee'] %}
 
 {% block action %}
   {{ parent() }}
@@ -42,7 +42,7 @@
           <th data-column-id="show" data-formatter="show" data-sortable="false"   data-width="20">{{'list.show'|trans}}</th>
           <th data-column-id="edit" data-formatter="edit" data-sortable="false"  data-width="20">{{'list.edit'|trans}}</th>
           <th data-column-id="delete" data-formatter="delete" data-sortable="false" data-width="20">{{'list.delete'|trans}}</th>
-          {# <th data-column-id="linkSequenceassemblee" data-formatter="linkSequenceassemblee" data-sortable="false" data-width="20">LSA</th>#}
+          <th data-column-id="linkSequenceassemblee" data-formatter="linkSequenceassemblee" data-sortable="false" data-width="20">{{'list.linkSequenceassemblee'|trans}}</th>
           {# <th data-column-id="linkEstaligneettraite" data-formatter="linkEstaligneettraite" data-sortable="false" data-width="20">SA(s)</th> #}
         </tr>
       </thead>

@@ -81,7 +81,7 @@ class IndividuLameController extends Controller
         }
         // Search for the list to show
         $tab_toshow =[];
-        $toshow = $em->getRepository("BbeesE3sBundle:IndividuLame")->createQueryBuilder('individuLame')
+        $entities_toshow = $em->getRepository("BbeesE3sBundle:IndividuLame")->createQueryBuilder('individuLame')
             ->where($where)
             ->setParameter('criteriaLower', strtolower($searchPhrase).'%')
             ->leftJoin('BbeesE3sBundle:Individu', 'individu', 'WITH', 'individuLame.individuFk = individu.id')
@@ -91,10 +91,10 @@ class IndividuLameController extends Controller
             ->addOrderBy(array_keys($orderBy)[0], array_values($orderBy)[0])
             ->getQuery()
             ->getResult();
-        $nb = count($toshow);
-        $toshow = array_slice($toshow, $minRecord, $rowCount);  
+        $nb = count($entities_toshow);
+        $entities_toshow = ($request->get('rowCount') > 0 ) ? array_slice($entities_toshow, $minRecord, $rowCount) : array_slice($entities_toshow, $minRecord);
         $lastTaxname = '';
-        foreach($toshow as $entity)
+        foreach($entities_toshow as $entity)
         {
             $id = $entity->getId();
             $userCreId = ($entity->getUserCre() !== null) ? $entity->getUserCre() : 0;
@@ -157,11 +157,22 @@ class IndividuLameController extends Controller
     public function newAction(Request $request)
     {
         $individuLame = new Individulame();
+        $em = $this->getDoctrine()->getManager();
+        // check if the relational Entity (Individu) is given and set the RelationalEntityFk for the new Entity
+        if ($request->get('idFk') !== null && $request->get('idFk') !== '') {
+            $RelEntityId = $request->get('idFk');
+            $RelEntity = $em->getRepository('BbeesE3sBundle:Individu')->find($RelEntityId);
+            $individuLame->setIndividuFk($RelEntity);
+        }
         $form = $this->createForm('Bbees\E3sBundle\Form\IndividuLameType', $individuLame);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            // (i) load the id of relational Entity (Individu) from typeahead input field and (ii) set the foreign key
+            $RelEntityId = $form->get('individuId');
+            $RelEntity = $em->getRepository('BbeesE3sBundle:Individu')->find($RelEntityId->getData());
+            $individuLame->setIndividuFk($RelEntity);
+            // persist
             $em->persist($individuLame);
             try {
                 $em->flush();
@@ -189,7 +200,7 @@ class IndividuLameController extends Controller
         $deleteForm = $this->createDeleteForm($individuLame);
         $editForm = $this->createForm('Bbees\E3sBundle\Form\IndividuLameType', $individuLame);
 
-        return $this->render('show.html.twig', array(
+        return $this->render('individulame/edit.html.twig', array(
             'individuLame' => $individuLame,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -224,6 +235,11 @@ class IndividuLameController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             // delete ArrayCollection
             $service->DelArrayCollection('IndividuLameEstRealisePars',$individuLame, $individuLameEstRealisePars);
+            // (i) load the id of relational Entity (Individu) from typeahead input field  (ii) set the foreign key
+            $em = $this->getDoctrine()->getManager();
+            $RelEntityId = $editForm->get('individuId');
+            $RelEntity = $em->getRepository('BbeesE3sBundle:Individu')->find($RelEntityId->getData());
+            $individuLame->setIndividuFk($RelEntity);
             // flush
             $this->getDoctrine()->getManager()->persist($individuLame);                       
             try {

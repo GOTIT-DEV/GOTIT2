@@ -78,6 +78,7 @@ $(document).ready(function(){
                 typeBoite: "{{ app.request.query.get('typeBoite') }}"
             };
         },
+        rowCount: [10, 25, 50, -1],
         labels: {
             noResults: "There are no results for the selection",
             search: "{{ app.request.query.get('searchPatern') }}"

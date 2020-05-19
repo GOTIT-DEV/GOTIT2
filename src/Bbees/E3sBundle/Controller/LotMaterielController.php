@@ -35,6 +35,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
  */
 class LotMaterielController extends Controller
 {
+    const MAX_RESULTS_TYPEAHEAD   = 20;
+    
     /**
      * Lists all lotMateriel entities.
      *
@@ -50,6 +52,32 @@ class LotMaterielController extends Controller
             'lotMateriels' => $lotMateriels,
         ));
     }
+           
+    /**
+     * @Route("/search/{q}", requirements={"q"=".+"}, name="lotmateriel_search")
+     */
+    public function searchAction($q)
+    {
+        $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
+        $qb->select('lot.id, lot.codeLotMateriel as code')
+            ->from('BbeesE3sBundle:LotMateriel', 'lot');
+        $query = explode(' ', strtolower(trim(urldecode($q))));
+        $and = [];
+        for($i=0; $i<count($query); $i++) {
+            $and[] = '(LOWER(lot.codeLotMateriel) like :q'.$i.')';
+        }
+        $qb->where(implode(' and ', $and));
+        for($i=0; $i<count($query); $i++) {
+            $qb->setParameter('q'.$i, $query[$i].'%');
+        }
+        $qb->setMaxResults(self::MAX_RESULTS_TYPEAHEAD);
+        $results = $qb->getQuery()->getResult();           
+        // Ajax answer
+        return $this->json(
+            $results
+        );
+    }
+    
     
     /**
      * Returns in json format a set of fields to display (tab_toshow) with the following criteria: 
@@ -80,7 +108,7 @@ class LotMaterielController extends Controller
         }
         // Search for the list to show
         $tab_toshow =[];
-        $toshow = $em->getRepository("BbeesE3sBundle:LotMateriel")->createQueryBuilder('lotMateriel')
+        $entities_toshow = $em->getRepository("BbeesE3sBundle:LotMateriel")->createQueryBuilder('lotMateriel')
             ->where($where)
             ->setParameter('criteriaLower', strtolower($searchPhrase).'%')
             ->leftJoin('BbeesE3sBundle:Collecte', 'collecte', 'WITH', 'lotMateriel.collecteFk = collecte.id')
@@ -89,10 +117,11 @@ class LotMaterielController extends Controller
             ->addOrderBy(array_keys($orderBy)[0], array_values($orderBy)[0])
             ->getQuery()
             ->getResult();
-        $nb = count($toshow);
-        $toshow = array_slice($toshow, $minRecord, $rowCount);  
+        $nb = count($entities_toshow);
+        $entities_toshow = ($request->get('rowCount') > 0 ) ? array_slice($entities_toshow, $minRecord, $rowCount) : array_slice($entities_toshow, $minRecord);
+
         $lastTaxname = '';
-        foreach($toshow as $entity)
+        foreach($entities_toshow as $entity)
         {
             $id = $entity->getId();
             $codeStation = $entity->getCollecteFk()->getStationFk()->getCodeStation();
@@ -150,11 +179,22 @@ class LotMaterielController extends Controller
     public function newAction(Request $request)
     {
         $lotMateriel = new Lotmateriel();
+        $em = $this->getDoctrine()->getManager();
+        // check if the relational Entity (Collecte) is given and set the RelationalEntityFk for the new Entity
+        if ($request->get('idFk') !== null && $request->get('idFk') !== '') {
+            $RelEntityId = $request->get('idFk');
+            $RelEntity = $em->getRepository('BbeesE3sBundle:Collecte')->find($RelEntityId);
+            $lotMateriel->setCollecteFk($RelEntity);
+        }        
         $form = $this->createForm('Bbees\E3sBundle\Form\LotMaterielType', $lotMateriel);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            // (i) load the id  the relational Entity (Collecte) from typeahead input field and (ii) set the foreign key 
+            $RelEntityId = $form->get('collecteId');
+            $RelEntity = $em->getRepository('BbeesE3sBundle:Collecte')->find($RelEntityId->getData());
+            $lotMateriel->setCollecteFk($RelEntity);
+            // persist
             $em->persist($lotMateriel);
             try {
                 $em->flush();
@@ -182,7 +222,7 @@ class LotMaterielController extends Controller
         $deleteForm = $this->createDeleteForm($lotMateriel);
         $editForm = $this->createForm('Bbees\E3sBundle\Form\LotMaterielType', $lotMateriel);
 
-        return $this->render('show.html.twig', array(
+        return $this->render('lotmateriel/edit.html.twig', array(
             'lotMateriel' => $lotMateriel,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -224,6 +264,11 @@ class LotMaterielController extends Controller
             $service->DelArrayCollectionEmbed('EspeceIdentifiees','EstIdentifiePars',$lotMateriel, $especeIdentifiees);
             $service->DelArrayCollection('LotEstPublieDanss',$lotMateriel, $lotEstPublieDanss);
             $service->DelArrayCollection('LotMaterielEstRealisePars',$lotMateriel, $lotMaterielEstRealisePars);
+            // (i) load the id of relational Entity (Collecte) from typeahead input field  (ii) set the foreign key
+            $em = $this->getDoctrine()->getManager();
+            $RelEntityId = $editForm->get('collecteId');;
+            $RelEntity = $em->getRepository('BbeesE3sBundle:Collecte')->find($RelEntityId->getData());
+            $lotMateriel->setCollecteFk($RelEntity);
             // flush
             $this->getDoctrine()->getManager()->persist($lotMateriel);                       
             try {

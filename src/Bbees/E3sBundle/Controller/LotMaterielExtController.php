@@ -80,7 +80,7 @@ class LotMaterielExtController extends Controller
         }
         // Search for the list to show
         $tab_toshow =[];
-        $toshow = $em->getRepository("BbeesE3sBundle:LotMaterielExt")->createQueryBuilder('lotMaterielExt')
+        $entities_toshow = $em->getRepository("BbeesE3sBundle:LotMaterielExt")->createQueryBuilder('lotMaterielExt')
             ->where($where)
             ->setParameter('criteriaLower', strtolower($searchPhrase).'%')
             ->leftJoin('BbeesE3sBundle:Collecte', 'collecte', 'WITH', 'lotMaterielExt.collecteFk = collecte.id')
@@ -89,10 +89,10 @@ class LotMaterielExtController extends Controller
             ->addOrderBy(array_keys($orderBy)[0], array_values($orderBy)[0])
             ->getQuery()
             ->getResult();
-        $nb = count($toshow);
-        $toshow = array_slice($toshow, $minRecord, $rowCount);  
+        $nb = count($entities_toshow);
+        $entities_toshow = ($request->get('rowCount') > 0 ) ? array_slice($entities_toshow, $minRecord, $rowCount) : array_slice($entities_toshow, $minRecord);
         $lastTaxname = '';
-        foreach($toshow as $entity)
+        foreach($entities_toshow as $entity)
         {
             $id = $entity->getId();
             $codeStation = $entity->getCollecteFk()->getStationFk()->getCodeStation();
@@ -145,11 +145,22 @@ class LotMaterielExtController extends Controller
     public function newAction(Request $request)
     {
         $lotMaterielExt = new Lotmaterielext();
+        $em = $this->getDoctrine()->getManager();
+        // check if the relational Entity (Collecte) is given and set the RelationalEntityFk for the new Entity
+        if ($request->get('idFk') !== null && $request->get('idFk') !== '') {
+            $RelEntityId = $request->get('idFk');
+            $RelEntity = $em->getRepository('BbeesE3sBundle:Collecte')->find($RelEntityId);
+            $lotMaterielExt->setCollecteFk($RelEntity);
+        }
         $form = $this->createForm('Bbees\E3sBundle\Form\LotMaterielExtType', $lotMaterielExt);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            // (i) load the id  the relational Entity (Collecte) from typeahead input field and (ii) set the foreign key 
+            $RelEntityId = $form->get('collecteId');
+            $RelEntity = $em->getRepository('BbeesE3sBundle:Collecte')->find($RelEntityId->getData());
+            $lotMaterielExt->setCollecteFk($RelEntity);
+            // persist
             $em->persist($lotMaterielExt);
             try {
                 $em->flush();
@@ -177,7 +188,7 @@ class LotMaterielExtController extends Controller
         $deleteForm = $this->createDeleteForm($lotMaterielExt);
         $editForm = $this->createForm('Bbees\E3sBundle\Form\LotMaterielExtType', $lotMaterielExt);
 
-        return $this->render('show.html.twig', array(
+        return $this->render('lotmaterielext/edit.html.twig', array(
             'lotMaterielExt' => $lotMaterielExt,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -215,6 +226,11 @@ class LotMaterielExtController extends Controller
             $service->DelArrayCollectionEmbed('EspeceIdentifiees','EstIdentifiePars',$lotMaterielExt, $especeIdentifiees);
             $service->DelArrayCollection('LotMaterielExtEstReferenceDanss',$lotMaterielExt, $lotMaterielExtEstReferenceDanss);
             $service->DelArrayCollection('LotMaterielExtEstRealisePars',$lotMaterielExt, $lotMaterielExtEstRealisePars);
+            // (i) load the id of relational Entity (Collecte) from typeahead input field  (ii) set the foreign key
+            $em = $this->getDoctrine()->getManager();
+            $RelEntityId = $editForm->get('collecteId');;
+            $RelEntity = $em->getRepository('BbeesE3sBundle:Collecte')->find($RelEntityId->getData());
+            $lotMaterielExt->setCollecteFk($RelEntity);
             // flush
             $this->getDoctrine()->getManager()->persist($lotMaterielExt);                       
             try {
