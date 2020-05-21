@@ -60,13 +60,4 @@
   <script src="{{ asset('e3s/vendors/bootstrap-select/dist/js/bootstrap-select.min.js') }}"></script>
   <!-- Bootstrap Multiselect -->
   <script src="{{ asset('e3s/vendors/bootstrap-multiselect/dist/js/bootstrap-multiselect.js') }}"></script>
-  <script type="text/javascript">
-    $(function() {$('#initial-constraints-switchbox').change(function() {$('#initial-collapse-constraints').collapse('toggle')})})
-  </script>
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $("#initial-fields").multiselect({includeSelectAllOption: true, allSelectedText: 'All fields selected', nonSelectedText: 'No field(s) selected', numberDisplayed: 7,
-      buttonWidth: 225});
-    });
-  </script>
 {% endblock %}

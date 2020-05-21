@@ -13,7 +13,14 @@ import { dtconfig } from "../../lehnaspeciessearch/js/datatables_utils.js";
 $(document).ready(function () {
   // Filling the menu with all the tables in the database
   $.getJSON("init", function (init_data) {
-    
+    $("#initial-fields").multiselect({
+      includeSelectAllOption: true,
+      allSelectedText: "All fields selected",
+      nonSelectedText: "No field(s) selected",
+      numberDisplayed: 7,
+      buttonWidth: 225,
+    });
+
     // Making sure these buttons are disabled on reload
     document.getElementById("add-join").disabled = true;
     document.getElementById("submit-button").disabled = true;
@@ -59,6 +66,13 @@ $(document).ready(function () {
     $(".reset").click(function () {
       let target = $(this).data("target");
       $(target).queryBuilder("reset");
+    });
+
+    // Hiding what's in the div, then showing it when the switchbox is triggered
+    document.getElementById("initial-applied-constraints").style.display =
+      "none";
+    $("#initial-constraints-switchbox").change(function () {
+      $("#initial-applied-constraints").toggle("slow");
     });
 
     // What occurs when you choose a table and/or change it
@@ -137,10 +151,9 @@ function addJoin(block_id) {
 
   $("[data-toggle='toggle']").bootstrapToggle("destroy");
   $("[data-toggle='toggle']").bootstrapToggle();
-  $(function () {
-    newBlock.find("#join-constraints-switchbox").change(function () {
-      newBlock.find(".join-collapse-constraints").collapse("toggle");
-    });
+  newBlock.find(".join-applied-constraints").hide();
+  newBlock.find("#join-constraints-switchbox").change(function () {
+    newBlock.find(".join-applied-constraints").toggle("slow");
   });
 
   $('[data-toggle="tooltip"]').tooltip();

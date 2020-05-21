@@ -5,7 +5,7 @@
 <div class="panel panel-default" id="initial-panel">
 	<div class="panel-heading" id="initial-header">
 		<div class="form-group" id="initial-table-selection">
-			<label class="control-label" for="niveau" data-toggle="tooltip" data-placement="top" title="Select the first table">
+			<label class="control-label" data-toggle="tooltip" data-placement="top" title="Select the first table">
 				{% trans %}
 				Select Table
 				{% endtrans %}
@@ -30,19 +30,14 @@
 			</strong>
 			<br>
 			<label class="control-label" title="Add Constraints" data-toggle="tooltip" data-placement="left">
-				<input id="initial-constraints-switchbox" class="constraints-switchbox" type="checkbox" data-toggle="toggle" data-onstyle="success" data-size="normal" aria-expanded="false" data-target="#initial-collapse-constraints" autocomplete="off">
+				<input id="initial-constraints-switchbox" class="constraints-switchbox" type="checkbox" data-toggle="toggle" data-onstyle="success" data-target="#initial-applied-constraints">
 			</label>
 		</div>
 	</div>
-	<div id="initial-applied-constraints" class="applied-constraints">
-		<div class="panel-collapse collapse" id="initial-collapse-constraints" aria-expanded="false">
-			<div id="initial-query-builder" class="collapsed-query-builder"></div>
-			<div class="btn-group">
-				<button class="btn btn-warning reset" data-target="#initial-query-builder">Reset
-				</button>
-			</div>
-		</div>
-		<div id="initial-warning-msg" class="warning-msg collapse">
+	<div class="applied-constraints" id="initial-applied-constraints">
+		<div id="initial-query-builder" class="collapsed-query-builder"></div>
+		<button class="btn btn-warning reset" id="initial-cc-reset" data-target="#initial-query-builder">Reset</button>
+		<div id="initial-warning-msg" class="warning-msg">
 			<strong>
 				{% trans %}
 				Some Warning Message
