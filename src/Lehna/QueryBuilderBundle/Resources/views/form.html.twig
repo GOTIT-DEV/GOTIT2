@@ -3,54 +3,29 @@
 {% trans_default_domain 'queries' %}
 
 <form id="main-form" action="#">
-	<legend id="logical-container">
-    <h2 id="logical-model-div">
-      {% trans %}
-			GOTIT Database Logical Model
-			{% endtrans %}
-    </h2>
-    <div id="img-container" data-toggle="tooltip" data-placement="left" title="Click on the image to see the Logical Model of the Full Database">
-      {% include '@LehnaQueryBuilder/logical.db.model.html.twig' %}
-    </div>
-    <h2 class="h2-query-fields">
-			{% trans %}
-			Query fields
-			{% endtrans %}
-		</h2>
-	</legend>
 
   {# Initial Block #}
   {% include '@LehnaQueryBuilder/forms/initial.block.html.twig' %}
 
-  {# Join Div #}
-  <div>
-    <div class="add-constraints" id="add-constraints"></div>
-    {# Join Blocks #}
-    <div class="row">
-      {% include '@LehnaQueryBuilder/forms/join.blocks.html.twig' %}
-    </div>
+  {# Join Blocks #}
+  <div class="add-constraints" id="add-constraints">
+    {% include '@LehnaQueryBuilder/forms/join.blocks.html.twig' %}
   </div>
 
   {# Button to Add a Join Div #}
-  <div class="row">
-    <div class="add-join-div btn-group pull-left group-actions" id="add-join-div">
-      <button class="btn btn-xs btn-basic collapsed" id="add-join" type="button" disabled>
-        <i class="glyphicon glyphicon-plus-sign add-join-block"  data-toggle="tooltip" data-placement="right" title="Add a join block"></i>
-      </button>
-    </div>
-  </div>
-
-
-	<center>
-    <button type="reset" value="Reset" class="btn btn-warning btn-lg reset-form" id="clear">
-      {% trans %}
-			Clear
-			{% endtrans %}
+  <div class="btn-group pull-left group-actions" id="form-end">
+    <button class="btn btn-xs btn-basic collapsed" id="add-join" type="button" disabled>
+      <i class="glyphicon glyphicon-plus-sign" id="add-join-block"  data-toggle="tooltip" data-placement="right" title="Add a join block"></i>
     </button>
-		<button type="submit" href="#resultats" value="Rechercher" class="btn btn-primary btn-lg" id="submit-button" disabled>
-			{% trans %}
-			Search
-			{% endtrans %}
-		</button>
-	</center>
+    <button type="reset" value="Reset" class="btn btn-warning btn-lg" id="clear" data-toggle="tooltip" data-placement="top" title="Reinitialize the form">
+      {% trans %}
+      Clear
+      {% endtrans %}
+    </button>
+    <button type="submit" href="#resultats" value="Rechercher" class="btn btn-primary btn-lg" id="submit-button" disabled>
+      {% trans %}
+      Search
+      {% endtrans %}
+    </button>
+  </div>
 </form>

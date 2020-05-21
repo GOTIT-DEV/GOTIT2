@@ -9,9 +9,24 @@
 {% endblock %}
 
 {% block titlepage %}
-	<h1>
-		Query Builder
-	</h1>
+	<legend id="page-title">
+		<h1 id="main-page-title">
+			Query Builder
+		</h1>
+		<h1 id="logical-model-title">
+			{% trans %}
+			GOTIT Database Logical Model
+			{% endtrans %}
+		</h1>
+		<div id="img-container" data-toggle="tooltip" data-placement="left" title="Click on the image to see the Logical Model of the Full Database">
+			{% include '@LehnaQueryBuilder/logical.db.model.html.twig' %}
+		</div>
+		<h2 id="query-fields-title">
+			{% trans %}
+			Query fields
+			{% endtrans %}
+		</h2>
+	</legend>
 {% endblock %}
 
 {% block body %}

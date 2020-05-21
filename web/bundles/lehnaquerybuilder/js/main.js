@@ -13,10 +13,13 @@ import { dtconfig } from "../../lehnaspeciessearch/js/datatables_utils.js";
 $(document).ready(function () {
   // Filling the menu with all the tables in the database
   $.getJSON("init", function (init_data) {
-    // Making sure the add-join button is disabled on reload
+    
+    // Making sure these buttons are disabled on reload
     document.getElementById("add-join").disabled = true;
     document.getElementById("submit-button").disabled = true;
+    document.getElementById("getSqlButton").disabled = true;
 
+    // Init tooltips for initial block
     $('[data-toggle="tooltip"]').tooltip();
 
     // Init menu for choosing the first table
