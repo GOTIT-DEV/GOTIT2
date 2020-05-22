@@ -310,6 +310,10 @@ $("#add-join").click(function () {
         alert(
           "Removed Join Block Successfully!\nBe warned : you might need to make changes accordingly on the remaining Join Blocks!"
         );
+        let blockList = document.getElementsByClassName(".form-block");
+        console.log(blockList.length);
+        let suppressedJoinId = newBlock.find(".form-block").prevObject[0].id;
+        console.log(suppressedJoinId);
       });
     });
   });
