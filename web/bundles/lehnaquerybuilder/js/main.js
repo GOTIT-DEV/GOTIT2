@@ -490,12 +490,14 @@ let myModal = document.getElementById("logigal-database-model");
 
 // Get the image and insert it inside the modal - use its "alt" text as a caption
 let dbImg = document.getElementById("logical-db-img");
+$("#logical-db-image").elevateZoom();
 let myModalImg = document.getElementById("db-img");
 let captionText = document.getElementById("caption");
 dbImg.onclick = function () {
   myModal.style.display = "block";
   myModalImg.src = this.src;
   captionText.innerHTML = this.alt;
+  $("#db-img").elevateZoom();
 };
 
 let closeImg = document.getElementsByClassName("close")[0];
