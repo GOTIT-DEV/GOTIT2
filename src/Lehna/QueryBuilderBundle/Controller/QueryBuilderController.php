@@ -66,7 +66,7 @@ class QueryBuilderController extends Controller
         if (count($data) > 1)
             if (strlen($data["joins"] >= 1)) {
                 $joins = $data["joins"];
-                $query = $this->getJoinsBlocks($joins, $query); // Getting the info on each block containing a JOIN. 
+                $query = $this->getJoinsBlocks($joins, $query, $initial); // Getting the info on each block containing a JOIN. 
             }
 
         $q = $query->getQuery();
@@ -340,7 +340,7 @@ class QueryBuilderController extends Controller
      * Returns : the query with the JOIN(s) added. 
      * Warning : by default, no fields are selected, the user is free to return no field for a JOIN. 
      */
-    public function getJoinsBlocks($joins, $query)
+    public function getJoinsBlocks($joins, $query, $initial)
     {
 
         foreach ($joins as $j) {
@@ -355,7 +355,7 @@ class QueryBuilderController extends Controller
                     $query = $query->addSelect($adjTable . "." . $newValue);
                 };
             }
-            $query = $this->makeJoin($joins, $query, $formerTable, $jointype, $adjTable, $srcField, $tgtField);
+            $query = $this->makeJoin($joins, $query, $initial, $formerTable, $jointype, $adjTable, $srcField, $tgtField);
             if ($j["constraints"] != "") { // If the user chooses to apply constraints on some fields in the JOIN part. 
                 $newConstraints = $j["constraints"]["rules"];
                 $newCondition = $j["constraints"]["condition"];
@@ -374,13 +374,22 @@ class QueryBuilderController extends Controller
      * Warning : the right, cross and full joins were added, but they are not supported by the QueryBuilder yet. Please keep them commented. 
      * 
      */
-    public function makeJoin($joins, $query, $formerTable, $jointype, $adjTable, $srcField, $tgtField)
+    public function makeJoin($joins, $query, $initial, $formerTable, $jointype, $adjTable, $srcField, $tgtField)
     {
-        // 
+        $firstTable = $initial["table"];
+        $aliasID = 1;
+        if ($firstTable == $adjTable) {
+            $adjTableOriginal = $adjTable;
+            $adjTableAlias = $adjTable.$aliasID;
+        } elseif ($firstTable != $adjTable) {
+            $adjTableOriginal = $adjTable;
+            $adjTableAlias = $adjTable;
+        }
+
         if ($jointype == "Inner Join") {
-            $query = $query->innerJoin('BbeesE3sBundle:' . $adjTable, $adjTable, 'WITH', $formerTable . '.' . $srcField . " = " . $adjTable . '.' . $tgtField);
+            $query = $query->innerJoin('BbeesE3sBundle:' . $adjTableOriginal, $adjTableAlias, 'WITH', $formerTable . '.' . $srcField . " = " . $adjTableAlias . '.' . $tgtField);
         } elseif ($jointype == "Left Join") {
-            $query = $query->leftJoin('BbeesE3sBundle:' . $adjTable, $adjTable, 'WITH', $formerTable . '.' . $srcField . " = " . $adjTable . '.' . $tgtField);
+            $query = $query->leftJoin('BbeesE3sBundle:' . $adjTableOriginal, $adjTableAlias, 'WITH', $formerTable . '.' . $srcField . " = " . $adjTableAlias . '.' . $tgtField);
         } /* elseif ($jointype == "right join") {
             $query = $query->rightJoin('BbeesE3sBundle:'.$adjTable, $adjTable, 'WITH', $formerTable.'.'.$srcField." = ".$adjTable.'.'.$tgtField);
         } elseif ($jointype == "cross join") {
