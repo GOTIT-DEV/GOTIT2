@@ -256,6 +256,10 @@ $("#add-join").click(function () {
         // Disabling the plus button and the submit button when the former table is changed and therefore no adjacent table is selected
         document.getElementById("add-join").disabled = true;
         document.getElementById("submit-button").disabled = true;
+
+        if (newBlock.find(".highlight-div")) {
+          newBlock.removeClass("highlight-div");
+        }
       })
       .selectpicker("refresh")
       .change();
@@ -304,16 +308,21 @@ $("#add-join").click(function () {
     newBlock.find(".table-selects").multiselect("rebuild");
     newBlock.find(".table-selects").multiselect("updateButtonText");
 
-    $(function () {
-      newBlock.find(".remove").click(function () {
-        newBlock.find(".form-block").remove();
-        alert(
-          "Removed Join Block Successfully!\nBe warned : you might need to make changes accordingly on the remaining Join Blocks!"
-        );
-        let blockList = document.getElementsByClassName(".form-block");
-        console.log(blockList.length);
-        let suppressedJoinId = newBlock.find(".form-block").prevObject[0].id;
-        console.log(suppressedJoinId);
+    newBlock.find(".remove").click(function () {
+      newBlock.find(".form-block").remove();
+      if (newBlock.find(".highlight-div")) {
+        newBlock.removeClass("highlight-div");
+      }
+      alert(
+        "Removed Join Block Successfully!\nBe warned : you might need to make changes in the higlighted blocks!"
+      );
+      let blockList = document.getElementsByClassName("form-block-id");
+      let suppressedJoinId = newBlock.find(".form-block").prevObject[0].id;
+      $.each(blockList, function (item) {
+        if (blockList[item].id > suppressedJoinId) {
+          document.getElementById(blockList[item].id).className +=
+            " highlight-div";
+        }
       });
     });
   });
