@@ -26,9 +26,6 @@ $(document).ready(function () {
     document.getElementById("submit-button").disabled = true;
     document.getElementById("getSqlButton").disabled = true;
 
-    // Init tooltips for initial block
-    $('[data-toggle="tooltip"]').tooltip();
-
     // Init menu for choosing the first table
     $("#initial-table")
       .empty()
@@ -51,6 +48,17 @@ $(document).ready(function () {
 
     // Redbuilding the dropdown with the new info in it
     $("#initial-table").selectpicker("refresh");
+    $(
+      '[data-toggle="tooltip"], [data-toggle="tooltip"] + .bootstrap-select > button'
+    ).tooltip({
+      selector: ".selectpicker",
+      container: "button",
+      placement: "bottom",
+    });
+
+    $("#initial-table").on("loaded.bs.select", (event) => {
+      $(event.target).tooltip("show");
+    });
 
     // Initialization of the query builder
     $("#initial-query-builder").queryBuilder({
@@ -112,6 +120,8 @@ $(document).ready(function () {
       document.getElementById("add-join").disabled = false;
       document.getElementById("submit-button").disabled = false;
     });
+
+    // Init tooltips for initial block
   });
 });
 
