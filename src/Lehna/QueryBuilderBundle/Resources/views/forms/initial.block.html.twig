@@ -5,22 +5,22 @@
 <div class="panel panel-default" id="initial-panel">
 	<div class="panel-heading" id="initial-header">
 		<div class="form-group" id="initial-table-selection">
-			<label class="control-label">
+			<label class="control-label" for="initial-table">
 				{% trans %}
 				Select Table
 				{% endtrans %}
 			</label>
 			<br>
-			<select id="initial-table" class="selectpicker" name="initial-table" data-live-search="true" data-placement="right" data-toggle="tooltip" title="Select the first table"></select>
+			<select name="initial-table" id="initial-table" class="selectpicker" data-live-search="true" data-toggle="tooltip" data-placement="auto right" title="Select the first table"></select>
 		</div>
 		<div class="form-group" id="initial-selected-fields">
-			<label class="control-label">
+			<label class="control-label" for="initial-fields">
 				{% trans %}
 				Select Field(s)									
 				{% endtrans %}
 			</label>
 			<br>
-			<select id="initial-fields" name="initial-fields" multiple="multiple" data-toggle="tooltip" title="Select fields from the first table (All selected by default)" data-placement="auto left"></select>
+			<select name="initial-fields" id="initial-fields" multiple data-toggle="tooltip" data-placement="auto left" title="Select fields from the first table (All selected by default)"></select>
 		</div>
 		<div class="form-group" id="initial-checked-constraints">
 			<strong>
@@ -29,7 +29,7 @@
 				{% endtrans %}
 			</strong>
 			<br>
-			<label class="control-label" title="Add Constraints" data-toggle="tooltip" data-placement="left">
+			<label class="control-label" for="initial-constraints-switchbox" data-toggle="tooltip" data-placement="left" title="Add Constraints" >
 				<input id="initial-constraints-switchbox" class="constraints-switchbox" type="checkbox" data-toggle="toggle" data-onstyle="success" data-target="#initial-applied-constraints">
 			</label>
 		</div>

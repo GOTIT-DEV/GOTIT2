@@ -48,17 +48,9 @@ $(document).ready(function () {
 
     // Redbuilding the dropdown with the new info in it
     $("#initial-table").selectpicker("refresh");
-    $(
-      '[data-toggle="tooltip"], [data-toggle="tooltip"] + .bootstrap-select > button'
-    ).tooltip({
-      selector: ".selectpicker",
-      container: "button",
-      placement: "bottom",
-    });
-
-    $("#initial-table").on("loaded.bs.select", (event) => {
-      $(event.target).tooltip("show");
-    });
+    // $('.bootstrap-select').tooltip({title: "Select the Initial Table"});
+    $(".bootstrap-select").tooltip({ title: "Select the Initial Table" });
+    $(".btn-group").tooltip({ title: "cc", selector: "multiple" });
 
     // Initialization of the query builder
     $("#initial-query-builder").queryBuilder({
@@ -376,7 +368,7 @@ $.get("init", function (data) {
 });
 
 // Get the information about the first table chosen, the constraints on it, fields to show
-function get_form_initial() {
+export function get_form_initial() {
   var table1 = document.getElementById("initial-table");
   var table = table1.options[table1.selectedIndex].value;
 
@@ -401,7 +393,7 @@ function get_form_initial() {
 }
 
 // Get the information about the templates' blocks
-function get_form_block_data(init_data) {
+export function get_form_block_data(init_data) {
   let block_list = $(".form-block");
   let data = block_list
     .map(function () {
