@@ -373,16 +373,17 @@ class QueryBuilderController extends Controller
         $adjTable = $j["adjacent_table"];
         $formerTable = $j["formerTable"];
       }
-      if ($aliasFTAlreadyExists === true and $key != 0) {
+      if ($aliasFTAlreadyExists === true and $j["formerTable"] != $initial["table"]) {
         $formerTable = $j["formerTable"] . $aliasFT;
-      } else $formerTable = $j["formerTable"];
+        $aliasFT += 1;
+      } else $formerTable = $initial["table"]; 
       $jointype = $j["join"];
       $srcField = $j["sourceField"];
       $tgtField = $j["targetField"];
       if (count($j) == 7) { // If the user chooses to return some fields.
         $newFields = $j["fields"];
         foreach ($newFields as $newValue) {
-          $query = $query->addSelect($adjTableAlias . "." . $newValue);
+          $query = $query->addSelect($adjTable . "." . $newValue);
         };
       }
       $query = $this->makeJoin($joins, $query, $initial, $formerTable, $jointype, $adjTable, $adjTableAlias, $srcField, $tgtField);
