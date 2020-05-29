@@ -185,15 +185,15 @@ class QueryBuilderController extends Controller
     }
     if ($firstOperator == "equal") {
       if ($condition == "OR") {
-        $query = $query->orWhere($ft . " = " . $firstValue);
+        $query = $query->orWhere($ft . " = " ." '" . $firstValue . "'");
       } else {
-        $query = $query->andWhere($ft . " = " . $firstValue);
+        $query = $query->andWhere($ft . " = " ." '" . $firstValue . "'");
       }
     } elseif ($firstOperator == "not_equal") {
       if ($condition == "OR") {
-        $query = $query->orWhere($ft . "!=" . $firstValue);
+        $query = $query->orWhere($ft . "!=" . " '" . $firstValue . "'");
       } else {
-        $query = $query->andWhere($ft . "!=" . $firstValue);
+        $query = $query->andWhere($ft . "!=" . " '" . $firstValue . "'");
       }
     } elseif ($firstOperator == "less") {
       if ($condition == "OR") {
@@ -221,15 +221,15 @@ class QueryBuilderController extends Controller
       }
     } elseif ($firstOperator == "begins_with") {
       if ($condition == "OR") {
-        $query = $query->orWhere($ft . " LIKE" . " '" . strtoupper($firstValue) . "%'");
+        $query = $query->orWhere($ft . " LIKE" . " '" . $firstValue . "%'");
       } else {
-        $query = $query->andWhere($ft . " LIKE" . " '" . strtoupper($firstValue) . "%'");
+        $query = $query->andWhere($ft . " LIKE" . " '" . $firstValue . "%'");
       }
     } elseif ($firstOperator == "not_begins_with") {
       if ($condition == "OR") {
-        $query = $query->orWhere($ft . " NOT LIKE" . " '" . strtoupper($firstValue) . "%'");
+        $query = $query->orWhere($ft . " NOT LIKE" . " '" . $firstValue . "%'");
       } else {
-        $query = $query->andWhere($ft . " NOT LIKE" . " '" . strtoupper($firstValue) . "%'");
+        $query = $query->andWhere($ft . " NOT LIKE" . " '" . $firstValue . "%'");
       }
     } elseif ($firstOperator == "is_null") {
       if ($condition == "OR") {
@@ -261,27 +261,27 @@ class QueryBuilderController extends Controller
       }
     } elseif ($firstOperator == "ends_with") {
       if ($condition == "OR") {
-        $query = $query->orWhere($ft . " LIKE" . " '%" . strtoupper($firstValue) . "'");
+        $query = $query->orWhere($ft . " LIKE" . " '%" . $firstValue . "'");
       } else {
-        $query = $query->andWhere($ft . " LIKE" . " '%" . strtoupper($firstValue) . "'");
+        $query = $query->andWhere($ft . " LIKE" . " '%" . $firstValue . "'");
       }
     } elseif ($firstOperator == "not_ends_with") {
       if ($condition == "OR") {
-        $query = $query->orWhere($ft . " NOT LIKE" . " '%" . strtoupper($firstValue) . "'");
+        $query = $query->orWhere($ft . " NOT LIKE" . " '%" . $firstValue . "'");
       } else {
-        $query = $query->andWhere($ft . " NOT LIKE" . " '%" . strtoupper($firstValue) . "'");
+        $query = $query->andWhere($ft . " NOT LIKE" . " '%" . $firstValue . "'");
       }
     } elseif ($firstOperator == "contains") {
       if ($condition == "OR") {
-        $query = $query->orWhere($ft . " LIKE" . " '%" . strtoupper($firstValue) . "%'");
+        $query = $query->orWhere($ft . " LIKE" . " '%" . $firstValue . "%'");
       } else {
-        $query = $query->andWhere($ft . " LIKE" . " '%" . strtoupper($firstValue) . "%'");
+        $query = $query->andWhere($ft . " LIKE" . " '%" . $firstValue . "%'");
       }
     } elseif ($firstOperator == "not_contains") {
       if ($condition == "OR") {
-        $query = $query->orWhere($ft . " NOT LIKE" . " '%" . strtoupper($firstValue) . "%'");
+        $query = $query->orWhere($ft . " NOT LIKE" . " '%" . $firstValue . "%'");
       } else {
-        $query = $query->andWhere($ft . " NOT LIKE" . " '%" . strtoupper($firstValue) . "%'");
+        $query = $query->andWhere($ft . " NOT LIKE" . " '%" . $firstValue . "%'");
       }
     } elseif ($firstOperator == "is_empty") {
       if ($condition == "OR") {
@@ -441,15 +441,15 @@ class QueryBuilderController extends Controller
     }
     if ($newOperator == "equal") {
       if ($newCondition == "OR") {
-        $query = $query->orWhere($nft . " = " . $newValue);
+        $query = $query->orWhere($nft . " = " . " '" . $newValue . "'");
       } else {
-        $query = $query->andWhere($nft . " = " . $newValue);
+        $query = $query->andWhere($nft . " = " . " '" . $newValue . "'");
       }
     } elseif ($newOperator == "not_equal") {
       if ($newCondition == "OR") {
-        $query = $query->orWhere($nft . "!=" . $newValue);
+        $query = $query->orWhere($nft . "!=" . " '" . $newValue . "'");
       } else {
-        $query = $query->andWhere($nft . "!=" . $newValue);
+        $query = $query->andWhere($nft . "!=" . " '" . $newValue . "'");
       }
     } elseif ($newOperator == "less") {
       if ($newCondition == "OR") {
@@ -477,15 +477,15 @@ class QueryBuilderController extends Controller
       }
     } elseif ($newOperator == "begins_with") {
       if ($newCondition == "OR") {
-        $query = $query->orWhere($nft . " LIKE" . " '" . strtoupper($newValue) . "%'");
+        $query = $query->orWhere($nft . " LIKE" . " '" . $newValue . "%'");
       } else {
-        $query = $query->andWhere($nft . " LIKE" . " '" . strtoupper($newValue) . "%'");
+        $query = $query->andWhere($nft . " LIKE" . " '" . $newValue . "%'");
       }
     } elseif ($newOperator == "not_begins_with") {
       if ($newCondition == "OR") {
-        $query = $query->orWhere($nft . " NOT LIKE" . " '" . strtoupper($newValue) . "%'");
+        $query = $query->orWhere($nft . " NOT LIKE" . " '" . $newValue . "%'");
       } else {
-        $query = $query->andWhere($nft . " NOT LIKE" . " '" . strtoupper($newValue) . "%'");
+        $query = $query->andWhere($nft . " NOT LIKE" . " '" . $newValue . "%'");
       }
     } elseif ($newOperator == "is_null") {
       if ($newCondition == "OR") {
@@ -517,27 +517,27 @@ class QueryBuilderController extends Controller
       }
     } elseif ($newOperator == "ends_with") {
       if ($newCondition == "OR") {
-        $query = $query->orWhere($nft . " LIKE" . " '%" . strtoupper($newValue) . "'");
+        $query = $query->orWhere($nft . " LIKE" . " '%" . $newValue . "'");
       } else {
-        $query = $query->andWhere($nft . " LIKE" . " '%" . strtoupper($newValue) . "'");
+        $query = $query->andWhere($nft . " LIKE" . " '%" . $newValue . "'");
       }
     } elseif ($newOperator == "not_ends_with") {
       if ($newCondition == "OR") {
-        $query = $query->orWhere($nft . " NOT LIKE" . " '%" . strtoupper($newValue) . "'");
+        $query = $query->orWhere($nft . " NOT LIKE" . " '%" . $newValue . "'");
       } else {
-        $query = $query->andWhere($nft . " NOT LIKE" . " '%" . strtoupper($newValue) . "'");
+        $query = $query->andWhere($nft . " NOT LIKE" . " '%" . $newValue . "'");
       }
     } elseif ($newOperator == "contains") {
       if ($newCondition == "OR") {
-        $query = $query->orWhere($nft . " LIKE" . " '%" . strtoupper($newValue) . "%'");
+        $query = $query->orWhere($nft . " LIKE" . " '%" . $newValue . "%'");
       } else {
-        $query = $query->andWhere($nft . " LIKE" . " '%" . strtoupper($newValue) . "%'");
+        $query = $query->andWhere($nft . " LIKE" . " '%" . $newValue . "%'");
       }
     } elseif ($newOperator == "not_contains") {
       if ($newCondition == "OR") {
-        $query = $query->orWhere($nft . " NOT LIKE" . " '%" . strtoupper($newValue) . "%'");
+        $query = $query->orWhere($nft . " NOT LIKE" . " '%" . $newValue . "%'");
       } else {
-        $query = $query->andWhere($nft . " NOT LIKE" . " '%" . strtoupper($newValue) . "%'");
+        $query = $query->andWhere($nft . " NOT LIKE" . " '%" . $newValue . "%'");
       }
     } elseif ($newOperator == "is_empty") {
       if ($newCondition == "OR") {
