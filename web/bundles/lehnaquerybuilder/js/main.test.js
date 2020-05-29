@@ -11,10 +11,10 @@ import { initFirstTable, initFirstQueryBuilder, initFirstFields, initJoinBlock, 
 const joins = ["Inner Join", "Left Join"];
 let mybutton = document.getElementById("myBtn");
 
-$(document).ready(_ => {
-  // calling necessary functions
-  // binding the blocks together
 
+$(document).ready(_ => {
+
+  console.log(init_data);
   $.getJSON("init", function (init_data) {
 
     // Making sure these buttons are disabled on reload
