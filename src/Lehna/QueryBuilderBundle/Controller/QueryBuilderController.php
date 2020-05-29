@@ -346,7 +346,6 @@ class QueryBuilderController extends Controller
     foreach ($joins as $key => $j) {
       $joinDqlParts = $query->getDQLParts()['join'];
       $fromDqlParts = $query->getDQLParts()['from'][0];
-      dump($query->getDQLParts());
       $aliasATAlreadyExists = false;
       $aliasFTAlreadyExists = false;
       $aliasAT = 1;
@@ -376,7 +375,7 @@ class QueryBuilderController extends Controller
       if ($aliasFTAlreadyExists === true and $j["formerTable"] != $initial["table"]) {
         $formerTable = $j["formerTable"] . $aliasFT;
         $aliasFT += 1;
-      } else $formerTable = $initial["table"]; 
+      } else $formerTable = $j["formerTable"]; 
       $jointype = $j["join"];
       $srcField = $j["sourceField"];
       $tgtField = $j["targetField"];
@@ -386,7 +385,7 @@ class QueryBuilderController extends Controller
           $query = $query->addSelect($adjTable . "." . $newValue);
         };
       }
-      $query = $this->makeJoin($joins, $query, $initial, $formerTable, $jointype, $adjTable, $adjTableAlias, $srcField, $tgtField);
+      $query = $this->makeJoin($joins, $query, $formerTable, $jointype, $adjTable, $adjTableAlias, $srcField, $tgtField);
       if ($j["constraints"] != "") { // If the user chooses to apply constraints on some fields in the JOIN part. 
         $newConstraints = $j["constraints"]["rules"];
         $newCondition = $j["constraints"]["condition"];
@@ -405,7 +404,7 @@ class QueryBuilderController extends Controller
    * Warning : the right, cross and full joins were added, but they are not supported by the QueryBuilder yet. Please keep them commented. 
    * 
    */
-  public function makeJoin($joins, $query, $initial, $formerTable, $jointype, $adjTable, $adjTableAlias, $srcField, $tgtField)
+  public function makeJoin($joins, $query, $formerTable, $jointype, $adjTable, $adjTableAlias, $srcField, $tgtField)
   {
     if ($jointype == "Inner Join") {
       $query = $query->innerJoin('BbeesE3sBundle:' . $adjTable, $adjTableAlias, 'WITH', $formerTable . '.' . $srcField . " = " . $adjTableAlias . '.' . $tgtField);
