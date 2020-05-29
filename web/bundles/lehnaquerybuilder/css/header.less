@@ -4,8 +4,8 @@ legend#page-title {
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr auto 1fr;
   grid-template-areas:
-    "main-page-title logical-model-title download-text"
-    ". img-container ."
+    "main-page-title logical-model-title ."
+    ". img-container download-text"
     "query-fields-title . .";
 
   h1#main-page-title {
@@ -18,14 +18,14 @@ legend#page-title {
 
   a.download-text {
     grid-area: download-text;
-    justify-self: start;
+    justify-self: center;
     height: 50px;
     width: 200px;
   }
 
   div#img-container {
     grid-area: img-container;
-    justify-self: start;
+    justify-self: center;
   }
 
   h2#query-fields-title {

@@ -20,7 +20,7 @@ export function initResults(data) {
     let data_initial = get_form_initial();
     let data_join_blocks = get_form_block_data(data);
 
-    let jsonData = { initial: data_initial, join: data_join_blocks};
+    let jsonData = { initial: data_initial, joins: data_join_blocks};
 
     document.getElementById("getSqlButton").disabled = false;
 
@@ -36,7 +36,7 @@ export function initResults(data) {
         $("#result-table").dataTable(
           Object.assign({ 
             dom: "lfrtipB",
-            responsove: true
+            responsive: true
           }, dtconfig)
         )
       }

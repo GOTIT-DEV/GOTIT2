@@ -63,11 +63,12 @@ class QueryBuilderController extends Controller
     $query = $this->getFirstBlock($data, $initial, $qb); // Getting the info of the first block. 
 
     // If $data is longer than 1, it means there are one or more JOIN(s) in the query.
-    if (count($data) > 1)
+    if (count($data) > 1) {
       if (strlen($data["joins"] >= 1)) {
         $joins = $data["joins"];
         $query = $this->getJoinsBlocks($joins, $query, $initial); // Getting the info on each block containing a JOIN. 
       }
+    }
 
     $q = $query->getQuery();
     dump($q);
@@ -94,15 +95,15 @@ class QueryBuilderController extends Controller
    */
   public function getSelectFields($data)
   {
-    $initialTable = $data["initial"]["table"];
-    $initialFields = $data["initial"]["fields"];
+    $initialTable = $data["initial"]["initialTable"];
+    $initialFields = $data["initial"]["initialFields"];
     $tab = [$initialTable => $initialFields];
     if (array_key_exists("joins", $data)) {
       $joins = $data["joins"];
       foreach ($joins as $j) {
         if (count($j) == 7) {
           $adjTable = $j["adjacent_table"];
-          $joinsFields = $j["fields"];
+          $joinsFields = $j["initialFields"];
           $tab[$adjTable] = $joinsFields;
         }
       }
@@ -147,9 +148,9 @@ class QueryBuilderController extends Controller
   public function getFirstBlock($data, $initial, $query)
   {
 
-    $firstTable = $initial["table"];
+    $firstTable = $initial["initialTable"];
     $query = $query->from('BbeesE3sBundle:' . $firstTable, $firstTable);
-    $firstFields = $initial["fields"];
+    $firstFields = $initial["initialFields"];
 
     foreach ($firstFields as $value) {
       $query = $query->addSelect($firstTable . "." . $value);
@@ -361,7 +362,7 @@ class QueryBuilderController extends Controller
       if ($fromDqlParts->getAlias() === $j["formerTable"]) {
         $aliasFTAlreadyExists = true;
       }
-      if ($aliasATAlreadyExists === true or $j["adjacent_table"] == $initial["table"]) {
+      if ($aliasATAlreadyExists === true or $j["adjacent_table"] == $initial["initialTable"]) {
         $adjTableAlias = $j["adjacent_table"] . $aliasAT;
         $formerTable = $j["formerTable"] . $aliasFT;
         $adjTable = $j["adjacent_table"];
@@ -372,7 +373,7 @@ class QueryBuilderController extends Controller
         $adjTable = $j["adjacent_table"];
         $formerTable = $j["formerTable"];
       }
-      if ($aliasFTAlreadyExists === true and $j["formerTable"] != $initial["table"]) {
+      if ($aliasFTAlreadyExists === true and $j["formerTable"] != $initial["initialTable"]) {
         $formerTable = $j["formerTable"] . $aliasFT;
         $aliasFT += 1;
       } else $formerTable = $j["formerTable"]; 
@@ -380,7 +381,7 @@ class QueryBuilderController extends Controller
       $srcField = $j["sourceField"];
       $tgtField = $j["targetField"];
       if (count($j) == 7) { // If the user chooses to return some fields.
-        $newFields = $j["fields"];
+        $newFields = $j["initialFields"];
         foreach ($newFields as $newValue) {
           $query = $query->addSelect($adjTable . "." . $newValue);
         };

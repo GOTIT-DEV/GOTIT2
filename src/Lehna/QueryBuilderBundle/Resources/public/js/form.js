@@ -68,7 +68,7 @@ export function initFirstQueryBuilder() {
 }
 
 
-export function initFirstFields() {
+export function initFirstFields(init_data) {
 
   // What occurs when you choose a table and/or change it
   $("#initial-table").change(event => {
@@ -168,7 +168,7 @@ let new_block_id = 0;
  * Choosing what join to make between a table chosen previously and an adjacent table, the fields to return and the constraints to apply.
  *
  */
-export function initJoinBlock(joins) {
+export function initJoinBlock(joinType, init_data) {
 
   // After each time the user clicks on the add join button
   $("#add-join").click(_ => {
@@ -181,7 +181,7 @@ export function initJoinBlock(joins) {
 
     // Filling the menu containing the possible joins
     newBlock.find("#join-type").empty().prop("selectedIndex", 0);
-    $.each(joins, (_index, value) => {
+    $.each(joinType, (_index, value) => {
       newBlock.find("#join-type").append($("<option></option>").attr("value", value).text(value));
     });
 
@@ -341,11 +341,11 @@ export function get_form_initial() {
 
   // Constraints
   if ($("#initial-constraints-switchbox").is(":checked") == true) {
-    let constraintsTable1 = $(".collapsed-query-builder")
+    var constraintsTable1 = $(".collapsed-query-builder")
       .eq(0)
       .queryBuilder("getRules");
   } else {
-    let constraintsTable1 = null;
+    var constraintsTable1 = null;
   }
 
   // Checked inputs
@@ -380,11 +380,11 @@ export function get_form_block_data(init_data) {
 
       // Constraints
       if (block.find("#join-constraints-switchbox").is(":checked") == true) {
-        let constraintsTable2 = block
+        var constraintsTable2 = block
           .find(".collapsed-query-builder")
           .queryBuilder("getRules");
       } else {
-        let constraintsTable2 = null;
+        var constraintsTable2 = null;
       }
 
       return {
