@@ -343,7 +343,7 @@ class QueryBuilderController extends Controller
   public function getJoinsBlocks($joins, $query, $initial)
   {
 
-    foreach ($joins as $key => $j) {
+    foreach ($joins as $j) {
       $joinDqlParts = $query->getDQLParts()['join'];
       $fromDqlParts = $query->getDQLParts()['from'][0];
       $aliasATAlreadyExists = false;
