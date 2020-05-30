@@ -32,7 +32,7 @@ export function initResults(data) {
       success: (response) => {
         $("#contentModalQuery").html(response.dql);
         $("#contentModalQuerySql").html(response.sql);
-        $("#results-container").html(response.results);
+        $("#result-container").html(response.results);
         $("#result-table").dataTable(
           Object.assign({ 
             dom: "lfrtipB",

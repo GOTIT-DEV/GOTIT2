@@ -103,7 +103,7 @@ class QueryBuilderController extends Controller
       foreach ($joins as $j) {
         if (count($j) == 7) {
           $adjTable = $j["adjacent_table"];
-          $joinsFields = $j["initialFields"];
+          $joinsFields = $j["fields"];
           $tab[$adjTable] = $joinsFields;
         }
       }
@@ -381,7 +381,7 @@ class QueryBuilderController extends Controller
       $srcField = $j["sourceField"];
       $tgtField = $j["targetField"];
       if (count($j) == 7) { // If the user chooses to return some fields.
-        $newFields = $j["initialFields"];
+        $newFields = $j["fields"];
         foreach ($newFields as $newValue) {
           $query = $query->addSelect($adjTable . "." . $newValue);
         };
