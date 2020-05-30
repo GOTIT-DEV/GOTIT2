@@ -15,11 +15,11 @@
 export function initFirstTable(init_data) {
 
   // Making sure we have a list of tables sorted by alphabetical order
-  let table_list = [];
-  $.each(init_data, function (key, _entry) {
-  table_list.push(key);
+  let sorted_table_list = [];
+  $.each(init_data, (key, _entry) => {
+    sorted_table_list.push(key);
   });
-  let sorted_table_list = table_list.sort();
+  sorted_table_list.sort();
 
   // Init the initial table dropdown
   $("#initial-table")
@@ -74,7 +74,7 @@ export function initFirstQueryBuilder() {
 export function initFirstFields(init_data) {
 
   // What occurs when you choose a table and/or change it
-  $("#initial-table").change(event => {
+  document.getElementById("initial-table").onchange = function (event) {
     let target_table = event.target.value;
     let table_data = init_data[target_table];
 
@@ -86,17 +86,17 @@ export function initFirstFields(init_data) {
     );
 
     // Init list of fields ( without the dateCre, userCre, dateMaj, userMaj)
-    let items = table_data.filters.filter((item) => {
-      return !(item.label.endsWith("Cre") || item.label.endsWith("Maj"));
+    let items = table_data.filters.filter((field) => {
+      return !(field.label.endsWith("Cre") || field.label.endsWith("Maj"));
     });
 
     // Init the dropdown containing the initial fields related to the chosen table
     $("#initial-fields").empty();
-    $.each(items, (item) => {
+    $.each(items, (field) => {
       $("#initial-fields").append(
         $("<option></option>")
-          .attr("value", items[item].label)
-          .text(items[item].label)
+          .attr("value", items[field].label)
+          .text(items[field].label)
       );
     });
 
@@ -108,7 +108,7 @@ export function initFirstFields(init_data) {
     // Enables the plus button to add a join block when the first table is chosen (Disabled by default)
     document.getElementById("add-join").disabled = false;
     document.getElementById("submit-button").disabled = false;
-  });
+  };
 }
 
 
@@ -167,7 +167,6 @@ function addJoin(block_id) {
 }
 
 let new_block_id = 0;
-
 /**
  * Init a join block each time you click on the plus button. 
  * @param {Array} joinType containing all the joins possible
@@ -176,7 +175,7 @@ let new_block_id = 0;
 export function initJoinBlock(joinType, init_data) {
 
   // After each time the user clicks on the add join button
-  $("#add-join").click(_ => {
+  document.getElementById("add-join").onclick = function() {
 
     // Adding 1 at each click 
     new_block_id += 1;
@@ -199,10 +198,10 @@ export function initJoinBlock(joinType, init_data) {
         return $(this).val();
       })
       .get();
-    let first_selection = $("#initial-table").val();
+    let first_selection = document.getElementById("initial-table").value;
     all_adj_tables.push(first_selection);
     all_adj_tables = [...new Set(all_adj_tables)];
-    all_adj_tables = all_adj_tables.sort();
+    all_adj_tables.sort();
 
     // Init the dropdown containing all the previously chosen tables
     newBlock
@@ -228,7 +227,7 @@ export function initJoinBlock(joinType, init_data) {
     // When you select or change the value of the previous table you want to select
     newBlock
       .find("#former-table")
-      .change(function (event) {
+      .change(event => {
         let target_table = event.target.value;
         let table_data = init_data[target_table];
 
@@ -242,13 +241,13 @@ export function initJoinBlock(joinType, init_data) {
           .prop("selectedIndex", 0);
 
         // Making sure we have a list of adjacent tables sorted by alphabetical order
-        let adj_tables_list = [];
-        $.each(table_data.relations, function (key, _entry) {
-          adj_tables_list.push(key);
+        let sorted_adj_tables_list = [];
+        $.each(table_data.relations, (key, _entry) => {
+          sorted_adj_tables_list.push(key);
         });
-        let sorted_adj_tables_list = adj_tables_list.sort();
+        sorted_adj_tables_list.sort();
 
-        $.each(sorted_adj_tables_list, function (_key, value) {
+        $.each(sorted_adj_tables_list, (_key, value) => {
           newBlock
             .find("#adjacent-tables")
             .append($("<option></option>").attr("value", value).text(value));
@@ -279,16 +278,16 @@ export function initJoinBlock(joinType, init_data) {
 
       // Init dropdown containing the fields related to the chosen adjacent table
       newBlock.find(".table-selects").empty();
-      let items = table_data.filters.filter(function (item) {
-        return !(item.label.endsWith("Cre") || item.label.endsWith("Maj"));
+      let items = table_data.filters.filter((field) => {
+        return !(field.label.endsWith("Cre") || field.label.endsWith("Maj"));
       });
-      $.each(items, function (item) {
+      $.each(items, (field) => {
         newBlock
           .find(".table-selects")
           .append(
             $("<option></option>")
-              .attr("value", items[item].label)
-              .text(items[item].label)
+              .attr("value", items[field].label)
+              .text(items[field].label)
           );
       });
 
@@ -313,7 +312,7 @@ export function initJoinBlock(joinType, init_data) {
     newBlock.find(".table-selects").multiselect("updateButtonText");
 
     // Remove Join button to give the user the possibility to remove a join block
-    newBlock.find(".remove").click(function () {
+    newBlock.find(".remove").click(_ => {
       newBlock.find(".form-block").remove();
       if (newBlock.find(".highlight-div")) {
         newBlock.removeClass("highlight-div");
@@ -325,14 +324,14 @@ export function initJoinBlock(joinType, init_data) {
       );
       let blockList = document.getElementsByClassName("form-block-id");
       let suppressedJoinId = newBlock.find(".form-block").prevObject[0].id;
-      $.each(blockList, function (item) {
+      $.each(blockList, (item) => {
         if (blockList[item].id > suppressedJoinId) {
           document.getElementById(blockList[item].id).className +=
             " highlight-div";
         }
       });
     });
-  });
+  };
 }
 
 
