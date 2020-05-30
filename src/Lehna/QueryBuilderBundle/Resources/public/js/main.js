@@ -10,8 +10,6 @@ import { initFirstTable, initFirstQueryBuilder, initFirstFields, initJoinBlock, 
 import { initResults, copySQLFunction } from './results.js'
 
 const joinType = ["Inner Join", "Left Join"];
-let mybutton = document.getElementById("myBtn");
-
 
 $(document).ready(_ => {
 
@@ -22,7 +20,7 @@ $(document).ready(_ => {
     document.getElementById("submit-button").disabled = true;
     document.getElementById("getSqlButton").disabled = true;
 
-    // Init initial fields multiselect
+    // Init initial fields multiselect dropdown
     $("#initial-fields").multiselect({
       includeSelectAllOption: true,
       allSelectedText: "All fields selected",
@@ -48,16 +46,16 @@ $(document).ready(_ => {
   })
   
   // Zoom in the image, scroll in / out to adjust zoom
-  $("#logical-db-img").elevateZoom({ scrollZoom: true }); // testing
+  $("#logical-db-img").elevateZoom({ scrollZoom: true });
 
   // To enable the copy SQL button after the search button is clicked
   document.getElementById("copySQL").onclick = function() {
     copySQLFunction();
   };
 
-    // When the user scrolls down 30px from the top of the document, shows the button
+  // When the user scrolls down 30px from the top of the document, the "scroll to the top" button is displayed
   window.onscroll = function () {
-    scrollFunction(mybutton);
+    scrollFunction();
   };
 
 

@@ -9,8 +9,8 @@
 
 
 /**
- * Initializes the dropdown containing all tables 
- * @param {object} init_data 
+ * Initializing the dropdown containing all tables 
+ * @param {Oject} init_data 
  */
 export function initFirstTable(init_data) {
 
@@ -44,7 +44,7 @@ export function initFirstTable(init_data) {
 
 
 /**
- * Initializes the first query builder
+ * Initializing the first query builder
  */
 export function initFirstQueryBuilder() {
 
@@ -67,7 +67,10 @@ export function initFirstQueryBuilder() {
   });
 }
 
-
+/**
+ * Initializing the dropdown containing the first fields and the first query builder according to the choice of initial table
+ * @param {Object} init_data 
+ */
 export function initFirstFields(init_data) {
 
   // What occurs when you choose a table and/or change it
@@ -110,7 +113,9 @@ export function initFirstFields(init_data) {
 
 
 /**
- * Function called when the "plus" button is clicked (using mustache.js)
+ * Function called when the "plus" button is clicked (using Mustache.js)
+ * @param {Number} block_id containing the current join block id
+ * @return {String} 
  */
 function addJoin(block_id) {
 
@@ -144,7 +149,7 @@ function addJoin(block_id) {
   });
 
 
-  // INIT buttons and stuff 
+  // Init switchobox buttons
   $("[data-toggle='toggle']").bootstrapToggle("destroy");
   $("[data-toggle='toggle']").bootstrapToggle();
 
@@ -164,9 +169,9 @@ function addJoin(block_id) {
 let new_block_id = 0;
 
 /**
- * when you click on the plus button.
- * Choosing what join to make between a table chosen previously and an adjacent table, the fields to return and the constraints to apply.
- *
+ * Init a join block each time you click on the plus button. 
+ * @param {Array} joinType containing all the joins possible
+ * @param {Object} init_data containing all the data in the form
  */
 export function initJoinBlock(joinType, init_data) {
 
@@ -333,7 +338,8 @@ export function initJoinBlock(joinType, init_data) {
 
 
 /**
- * Get the information about the initial table, the constraints applied on it, and the fields to return
+ * Get information contained in the initial block
+ * @return {Object}
  */
 export function get_form_initial() {
   let table1 = document.getElementById("initial-table");
@@ -359,6 +365,11 @@ export function get_form_initial() {
 }
 
 
+/**
+ * Get the information contained in each join block
+ * @param {Object} init_data 
+ * @return {Array} 
+ */
 export function get_form_block_data(init_data) {
   let block_list = $(".form-block");
   let data = block_list
@@ -402,16 +413,20 @@ export function get_form_block_data(init_data) {
   return data;
 }
 
-/* Buttons and stuff */
-export function scrollFunction(mybutton) {
+/**
+ * Displaying the "scroll to the top" button 
+ */
+export function scrollFunction() {
   if (document.body.scrollTop > 30 || document.documentElement.scrollTop > 30) {
-    mybutton.style.display = "block";
+    document.getElementById("myBtn").style.display = "block";
   } else {
-    mybutton.style.display = "none";
+    document.getElementById("myBtn").style.display = "none";
   }
 }
 
-// When the user clicks on the button, scrolls to the top of the document
+/**
+ * Scrolling to the top of the form
+ */
 export function topFunction() {
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;

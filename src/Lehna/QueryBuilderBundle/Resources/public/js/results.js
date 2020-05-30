@@ -11,19 +11,24 @@ import { dtconfig } from "../../lehnaspeciessearch/js/datatables_utils.js";
 import { get_form_initial, get_form_block_data } from "./form.js";
 
 /**
- * Init the results of the query
- * @param {object} data
+ * Init the results of the query in the result-container
+ * @param {Object} data containing all the info of the form
  */
 export function initResults(data) {
   $("#main-form").submit(event => {
     event.preventDefault();
+
+    // Getting the data
     let data_initial = get_form_initial();
     let data_join_blocks = get_form_block_data(data);
 
+    // Formatting the data
     let jsonData = { initial: data_initial, joins: data_join_blocks};
 
+    // Enabling the "Get SQL" button after the query is successful 
     document.getElementById("getSqlButton").disabled = false;
 
+    // Returning the elements of the query
     $.ajax({
       url: "query",
       type: "POST",
@@ -43,7 +48,6 @@ export function initResults(data) {
     })
   })
 }
-
 
 
 /**
