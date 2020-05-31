@@ -51,15 +51,12 @@ class QueryBuilderController extends Controller
   public function getRequestBuilder(Request $request, QueryBuilderService $service)
   {
     $data = $request->request->all();
-    dump($data);
     $selectedFields = $service->getSelectFields($data);
     $em = $this->getDoctrine()->getManager();
     $qb = $em->createQueryBuilder();
     $query = $service->getBlocks($data, $qb); // Getting the info of the blocks 
-    dump($query);
     $q = $query->getQuery();
     $dqlresults = $q->getDql();
-    dump($dqlresults);
     $sqlresults = $q->getSql();
     $results = $q->getArrayResult();
     return new JsonResponse([

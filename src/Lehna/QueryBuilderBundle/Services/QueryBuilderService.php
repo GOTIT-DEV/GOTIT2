@@ -122,23 +122,23 @@ class QueryBuilderService
    ************************************************/
 
   /** 
-   * Get the selected fields of the query to create a table for the results. 
+   * Get the selected fields of the query to create a tamplate table for the results. 
    * 
-   * Receives : the array containing the info for the query. 
-   * Returns : the array with the itial tables and the adjacent tables as keys and the corresponding fields as values.  
+   * @param mixed $data the array containing the info for the query. 
+   * @return array the array with the initial tables and the adjacent tables as keys and the corresponding fields as values.  
    */
   public function getSelectFields($data)
   {
     $initialTable = $data["initial"]["initialTable"];
     $initialFields = $data["initial"]["initialFields"];
-    $resultsTab = [$initialTable => $initialFields];
-    if (array_key_exists("joins", $data)) {
+    $resultsTab = [$initialTable => $initialFields]; // Init the array with the first fields
+    if (array_key_exists("joins", $data)) { // If there are join blocks in the query
       $joins = $data["joins"];
       foreach ($joins as $j) {
         if (count($j) == 7) {
           $adjTable = $j["adjacent_table"];
           $joinsFields = $j["fields"];
-          $resultsTab[$adjTable] = $joinsFields;
+          $resultsTab[$adjTable] = $joinsFields; // Adding the selected fields for each join block
         }
       }
     }
@@ -148,23 +148,24 @@ class QueryBuilderService
 
   
   /**
-   * Get the level of the first block of constraints for the querybuilder. 
+   * Get the current level in the block of constraints for the querybuilder. 
    * 
-   * Receives : the current level in the array, the current state of the query, the first block of the querybuilder, the first chosen table and the 
-   *            condition to apply on the constraints.
-   * Returns : the query with the constraints added in it.  
+   * @param mixed $level, $query, $data, $table, $condition : the current level in the array, the current state of the query, all info, 
+   *              the current table and the condition to apply on the constraints.
+   * @return mixed $query : the query with the constraints added to it. 
+   * 
    * Warning : doesn't work properly when clicking ond the 'add-group' on the form.    
    */
-  public function constraintsOfLevel($level, $query, $data, $table, $condition)
+  private function constraintsOfLevel($level, $query, $data, $table, $condition)
   {
 
     if (strlen($level == 1)) { // If we are on the first level, we can use the 'simple' function to get the constraints. 
       $query = $this->getConstraints($constraints, $data, $query, $table, $condition);
     } elseif (strlen($level > 1)) { // If we are on a deeper level : 
       foreach ($level as $r) {
-        if (count($r) == 6) { // If there are no more constraints after we use the 'simple' function. 
+        if (count($r) == 6) { // If there are no more constraints after, we use the 'simple' function. 
           $query = $this->getConstraints($r, $data, $query, $table, $condition);
-        } elseif (count($r) == 2) { // If there are multiple constraints, we use this function on itself. 
+        } elseif (count($r) == 2) { // If there are multiple constraints, we call this function on itself. 
           $query = $this->constraintsOfLevel($r["rules"], $query, $data, $table, $r["condition"]);
         }
       }
@@ -177,35 +178,36 @@ class QueryBuilderService
    /**
    * Get the full first block of querybuilder.
    * 
-   * Receives : the full array containing the info in the form, the first block of querybuilder and the current state of the query.
-   * Returns : the query with the added chosen table, the fields and the constraints if the user choses to apply some constraints.
+   * @param mixed $data, query : the full array containing the info in the form, the current state of the query.
+   * @return mixed $query : the query with the added chosen table, the fields and the constraints if the user choses to apply some constraints
+   * 
    * Warning : by default, all fields are checked for the first table, please keep at least one box checked.   
    */
   public function getBlocks($data, $query) {
     
     $initial = $data["initial"];
     $table = $initial["initialTable"];
-    $query = $query->from('BbeesE3sBundle:' . $table, $table);
+    $query = $query->from('BbeesE3sBundle:' . $table, $table); // Adding the initial table to the query
     $fields = $initial["initialFields"];
     foreach ($fields as $value) {
-      $query = $query->addSelect($table . "." . $value);
+      $query = $query->addSelect($table . "." . $value); // Adding every field selected for the initial table
     };
 
-    if ($initial["constraintsTable1"] != "") {
+    if ($initial["constraintsTable1"] != "") { // If the user decided to add some constraints
       $condition = $initial["constraintsTable1"]["condition"];
       $constraints = $initial["constraintsTable1"]["rules"];
-      $query = $this->constraintsOfLevel($constraints, $query, $data, $table, $condition);
+      $query = $this->constraintsOfLevel($constraints, $query, $data, $table, $condition); // Adding the constraints to the query
     }
 
-    if (count($data) > 1) {
+    if (count($data) > 1) { // If the user decided to make some joins
       if (strlen($data["joins"] >= 1)) {
         $joins = $data["joins"];
-        foreach ($joins as $j) {
+        foreach ($joins as $j) { // For each block added
           $joinDqlParts = $query->getDQLParts()['join'];
           $fromDqlParts = $query->getDQLParts()['from'][0];
           $aliasATAlreadyExists = false;
           $aliasFTAlreadyExists = false;
-          $aliasAT = 1;
+          $aliasAT = 1; // Creating Aliases to avoid issue with already defined tables
           $aliasFT = 1;
           foreach ($joinDqlParts as $joinsDql) {
             foreach ($joinsDql as $joinDql) {
@@ -235,6 +237,7 @@ class QueryBuilderService
           $jointype = $j["join"];
           $srcField = $j["sourceField"];
           $tgtField = $j["targetField"];
+
           if (count($j) == 7) { // If the user chooses to return some fields.
             $newFields = $j["fields"];
             foreach ($newFields as $newValue) {
@@ -242,6 +245,7 @@ class QueryBuilderService
             };
           }
           $query = $this->makeJoin($joins, $query, $formerTable, $jointype, $adjTable, $adjTableAlias, $srcField, $tgtField);
+
           if ($j["constraints"] != "") { // If the user chooses to apply constraints on some fields in the JOIN part. 
             $constraints = $j["constraints"]["rules"];
             $condition = $j["constraints"]["condition"];
@@ -258,30 +262,19 @@ class QueryBuilderService
   /**
    * Get the first constraints (simple function that is used on each constraint). 
    * 
-   * Receives : the array containing the constraints in the form, the inital block of querybuilder, the current state of the query,
-   *            the first chosen table and the condition to apply on the constraints. 
-   * Returns : the query with the 'WHERE' constraints added. 
+   * @param mixed $constrains, $data, $query, $table, $condition : the array containing the constraints in the form, all info, 
+   *              the current state of the query, the current chosen table and the condition to apply on the constraints. 
+   * @return mixed $query : the query with the 'WHERE' constraints added. 
    */
-  private function getConstraints($constraints, $data, $query, $table, $condition)
-  {
-    if ($data["initial"]) {
-      $field = $constraints["field"];
-      $operator = $constraints["operator"];
-      $value = $constraints["value"];
-      $tableField = $table . "." . $field;
-      if ((preg_match('#^date#', $field) === 1)) {
-        $value = \DateTime::createFromFormat("Y-m-d", $value)->format("Y-m-d");
-        $value = "'" . $value . "'";
-      }
-    } elseif ($data["joins"]) {
-      $field = $constraints["field"];
-      $operator = $constraints["operator"];
-      $value = $constraints["value"];
-      $tableField = $table . "." . $field;
-      if ((preg_match('#^date#', $field) === 1)) {
-        $value = \DateTime::createFromFormat("Y-m-d", $value)->format("Y-m-d");
-        $value = "'" . $value . "'";
-      }
+  private function getConstraints($constraints, $data, $query, $table, $condition) {
+    
+    $field = $constraints["field"];
+    $operator = $constraints["operator"];
+    $value = $constraints["value"];
+    $tableField = $table . "." . $field;
+    if ((preg_match('#^date#', $field) === 1)) {
+      $value = \DateTime::createFromFormat("Y-m-d", $value)->format("Y-m-d");
+      $value = "'" . $value . "'";
     }
 
     if ($operator == "equal") {
@@ -410,10 +403,11 @@ class QueryBuilderService
   /**
    * Get the type of JOIN and makes the appropriate query.
    * 
-   * Receives : the array containing the JOIN info, the current state of the query, the chosen former table, the JOIN type, 
-   *            the source and the target fields. 
-   * Returns : the query with JOIN added. 
-   * Warning : the right, cross and full joins were added, but they are not supported by the QueryBuilder yet. Please keep them commented. 
+   * @param mixed $joins, $query, $formerTable, $jointype, $adjTable, $adjTableAlias, $srcField, $tgtField : the array containing the JOIN info, 
+   *              the current state of the query, the chosen former table, the JOIN type, 
+   *              the source and the target fields. 
+   * @return mixed $query : the query with the JOIN added
+   * 
    */
   private function makeJoin($joins, $query, $formerTable, $jointype, $adjTable, $adjTableAlias, $srcField, $tgtField)
   {
