@@ -38,7 +38,7 @@ export function initFirstTable(init_data) {
   $("#initial-table").selectpicker("refresh");
 
   // Init tooltip for the dropdown
-  $(".bootstrap-select").tooltip({ title: "Select the Initial Table" });
+  $("#initial-table").parent().tooltip({ title: "Select the Initial Table" });
 }
 
 
@@ -99,6 +99,9 @@ export function initFirstFields(init_data) {
           .text(items[field].label)
       );
     });
+
+    // Init the tooltip for the initial table dropdown
+    $("#initial-fields").parent().tooltip({ title: "Select the Fields (all selected by default)" });
 
     // Making sure the dropdown works
     $("#initial-fields").multiselect("rebuild");
@@ -310,6 +313,13 @@ export function initJoinBlock(joinType, init_data) {
     });
     newBlock.find(".table-selects").multiselect("rebuild");
     newBlock.find(".table-selects").multiselect("updateButtonText");
+
+    // Init tooltips for the dropdowns
+    $("#former-table").parent().tooltip({ title: "Select a previously chosen Table" });
+    $("#join-type").parent().tooltip({ title: "Choose a JOIN Type" });
+    $("#adjacent-tables").parent().tooltip({ title: "Select an Adjacent Table to the Former Table currently selected" });
+    $(".table-selects").parent().tooltip({ title: "Select the Fields (none selected by default)" });
+    
 
     // Remove Join button to give the user the possibility to remove a join block
     newBlock.find(".remove").click(_ => {
