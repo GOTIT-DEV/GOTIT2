@@ -51,17 +51,28 @@ class QueryBuilderService
       foreach ($m->getAssociationMappings() as $field => $mapping) {
         if (array_key_exists("joinColumns", $mapping)) {
           $target = $this->parse_entity_name($mapping['targetEntity']);
-          $relations[$entity][$target] = $this->parse_associated($mapping);
+          if (array_key_exists($target, $relations[$entity])) {
+            $relations[$entity][$target][] = $this->parse_associated($mapping);
+          } else {
+            $relations[$entity][$target] = [$this->parse_associated($mapping)];
+          }
         }
       }
     }
+
     foreach ($relations as $sourceEntity => $targets) {
       foreach ($targets as $targetEntity => $data) {
-        $relations[$targetEntity][$sourceEntity] = [
-          "entity" => $sourceEntity,
-          "from" => $data["to"],
-          "to" => $data["from"]
-        ];
+        $reverse_relation = function($d) use ($sourceEntity) {
+          return [
+            "entity" => $sourceEntity,
+            "from" => $d["to"],
+            "to" => $d["from"]
+          ];
+        };
+        $relations[$targetEntity][$sourceEntity] = array_map(
+          $reverse_relation,
+          $data
+        );
       }
     }
     foreach ($res as $entity => $data) {
@@ -97,19 +108,17 @@ class QueryBuilderService
       "table" => $metadata->table["name"]
     ];
   }
-  
-  private function convert_field_type($type){
-    if (strpos($type, "int") != false){
+
+  private function convert_field_type($type)
+  {
+    if (strpos($type, "int") != false) {
       $type = "integer";
-    }
-    elseif ($type == "float"){
+    } elseif ($type == "float") {
       $type = "double";
-    }
-    elseif ($type == "text"){
+    } elseif ($type == "text") {
       $type = "string";
-    }
-    elseif (strpos($type, "bool") != false){
-      $type= "boolean";
+    } elseif (strpos($type, "bool") != false) {
+      $type = "boolean";
     }
     // $valid_types = ["string", "integer", "double", "date", "time", "datetime", "boolean"];
     // assert(in_array($type, $valid_types));
@@ -146,7 +155,7 @@ class QueryBuilderService
     return $resultsTab;
   }
 
-  
+
   /**
    * Get the current level in the block of constraints for the querybuilder. 
    * 
@@ -175,7 +184,7 @@ class QueryBuilderService
   }
 
 
-   /**
+  /**
    * Get the full first block of querybuilder.
    * 
    * @param mixed $data, query : the full array containing the info in the form, the current state of the query.
@@ -183,8 +192,9 @@ class QueryBuilderService
    * 
    * Warning : by default, all fields are checked for the first table, please keep at least one box checked.   
    */
-  public function getBlocks($data, $query) {
-    
+  public function getBlocks($data, $query)
+  {
+
     $initial = $data["initial"];
     $table = $initial["initialTable"];
     $query = $query->from('BbeesE3sBundle:' . $table, $table); // Adding the initial table to the query
@@ -233,7 +243,7 @@ class QueryBuilderService
           if ($aliasFTAlreadyExists === true and $j["formerTable"] != $initial["initialTable"]) {
             $formerTable = $j["formerTable"] . $aliasFT;
             $aliasFT += 1;
-          } else $formerTable = $j["formerTable"]; 
+          } else $formerTable = $j["formerTable"];
           $jointype = $j["join"];
           $srcField = $j["sourceField"];
           $tgtField = $j["targetField"];
@@ -255,8 +265,8 @@ class QueryBuilderService
         }
       }
     }
-  return $query;
-}
+    return $query;
+  }
 
 
   /**
@@ -266,8 +276,9 @@ class QueryBuilderService
    *              the current state of the query, the current chosen table and the condition to apply on the constraints. 
    * @return mixed $query : the query with the 'WHERE' constraints added. 
    */
-  private function getConstraints($constraints, $data, $query, $table, $condition) {
-    
+  private function getConstraints($constraints, $data, $query, $table, $condition)
+  {
+
     $field = $constraints["field"];
     $operator = $constraints["operator"];
     $value = $constraints["value"];
@@ -279,9 +290,9 @@ class QueryBuilderService
 
     if ($operator == "equal") {
       if ($condition == "OR") {
-        $query = $query->orWhere($tableField . " = " ." '" . $value . "'");
+        $query = $query->orWhere($tableField . " = " . " '" . $value . "'");
       } else {
-        $query = $query->andWhere($tableField . " = " ." '" . $value . "'");
+        $query = $query->andWhere($tableField . " = " . " '" . $value . "'");
       }
     } elseif ($operator == "not_equal") {
       if ($condition == "OR") {
@@ -419,5 +430,4 @@ class QueryBuilderService
 
     return $query;
   }
-
 }
