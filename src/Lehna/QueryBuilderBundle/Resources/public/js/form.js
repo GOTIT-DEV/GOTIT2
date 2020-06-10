@@ -298,10 +298,27 @@ export function initJoinBlock(joinType, init_data) {
       newBlock.find(".table-selects").multiselect("rebuild");
       newBlock.find(".table-selects").multiselect("updateButtonText");
 
+      let formerTable = newBlock.find("#former-table").val();
+      let adjacentTable = newBlock.find("#adjacent-tables").val();
+      let relationsFromTo = init_data[formerTable].relations[adjacentTable];
+
+      if (relationsFromTo.length > 1) {
+        newBlock.find("#source-fields").selectpicker().empty();
+        $.each(relationsFromTo, (source) => {
+          newBlock.find("#source-fields").append(
+            $("<option></option>")
+              .attr("value", relationsFromTo[source].from)
+              .text(relationsFromTo[source].from)
+          ) 
+        })
+        newBlock.find("#join-source-fields").show();
+        newBlock.find("#source-fields").selectpicker("refresh");
+      } else newBlock.find("#join-source-fields").hide();
+
       // Making sure the buttons are enabled after an adjacent table is chosen
       document.getElementById("add-join").disabled = false;
       document.getElementById("submit-button").disabled = false;
-    });
+    })
 
     // Init the dropdown when the add-join button is clicked
     newBlock.find(".table-selects").multiselect({
@@ -395,8 +412,22 @@ export function get_form_block_data(init_data) {
 
       // Obtaining the source field and target field
       let relationAdj = init_data[formerT].relations[adj_table];
-      let sourceField = relationAdj.from;
-      let targetField = relationAdj.to;
+      console.log(relationAdj);
+      if (relationAdj.length > 1) {
+        var sourceField = block.find("#source-fields").val();
+        $.each(relationAdj, (item) => {
+          if (relationAdj[item].from == block.find("#source-fields").val()) {
+            let tgtField = relationAdj[item].to; 
+            return tgtField;
+          }
+          return tgtField;
+        })
+        var targetField = tgtField;
+      } else {
+        var sourceField = relationAdj[0].from;
+        var targetField = relationAdj[0].to;
+      }
+
 
       // Constraints
       if (block.find("#join-constraints-switchbox").is(":checked") == true) {

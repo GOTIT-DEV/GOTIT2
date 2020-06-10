@@ -15,7 +15,7 @@ div#join-panel {
     column-gap: 10px;
     row-gap: 5px;
     grid-template-areas:
-      "former-table-choice join-type-choice adj-table-choice . join-selected-fields join-checked-constraints"
+      "former-table-choice join-type-choice adj-table-choice join-source-fields join-selected-fields join-checked-constraints"
       ". remove-join . . . .";
 
     div#former-table-choice {
@@ -28,6 +28,11 @@ div#join-panel {
 
     div#adj-table-choice {
       grid-area: adj-table-choice;
+    }
+
+    div#join-source-fields {
+      grid-area: join-source-fields;
+      display: none;
     }
 
     div#join-selected-fields {
@@ -53,7 +58,7 @@ div#join-panel {
       grid-template-rows: auto auto auto;
       grid-template-areas:
         "former-table-choice join-type-choice adj-table-choice"
-        "join-selected-fields join-checked-constraints ."
+        "join-source-fields join-selected-fields join-checked-constraints "
         ". remove-join .";
 
       div#former-table-choice {
@@ -66,6 +71,11 @@ div#join-panel {
 
       div#adj-table-choice {
         grid-area: adj-table-choice;
+      }
+
+      div#join-source-fields {
+        grid-area: join-source-fields;
+        display: none;
       }
 
       div#join-selected-fields {
@@ -92,7 +102,7 @@ div#join-panel {
       grid-template-rows: auto auto auto;
       grid-template-areas:
         "former-table-choice join-selected-fields"
-        "join-type-choice ."
+        "join-type-choice join-source-fields"
         "adj-table-choice join-checked-constraints"
         "remove-join .";
 
@@ -109,6 +119,11 @@ div#join-panel {
       div#adj-table-choice {
         grid-area: adj-table-choice;
         justify-self: start;
+      }
+
+      div#join-source-fields {
+        grid-area: join-source-fields;
+        display: none;
       }
 
       div#join-selected-fields {
@@ -137,6 +152,7 @@ div#join-panel {
         "former-table-choice"
         "join-type-choice"
         "adj-table-choice"
+        "join-source-fields"
         "join-selected-fields"
         "join-checked-constraints"
         "remove-join";
@@ -154,6 +170,11 @@ div#join-panel {
       div#adj-table-choice {
         grid-area: adj-table-choice;
         justify-self: center;
+      }
+
+      div#join-source-fields {
+        grid-area: join-source-fields;
+        display: none;
       }
 
       div#join-selected-fields {
