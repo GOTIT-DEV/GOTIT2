@@ -7,13 +7,11 @@
  * Authors : Thierno Diallo, Maud Ferrer and Elsa Mendes.
  */
 
-
 /**
- * Initializing the dropdown containing all tables 
- * @param {Oject} init_data 
+ * Initializing the dropdown containing all tables
+ * @param {Oject} init_data
  */
 export function initFirstTable(init_data) {
-
   // Making sure we have a list of tables sorted by alphabetical order
   let sorted_table_list = [];
   $.each(init_data, (key, _entry) => {
@@ -41,14 +39,11 @@ export function initFirstTable(init_data) {
   $("#initial-table").parent().tooltip({ title: "Select the Initial Table" });
 }
 
-
-
 /**
  * Initializing the first query builder
  */
 export function initFirstQueryBuilder() {
-
-  // Init the query builder for the initial block 
+  // Init the query builder for the initial block
   $("#initial-query-builder").queryBuilder({
     plugins: ["bt-tooltip-errors"],
     filters: [
@@ -61,7 +56,7 @@ export function initFirstQueryBuilder() {
   });
 
   // Init the reset button for this query builder
-  $(".reset").click(_ => {
+  $(".reset").click((_) => {
     let target = $(this).data("target");
     $(target).queryBuilder("reset");
   });
@@ -69,10 +64,9 @@ export function initFirstQueryBuilder() {
 
 /**
  * Initializing the dropdown containing the first fields and the first query builder according to the choice of initial table
- * @param {Object} init_data 
+ * @param {Object} init_data
  */
 export function initFirstFields(init_data) {
-
   // What occurs when you choose a table and/or change it
   document.getElementById("initial-table").onchange = function (event) {
     let target_table = event.target.value;
@@ -101,7 +95,9 @@ export function initFirstFields(init_data) {
     });
 
     // Init the tooltip for the initial table dropdown
-    $("#initial-fields").parent().tooltip({ title: "Select the Fields (all selected by default)" });
+    $("#initial-fields")
+      .parent()
+      .tooltip({ title: "Select the Fields (all selected by default)" });
 
     // Making sure the dropdown works
     $("#initial-fields").multiselect("rebuild");
@@ -114,14 +110,12 @@ export function initFirstFields(init_data) {
   };
 }
 
-
 /**
  * Function called when the "plus" button is clicked (using Mustache.js)
  * @param {Number} block_id containing the current join block id
- * @return {String} 
+ * @return {String}
  */
 function addJoin(block_id) {
-
   // Making template's block with mustache.js
   let newBlock = Mustache.render($("#form-block-template").html(), {
     id: block_id,
@@ -151,7 +145,6 @@ function addJoin(block_id) {
     $(target).queryBuilder("reset");
   });
 
-
   // Init switchobox buttons
   $("[data-toggle='toggle']").bootstrapToggle("destroy");
   $("[data-toggle='toggle']").bootstrapToggle();
@@ -171,16 +164,14 @@ function addJoin(block_id) {
 
 let new_block_id = 0;
 /**
- * Init a join block each time you click on the plus button. 
+ * Init a join block each time you click on the plus button.
  * @param {Array} joinType containing all the joins possible
  * @param {Object} init_data containing all the data in the form
  */
 export function initJoinBlock(joinType, init_data) {
-
   // After each time the user clicks on the add join button
-  document.getElementById("add-join").onclick = function() {
-
-    // Adding 1 at each click 
+  document.getElementById("add-join").onclick = function () {
+    // Adding 1 at each click
     new_block_id += 1;
 
     // Adding a block of query
@@ -189,7 +180,9 @@ export function initJoinBlock(joinType, init_data) {
     // Filling the menu containing the possible joins
     newBlock.find("#join-type").empty().prop("selectedIndex", 0);
     $.each(joinType, (_index, value) => {
-      newBlock.find("#join-type").append($("<option></option>").attr("value", value).text(value));
+      newBlock
+        .find("#join-type")
+        .append($("<option></option>").attr("value", value).text(value));
     });
 
     // Making sure the dropdown is initialized correctly
@@ -230,7 +223,7 @@ export function initJoinBlock(joinType, init_data) {
     // When you select or change the value of the previous table you want to select
     newBlock
       .find("#former-table")
-      .change(event => {
+      .change((event) => {
         let target_table = event.target.value;
         let table_data = init_data[target_table];
 
@@ -305,12 +298,14 @@ export function initJoinBlock(joinType, init_data) {
       if (relationsFromTo.length > 1) {
         newBlock.find("#source-fields").selectpicker().empty();
         $.each(relationsFromTo, (source) => {
-          newBlock.find("#source-fields").append(
-            $("<option></option>")
-              .attr("value", relationsFromTo[source].from)
-              .text(relationsFromTo[source].from)
-          ) 
-        })
+          newBlock
+            .find("#source-fields")
+            .append(
+              $("<option></option>")
+                .attr("value", relationsFromTo[source].from)
+                .text(relationsFromTo[source].from)
+            );
+        });
         newBlock.find("#join-source-fields").show();
         newBlock.find("#source-fields").selectpicker("refresh");
       } else newBlock.find("#join-source-fields").hide();
@@ -318,7 +313,7 @@ export function initJoinBlock(joinType, init_data) {
       // Making sure the buttons are enabled after an adjacent table is chosen
       document.getElementById("add-join").disabled = false;
       document.getElementById("submit-button").disabled = false;
-    })
+    });
 
     // Init the dropdown when the add-join button is clicked
     newBlock.find(".table-selects").multiselect({
@@ -332,14 +327,22 @@ export function initJoinBlock(joinType, init_data) {
     newBlock.find(".table-selects").multiselect("updateButtonText");
 
     // Init tooltips for the dropdowns
-    $("#former-table").parent().tooltip({ title: "Select a previously chosen Table" });
+    $("#former-table")
+      .parent()
+      .tooltip({ title: "Select a previously chosen Table" });
     $("#join-type").parent().tooltip({ title: "Choose a JOIN Type" });
-    $("#adjacent-tables").parent().tooltip({ title: "Select an Adjacent Table to the Former Table currently selected" });
-    $(".table-selects").parent().tooltip({ title: "Select the Fields (none selected by default)" });
-    
+    $("#adjacent-tables")
+      .parent()
+      .tooltip({
+        title:
+          "Select an Adjacent Table to the Former Table currently selected",
+      });
+    $(".table-selects")
+      .parent()
+      .tooltip({ title: "Select the Fields (none selected by default)" });
 
     // Remove Join button to give the user the possibility to remove a join block
-    newBlock.find(".remove").click(_ => {
+    newBlock.find(".remove").click((_) => {
       newBlock.find(".form-block").remove();
       if (newBlock.find(".highlight-div")) {
         newBlock.removeClass("highlight-div");
@@ -360,8 +363,6 @@ export function initJoinBlock(joinType, init_data) {
     });
   };
 }
-
-
 
 /**
  * Get information contained in the initial block
@@ -390,11 +391,10 @@ export function get_form_initial() {
   return { initialTable, constraintsTable1, initialFields };
 }
 
-
 /**
  * Get the information contained in each join block
- * @param {Object} init_data 
- * @return {Array} 
+ * @param {Object} init_data
+ * @return {Array}
  */
 export function get_form_block_data(init_data) {
   let block_list = $(".form-block");
@@ -412,22 +412,19 @@ export function get_form_block_data(init_data) {
 
       // Obtaining the source field and target field
       let relationAdj = init_data[formerT].relations[adj_table];
-      console.log(relationAdj);
       if (relationAdj.length > 1) {
+        // If there is more than 1 foreign key linking the two tables
         var sourceField = block.find("#source-fields").val();
+        var targetField = "";
         $.each(relationAdj, (item) => {
           if (relationAdj[item].from == block.find("#source-fields").val()) {
-            let tgtField = relationAdj[item].to; 
-            return tgtField;
+            targetField = relationAdj[item].to;
           }
-          return tgtField;
-        })
-        var targetField = tgtField;
+        });
       } else {
         var sourceField = relationAdj[0].from;
         var targetField = relationAdj[0].to;
       }
-
 
       // Constraints
       if (block.find("#join-constraints-switchbox").is(":checked") == true) {
@@ -454,7 +451,7 @@ export function get_form_block_data(init_data) {
 }
 
 /**
- * Displaying the "scroll to the top" button 
+ * Displaying the "scroll to the top" button
  */
 export function scrollFunction() {
   if (document.body.scrollTop > 30 || document.documentElement.scrollTop > 30) {
@@ -471,4 +468,3 @@ export function topFunction() {
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
 }
-
