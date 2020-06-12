@@ -9,37 +9,37 @@
 			<div class="panel panel-default form-block" id="join-panel">
 				<div class="panel-heading" id="join-header">
 					<div class="form-group" id="former-table-choice">
-						<label class="control-label" for="lot-materiel" data-toggle="tooltip" data-placement="top" title="Select one former table">
+						<label class="control-label" for="lot-materiel" data-toggle="tooltip">
 							FROM
 						</label>
 						<br>
 						<select class="selectpicker" id="former-table"></select>
 					</div>
 					<div class="form-group" id="join-type-choice">
-						<label class="control-label" for="individu" data-toggle="tooltip" data-placement="top" title="Select a JOIN type">JOIN</label>
+						<label class="control-label" for="individu" data-toggle="tooltip">JOIN</label>
 						<br>
 						<select class="selectpicker" id="join-type"></select>
 					</div>
 					<div class="form-group" id="adj-table-choice">
-						<label for="sequence" class="control-label" data-toggle="tooltip" data-placement="top" title="Select an adjacent table to the chosen former table">
+						<label for="sequence" class="control-label" data-toggle="tooltip">
 							TO
 						</label>
 						<br>
 						<select class="selectpicker adjacent-tables" id="adjacent-tables"></select>
 					</div>
+					<div class="form-group" id="join-source-fields">
+						<label class="control-label" data-toggle="tooltip">
+							Select Join Path
+						</label>
+						<br>
+						<select id="source-fields" class="selectpicker source-fields"></select>
+					</div>
 					<div class="form-group" id="join-selected-fields">
-						<label class="control-label" data-toggle="tooltip" data-placement="top" title="Select fields related to the chosen adjacent table (None selected by default)">
+						<label class="control-label" data-toggle="tooltip">
 							Select Field(s)
 						</label>
 						<br>
 						<select id="table-selects-{{id}}" class="table-selects" multiple="multiple"></select>
-					</div>
-					<div class="form-group" id="join-source-fields">
-						<label class="control-label" data-toggle="tooltip" data-placement="top" title="Select a Source Field from which to make the Join">
-							Select Source Field
-						</label>
-						<br>
-						<select id="source-fields" class="selectpicker source-fields"></select>
 					</div>
 					<div class="form-group" id="join-checked-constraints">
 						<strong>

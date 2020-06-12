@@ -148,6 +148,7 @@ function addJoin(block_id) {
   // Init switchobox buttons
   $("[data-toggle='toggle']").bootstrapToggle("destroy");
   $("[data-toggle='toggle']").bootstrapToggle();
+  $("[data-toggle='tooltip']").tooltip();
 
   // Targeting the collapsed block of query builder
   newBlock.find(".join-applied-constraints").hide();
@@ -309,6 +310,13 @@ export function initJoinBlock(joinType, init_data) {
           );
         });
         newBlock.find("#join-source-fields").show();
+        // Init the tooltip for the initial table dropdown
+        $("#source-fields")
+          .parent()
+          .tooltip({
+            title:
+              "Select the Join Path (Source and Target Fields for the Join)",
+          });
         newBlock.find("#source-fields").selectpicker("refresh");
       } else newBlock.find("#join-source-fields").hide();
 

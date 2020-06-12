@@ -11,8 +11,10 @@
 				{% endtrans %}
 			</label>
 			<br>
-			<select name="initial-table" id="initial-table" class="selectpicker" data-live-search="true" data-toggle="tooltip" data-placement="auto right" title="Select the first table"></select>
+			<select name="initial-table" id="initial-table" class="selectpicker" data-live-search="true" data-toggle="tooltip"></select>
 		</div>
+	</div>
+	<div class="fields-constraints-options" id="initial-fields-constraints-options">
 		<div class="form-group" id="initial-selected-fields">
 			<label class="control-label" for="initial-fields">
 				{% trans %}
@@ -20,7 +22,7 @@
 				{% endtrans %}
 			</label>
 			<br>
-			<select name="initial-fields" id="initial-fields" multiple data-toggle="tooltip" data-placement="auto left" title="Select fields from the first table (All selected by default)"></select>
+			<select name="initial-fields" id="initial-fields" multiple data-toggle="tooltip"></select>
 		</div>
 		<div class="form-group" id="initial-checked-constraints">
 			<strong>
@@ -30,19 +32,13 @@
 			</strong>
 			<br>
 			<label class="control-label" for="initial-constraints-switchbox" data-toggle="tooltip" data-placement="left" title="Add Constraints" >
-				<input id="initial-constraints-switchbox" class="constraints-switchbox" type="checkbox" data-toggle="toggle" data-onstyle="success" data-target="#initial-applied-constraints">
+				<input id="initial-constraints-switchbox" class="constraints-switchbox" type="checkbox" data-toggle="toggle" data-onstyle="success" data-target="#initial-toggled-constraints">
 			</label>
 		</div>
-	</div>
-	<div class="applied-constraints" id="initial-applied-constraints">
-		<div id="initial-query-builder" class="collapsed-query-builder"></div>
-		<button class="btn btn-warning reset" id="initial-cc-reset" data-target="#initial-query-builder">Reset</button>
-		<div id="initial-warning-msg" class="warning-msg">
-			<strong>
-				{% trans %}
-				Some Warning Message
-				{% endtrans %}
-			</strong>
+		<div id="initial-toggled-constraints" class="toggled-constraints">
+			<div id="initial-query-builder" class="collapsed-query-builder"></div>
+			<button class="btn btn-warning reset" id="initial-cc-reset" data-target="#initial-query-builder">Reset</button>
+			<div id="initial-warning-msg" class="warning-msg"></div>
 		</div>
 	</div>
 </div>

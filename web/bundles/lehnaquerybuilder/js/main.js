@@ -6,15 +6,20 @@
  *
  * Authors : Thierno Diallo, Maud Ferrer and Elsa Mendes.
  */
-import { initFirstTable, initFirstQueryBuilder, initFirstFields, initJoinBlock, scrollFunction, topFunction } from './form.js'
-import { initResults, copySQLFunction } from './results.js'
+import {
+  initFirstTable,
+  initFirstQueryBuilder,
+  initFirstFields,
+  initJoinBlock,
+  scrollFunction,
+  topFunction,
+} from "./form.js";
+import { initResults, copySQLFunction } from "./results.js";
 
 const joinType = ["Inner Join", "Left Join"];
 
-$(document).ready(_ => {
-
+$(document).ready((_) => {
   $.getJSON("init", function (init_data) {
-
     // Making sure these buttons are disabled on reload
     document.getElementById("add-join").disabled = true;
     document.getElementById("submit-button").disabled = true;
@@ -34,22 +39,21 @@ $(document).ready(_ => {
     initFirstFields(init_data);
 
     // Hiding what's in the div, then showing it when the switchbox is triggered
-    document.getElementById("initial-applied-constraints").style.display =
+    document.getElementById("initial-toggled-constraints").style.display =
       "none";
-    $("#initial-constraints-switchbox").change(_ => {
-      $("#initial-applied-constraints").toggle("slow");
+    $("#initial-constraints-switchbox").change((_) => {
+      $("#initial-toggled-constraints").toggle("slow");
     });
 
     initJoinBlock(joinType, init_data);
     initResults(init_data);
+  });
 
-  })
-  
   // Zoom in the image, scroll in / out to adjust zoom
   $("#logical-db-img").elevateZoom({ scrollZoom: true });
 
   // To enable the copy SQL button after the search button is clicked
-  document.getElementById("copySQL").onclick = function() {
+  document.getElementById("copySQL").onclick = function () {
     copySQLFunction();
   };
 
@@ -58,16 +62,13 @@ $(document).ready(_ => {
     scrollFunction();
   };
 
-
-  // Button to scroll back to the top the page 
+  // Button to scroll back to the top the page
   document.getElementById("myBtn").onclick = function () {
-    topFunction(); 
+    topFunction();
   };
 
   //Button to reload the page / clear the form
   document.getElementById("clear").onclick = function () {
     location.reload(true);
   };
-
-})
-
+});
