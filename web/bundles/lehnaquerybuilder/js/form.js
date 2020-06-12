@@ -298,13 +298,15 @@ export function initJoinBlock(joinType, init_data) {
       if (relationsFromTo.length > 1) {
         newBlock.find("#source-fields").selectpicker().empty();
         $.each(relationsFromTo, (source) => {
-          newBlock
-            .find("#source-fields")
-            .append(
-              $("<option></option>")
-                .attr("value", relationsFromTo[source].from)
-                .text(relationsFromTo[source].from)
-            );
+          newBlock.find("#source-fields").append(
+            $("<option></option>")
+              .attr("value", relationsFromTo[source].from)
+              .text(
+                relationsFromTo[source].from +
+                  "  ->  " +
+                  relationsFromTo[source].to
+              )
+          );
         });
         newBlock.find("#join-source-fields").show();
         newBlock.find("#source-fields").selectpicker("refresh");
@@ -331,12 +333,9 @@ export function initJoinBlock(joinType, init_data) {
       .parent()
       .tooltip({ title: "Select a previously chosen Table" });
     $("#join-type").parent().tooltip({ title: "Choose a JOIN Type" });
-    $("#adjacent-tables")
-      .parent()
-      .tooltip({
-        title:
-          "Select an Adjacent Table to the Former Table currently selected",
-      });
+    $("#adjacent-tables").parent().tooltip({
+      title: "Select an Adjacent Table to the Former Table currently selected",
+    });
     $(".table-selects")
       .parent()
       .tooltip({ title: "Select the Fields (none selected by default)" });
@@ -409,7 +408,6 @@ export function get_form_block_data(init_data) {
       selectedFields.each(function () {
         fields.push($(this).val());
       });
-
       // Obtaining the source field and target field
       let relationAdj = init_data[formerT].relations[adj_table];
       if (relationAdj.length > 1) {
@@ -417,7 +415,10 @@ export function get_form_block_data(init_data) {
         var sourceField = block.find("#source-fields").val();
         var targetField = "";
         $.each(relationAdj, (item) => {
-          if (relationAdj[item].from == block.find("#source-fields").val()) {
+          let textOption = block.find("#source-fields option:selected")[0]
+            .firstChild.data;
+          let str = textOption.split(" ");
+          if (relationAdj[item].to == str[4]) {
             targetField = relationAdj[item].to;
           }
         });
