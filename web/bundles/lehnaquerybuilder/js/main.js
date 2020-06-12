@@ -25,6 +25,8 @@ $(document).ready((_) => {
     document.getElementById("submit-button").disabled = true;
     document.getElementById("getSqlButton").disabled = true;
 
+    $("#initial-constraints-switchbox").bootstrapToggle("off");
+
     // Init initial fields multiselect dropdown
     $("#initial-fields").multiselect({
       includeSelectAllOption: true,
@@ -50,7 +52,14 @@ $(document).ready((_) => {
   });
 
   // Zoom in the image, scroll in / out to adjust zoom
-  $("#logical-db-img").elevateZoom({ scrollZoom: true });
+  $("#logical-db-img").elevateZoom({
+    scrollZoom: true,
+    zoomWindowWidth: 420,
+    zoomWindowHeight: 345,
+    zoomWindowPosition: 0,
+    zoomWindowOffetx: -725,
+    zoomWindowOffety: 0,
+  });
 
   // To enable the copy SQL button after the search button is clicked
   document.getElementById("copySQL").onclick = function () {

@@ -140,7 +140,7 @@ function addJoin(block_id) {
   });
 
   // Reset button
-  newBlock.find(".reset").click(function () {
+  newBlock.find(".reset").click((_) => {
     let target = $(this).data("target");
     $(target).queryBuilder("reset");
   });
@@ -151,9 +151,9 @@ function addJoin(block_id) {
   $("[data-toggle='tooltip']").tooltip();
 
   // Targeting the collapsed block of query builder
-  newBlock.find(".join-applied-constraints").hide();
-  newBlock.find("#join-constraints-switchbox").change(function () {
-    newBlock.find(".join-applied-constraints").toggle("slow");
+  newBlock.find(".toggled-constraints").hide();
+  newBlock.find("#join-constraints-switchbox").change((_) => {
+    newBlock.find(".toggled-constraints").toggle("slow");
   });
 
   // Making sure those are disabled on reload
@@ -311,12 +311,9 @@ export function initJoinBlock(joinType, init_data) {
         });
         newBlock.find("#join-source-fields").show();
         // Init the tooltip for the initial table dropdown
-        $("#source-fields")
-          .parent()
-          .tooltip({
-            title:
-              "Select the Join Path (Source and Target Fields for the Join)",
-          });
+        $("#source-fields").parent().tooltip({
+          title: "Select the Join Path (Source and Target Fields for the Join)",
+        });
         newBlock.find("#source-fields").selectpicker("refresh");
       } else newBlock.find("#join-source-fields").hide();
 

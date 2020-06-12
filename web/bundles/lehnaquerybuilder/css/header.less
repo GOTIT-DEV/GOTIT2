@@ -21,6 +21,7 @@ legend#page-title {
     justify-self: center;
     width: 45%;
     height: 45px;
+    min-width: 225px;
     background-color: DodgerBlue;
     padding-left: 10px;
     padding-top: 5px;
@@ -31,7 +32,7 @@ legend#page-title {
 
   a.download-text:hover {
     background-color: RoyalBlue;
-  } 
+  }
 
   div#img-container {
     grid-area: img-container;
@@ -41,7 +42,6 @@ legend#page-title {
   h2#query-fields-title {
     grid-area: query-fields-title;
   }
-
 }
 
 @media (max-width: 1800px) {
@@ -54,28 +54,29 @@ legend#page-title {
       ". img-container"
       ". download-text"
       "query-fields-title . ";
-  
+
     h1#main-page-title {
       grid-area: main-page-title;
     }
-  
+
     h1#logical-model-title {
       grid-area: logical-model-title;
     }
-  
+
     a.download-text {
       grid-area: download-text;
       justify-self: center;
+      min-width: 225px;
     }
-  
+
     div#img-container {
       grid-area: img-container;
       padding-bottom: 10px;
       justify-self: center;
     }
-  
+
     h2#query-fields-title {
       grid-area: query-fields-title;
     }
-  }  
+  }
 }
