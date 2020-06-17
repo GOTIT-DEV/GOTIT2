@@ -1,7 +1,8 @@
 /*
  * This file file is part of the QueryBuilderBundle.
  *
- * It is a free software, included in a bigger project. You can use it and modify it under the terms of the GNU General Public License (Version 3 or later).
+ * It is a free software, included in a bigger project. 
+ * You can use it and modify it under the terms of the GNU General Public License (Version 3 or later).
  * This software is distributed without any warranty.
  *
  * Authors : Thierno Diallo, Maud Ferrer and Elsa Mendes.
@@ -49,7 +50,8 @@ $(document).ready((_) => {
     zoomWindowPosition: 0,
     zoomWindowOffetx: -725,
     zoomWindowOffety: 0,
-  });
+    zoomLevel: 3
+  })
 
   // To enable the copy SQL button after the search button is clicked
   $("#copySQL").click(copySQLFunction)

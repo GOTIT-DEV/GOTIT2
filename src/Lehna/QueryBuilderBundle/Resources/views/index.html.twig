@@ -3,41 +3,29 @@
 {% block stylesheets %}
 	{{parent()}}
 	<!-- Modal window styles -->
-	<link href="{{ asset('e3s/vendors/queryBuilder/query-builder.default.css') }}" rel="stylesheet">
-	<!-- Main QuerBuilder Style -->
- 	<link href="{{ asset('bundles/lehnaquerybuilder/css/db-img.css') }}" rel="stylesheet">
-	<link href="{{ asset('bundles/lehnaquerybuilder/css/form-end.css') }}" rel="stylesheet">
-	<link href="{{ asset('bundles/lehnaquerybuilder/css/header.css') }}" rel="stylesheet">
-	<link href="{{ asset('bundles/lehnaquerybuilder/css/initial.block.css') }}" rel="stylesheet">
-	<link href="{{ asset('bundles/lehnaquerybuilder/css/join.blocks.css') }}" rel="stylesheet">
+	<link
+	href="{{ asset('e3s/vendors/queryBuilder/query-builder.default.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block titlepage %}
-	<legend id="page-title">
-		<h1 id="main-page-title">
-			Query Builder
-		</h1>
-		<h1 id="logical-model-title">
-			{% trans %}
-			GOTIT Database Logical Model
-			{% endtrans %}
-		</h1>
-		<a download class="button download-text" href="{{ asset('bundles/lehnaquerybuilder/images/S1_Gotitdb_V2_logical_model_en.jpg') }}"><i class="fa fa-download"></i>Download the Model</a>
-		<div id="img-container" data-toggle="tooltip" data-placement="left" title="Click on the image to see the Logical Model of the Full Database">
-			{% include '@LehnaQueryBuilder/logical.db.model.html.twig' %}
-		</div>
+	<h1 id="main-page-title">
+		Query Builder
+	</h1>
+{% endblock %}
+
+{% block body %}
+
+	{% include '@LehnaQueryBuilder/logical.db.model.html.twig' %}
+
+	<legend>
 		<h2 id="query-fields-title">
 			{% trans %}
 			Query fields
 			{% endtrans %}
 		</h2>
 	</legend>
-{% endblock %}
-
-{% block body %}
-
 	<div class='row'>
-		<div 
+		<div
 			class="col-xs-12">
 			{#Form #}
 			{% include '@LehnaQueryBuilder/form.html.twig' %}
