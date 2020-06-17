@@ -126,6 +126,10 @@ function addJoin(block_id) {
         type: "integer",
       },
     ],
+    lang: {
+      "delete_rule": " ",
+      "delete_group": " ",
+    }
   });
 
   // Reset button
@@ -140,9 +144,11 @@ function addJoin(block_id) {
   $("[data-toggle='tooltip']").tooltip();
 
   // Targeting the collapsed block of query builder
-  newBlock.find(".toggled-constraints").hide();
   newBlock.find("#join-constraints-switchbox").change(
-    _ => newBlock.find(".toggled-constraints").toggle("slow")
+    () => {
+      newBlock.find(".toggled-constraints").slideToggle("fast")
+      newBlock.find("#join-cc-reset").slideToggle("fast")
+    }
   );
 
   // Making sure those are disabled on reload
@@ -199,7 +205,7 @@ export function initJoinBlock(joinType, init_data) {
       actionsBox: true,
       selectedTextFormat: "count > 4",
       title: "None selected",
-      width: '75%'
+      width: '100%'
     })
       // Init tooltip
       .parent().tooltip({ title: "Select the Fields (none selected by default)" });

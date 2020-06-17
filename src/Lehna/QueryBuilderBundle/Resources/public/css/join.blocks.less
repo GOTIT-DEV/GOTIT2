@@ -10,7 +10,7 @@ div#join-panel {
   div#join-header {
     grid-area: join-header;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 0fr;
+    grid-template-columns: 0fr 0fr 0fr 0fr 1fr 0fr;
     grid-template-rows: auto;
     grid-template-areas: "former-table-choice join-type-choice adj-table-choice join-source-fields . remove-btn";
     align-items: center;
@@ -41,17 +41,17 @@ div#join-panel {
 
   @media (max-width: 1290px) {
     div#join-header {
-      grid-template-columns: 1fr 1fr 1fr 0fr;
+      grid-template-columns: 0fr 0fr 0fr 1fr 0fr;
       grid-template-rows: auto auto;
       grid-template-areas:
-        "former-table-choice join-type-choice adj-table-choice remove-btn"
+        "former-table-choice join-type-choice adj-table-choice . remove-btn"
         ". join-source-fields . .";
     }
   }
 
   @media (max-width: 1010px) {
     div#join-header {
-      grid-template-columns: 1fr 1fr 1fr 0fr;
+      grid-template-columns: 0fr 0fr 1fr 0fr;
       grid-template-rows: auto auto;
       grid-template-areas:
         "former-table-choice adj-table-choice . remove-btn"
@@ -82,98 +82,35 @@ div#join-panel {
   div.join-fields-constraints-options {
     grid-area: join-fields-constraints-options;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding-bottom: 10px;
-    grid-template-rows: auto auto auto;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr 0fr;
+    padding: 10px 20px;
+    grid-template-rows: auto auto;
     grid-template-areas:
-      "join-selected-fields join-checked-constraints"
-      "toggled-constraints toggled-constraints"
-      "remove-join remove-join";
+      "messages messages ."
+      "join-selected-fields  . join-checked-constraints"
+      "toggled-constraints toggled-constraints reset-constraints";
 
     div#join-selected-fields {
       grid-area: join-selected-fields;
-      padding-top: 10px;
-      padding-left: 20px;
-      padding-bottom: 15px;
       justify-self: start;
       width: 100%;
     }
 
     div#join-checked-constraints {
       grid-area: join-checked-constraints;
-      padding-top: 10px;
-      padding-right: 20px;
-      padding-bottom: 15px;
       justify-self: end;
     }
 
     div.toggled-constraints {
       grid-area: toggled-constraints;
-      display: grid;
-      grid-template-columns: 1fr 0.5fr;
-      padding-left: 20px;
-      padding-bottom: 10px;
-      padding-right: 20px;
-      grid-template-rows: auto auto;
-      grid-template-areas:
-        "join-collapse-constraints join-warning-msg"
-        "join-cc-reset .";
-
-      div.join-collapse-constraints {
-        grid-area: join-collapse-constraints;
-        padding-bottom: 5px;
-      }
-
-      div#join-warning-msg {
-        grid-area: join-warning-msg;
-        justify-self: center;
-      }
-
-      button#join-cc-reset {
-        grid-area: join-cc-reset;
-        justify-self: start;
-        padding-bottom: 5px;
-      }
+      display:none;
     }
 
-    @media (max-width: 1100px) {
-      div.toggled-constraints {
-        display: grid;
-        grid-template-columns: 1fr;
-        padding-left: 20px;
-        padding-bottom: 10px;
-        padding-right: 20px;
-        grid-template-rows: auto auto;
-        grid-template-areas:
-          "join-collapse-constraints"
-          "join-cc-reset"
-          "join-warning-msg";
-
-        div.join-collapse-constraints {
-          grid-area: join-collapse-constraints;
-          padding-bottom: 5px;
-        }
-
-        div#join-warning-msg {
-          grid-area: join-warning-msg;
-          justify-self: center;
-        }
-
-        button#join-cc-reset {
-          grid-area: join-cc-reset;
-          justify-self: start;
-          padding-bottom: 5px;
-        }
-      }
-    }
-
-    button#remove-btn {
-      grid-area: remove-join;
-      padding-top: 10px;
-      padding-right: 20px;
-      padding-left: 20px;
-      padding-bottom: 15px;
-      justify-self: center;
+    button#join-cc-reset {
+      grid-area: reset-constraints;
+      display: none;
+      align-self: start;
     }
   }
 }

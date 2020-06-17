@@ -16,7 +16,9 @@
 						<select class="selectpicker" id="former-table"></select>
 					</div>
 					<div class="form-group" id="join-type-choice">
-						<label class="control-label" for="individu" data-toggle="tooltip">JOIN</label>
+						<label class="control-label" for="individu" data-toggle="tooltip">
+							JOIN
+						</label>
 						<br>
 						<select class="selectpicker" id="join-type"></select>
 					</div>
@@ -38,8 +40,8 @@
 						<i class="fas fa-times"></i>
 					</button>
 				</div>
-
-				<div id="collapse-constraints-{{id}}" class="join-fields-constraints-options">
+				
+				<div id="collapse-constraints-{{id}}" class="join-fields-constraints-options panel-body">
 					<div class="form-group" id="join-selected-fields">
 						<label class="control-label" data-toggle="tooltip">
 							Select Field(s)
@@ -48,20 +50,21 @@
 						<select id="table-selects-{{id}}" class="table-selects" multiple></select>
 					</div>
 					<div class="form-group" id="join-checked-constraints">
-						<strong>
+						<label class="control-label">
 							Constraints
-						</strong>
+						</label>
 						<br>
 						<label class="control-label" title="Add Constraints" data-toggle="tooltip" data-placement="left">
 							<input id="join-constraints-switchbox" class="constraints-switchbox" type="checkbox" data-toggle="toggle" data-onstyle="success" data-size="normal" data-target="#join-toggled-constraints-{{id}}">
 						</label>
 					</div>
-					
-					<div class="toggled-constraints" id="join-toggled-constraints-{{id}}">
-						<div id="builder-constraints-{{id}}" class="collapsed-query-builder join-collapse-constraints"></div>
-						<button class="btn btn-warning reset" id="join-cc-reset" data-target="#builder-constraints-{{id}}">Reset</button>
-						<div class="warning-msg" id="join-warning-msg"></div>
-					</div>
+
+					<div id="builder-constraints-{{id}}" class="collapsed-query-builder toggled-constraints"></div>
+
+					<button class="btn btn-warning reset" id="join-cc-reset" data-target="#builder-constraints-{{id}}">
+						Reset
+					</button>
+					<div class="warning-msg" id="join-warning-msg"></div>
 				</div>
 			</div>
 		</div>

@@ -35,7 +35,7 @@ $(document).ready((_) => {
     // Hiding what's in the div, then showing it when the switchbox is triggered
     document.getElementById("initial-toggled-constraints").style.display = "none";
     $("#initial-constraints-switchbox").change((_) => {
-      $("#initial-toggled-constraints").toggle("slow");
+      $("#initial-toggled-constraints").toggle();
     });
 
     initJoinBlock(joinType, init_data);
