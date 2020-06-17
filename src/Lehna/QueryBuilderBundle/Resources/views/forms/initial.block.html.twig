@@ -7,18 +7,20 @@
 		<div class="form-group" id="initial-table-selection">
 			<label class="control-label" for="initial-table">
 				{% trans %}
-				Select Table
+				Initial Table
 				{% endtrans %}
 			</label>
 			<br>
-			<select name="initial-table" id="initial-table" class="selectpicker" data-live-search="true" data-toggle="tooltip" data-size="15"></select>
+			<select name="initial-table" id="initial-table" class="selectpicker" title="Pick a table" data-live-search="true" data-toggle="tooltip" data-size="15">
+				<option selected="true" disabled>Choose table</option>
+			</select>
 		</div>
 	</div>
 	<div class="fields-constraints-options" id="initial-fields-constraints-options">
 		<div class="form-group" id="initial-selected-fields">
 			<label class="control-label" for="initial-fields">
 				{% trans %}
-				Select Field(s)									
+				Select Field(s)
 				{% endtrans %}
 			</label>
 			<br>
@@ -31,7 +33,7 @@
 				{% endtrans %}
 			</strong>
 			<br>
-			<label class="control-label" for="initial-constraints-switchbox" data-toggle="tooltip" data-placement="left" title="Add Constraints" >
+			<label class="control-label" for="initial-constraints-switchbox" data-toggle="tooltip" data-placement="left" title="Add Constraints">
 				<input id="initial-constraints-switchbox" class="constraints-switchbox" type="checkbox" data-toggle="toggle" data-onstyle="success" data-target="#initial-toggled-constraints">
 			</label>
 		</div>

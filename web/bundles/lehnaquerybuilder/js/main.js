@@ -41,8 +41,7 @@ $(document).ready((_) => {
     initFirstFields(init_data);
 
     // Hiding what's in the div, then showing it when the switchbox is triggered
-    document.getElementById("initial-toggled-constraints").style.display =
-      "none";
+    document.getElementById("initial-toggled-constraints").style.display = "none";
     $("#initial-constraints-switchbox").change((_) => {
       $("#initial-toggled-constraints").toggle("slow");
     });
@@ -62,9 +61,7 @@ $(document).ready((_) => {
   });
 
   // To enable the copy SQL button after the search button is clicked
-  document.getElementById("copySQL").onclick = function () {
-    copySQLFunction();
-  };
+  $("#copySQL").click(copySQLFunction)
 
   // When the user scrolls down 30px from the top of the document, the "scroll to the top" button is displayed
   window.onscroll = function () {
@@ -72,12 +69,8 @@ $(document).ready((_) => {
   };
 
   // Button to scroll back to the top the page
-  document.getElementById("myBtn").onclick = function () {
-    topFunction();
-  };
+  $("#myBtn").click(topFunction)
 
-  //Button to reload the page / clear the form
-  document.getElementById("clear").onclick = function () {
-    location.reload(true);
-  };
+  // Button to reload the page / clear the form
+  $("#clear").click(() => location.reload(true))
 });

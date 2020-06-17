@@ -13,30 +13,16 @@
  */
 export function initFirstTable(init_data) {
   // Making sure we have a list of tables sorted by alphabetical order
-  let sorted_table_list = [];
-  $.each(init_data, (key, _entry) => {
-    sorted_table_list.push(key);
-  });
-  sorted_table_list.sort();
-
-  // Init the initial table dropdown
-  $("#initial-table")
-    .empty()
-    .append('<option selected="true" disabled>Choose table</option>')
-    .prop("selectedIndex", 0);
-
+  let sorted_table_list = Object.keys(init_data).sort()
+  let initial_options = sorted_table_list.map(
+    table_name => $("<option></option>").attr("value", table_name).text(table_name)
+  )
   // Adding every single table to the dropdown
-  $.each(sorted_table_list, (_key, entry) => {
-    $("#initial-table").append(
-      $("<option></option>").attr("value", entry).text(entry)
-    );
-  });
-
-  // Redbuilding the dropdown with the new info in it
-  $("#initial-table").selectpicker("refresh");
-
-  // Init tooltip for the dropdown
-  $("#initial-table").parent().tooltip({ title: "Select the Initial Table" });
+  $("#initial-table").append(...initial_options)
+    // Redbuilding the dropdown with the new info in it
+    .selectpicker("refresh")
+    // Init tooltip for the dropdown
+    .parent().tooltip({ title: "Select the Initial Table" });
 }
 
 /**
@@ -80,22 +66,16 @@ export function initFirstFields(init_data) {
     );
 
     // Init list of fields ( without the dateCre, userCre, dateMaj, userMaj)
-    let items = table_data.filters.filter((field) => {
-      return !(field.label.endsWith("Cre") || field.label.endsWith("Maj"));
-    });
-
+    let items = table_data.filters
+      .filter(
+        field => !(field.label.endsWith("Cre") || field.label.endsWith("Maj"))
+      )
+      .map(
+        item => $("<option></option>").attr("value", item.label).text(item.label)
+      )
     // Init the dropdown containing the initial fields related to the chosen table
-    $("#initial-fields").empty();
-    $.each(items, (field) => {
-      $("#initial-fields").append(
-        $("<option></option>")
-          .attr("value", items[field].label)
-          .text(items[field].label)
-      );
-    });
-
-    // Init the tooltip for the initial table dropdown
-    $("#initial-fields")
+    $("#initial-fields").empty().append(...items)
+      // Init the tooltip for the initial table dropdown
       .parent()
       .tooltip({ title: "Select the Fields (all selected by default)" });
 
@@ -152,15 +132,29 @@ function addJoin(block_id) {
 
   // Targeting the collapsed block of query builder
   newBlock.find(".toggled-constraints").hide();
-  newBlock.find("#join-constraints-switchbox").change((_) => {
-    newBlock.find(".toggled-constraints").toggle("slow");
-  });
+  newBlock.find("#join-constraints-switchbox").change(
+    _ => newBlock.find(".toggled-constraints").toggle("slow")
+  );
 
   // Making sure those are disabled on reload
   document.getElementById("add-join").disabled = true;
   document.getElementById("submit-button").disabled = true;
 
   return newBlock;
+}
+
+/**
+ * Previously selected tables 
+ * available when choosing a source table to make joins
+ */
+function getAvailableTables() {
+  let initial_table = document.getElementById("initial-table").value;
+  let available_tables = $(".adjacent-tables").get()
+    .map(elt => elt.value)
+    .filter(value => value !== "")
+    .concat([initial_table])
+  // Remove duplicates
+  return [...new Set(available_tables)].sort();
 }
 
 let new_block_id = 0;
@@ -170,6 +164,11 @@ let new_block_id = 0;
  * @param {Object} init_data containing all the data in the form
  */
 export function initJoinBlock(joinType, init_data) {
+
+  let join_options = joinType.map(
+    join => $("<option></option>").attr("value", join).text(join)
+  )
+
   // After each time the user clicks on the add join button
   document.getElementById("add-join").onclick = function () {
     // Adding 1 at each click
@@ -179,78 +178,107 @@ export function initJoinBlock(joinType, init_data) {
     let newBlock = addJoin(new_block_id);
 
     // Filling the menu containing the possible joins
-    newBlock.find("#join-type").empty().prop("selectedIndex", 0);
-    $.each(joinType, (_index, value) => {
-      newBlock
-        .find("#join-type")
-        .append($("<option></option>").attr("value", value).text(value));
-    });
+    newBlock.find("#join-type").empty()
+      .append(...join_options)
+      // Making sure the dropdown is initialized correctly
+      .selectpicker("refresh")
+      // Init tooltip
+      .parent().tooltip({ title: "Choose a JOIN Type" });
 
-    // Making sure the dropdown is initialized correctly
-    newBlock.find("#join-type").selectpicker("refresh");
+    // Init the dropdown when the add-join button is clicked
+    newBlock.find(".table-selects").multiselect({
+      includeSelectAllOption: true,
+      allSelectedText: "All fields selected",
+      nonSelectedText: "No field(s) selected",
+      numberDisplayed: 7,
+      buttonWidth: "225",
+    })
+      // Init tooltip
+      .parent().tooltip({ title: "Select the Fields (none selected by default)" });
 
-    // Previous tables available when you choose a new table to make joins
-    let all_adj_tables = $(".adjacent-tables")
-      .map(function () {
-        return $(this).val();
-      })
-      .get();
-    let first_selection = document.getElementById("initial-table").value;
-    all_adj_tables.push(first_selection);
-    all_adj_tables = [...new Set(all_adj_tables)];
-    all_adj_tables.sort();
+    // When the user selects an adjacent table
+    newBlock.find(".adjacent-tables").change((event) => {
+      let target_table = event.target.value;
+      let table_data = init_data[target_table];
+
+      // Init query-builder with the fields of the selected table and adequate filters
+      newBlock.find(".collapsed-query-builder")
+        .queryBuilder("setFilters", true, table_data.filters);
+
+      // Init dropdown containing the fields related to the chosen adjacent table
+      let items = table_data.filters
+        .filter(
+          field => !(field.label.endsWith("Cre") || field.label.endsWith("Maj"))
+        )
+        .map(
+          item => $("<option></option>").attr("value", item.label).text(item.label)
+        )
+      newBlock.find(".table-selects")
+        .empty()
+        .append(...items)
+        // Making sure the dropdown is built correctly
+        .multiselect("rebuild")
+        .multiselect("updateButtonText");
+
+      // Initialize join path selection if necessary
+      let formerTable = newBlock.find("#former-table").val();
+      let relationsFromTo = init_data[formerTable].relations[target_table];
+
+      if (relationsFromTo.length > 1) {
+        let join_paths = relationsFromTo
+          .map((relation) => {
+            return $("<option></option>")
+              .attr("value", relation.from)
+              .attr("data-content",
+                Mustache.render(
+                  '{{from}} <i class="fas fa-long-arrow-alt-right"></i> {{to}}',
+                  relation))
+              .text(relation.from + "  ->  " + relation.to)
+          })
+
+        newBlock.find("select#source-fields").empty()
+          .append(...join_paths)
+          .selectpicker()
+          // Init the tooltip for the initial table dropdown
+          .parent().tooltip({
+            title: "Select the join path (Source and Target fields)",
+          });
+
+        newBlock.find("#join-source-fields").show();
+        // newBlock.find("#source-fields").selectpicker("refresh");
+      } else newBlock.find("#join-source-fields").hide();
+
+      // Making sure the buttons are enabled after an adjacent table is chosen
+      document.getElementById("add-join").disabled = false;
+      document.getElementById("submit-button").disabled = false;
+    })
+      // Init tooltip
+      .parent().tooltip({
+        title: "Select an Adjacent Table to the Former Table currently selected",
+      });;
+
 
     // Init the dropdown containing all the previously chosen tables
-    newBlock
-      .find("#former-table")
-      .empty()
-      .append(
-        '<option selected="true" disabled>Choose one previous table</option>'
-      )
-      .prop("selectedIndex", 0);
-    $.each(all_adj_tables, (_index, value) => {
-      if (value != "") {
-        newBlock
-          .find("#former-table")
-          .append($("<option></option>").attr("value", value).text(value));
-      }
-    });
-
-    // Making sure the first table in the dropdown is always selected
-    newBlock
-      .find("#former-table")
-      .val(newBlock.find("#former-table").find("option:enabled:first").val());
-
-    // When you select or change the value of the previous table you want to select
-    newBlock
-      .find("#former-table")
+    let table_options = getAvailableTables().map(
+      table => $("<option></option>").attr("value", table).text(table)
+    )
+    newBlock.find("#former-table").empty()
+      .append(...table_options)
+      .selectpicker("refresh")
+      // When you select or change the value of the previous table you want to select
       .change((event) => {
         let target_table = event.target.value;
         let table_data = init_data[target_table];
 
-        // Init the menu
-        newBlock
-          .find("#adjacent-tables")
-          .empty()
-          .append(
-            '<option selected="true" disabled>Choose adjacent table</option>'
-          )
-          .prop("selectedIndex", 0);
-
         // Making sure we have a list of adjacent tables sorted by alphabetical order
-        let sorted_adj_tables_list = [];
-        $.each(table_data.relations, (key, _entry) => {
-          sorted_adj_tables_list.push(key);
-        });
-        sorted_adj_tables_list.sort();
-
-        $.each(sorted_adj_tables_list, (_key, value) => {
-          newBlock
-            .find("#adjacent-tables")
-            .append($("<option></option>").attr("value", value).text(value));
-        });
-
-        newBlock.find("#adjacent-tables").selectpicker("refresh");
+        let sorted_adj_tables_list = Object.keys(table_data.relations).sort()
+        let adj_tables_options = sorted_adj_tables_list.map(
+          table => $("<option></option>").attr("value", table).text(table)
+        )
+        newBlock.find("#adjacent-tables").empty()
+          .append(adj_tables_options)
+          .selectpicker("refresh")
+          .change();
 
         // Disabling the plus button and the submit button when the former table is changed and therefore no adjacent table is selected
         document.getElementById("add-join").disabled = true;
@@ -260,94 +288,9 @@ export function initJoinBlock(joinType, init_data) {
           newBlock.removeClass("highlight-div");
         }
       })
-      .selectpicker("refresh")
-      .change();
-
-    // When you click to select/or change an adjacent table
-    newBlock.find(".adjacent-tables").change((event) => {
-      let target_table = event.target.value;
-      let table_data = init_data[target_table];
-
-      // Init query-builder with the fields of the selected table and adequate filters
-      newBlock
-        .find(".collapsed-query-builder")
-        .queryBuilder("setFilters", true, table_data.filters);
-
-      // Init dropdown containing the fields related to the chosen adjacent table
-      newBlock.find(".table-selects").empty();
-      let items = table_data.filters.filter((field) => {
-        return !(field.label.endsWith("Cre") || field.label.endsWith("Maj"));
-      });
-      $.each(items, (field) => {
-        newBlock
-          .find(".table-selects")
-          .append(
-            $("<option></option>")
-              .attr("value", items[field].label)
-              .text(items[field].label)
-          );
-      });
-
-      // Making sure the dropdown is built correctly
-      newBlock.find(".table-selects").multiselect("rebuild");
-      newBlock.find(".table-selects").multiselect("updateButtonText");
-
-      let formerTable = newBlock.find("#former-table").val();
-      let adjacentTable = newBlock.find("#adjacent-tables").val();
-      let relationsFromTo = init_data[formerTable].relations[adjacentTable];
-
-      if (relationsFromTo.length > 1) {
-        newBlock.find("#source-fields").selectpicker().empty();
-        $.each(relationsFromTo, (source) => {
-          newBlock.find("#source-fields").append(
-            $("<option></option>")
-              .attr("value", relationsFromTo[source].from)
-              .attr("data-content",
-                Mustache.render(
-                  '{{from}} <i class="fas fa-long-arrow-alt-right"></i> {{to}}',
-                  relationsFromTo[source]))
-              .text(
-                relationsFromTo[source].from +
-                "  ->  " +
-                relationsFromTo[source].to
-              )
-          );
-        });
-        newBlock.find("#join-source-fields").show();
-        // Init the tooltip for the initial table dropdown
-        $("#source-fields").parent().tooltip({
-          title: "Select the Join Path (Source and Target Fields for the Join)",
-        });
-        newBlock.find("#source-fields").selectpicker("refresh");
-      } else newBlock.find("#join-source-fields").hide();
-
-      // Making sure the buttons are enabled after an adjacent table is chosen
-      document.getElementById("add-join").disabled = false;
-      document.getElementById("submit-button").disabled = false;
-    });
-
-    // Init the dropdown when the add-join button is clicked
-    newBlock.find(".table-selects").multiselect({
-      includeSelectAllOption: true,
-      allSelectedText: "All fields selected",
-      nonSelectedText: "No field(s) selected",
-      numberDisplayed: 7,
-      buttonWidth: "225",
-    });
-    newBlock.find(".table-selects").multiselect("rebuild");
-    newBlock.find(".table-selects").multiselect("updateButtonText");
-
-    // Init tooltips for the dropdowns
-    $("#former-table")
-      .parent()
-      .tooltip({ title: "Select a previously chosen Table" });
-    $("#join-type").parent().tooltip({ title: "Choose a JOIN Type" });
-    $("#adjacent-tables").parent().tooltip({
-      title: "Select an Adjacent Table to the Former Table currently selected",
-    });
-    $(".table-selects")
-      .parent()
-      .tooltip({ title: "Select the Fields (none selected by default)" });
+      .change()
+      // Init tooltips
+      .parent().tooltip({ title: "Select a previously chosen Table" });
 
     // Remove Join button to give the user the possibility to remove a join block
     newBlock.find(".remove")
@@ -366,8 +309,7 @@ export function initJoinBlock(joinType, init_data) {
         let suppressedJoinId = newBlock.find(".form-block").prevObject[0].id;
         $.each(blockList, (item) => {
           if (blockList[item].id > suppressedJoinId) {
-            document.getElementById(blockList[item].id).className +=
-              " highlight-div";
+            $(item).addClass("highlight-div");
           }
         });
       });
