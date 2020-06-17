@@ -10,9 +10,11 @@ div#join-panel {
   div#join-header {
     grid-area: join-header;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 0fr;
     grid-template-rows: auto;
-    grid-template-areas: "former-table-choice join-type-choice adj-table-choice join-source-fields";
+    grid-template-areas: "former-table-choice join-type-choice adj-table-choice join-source-fields . remove-btn";
+    align-items: center;
+    gap: 5px;
 
     div#former-table-choice {
       grid-area: former-table-choice;
@@ -31,94 +33,48 @@ div#join-panel {
       grid-area: join-source-fields;
       display: none;
     }
+
+    button#remove-btn {
+      grid-area: remove-btn;
+    }
   }
 
   @media (max-width: 1290px) {
     div#join-header {
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr 0fr;
       grid-template-rows: auto auto;
       grid-template-areas:
-        "former-table-choice join-type-choice adj-table-choice"
-        ". join-source-fields .";
-
-      div#former-table-choice {
-        grid-area: former-table-choice;
-      }
-
-      div#join-type-choice {
-        grid-area: join-type-choice;
-      }
-
-      div#adj-table-choice {
-        grid-area: adj-table-choice;
-      }
-
-      div#join-source-fields {
-        grid-area: join-source-fields;
-        display: none;
-      }
+        "former-table-choice join-type-choice adj-table-choice remove-btn"
+        ". join-source-fields . .";
     }
   }
 
   @media (max-width: 1010px) {
     div#join-header {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr 0fr;
       grid-template-rows: auto auto;
       grid-template-areas:
-        "former-table-choice adj-table-choice"
-        "join-type-choice join-source-fields";
+        "former-table-choice adj-table-choice . remove-btn"
+        "join-type-choice join-source-fields . .";
 
-      div#former-table-choice {
-        grid-area: former-table-choice;
+      >div{
         justify-self: start;
-      }
-
-      div#join-type-choice {
-        grid-area: join-type-choice;
-        justify-self: start;
-      }
-
-      div#adj-table-choice {
-        grid-area: adj-table-choice;
-        justify-self: start;
-      }
-
-      div#join-source-fields {
-        grid-area: join-source-fields;
-        display: none;
       }
     }
   }
 
-  @media (max-width: 500px) {
+  @media (max-width: 550px) {
     div#join-header {
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr 0fr;
       grid-template-rows: auto auto auto auto;
       grid-template-areas:
-        "former-table-choice"
-        "join-type-choice"
-        "adj-table-choice"
-        "join-source-fields";
+        "former-table-choice remove-btn"
+        "join-type-choice ."
+        "adj-table-choice ."
+        "join-source-fields .";
 
-      div#former-table-choice {
-        grid-area: former-table-choice;
+      >div {
         justify-self: center;
-      }
-
-      div#join-type-choice {
-        grid-area: join-type-choice;
-        justify-self: center;
-      }
-
-      div#adj-table-choice {
-        grid-area: adj-table-choice;
-        justify-self: center;
-      }
-
-      div#join-source-fields {
-        grid-area: join-source-fields;
-        justify-self: center;
-        display: none;
       }
     }
   }

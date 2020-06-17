@@ -304,8 +304,8 @@ export function initJoinBlock(joinType, init_data) {
               .attr("value", relationsFromTo[source].from)
               .text(
                 relationsFromTo[source].from +
-                  "  ->  " +
-                  relationsFromTo[source].to
+                "  ->  " +
+                relationsFromTo[source].to
               )
           );
         });
@@ -346,25 +346,27 @@ export function initJoinBlock(joinType, init_data) {
       .tooltip({ title: "Select the Fields (none selected by default)" });
 
     // Remove Join button to give the user the possibility to remove a join block
-    newBlock.find(".remove").click((_) => {
-      newBlock.find(".form-block").remove();
-      if (newBlock.find(".highlight-div")) {
-        newBlock.removeClass("highlight-div");
-      }
-
-      // The alert is there to guide the user on why there are highlighted blocks
-      alert(
-        "Removed Join Block Successfully!\nBe warned : you might need to make changes in the higlighted blocks!"
-      );
-      let blockList = document.getElementsByClassName("form-block-id");
-      let suppressedJoinId = newBlock.find(".form-block").prevObject[0].id;
-      $.each(blockList, (item) => {
-        if (blockList[item].id > suppressedJoinId) {
-          document.getElementById(blockList[item].id).className +=
-            " highlight-div";
+    newBlock.find(".remove")
+      .tooltip()
+      .click((_) => {
+        newBlock.find(".form-block").remove();
+        if (newBlock.find(".highlight-div")) {
+          newBlock.removeClass("highlight-div");
         }
+
+        // The alert is there to guide the user on why there are highlighted blocks
+        alert(
+          "Removed Join Block Successfully!\nBe warned : you might need to make changes in the higlighted blocks!"
+        );
+        let blockList = document.getElementsByClassName("form-block-id");
+        let suppressedJoinId = newBlock.find(".form-block").prevObject[0].id;
+        $.each(blockList, (item) => {
+          if (blockList[item].id > suppressedJoinId) {
+            document.getElementById(blockList[item].id).className +=
+              " highlight-div";
+          }
+        });
       });
-    });
   };
 }
 
