@@ -286,10 +286,6 @@ export function initJoinBlock(joinType, init_data) {
           .selectpicker("refresh")
           .change();
 
-        // Disabling the plus button and the submit button when the former table is changed and therefore no adjacent table is selected
-        document.getElementById("add-join").disabled = true;
-        document.getElementById("submit-button").disabled = true;
-
         if (newBlock.find(".highlight-div")) {
           newBlock.removeClass("highlight-div");
         }
