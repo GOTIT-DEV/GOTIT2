@@ -27,15 +27,6 @@ $(document).ready((_) => {
 
     $("#initial-constraints-switchbox").bootstrapToggle("off");
 
-    // Init initial fields multiselect dropdown
-    $("#initial-fields").multiselect({
-      includeSelectAllOption: true,
-      allSelectedText: "All fields selected",
-      nonSelectedText: "No field(s) selected",
-      numberDisplayed: 7,
-      buttonWidth: 225,
-    });
-
     initFirstTable(init_data);
     initFirstQueryBuilder();
     initFirstFields(init_data);

@@ -53,17 +53,22 @@ export function initFirstQueryBuilder() {
  * @param {Object} init_data
  */
 export function initFirstFields(init_data) {
+
+  // Initialize selectpicker
+  $("#initial-fields").selectpicker({
+    actionsBox: true,
+    selectedTextFormat: "count > 4",
+    title: "None selected",
+    width: '75%'
+  })
+
   // What occurs when you choose a table and/or change it
   document.getElementById("initial-table").onchange = function (event) {
     let target_table = event.target.value;
     let table_data = init_data[target_table];
 
     // Init query-builder with fields and filters
-    $("#initial-query-builder").queryBuilder(
-      "setFilters",
-      true,
-      table_data.filters
-    );
+    $("#initial-query-builder").queryBuilder("setFilters", true, table_data.filters);
 
     // Init list of fields ( without the dateCre, userCre, dateMaj, userMaj)
     let items = table_data.filters
@@ -71,18 +76,22 @@ export function initFirstFields(init_data) {
         field => !(field.label.endsWith("Cre") || field.label.endsWith("Maj"))
       )
       .map(
-        item => $("<option></option>").attr("value", item.label).text(item.label)
+        item => $("<option></option>")
+          .attr("value", item.label)
+          .attr("selected", true)
+          .text(item.label)
       )
     // Init the dropdown containing the initial fields related to the chosen table
     $("#initial-fields").empty().append(...items)
+      .selectpicker("refresh")
       // Init the tooltip for the initial table dropdown
       .parent()
       .tooltip({ title: "Select the Fields (all selected by default)" });
 
     // Making sure the dropdown works
-    $("#initial-fields").multiselect("rebuild");
-    $("#initial-fields").multiselect("selectAll", false);
-    $("#initial-fields").multiselect("updateButtonText");
+    // $("#initial-fields").multiselect("rebuild");
+    // $("#initial-fields").multiselect("selectAll", false);
+    // $("#initial-fields").multiselect("updateButtonText");
 
     // Enables the plus button to add a join block when the first table is chosen (Disabled by default)
     document.getElementById("add-join").disabled = false;
@@ -186,12 +195,11 @@ export function initJoinBlock(joinType, init_data) {
       .parent().tooltip({ title: "Choose a JOIN Type" });
 
     // Init the dropdown when the add-join button is clicked
-    newBlock.find(".table-selects").multiselect({
-      includeSelectAllOption: true,
-      allSelectedText: "All fields selected",
-      nonSelectedText: "No field(s) selected",
-      numberDisplayed: 7,
-      buttonWidth: "225",
+    newBlock.find("select.table-selects").selectpicker({
+      actionsBox: true,
+      selectedTextFormat: "count > 4",
+      title: "None selected",
+      width: '75%'
     })
       // Init tooltip
       .parent().tooltip({ title: "Select the Fields (none selected by default)" });
@@ -213,12 +221,11 @@ export function initJoinBlock(joinType, init_data) {
         .map(
           item => $("<option></option>").attr("value", item.label).text(item.label)
         )
-      newBlock.find(".table-selects")
+      newBlock.find("select.table-selects")
         .empty()
         .append(...items)
         // Making sure the dropdown is built correctly
-        .multiselect("rebuild")
-        .multiselect("updateButtonText");
+        .selectpicker("refresh")
 
       // Initialize join path selection if necessary
       let formerTable = newBlock.find("#former-table").val();
@@ -245,7 +252,6 @@ export function initJoinBlock(joinType, init_data) {
           });
 
         newBlock.find("#join-source-fields").show();
-        // newBlock.find("#source-fields").selectpicker("refresh");
       } else newBlock.find("#join-source-fields").hide();
 
       // Making sure the buttons are enabled after an adjacent table is chosen
