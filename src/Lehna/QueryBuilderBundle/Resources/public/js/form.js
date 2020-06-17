@@ -302,6 +302,10 @@ export function initJoinBlock(joinType, init_data) {
           newBlock.find("#source-fields").append(
             $("<option></option>")
               .attr("value", relationsFromTo[source].from)
+              .attr("data-content",
+                Mustache.render(
+                  '{{from}} <i class="fas fa-long-arrow-alt-right"></i> {{to}}',
+                  relationsFromTo[source]))
               .text(
                 relationsFromTo[source].from +
                 "  ->  " +
