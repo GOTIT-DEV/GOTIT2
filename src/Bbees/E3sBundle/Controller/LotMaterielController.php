@@ -70,6 +70,7 @@ class LotMaterielController extends Controller
         for($i=0; $i<count($query); $i++) {
             $qb->setParameter('q'.$i, $query[$i].'%');
         }
+        $qb->addOrderBy('code', 'ASC');
         $qb->setMaxResults(self::MAX_RESULTS_TYPEAHEAD);
         $results = $qb->getQuery()->getResult();           
         // Ajax answer
