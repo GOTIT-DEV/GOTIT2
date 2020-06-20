@@ -166,7 +166,7 @@ function addJoin(block_id) {
 /**
  * Previously selected tables 
  * available when choosing a source table to make joins
- * @return {Set} The sorted set of available tables
+ * @return {Set} 
  */
 function getAvailableTables() {
 
@@ -175,7 +175,17 @@ function getAvailableTables() {
     .map(elt => elt.value)
     .filter(value => value !== "")
     .concat([initial_table])
+
+  // Making sure we don't have any blank line added to the dropdown
+  for (let i = 0; i < available_tables.length; i++) {
+     if (available_tables[i] === undefined) {
+      available_tables.splice(i, 1)
+    }
+  }
+
   // Remove duplicates
+
+  console.log(available_tables);
   return [...new Set(available_tables)].sort();
 }
 
@@ -297,6 +307,7 @@ export function initJoinBlock(joinType, init_data) {
     let table_options = getAvailableTables().map(
       table => $("<option></option>").attr("value", table).text(table)
     )
+    console.log(table_options);
     newBlock.find("#former-table").empty()
       .append(...table_options)
       .selectpicker("refresh")
