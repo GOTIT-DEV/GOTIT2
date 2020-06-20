@@ -12,11 +12,13 @@
  * @param {Oject} init_data
  */
 export function initFirstTable(init_data) {
+
   // Making sure we have a list of tables sorted by alphabetical order
   let sorted_table_list = Object.keys(init_data).sort()
   let initial_options = sorted_table_list.map(
     table_name => $("<option></option>").attr("value", table_name).text(table_name)
   )
+
   // Adding every single table to the dropdown
   $("#initial-table").append(...initial_options)
     // Redbuilding the dropdown with the new info in it
@@ -29,6 +31,7 @@ export function initFirstTable(init_data) {
  * Initializing the first query builder
  */
 export function initFirstQueryBuilder() {
+
   // Init the query builder for the initial block
   $("#initial-query-builder").queryBuilder({
     plugins: ["bt-tooltip-errors"],
@@ -81,6 +84,7 @@ export function initFirstFields(init_data) {
           .attr("selected", true)
           .text(item.label)
       )
+
     // Init the dropdown containing the initial fields related to the chosen table
     $("#initial-fields").empty().append(...items)
       .selectpicker("refresh")
@@ -105,6 +109,7 @@ export function initFirstFields(init_data) {
  * @return {String}
  */
 function addJoin(block_id) {
+
   // Making template's block with mustache.js
   let newBlock = Mustache.render($("#form-block-template").html(), {
     id: block_id,
@@ -161,8 +166,10 @@ function addJoin(block_id) {
 /**
  * Previously selected tables 
  * available when choosing a source table to make joins
+ * @return {Set} The sorted set of available tables
  */
 function getAvailableTables() {
+
   let initial_table = document.getElementById("initial-table").value;
   let available_tables = $(".adjacent-tables").get()
     .map(elt => elt.value)
@@ -180,25 +187,41 @@ let new_block_id = 0;
  */
 export function initJoinBlock(joinType, init_data) {
 
-  let join_options = joinType.map(
+  //This solution leads to an error with join type being removed from query
+  /* let join_options = joinType.map(
     join => $("<option></option>").attr("value", join).text(join)
   )
+  console.log(join_options); */ 
 
   // After each time the user clicks on the add join button
   document.getElementById("add-join").onclick = function () {
+
     // Adding 1 at each click
     new_block_id += 1;
 
     // Adding a block of query
     let newBlock = addJoin(new_block_id);
 
-    // Filling the menu containing the possible joins
+    //This solution leads to an error with join type being removed from query
+    /* // Filling the menu containing the possible joins
     newBlock.find("#join-type").empty()
       .append(...join_options)
       // Making sure the dropdown is initialized correctly
       .selectpicker("refresh")
       // Init tooltip
-      .parent().tooltip({ title: "Choose a JOIN Type" });
+      .parent().tooltip({ title: "Choose a JOIN Type" }); */
+
+    // Init the JOIN Type dropdown
+    newBlock.find("#join-type").empty().prop("selectedIndex", 0);
+    $.each(joinType, (_index, value) => {
+      newBlock
+        .find("#join-type")
+        .append($("<option></option>").attr("value", value).text(value));
+    });
+
+    // Making sure the dropdown is initialized correctly
+    newBlock.find("#join-type").selectpicker("refresh").parent().tooltip({ title: "Choose a JOIN Type" });
+
 
     // Init the dropdown when the add-join button is clicked
     newBlock.find("select.table-selects").selectpicker({
@@ -329,6 +352,7 @@ export function initJoinBlock(joinType, init_data) {
  * @return {Object}
  */
 export function get_form_initial() {
+
   let table1 = document.getElementById("initial-table");
   let initialTable = table1.options[table1.selectedIndex].value;
 
@@ -357,6 +381,7 @@ export function get_form_initial() {
  * @return {Array}
  */
 export function get_form_block_data(init_data) {
+
   let block_list = $(".form-block");
   let data = block_list
     .map(function () {
@@ -416,6 +441,7 @@ export function get_form_block_data(init_data) {
  * Displaying the "scroll to the top" button
  */
 export function scrollFunction() {
+  
   if (document.body.scrollTop > 30 || document.documentElement.scrollTop > 30) {
     document.getElementById("myBtn").style.display = "block";
   } else {
