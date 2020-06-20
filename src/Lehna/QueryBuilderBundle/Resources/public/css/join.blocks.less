@@ -1,4 +1,5 @@
 /* Grid for the Join Blocks */
+
 div#join-panel {
   display: grid;
   grid-template-columns: 1fr;
@@ -63,7 +64,7 @@ div#join-panel {
     }
   }
 
-  @media (max-width: 550px) {
+  @media (max-width: 650px) {
     div#join-header {
       grid-template-columns: 1fr 0fr;
       grid-template-rows: auto auto auto auto;
@@ -72,6 +73,27 @@ div#join-panel {
         "join-type-choice ."
         "adj-table-choice ."
         "join-source-fields .";
+
+      >div {
+        justify-self: center;
+      }
+    }
+  }
+
+  @media (max-width: 470px) {
+    div#join-header {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto auto auto;
+      grid-template-areas:
+        "former-table-choice"
+        "join-type-choice"
+        "adj-table-choice"
+        "join-source-fields"
+        "remove-btn";
+
+      >button {
+        justify-self: center;
+      }
 
       >div {
         justify-self: center;
@@ -111,6 +133,26 @@ div#join-panel {
       grid-area: reset-constraints;
       display: none;
       align-self: start;
+    }
+  }
+
+  @media (max-width: 480px) {
+    div.join-fields-constraints-options {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto;
+      grid-template-areas:
+      "messages messages"
+      "join-selected-fields join-checked-constraints"
+      "toggled-constraints toggled-constraints"
+      "reset-constraints reset-constraints";
+
+      >button {
+        justify-self: center;
+      }
+
+      div.toggled-constraints {
+        justify-self: start;
+      }
     }
   }
 }

@@ -1,3 +1,5 @@
+/* Grid for the Initial Block */
+
 div#initial-panel {
   display: grid;
   grid-template-columns: 1fr;
@@ -12,6 +14,7 @@ div#initial-panel {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
     grid-template-areas: "initial-table-selection";
+    gap: 5px;
 
     div#initial-table-selection {
       grid-area: initial-table-selection;
@@ -24,99 +27,54 @@ div#initial-panel {
   div#initial-fields-constraints-options {
     grid-area: initial-fields-constraints-options;
     display: grid;
-    grid-template-columns: 1fr 0.5fr;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr 0fr;
+    padding: 10px 20px;
     grid-template-rows: auto auto;
     grid-template-areas:
-      "initial-selected-fields initial-checked-constraints"
-      "initial-toggled-constraints initial-toggled-constraints";
+      "messages messages ."
+      "initial-selected-fields . initial-checked-constraints"
+      "toggled-constraints toggled-constraints initial-reset-constraints";
 
     div#initial-selected-fields {
       grid-area: initial-selected-fields;
       justify-self: start;
-      padding-top: 10px;
-      padding-left: 20px;
-      padding-bottom: 15px;
       width: 100%;
     }
 
     div#initial-checked-constraints {
       grid-area: initial-checked-constraints;
       justify-self: end;
-      padding-top: 10px;
-      padding-right: 20px;
-      padding-bottom: 15px;
     }
 
-    div#initial-toggled-constraints {
-      grid-area: initial-toggled-constraints;
-      display: grid;
-      grid-template-columns: 1fr 0.5fr;
-      padding-left: 20px;
-      padding-bottom: 10px;
-      padding-right: 20px;
-      grid-template-rows: auto auto;
-      grid-template-areas:
-        "initial-query-builder initial-warning-msg"
-        "initial-cc-reset .";
+    div.toggled-constraints {
+      grid-area: toggled-constraints;
+      display: none;
+    }
 
-      div#initial-query-builder {
-        grid-area: initial-query-builder;
-        padding-bottom: 5px;
-      }
-
-      div#initial-warning-msg {
-        grid-area: initial-warning-msg;
-        justify-self: center;
-      }
-
-      button#initial-cc-reset {
-        grid-area: initial-cc-reset;
-        justify-self: start;
-      }
+    button#initial-cc-reset {
+      grid-area: initial-reset-constraints;
+      display: none;
+      align-self: start;
     }
   }
 
-  @media (max-width: 1100px) {
+  @media (max-width: 480px) {
     div#initial-fields-constraints-options {
-      grid-area: initial-fields-constraints-options;
-      display: grid;
-      grid-template-columns: 1fr 0.5fr;
-      grid-template-rows: auto auto;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto auto;
       grid-template-areas:
-        "initial-selected-fields initial-checked-constraints"
-        "initial-toggled-constraints initial-toggled-constraints";
+      "messages messages"
+      "initial-selected-fields initial-checked-constraints"
+      "toggled-constraints toggled-constraints"
+      "initial-reset-constraints initial-reset-constraints";
 
-      div#initial-selected-fields {
-        grid-area: initial-selected-fields;
+      >button {
+        justify-self: center;
+      }
+
+      div.toggled-constraints {
         justify-self: start;
-      }
-
-      div#initial-checked-constraints {
-        grid-area: initial-checked-constraints;
-        justify-self: end;
-      }
-
-      div#initial-toggled-constraints {
-        grid-template-columns: 1fr;
-        grid-template-rows: 0.5fr auto auto;
-        grid-template-areas:
-          "initial-query-builder"
-          "initial-cc-reset"
-          "initial-warning-msg";
-
-        div#initial-query-builder {
-          grid-area: initial-query-builder;
-        }
-
-        button#initial-cc-reset {
-          grid-area: initial-cc-reset;
-          justify-self: start;
-        }
-
-        div#initial-warning-msg {
-          grid-area: initial-warning-msg;
-          justify-self: center;
-        }
       }
     }
   }

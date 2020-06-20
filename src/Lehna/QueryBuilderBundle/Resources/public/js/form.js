@@ -42,6 +42,10 @@ export function initFirstQueryBuilder() {
         type: "integer",
       },
     ],
+    lang: {
+      "delete_rule": " ",
+      "delete_group": " ",
+    }
   });
 
   // Init the reset button for this query builder

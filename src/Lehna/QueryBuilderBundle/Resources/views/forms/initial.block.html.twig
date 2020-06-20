@@ -34,13 +34,10 @@
 			</strong>
 			<br>
 			<label class="control-label" for="initial-constraints-switchbox" data-toggle="tooltip" data-placement="left" title="Add Constraints">
-				<input id="initial-constraints-switchbox" class="constraints-switchbox" type="checkbox" data-toggle="toggle" data-onstyle="success" data-target="#initial-toggled-constraints">
+				<input id="initial-constraints-switchbox" class="constraints-switchbox" type="checkbox" data-toggle="toggle" data-onstyle="success" data-target=".toggled-constraints">
 			</label>
 		</div>
-		<div id="initial-toggled-constraints" class="toggled-constraints">
-			<div id="initial-query-builder" class="collapsed-query-builder"></div>
-			<button class="btn btn-warning reset" id="initial-cc-reset" data-target="#initial-query-builder">Reset</button>
-			<div id="initial-warning-msg" class="warning-msg"></div>
-		</div>
+		<div id="initial-query-builder" class="collapsed-query-builder toggled-constraints"></div>
+		<button class="btn btn-warning reset" id="initial-cc-reset" data-target="#initial-query-builder">Reset</button>
 	</div>
 </div>

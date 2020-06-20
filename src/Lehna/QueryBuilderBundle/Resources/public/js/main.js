@@ -7,6 +7,7 @@
  *
  * Authors : Thierno Diallo, Maud Ferrer and Elsa Mendes.
  */
+
 import {
   initFirstTable,
   initFirstQueryBuilder,
@@ -33,9 +34,10 @@ $(document).ready((_) => {
     initFirstFields(init_data);
 
     // Hiding what's in the div, then showing it when the switchbox is triggered
-    document.getElementById("initial-toggled-constraints").style.display = "none";
+    document.getElementById("initial-query-builder").style.display = "none";
     $("#initial-constraints-switchbox").change((_) => {
-      $("#initial-toggled-constraints").toggle();
+      $("#initial-query-builder").slideToggle("fast");
+      $("#initial-cc-reset").slideToggle("fast");
     });
 
     initJoinBlock(joinType, init_data);

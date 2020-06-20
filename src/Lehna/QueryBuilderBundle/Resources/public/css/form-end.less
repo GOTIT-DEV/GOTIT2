@@ -29,3 +29,18 @@ div#form-end {
     min-width: 10em;
   }
 }
+
+@media (max-width: 520px) {
+  div#form-end {
+    grid-template-columns: 0.5fr 0.5fr 1fr 1fr 1fr;;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+    "add-join . . . . "
+    ". . clear-button . ."
+    ". . results-btn . .";
+
+    >button {
+      justify-self: start;
+    }
+  }
+}
