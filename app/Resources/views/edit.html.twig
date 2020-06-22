@@ -100,12 +100,14 @@
                                         {% if  action != 'show'  %} 
                                             <button type="submit" class="btn btn-round btn-success " value="Create">{{'buton.Valid'|trans}}</button>
 					{% endif %}
-                                        {% if ( backbutton == 0 )%}
-						{# cas d une validation en mode CREATE #}
+
+                                        {# {% if ( backbutton == 0 )%}#}
+                                        {% if ( action == 'edit' or action == 'show')%}
 						<a href="{{ path_route_index }}" class="btn btn-round btn-primary">{{'buton.BackToTheList'|trans}}</a>
-					{% else %}
-						{# case of mode Edit /edit  #}
-						<a href="#" onclick="window.history.go(-{{comptvalid}}); return false;" class="btn btn-round btn-primary  ">{{'buton.BackToTheList'|trans}}</a>
+						<a href="#" onclick="window.history.go(-1); return false;" class="btn btn-round btn-primary  ">{{'buton.Back'|trans}}</a>					
+                                        {% else %}
+						{# <a href="#" onclick="window.history.go(-{{comptvalid}}); return false;" class="btn btn-round btn-primary  ">{{'buton.BackToTheList'|trans}}</a> #}
+						<a href="#" onclick="window.history.go(-1); return false;" class="btn btn-round btn-primary  ">{{'buton.Back'|trans}}</a>
 					{% endif %}
 				</div>
 			</div>
@@ -118,7 +120,7 @@
 
 {% block scripts %}
 <script type="text/javascript">
-	var addButon = {
+var addButon = {
 "Add a SamplingMethod":"{{ 'buton.Add a SamplingMethod'|trans }}",
 "Add a Fixateur":"{{ 'buton.Add a Fixateur'|trans }}",
 "Add a Programme":"{{ 'buton.Add a Programme'|trans }}",

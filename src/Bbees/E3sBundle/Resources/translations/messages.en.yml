@@ -265,6 +265,9 @@ list.MotuAssigne: MOTU
 
 # BUTTONS ######################################################################
 #
+buton.Back: Back
+buton.exportToCSV: Export to CSV file
+buton.exportToCSV-title: UTF-8 encoding and comma point separator
 buton.See Stations Around: See nearby sites
 buton.Close: Close 
 # Button titles in csv file uploading tools
@@ -371,7 +374,7 @@ buton.NewChromatogramme: Create new chromatogram
 buton.ImportChromatogramme: Import new set of chromatograms and related data
 buton.Valid: Validate
 buton.BackToTheSelection: Back to selection
-buton.BackToTheList: Back to list
+buton.BackToTheList: Show list
 buton.showAllRecord: Show all records
 Envoyer: Import CSV file
 

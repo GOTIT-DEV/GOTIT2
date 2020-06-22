@@ -99,6 +99,9 @@ list.MotuAssigne: MOTU
 
 # BUTTONS ######################################################################
 # 
+buton.Back: Retour
+buton.exportToCSV: Exporter au format CSV
+buton.exportToCSV-title: Encodage UTF-8 et Séparateur point virgule
 buton.See Stations Around: Afficher les Stations autour du point GPS
 buton.Close: Fermer
 # Button titles in csv file uploading tools
@@ -205,7 +208,7 @@ buton.NewChromatogramme: Creer un chromatogramme
 buton.ImportChromatogramme: Importer des chromatogrammes
 buton.Valid: Valider
 buton.BackToTheSelection: Retour à la selection
-buton.BackToTheList: Retour à la Liste
+buton.BackToTheList: Afficher la Liste
 buton.showAllRecord: Liste de tous les enregistrements
 Envoyer: Importer le fichier CSV
 
