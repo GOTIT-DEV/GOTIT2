@@ -170,33 +170,7 @@
                 $('bbees_e3sbundle_sequenceassemblee_codeSqcAlignement').attr("disabled", false); 
             });
         {% endif %}   
-        // function that automatically generates the Sequence code
-        function setCodeSqcAss() {
-            var code = '';
-            var codeIndBiomol = $('#form_individuFk option:selected').text();
-            var statut = $('#bbees_e3sbundle_sequenceassemblee_statutSqcAssVocFk option:selected').text();
-            var tabChromato = new Array();
-            for (i = 0; i < 25; i++) {
-                var estAligneEtTraite = $('#bbees_e3sbundle_sequenceassemblee_estAligneEtTraites_'+i.toString()+'_chromatogrammeFk option:selected').text();
-                if (estAligneEtTraite !== '') {
-                    tabChromato.push(estAligneEtTraite);  
-                }
-            }
-            var codeChromatoSpecificite = ''
-            if (tabChromato.length > 0){
-                tabChromato.sort(); 
-                for (i = 0; i < tabChromato.length; i++) {
-                     codeChromatoSpecificite = (i==0) ? tabChromato[i]  : codeChromatoSpecificite +'-'+tabChromato[i];  
-                }
-            } else {
-            }
-            if (statut=='VALIDEE'){
-                code =  codeIndBiomol+'_'+codeChromatoSpecificite ;
-            } else {
-                code =  statut+'_'+codeIndBiomol+'_'+codeChromatoSpecificite ;
-            }
-            $('#bbees_e3sbundle_sequenceassemblee_codeSqcAss').val(code);
-        }
+
     });
 </script>
 

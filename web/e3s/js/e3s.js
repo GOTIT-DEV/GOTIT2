@@ -718,7 +718,34 @@ function stationsMap(json_stations, latGPS = undefined, longGPS = undefined) {
   return gd // Return objet plotly
 }
 
-
+// function that automatically generates the Sequence code
+function setCodeSqcAss() {
+    var code = '';
+    var codeIndBiomol = $('#form_individuFk option:selected').text();
+    var statut = $('#bbees_e3sbundle_sequenceassemblee_statutSqcAssVocFk option:selected').text();
+    var tabChromato = new Array();
+    for (i = 0; i < 25; i++) {
+        var estAligneEtTraite = $('#bbees_e3sbundle_sequenceassemblee_estAligneEtTraites_'+i.toString()+'_chromatogrammeFk option:selected').text();
+        if (estAligneEtTraite !== '') {
+            tabChromato.push(estAligneEtTraite);  
+        }
+    }
+    var codeChromatoSpecificite = ''
+    if (tabChromato.length > 0){
+        tabChromato.sort(); 
+        for (i = 0; i < tabChromato.length; i++) {
+             codeChromatoSpecificite = (i==0) ? tabChromato[i]  : codeChromatoSpecificite +'-'+tabChromato[i];  
+        }
+    } else {
+    }
+    if (statut.substr(0, 5)==='VALID'){
+        code =  codeIndBiomol+'_'+codeChromatoSpecificite ;
+    } else {
+        code =  statut+'_'+codeIndBiomol+'_'+codeChromatoSpecificite ;
+    }
+    $('#bbees_e3sbundle_sequenceassemblee_codeSqcAss').val(code);
+}
+        
 // function that automatically generates the codeSqcAssExt
 function setCodeSqcAssExt(CodePlaceholder = {"statut" : "Statut", "RefTaxonSelected" : "RefTaxonSelected", "numIndividu" : "numIndividu", "accessionNumber" : "accessionNumber" }) {
     var code = '';
@@ -734,7 +761,7 @@ function setCodeSqcAssExt(CodePlaceholder = {"statut" : "Statut", "RefTaxonSelec
     if (numIndividu == '') numIndividu = CodePlaceholder["numIndividu"];
     if (accessionNumber == '') accessionNumber = CodePlaceholder["accessionNumber"];
     //alert(RefTaxonSelected);
-    if (statut=='VALIDEE'){
+    if (statut.substr(0, 5)==='VALID'){
         code =  RefTaxonSelected+'_'+codeCollecte+'_'+numIndividu+'_'+accessionNumber+'|'+origine ;
     } else {
         code =  statut+'_'+RefTaxonSelected+'_'+codeCollecte+'_'+numIndividu+'_'+accessionNumber+'|'+origine ;

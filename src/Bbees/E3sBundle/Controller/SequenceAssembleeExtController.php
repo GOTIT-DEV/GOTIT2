@@ -343,7 +343,7 @@ class SequenceAssembleeExtController extends Controller
             ksort($arrayReferentielTaxon);
             reset($arrayReferentielTaxon);
             $firstTaxname = current($arrayReferentielTaxon);
-            $codeSqc = ($codeStatutSqcAss == 'VALIDEE') ? $firstTaxname : $codeStatutSqcAss.'_'.$firstTaxname;              
+            $codeSqc = (substr($codeStatutSqcAss, 0, 5)=='VALID') ? $firstTaxname : $codeStatutSqcAss.'_'.$firstTaxname;              
             $codeCollecte = $sequenceAssembleeExt->getCollecteFk()->getCodeCollecte();
             $numIndividuSqcAssExt = $sequenceAssembleeExt->getNumIndividuSqcAssExt();
             $accessionNumberSqcAssExt = $sequenceAssembleeExt->getAccessionNumberSqcAssExt();
