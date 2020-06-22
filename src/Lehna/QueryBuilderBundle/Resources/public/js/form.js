@@ -331,7 +331,7 @@ export function initJoinBlock(joinType, init_data) {
           .change();
 
         if (newBlock.find(".highlight-div")) {
-          newBlock.removeClass("highlight-div");
+          newBlock.removeClass(" highlight-div");
         }
       })
       .change()
@@ -344,7 +344,7 @@ export function initJoinBlock(joinType, init_data) {
       .click((_) => {
         newBlock.find(".form-block").remove();
         if (newBlock.find(".highlight-div")) {
-          newBlock.removeClass("highlight-div");
+          newBlock.removeClass(" highlight-div");
         }
 
         // The alert is there to guide the user on why there are highlighted blocks
@@ -355,7 +355,9 @@ export function initJoinBlock(joinType, init_data) {
         let suppressedJoinId = newBlock.find(".form-block").prevObject[0].id;
         $.each(blockList, (item) => {
           if (blockList[item].id > suppressedJoinId) {
-            $(item).addClass("highlight-div");
+            console.log("ok")
+            document.getElementById(blockList[item].id).className += " highlight-div";
+            // $(item).addClass(" highlight-div");
           }
         });
       });
