@@ -220,7 +220,7 @@ class SequenceAssembleeController extends Controller
                 $exception_message =  str_replace('"', '\"',str_replace("'", "\'", html_entity_decode(strval($e), ENT_QUOTES , 'UTF-8')));
                 return $this->render('sequenceassemblee/index.html.twig', array('exception_message' =>  explode("\n", $exception_message)[0]));
             }
-            return $this->redirectToRoute('sequenceassemblee_edit', array('id' => $sequenceAssemblee->getId(), 'valid' => 1));
+            return $this->redirectToRoute('sequenceassemblee_edit', array('id' => $sequenceAssemblee->getId(), 'valid' => 1, 'idFk' => $request->get('idFk') ));
         }       
         return $this->render('sequenceassemblee/edit.html.twig', array(
                                 'sequenceAssemblee' => $sequenceAssemblee,
@@ -228,6 +228,7 @@ class SequenceAssembleeController extends Controller
                                 'form_gene_indbiomol' => $form_gene_indbiomol->createView(),
                                 'geneVocFk' => $this->geneVocFk,
                                 'individuFk' => $this->individuFk,
+                                'idFk' => $request->get('idFk'),
         ));
     }
 

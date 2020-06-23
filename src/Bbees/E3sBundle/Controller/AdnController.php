@@ -197,7 +197,7 @@ class AdnController extends Controller
                 $exception_message =  str_replace('"', '\"',str_replace("'", "\'", html_entity_decode(strval($e), ENT_QUOTES , 'UTF-8')));
                 return $this->render('adn/index.html.twig', array('exception_message' =>  explode("\n", $exception_message)[0]));
             } 
-            return $this->redirectToRoute('adn_edit', array('id' => $adn->getId(), 'valid' => 1));                        
+            return $this->redirectToRoute('adn_edit', array('id' => $adn->getId(), 'valid' => 1, 'idFk' => $request->get('idFk') ));                        
         }
 
         return $this->render('adn/edit.html.twig', array(

@@ -206,7 +206,7 @@ class CollecteController extends Controller
                 $exception_message =  str_replace('"', '\"',str_replace("'", "\'", html_entity_decode(strval($e), ENT_QUOTES , 'UTF-8')));
                 return $this->render('collecte/index.html.twig', array('exception_message' =>  explode("\n", $exception_message)[0]));
             } 
-            return $this->redirectToRoute('collecte_edit', array('id' => $collecte->getId(), 'valid' => 1));  
+            return $this->redirectToRoute('collecte_edit', array('id' => $collecte->getId(), 'valid' => 1, 'idFk' => $request->get('idFk') ));  
         }
 
         return $this->render('collecte/edit.html.twig', array(

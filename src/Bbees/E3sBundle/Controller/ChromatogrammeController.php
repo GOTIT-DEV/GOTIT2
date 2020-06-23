@@ -170,7 +170,7 @@ class ChromatogrammeController extends Controller
                 $exception_message =  str_replace('"', '\"',str_replace("'", "\'", html_entity_decode(strval($e), ENT_QUOTES , 'UTF-8')));
                 return $this->render('chromatogramme/index.html.twig', array('exception_message' =>  explode("\n", $exception_message)[0]));
             } 
-            return $this->redirectToRoute('chromatogramme_edit', array('id' => $chromatogramme->getId(), 'valid' => 1));                      
+            return $this->redirectToRoute('chromatogramme_edit', array('id' => $chromatogramme->getId(), 'valid' => 1, 'idFk' => $request->get('idFk')));
         }
 
         return $this->render('chromatogramme/edit.html.twig', array(
@@ -231,9 +231,10 @@ class ChromatogrammeController extends Controller
                 return $this->render('chromatogramme/index.html.twig', array('exception_message' =>  explode("\n", $exception_message)[0]));
             } 
             return $this->render('chromatogramme/edit.html.twig', array(
-                'chromatogramme' => $chromatogramme,
-                'edit_form' => $editForm->createView(),
-                'valid' => 1));
+            'chromatogramme' => $chromatogramme,
+            'edit_form' => $editForm->createView(),
+            'valid' => 1));
+
         }        
 
         return $this->render('chromatogramme/edit.html.twig', array(

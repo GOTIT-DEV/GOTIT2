@@ -200,7 +200,7 @@ class PcrController extends Controller
                 $exception_message =  str_replace('"', '\"', str_replace("'", "\'", html_entity_decode(strval($e), ENT_QUOTES, 'UTF-8')));
                 return $this->render('pcr/index.html.twig', array('exception_message' =>  explode("\n", $exception_message)[0]));
             }
-            return $this->redirectToRoute('pcr_edit', array('id' => $pcr->getId(), 'valid' => 1));
+            return $this->redirectToRoute('pcr_edit', array('id' => $pcr->getId(), 'valid' => 1, 'idFk' => $request->get('idFk') ));
         }
 
         return $this->render('pcr/edit.html.twig', array(

@@ -204,7 +204,7 @@ class LotMaterielController extends Controller
                 $exception_message =  str_replace('"', '\"',str_replace("'", "\'", html_entity_decode(strval($e), ENT_QUOTES , 'UTF-8')));
                 return $this->render('lotmateriel/index.html.twig', array('exception_message' =>  explode("\n", $exception_message)[0]));
             } 
-            return $this->redirectToRoute('lotmateriel_edit', array('id' => $lotMateriel->getId(), 'valid' => 1));                       
+            return $this->redirectToRoute('lotmateriel_edit', array('id' => $lotMateriel->getId(), 'valid' => 1, 'idFk' => $request->get('idFk') ));                       
         }
 
         return $this->render('lotmateriel/edit.html.twig', array(
