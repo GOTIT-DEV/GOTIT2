@@ -378,7 +378,7 @@ class SequenceAssembleeExtController extends Controller
             ksort($arrayReferentielTaxon);
             end($arrayReferentielTaxon);
             $lastCodeTaxon = current($arrayReferentielTaxon);
-            $codeSqcAlignement = ($codeStatutSqcAss == 'VALIDEE') ? $lastCodeTaxon : $codeStatutSqcAss.'_'.$lastCodeTaxon;              
+            $codeSqcAlignement = (substr($codeStatutSqcAss, 0, 5)=='VALID')  ? $lastCodeTaxon : $codeStatutSqcAss.'_'.$lastCodeTaxon;              
             $codeCollecte = $sequenceAssembleeExt->getCollecteFk()->getCodeCollecte();
             $numIndividuSqcAssExt = $sequenceAssembleeExt->getNumIndividuSqcAssExt();
             $accessionNumberSqcAssExt = $sequenceAssembleeExt->getAccessionNumberSqcAssExt();

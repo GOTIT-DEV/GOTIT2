@@ -201,6 +201,29 @@ class SequenceAssembleeController extends Controller
             $sequenceAssemblee->setGeneVocFk($form_gene_indbiomol->get('geneVocFk')->getData()->getId());
             $sequenceAssemblee->setIndividuFk($form_gene_indbiomol->get('individuFk')->getData()->getId());
         } 
+        // case where the idFk url parameter is not null 
+        if ( $request->get('idFk') !== null && $request->get('idFk') !== '') {
+            $where = ' chromatogramme.id = '.$request->get('idFk');
+            // Search for the list to show EstAligneEtTraite
+            $tab_toshow =[];
+            $entities_toshow = $this->getDoctrine()->getManager()->getRepository("BbeesE3sBundle:Chromatogramme")->createQueryBuilder('chromatogramme')
+                ->where($where)
+                ->leftJoin('BbeesE3sBundle:Pcr', 'pcr', 'WITH', 'chromatogramme.pcrFk = pcr.id')
+                ->leftJoin('BbeesE3sBundle:Adn', 'adn', 'WITH', 'pcr.adnFk = adn.id')
+                ->leftJoin('BbeesE3sBundle:Individu', 'individu', 'WITH', 'adn.individuFk = individu.id')
+                ->leftJoin('BbeesE3sBundle:Voc', 'vocGene', 'WITH', 'pcr.geneVocFk = vocGene.id')
+                ->getQuery()
+                ->getResult();
+            // set the geneVocFk and individuFk parameteres
+            foreach($entities_toshow as $entity)
+            {
+                $this->geneVocFk = $entity->getPcrFk()->getGeneVocFk()->getId();
+                $this->individuFk = $entity->getPcrFk()->getAdnFk()->getIndividuFk()->getId();
+                $form_gene_indbiomol = $this->createGeneIndbiomolForm($sequenceAssemblee, $this->geneVocFk, $this->individuFk );
+                $sequenceAssemblee->setGeneVocFk($this->geneVocFk );
+                $sequenceAssemblee->setIndividuFk($this->individuFk);
+            }
+        }
 
         // management of the form SequenceAssembleeType
         $form_gene_indbiomol = $this->createGeneIndbiomolForm($sequenceAssemblee, $this->geneVocFk, $this->individuFk );

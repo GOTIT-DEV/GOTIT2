@@ -148,6 +148,14 @@
             {% endif %}
         {% endif %}
         {% if action == 'new'  %}
+            // set the code chromatogram if the url parameter idFk is not null
+            {% if ( app.request.query.get('idFk') is defined and app.request.query.get('idFk') is not null and  app.request.query.get('idFk') !='')%}
+                {% set idFk = app.request.query.get('idFk') %}
+                var chromatogrammeFk = {{idFk}};
+                $('#bbees_e3sbundle_sequenceassemblee_estAligneEtTraites_0_chromatogrammeFk').val(chromatogrammeFk);
+                setCodeSqcAss();
+            {% endif %}
+            //
             if($('#bbees_e3sbundle_sequenceassemblee_codeSqcAss').val() == '') setCodeSqcAss();
             $('#bbees_e3sbundle_sequenceassemblee_statutSqcAssVocFk').change(function (e) { setCodeSqcAss();}) 
             $('#bbees_e3sbundle_sequenceassemblee_estAligneEtTraites').change(function (e) { setCodeSqcAss();})

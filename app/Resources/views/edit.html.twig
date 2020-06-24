@@ -104,7 +104,7 @@
                                         {# {% if ( backbutton == 0 )%}#}
                                         {% if ( action == 'edit' )%}
 						<a href="{{ path_route_index }}" class="btn btn-round btn-primary">{{'buton.BackToTheList'|trans}}</a>
-                                                {% if not (app.request.query.get('valid')is defined and app.request.query.get('valid') == 1 )%}
+                                                {% if  not ( flagvalid )%}
                                                     <a href="#" onclick="window.history.go(-1); return false;" class="btn btn-round btn-primary  ">{{'buton.Back'|trans}}</a>					
                                                 {% endif %}
                                         {% else %}
