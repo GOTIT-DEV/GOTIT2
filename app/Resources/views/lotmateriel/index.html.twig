@@ -24,22 +24,22 @@
     <table id="grid-basic" class="table table-condensed table-hover table-striped" >           
         <thead>
             <tr>
-                <th data-column-id="lotMateriel.id" data-type="numeric" data-visible="false">Id</th>
-                <th data-column-id="collecte.codeCollecte" data-sortable="true">{{'Code collecte'|trans}}</th>                
-                <th data-column-id="lotMateriel.codeLotMateriel" data-sortable="true">{{'Code lot materiel'|trans}}</th> 
-                <th data-column-id="lotMateriel.aFaire">{{'A faire'|trans}}</th>
-                <th data-column-id="lotMateriel.commentaireConseilSqc" data-sortable="false">{{'Commentaire conseil sqc'|trans}}</th> 
-                <th data-column-id="lotMateriel.dateLotMateriel" data-type="date">{{'Date lot materiel'|trans}}</th>
-                <th data-column-id="listePersonne" data-sortable="false" data-visible="false">{{'list.Liste personnes'|trans}}</th>
-                <th data-column-id="pays.nomPays" data-type="date" data-visible="false">{{'Nom pays'|trans}}</th>
-                <th data-column-id="commune.codeCommune"  data-visible="false">{{'Code commune'|trans}}</th>
-                <th data-column-id="lastTaxname" data-sortable="false" data-visible="false">{{'list.Last taxname'|trans}}</th> 
-                <th data-column-id="lastdateIdentification" data-sortable="false" data-visible="false">{{'list.Last identification date'|trans}}</th>  
-                <th data-column-id="codeIdentification" data-sortable="false" data-visible="false">{{'list.Last identification critere'|trans}}</th> 
-                <th data-column-id="lotMateriel.dateMaj" data-width="100">{{'list.Date maj'|trans}}</th>
-                <th data-column-id="lotMateriel.dateCre" data-width="100" data-visible="false">{{'list.Date cre'|trans}}</th>
-                <th data-column-id="lotMateriel.userCre" data-width="10" data-visible="false">{{'list.User cre'|trans}}</th>
-                <th data-column-id="lotMateriel.userMaj" data-width="10" data-visible="false">{{'list.User maj'|trans}}</th>
+                <th data-column-id="lot.id" data-type="numeric" data-visible="false">Id</th>
+                <th data-column-id="sampling.sample_code" data-sortable="true">{{'Code collecte'|trans}}</th>                
+                <th data-column-id="lot.internal_biological_material_code" data-sortable="true">{{'Code lot materiel'|trans}}</th> 
+                <th data-column-id="lot.internal_biological_material_status" data-type="numeric">{{'A faire'|trans}}</th>
+                <th data-column-id="lot.sequencing_advice" data-sortable="false">{{'Commentaire conseil sqc'|trans}}</th> 
+                <th data-column-id="lot.internal_biological_material_date" data-type="date">{{'Date lot materiel'|trans}}</th>
+                <th data-column-id="list_person" data-sortable="false" data-visible="false">{{'list.Liste personnes'|trans}}</th>
+                <th data-column-id="country.country_name" data-type="date" data-visible="false">{{'Nom pays'|trans}}</th>
+                <th data-column-id="municipality.municipality_code"  data-visible="false">{{'Code commune'|trans}}</th>
+                <th data-column-id="last_taxname_lot" data-sortable="true" data-visible="false">{{'list.Last taxname'|trans}}</th> 
+                <th data-column-id="last_date_identification_lot" data-sortable="true" data-visible="false">{{'list.Last identification date'|trans}}</th>  
+                <th data-column-id="code_lot_identification_criterion" data-sortable="true" data-visible="false">{{'list.Last identification critere'|trans}}</th> 
+                <th data-column-id="lot.date_of_update" data-width="100">{{'list.Date maj'|trans}}</th>
+                <th data-column-id="lot.date_of_creation" data-width="100" data-visible="false">{{'list.Date cre'|trans}}</th>
+                <th data-column-id="user_cre.username" data-width="10" data-visible="false">{{'list.User cre'|trans}}</th>
+                <th data-column-id="user_maj.username" data-width="10" data-visible="false">{{'list.User maj'|trans}}</th>
                 <th data-column-id="show" data-formatter="show" data-sortable="false"   data-width="20">{{'list.show'|trans}}</th>
                 <th data-column-id="edit" data-formatter="edit" data-sortable="false"  data-width="20">{{'list.edit'|trans}}</th>
                 <th data-column-id="delete" data-formatter="delete" data-sortable="false" data-width="20">{{'list.delete'|trans}}</th> 

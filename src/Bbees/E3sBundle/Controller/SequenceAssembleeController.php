@@ -251,7 +251,6 @@ class SequenceAssembleeController extends Controller
                                 'form_gene_indbiomol' => $form_gene_indbiomol->createView(),
                                 'geneVocFk' => $this->geneVocFk,
                                 'individuFk' => $this->individuFk,
-                                'idFk' => $request->get('idFk'),
         ));
     }
 
