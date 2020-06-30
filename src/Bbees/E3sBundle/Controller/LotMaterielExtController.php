@@ -66,60 +66,72 @@ class LotMaterielExtController extends Controller
         $em = $this->getDoctrine()->getManager();
         //
         $rowCount = ($request->get('rowCount')  !== NULL) ? $request->get('rowCount') : 10;
-        $orderBy = ($request->get('sort')  !== NULL) ? $request->get('sort') : array('lotMaterielExt.dateMaj' => 'desc', 'lotMaterielExt.id' => 'desc');  
+        $orderBy = ($request->get('sort')  !== NULL) ? array_keys($request->get('sort'))[0]." ".array_values($request->get('sort'))[0] : "lot.date_of_update DESC, lot.id DESC";  
         $minRecord = intval($request->get('current')-1)*$rowCount;
         $maxRecord = $rowCount; 
         // initializes the searchPhrase variable as appropriate and sets the condition according to the url idFk parameter
-        $where = 'LOWER(lotMaterielExt.codeLotMaterielExt) LIKE :criteriaLower';
+        $where = 'LOWER(lot.external_biological_material_code) LIKE :criteriaLower';
         $searchPhrase = $request->get('searchPhrase');
         if ( $request->get('searchPatern') !== null && $request->get('searchPatern') !== '' && $searchPhrase == '') {
             $searchPhrase = $request->get('searchPatern');
         }
         if ( $request->get('idFk') !== null && $request->get('idFk') !== '') {
-            $where .= ' AND lotMaterielExt.collecteFk = '.$request->get('idFk');
+            $where .= ' AND lot.sampling_fk = '.$request->get('idFk');
         }
-        // Search for the list to show
+
+                // Search for the list to show
         $tab_toshow =[];
-        $entities_toshow = $em->getRepository("BbeesE3sBundle:LotMaterielExt")->createQueryBuilder('lotMaterielExt')
-            ->where($where)
-            ->setParameter('criteriaLower', strtolower($searchPhrase).'%')
-            ->leftJoin('BbeesE3sBundle:Collecte', 'collecte', 'WITH', 'lotMaterielExt.collecteFk = collecte.id')
-            ->leftJoin('BbeesE3sBundle:Station', 'station', 'WITH', 'collecte.stationFk = station.id')
-            ->leftJoin('BbeesE3sBundle:Pays', 'pays', 'WITH', 'station.paysFk = pays.id')
-            ->addOrderBy(array_keys($orderBy)[0], array_values($orderBy)[0])
-            ->getQuery()
-            ->getResult();
+        $rawSql = "SELECT  lot.id, st.site_code, st.latitude, st.longitude, sampling.sample_code, country.country_name, municipality.municipality_code,
+        lot.external_biological_material_creation_date, lot.date_of_creation, lot.date_of_update, voc_lot_identification_criterion.code as code_lot_identification_criterion,
+	lot.external_biological_material_code, rt_lot.taxon_name as last_taxname_lot, ei_lot.identification_date as last_date_identification_lot,
+        lot.creation_user_name, user_cre.username as user_cre_username , user_maj.username as user_maj_username,
+        string_agg(DISTINCT person.person_name , ' ; ') as list_person
+	FROM external_biological_material lot 
+                LEFT JOIN user_db user_cre ON user_cre.id = lot.creation_user_name
+                LEFT JOIN user_db user_maj ON user_maj.id = lot.update_user_name
+		JOIN sampling ON sampling.id = lot.sampling_fk
+			JOIN site st ON st.id = sampling.site_fk
+                        LEFT JOIN country ON st.country_fk = country.id
+                        LEFT JOIN municipality ON st.municipality_fk = municipality.id
+                LEFT JOIN external_biological_material_is_processed_by ebmip ON ebmip.external_biological_material_fk = lot.id
+                    LEFT JOIN person ON ebmip.person_fk = person.id
+		LEFT JOIN identified_species ei_lot ON ei_lot.external_biological_material_fk = lot.id
+			INNER JOIN (SELECT MAX(ei_loti.id) AS maxei_loti 
+				FROM identified_species ei_loti 
+				GROUP BY ei_loti.external_biological_material_fk) ei_lot2 ON (ei_lot.id = ei_lot2.maxei_loti)
+			LEFT JOIN taxon rt_lot ON ei_lot.taxon_fk = rt_lot.id
+                        LEFT JOIN vocabulary voc_lot_identification_criterion ON ei_lot.identification_criterion_voc_fk = voc_lot_identification_criterion.id"
+        ." WHERE ".$where." 
+        GROUP BY lot.id, st.site_code, st.latitude, st.longitude, sampling.sample_code, country.country_name, municipality.municipality_code,
+        lot.external_biological_material_creation_date, lot.date_of_creation, lot.date_of_update, voc_lot_identification_criterion.code ,
+	lot.external_biological_material_code, rt_lot.taxon_name, ei_lot.identification_date,
+        lot.creation_user_name, user_cre.username, user_maj.username" 
+        ." ORDER BY ".$orderBy;
+        // execute query and fill tab to show in the bootgrid list (see index.htm)
+        $stmt = $em->getConnection()->prepare($rawSql);
+        $stmt->bindValue('criteriaLower', strtolower($searchPhrase).'%');
+        $stmt->execute();
+        $entities_toshow = $stmt->fetchAll();
         $nb = count($entities_toshow);
         $entities_toshow = ($request->get('rowCount') > 0 ) ? array_slice($entities_toshow, $minRecord, $rowCount) : array_slice($entities_toshow, $minRecord);
-        $lastTaxname = '';
-        foreach($entities_toshow as $entity)
-        {
-            $id = $entity->getId();
-            $codeStation = $entity->getCollecteFk()->getStationFk()->getCodeStation();
-            $DateLot = ($entity->getDateCreationLotMaterielExt() !== null) ?  $entity->getDateCreationLotMaterielExt()->format('Y-m-d') : null;
-            $DateMaj = ($entity->getDateMaj() !== null) ?  $entity->getDateMaj()->format('Y-m-d H:i:s') : null;
-            $DateCre = ($entity->getDateCre() !== null) ?  $entity->getDateCre()->format('Y-m-d H:i:s') : null;
-            // load the first identified taxon            
-            $query = $em->createQuery('SELECT ei.id, ei.dateIdentification, rt.taxname as taxname, voc.libelle as codeIdentification FROM BbeesE3sBundle:EspeceIdentifiee ei JOIN ei.referentielTaxonFk rt JOIN ei.critereIdentificationVocFk voc WHERE ei.lotMaterielExtFk = '.$id.' ORDER BY ei.id DESC')->getResult(); 
-            $lastTaxname = ($query[0]['taxname'] !== NULL) ? $query[0]['taxname'] : NULL;
-            $lastdateIdentification = ($query[0]['dateIdentification']  !== NULL) ? $query[0]['dateIdentification']->format('Y-m-d') : NULL;
-            $codeIdentification = ($query[0]['codeIdentification'] !== NULL) ? $query[0]['codeIdentification'] : NULL;
-            //  concatenated list of people
-            $query = $em->createQuery('SELECT p.nomPersonne as nom FROM BbeesE3sBundle:LotMaterielExtEstRealisePar lmerp JOIN lmerp.personneFk p WHERE lmerp.lotMaterielExtFk = '.$id.'')->getResult();            
-            $arrayListePersonne = array();
-            foreach($query as $taxon) {
-                 $arrayListePersonne[] = $taxon['nom'];
-            }
-            $listePersonne= implode(", ", $arrayListePersonne);
-            //
-            $tab_toshow[] = array("id" => $id, "lotMaterielExt.id" => $id, "lotMaterielExt.codeLotMaterielExt" => $entity->getCodeLotMaterielExt(),
-             "listePersonne" => $listePersonne, "collecte.codeCollecte" => $entity->getCollecteFk()->getCodeCollecte(),
-             "lotMaterielExt.dateCreationLotMaterielExt" => $DateLot ,"lotMaterielExt.dateCre" => $DateCre, "lotMaterielExt.dateMaj" => $DateMaj,
-             "userCreId" => $service->GetUserCreId($entity), "lotMaterielExt.userCre" => $service->GetUserCreUsername($entity) ,"lotMaterielExt.userMaj" => $service->GetUserMajUsername($entity),
-             "lastTaxname" => $lastTaxname, "lastdateIdentification" => $lastdateIdentification , "codeIdentification" => $codeIdentification ,
-             "pays.nomPays" => $entity->getCollecteFk()->getStationFk()->getpaysFk()->getNomPays(),
-             "commune.codeCommune" => $entity->getCollecteFk()->getStationFk()->getCommuneFk()->getCodeCommune(),);
-        }     
+        
+        foreach($entities_toshow as $key => $val){
+             $tab_toshow[] = array("id" => $val['id'], "lot.id" => $val['id'], 
+                "lot.external_biological_material_code" => $val['external_biological_material_code'],  
+                "last_taxname_lot" => $val['last_taxname_lot'], 
+                "last_date_identification_lot" => $val['last_date_identification_lot'],  
+                "code_lot_identification_criterion" => $val['code_lot_identification_criterion'],
+                "lot.external_biological_material_creation_date" => $val['external_biological_material_creation_date'] ,
+                "lot.date_of_creation" => $val['date_of_creation'], 
+                "lot.date_of_update" => $val['date_of_update'],
+                "list_person" => $val['list_person'], 
+                "sampling.sample_code" => $val['sample_code'],
+                "country.country_name" => $val['country_name'], 
+                "municipality.municipality_code" => $val['municipality_code'],
+                "creation_user_name" => $val['creation_user_name'], "user_cre.username" => $val['user_cre_username'] ,"user_maj.username" => $val['user_maj_username']
+             );
+         }
+        
         // Ajax answer
         $response = new Response ();
         $response->setContent ( json_encode ( array (
@@ -134,6 +146,8 @@ class LotMaterielExtController extends Controller
 
         return $response;          
     }
+
+    
 
     
     /**

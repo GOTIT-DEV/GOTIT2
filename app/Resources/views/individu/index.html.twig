@@ -24,20 +24,20 @@
     <table id="grid-basic" class="table table-condensed table-hover table-striped" >           
         <thead>
             <tr>
-                <th data-column-id="individu.id" data-type="numeric" data-visible="false">Id</th>
-                <th data-column-id="station.codeStation" data-sortable="true">{{'Code station'|trans}}</th> 
-                <th data-column-id="individu.codeIndTriMorpho" data-sortable="true">{{'Code ind tri morpho'|trans}}</th>           
-                <th data-column-id="individu.codeIndBiomol" data-type="date">{{'Code ind biomol'|trans}}</th>
-                <th data-column-id="voc.code" data-sortable="false">{{'Type individu voc fk'|trans}}</th>
-                <th data-column-id="individu.codeTube" data-type="date">{{'Code tube'|trans}}</th>
-                <th data-column-id="individu.numIndBiomol" data-type="date">{{'Num ind biomol'|trans}}</th>
-                <th data-column-id="lastTaxname" data-sortable="false">{{'list.Last taxname'|trans}}</th> 
-                <th data-column-id="lastdateIdentification" data-sortable="false" data-visible="false">{{'list.Last identification date'|trans}}</th> 
-                <th data-column-id="codeIdentification" data-sortable="false" data-visible="false">{{'list.Last identification critere'|trans}}</th> 
-                <th data-column-id="individu.dateMaj" data-width="100">{{'list.Date maj'|trans}}</th>
-                <th data-column-id="individu.dateCre" data-width="100" data-visible="false">{{'list.Date cre'|trans}}</th>
-                <th data-column-id="individu.userCre" data-width="10" data-visible="false">{{'list.User cre'|trans}}</th>
-                <th data-column-id="individu.userMaj" data-width="10" data-visible="false">{{'list.User maj'|trans}}</th>
+                <th data-column-id="sp.id" data-type="numeric" data-visible="false">Id</th>
+                <th data-column-id="st.site_code" data-sortable="true">{{'Code station'|trans}}</th> 
+                <th data-column-id="sp.specimen_morphological_code" data-sortable="true">{{'Code ind tri morpho'|trans}}</th>           
+                <th data-column-id="sp.specimen_molecular_code" data-type="date">{{'Code ind biomol'|trans}}</th>
+                <th data-column-id="voc_sp_specimen_type.code" data-sortable="true">{{'Type individu voc fk'|trans}}</th>
+                <th data-column-id="sp.tube_code" data-type="date">{{'Code tube'|trans}}</th>
+                <th data-column-id="sp.specimen_molecular_number" data-type="date">{{'Num ind biomol'|trans}}</th>
+                <th data-column-id="last_taxname_sp" data-sortable="true">{{'list.Last taxname'|trans}}</th> 
+                <th data-column-id="last_date_identification_sp" data-sortable="true" data-visible="false">{{'list.Last identification date'|trans}}</th> 
+                <th data-column-id="code_sp_identification_criterion" data-sortable="true" data-visible="false">{{'list.Last identification critere'|trans}}</th> 
+                <th data-column-id="sp.date_of_update" data-width="100">{{'list.Date maj'|trans}}</th>
+                <th data-column-id="sp.date_of_creation" data-width="100" data-visible="false">{{'list.Date cre'|trans}}</th>
+                <th data-column-id="user_cre.username" data-width="10" data-visible="false">{{'list.User cre'|trans}}</th>
+                <th data-column-id="user_maj.username" data-width="10" data-visible="false">{{'list.User maj'|trans}}</th>
                 <th data-column-id="show" data-formatter="show" data-sortable="false"   data-width="20">{{'list.show'|trans}}</th>
                 <th data-column-id="edit" data-formatter="edit" data-sortable="false"  data-width="20">{{'list.edit'|trans}}</th>
                 <th data-column-id="delete" data-formatter="delete" data-sortable="false" data-width="20">{{'list.delete'|trans}}</th>

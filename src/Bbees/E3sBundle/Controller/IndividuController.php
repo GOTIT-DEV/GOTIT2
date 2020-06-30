@@ -94,64 +94,76 @@ class IndividuController extends Controller
         $em = $this->getDoctrine()->getManager();
         //
         $rowCount = ($request->get('rowCount')  !== NULL) ? $request->get('rowCount') : 10;
-        $orderBy = ($request->get('sort')  !== NULL) ? $request->get('sort') : array('individu.dateMaj' => 'desc', 'individu.id' => 'desc');  
+        $orderBy = ($request->get('sort')  !== NULL) ? array_keys($request->get('sort'))[0]." ".array_values($request->get('sort'))[0] : "sp.date_of_update DESC, sp.id DESC";  
         $minRecord = intval($request->get('current')-1)*$rowCount;
         $maxRecord = $rowCount; 
         // initializes the searchPhrase variable as appropriate and sets the condition according to the url idFk parameter
-        $where = 'LOWER(individu.codeIndTriMorpho) LIKE :criteriaLower';
+        $where = ' LOWER(sp.specimen_morphological_code) LIKE :criteriaLower';
         $searchPhrase = $request->get('searchPhrase');
         if ( $request->get('searchPatern') !== null && $request->get('searchPatern') !== '' && $searchPhrase == '') {
             $searchPhrase = $request->get('searchPatern');
         }
         if ( $request->get('idFk') !== null && $request->get('idFk') !== '') {
-            $where .= ' AND individu.lotMaterielFk = '.$request->get('idFk');
+            $where .= ' AND sp.internal_biological_material_fk = '.$request->get('idFk');
         }
+        
         // Search for the list to show
         $tab_toshow =[];
-        $entities_toshow = $em->getRepository("BbeesE3sBundle:Individu")->createQueryBuilder('individu')
-            ->where($where)
-            ->setParameter('criteriaLower', strtolower($searchPhrase).'%')
-            ->leftJoin('BbeesE3sBundle:LotMateriel', 'lot', 'WITH', 'individu.lotMaterielFk = lot.id')
-                ->leftJoin('BbeesE3sBundle:Collecte', 'collecte', 'WITH', 'lot.collecteFk = collecte.id')
-                    ->leftJoin('BbeesE3sBundle:Station', 'station', 'WITH', 'collecte.stationFk = station.id')
-            ->addOrderBy(array_keys($orderBy)[0], array_values($orderBy)[0])
-            ->getQuery()
-            ->getResult();
+        $rawSql = "SELECT  sp.id, st.site_code, st.latitude, st.longitude, sampling.sample_code, country.country_name, municipality.municipality_code, st.site_code,
+        sp.specimen_molecular_code, sp.specimen_morphological_code, sp.specimen_molecular_number, sp.tube_code, sp.date_of_creation, sp.date_of_update,
+        rt_sp.taxon_name as last_taxname_sp, ei_sp.identification_date as last_date_identification_sp, voc_sp_identification_criterion.code as code_sp_identification_criterion,
+        voc_sp_specimen_type.code as voc_sp_specimen_type_code, sp.creation_user_name, user_cre.username as user_cre_username , user_maj.username as user_maj_username,
+        string_agg(cast( dna.id as character varying) , ' ;') as list_dna, string_agg(cast( specimen_slide.id as character varying) , ' ;') as list_specimen_slide
+	FROM  specimen sp
+                LEFT JOIN user_db user_cre ON user_cre.id = sp.creation_user_name
+                LEFT JOIN user_db user_maj ON user_maj.id = sp.update_user_name               
+                JOIN internal_biological_material lot ON sp.internal_biological_material_fk = lot.id
+		JOIN sampling ON sampling.id = lot.sampling_fk
+			JOIN site st ON st.id = sampling.site_fk
+                        LEFT JOIN country ON st.country_fk = country.id
+                        LEFT JOIN municipality ON st.municipality_fk = municipality.id 
+                LEFT JOIN vocabulary voc_sp_specimen_type ON sp.specimen_type_voc_fk = voc_sp_specimen_type.id
+		LEFT JOIN identified_species ei_sp ON ei_sp.specimen_fk = sp.id
+			INNER JOIN (SELECT MAX(ei_spi.id) AS maxei_spi 
+				FROM identified_species ei_spi 
+				GROUP BY ei_spi.specimen_fk) ei_sp2 ON (ei_sp.id = ei_sp2.maxei_spi)
+			LEFT JOIN taxon rt_sp ON ei_sp.taxon_fk = rt_sp.id
+                        LEFT JOIN vocabulary voc_sp_identification_criterion ON ei_sp.identification_criterion_voc_fk = voc_sp_identification_criterion.id
+		LEFT JOIN dna ON dna.specimen_fk = sp.id
+                LEFT JOIN specimen_slide ON specimen_slide.specimen_fk = sp.id"
+        ." WHERE ".$where." 
+        GROUP BY sp.id, st.site_code, st.latitude, st.longitude, sampling.sample_code, country.country_name, municipality.municipality_code, st.site_code,
+        sp.specimen_molecular_code, sp.specimen_morphological_code, sp.specimen_molecular_number, sp.tube_code, sp.date_of_creation, sp.date_of_update,
+        rt_sp.taxon_name, ei_sp.identification_date, voc_sp_identification_criterion.code,
+        voc_sp_specimen_type.code, sp.creation_user_name, user_cre.username , user_maj.username" 
+        ." ORDER BY ".$orderBy;
+        // execute query and fill tab to show in the bootgrid list (see index.htm)
+        $stmt = $em->getConnection()->prepare($rawSql);
+        $stmt->bindValue('criteriaLower', strtolower($searchPhrase).'%');
+        $stmt->execute();
+        $entities_toshow = $stmt->fetchAll();
         $nb = count($entities_toshow);
-        // $entities_toshow = array_slice($entities_toshow, $minRecord, $rowCount); 
         $entities_toshow = ($request->get('rowCount') > 0 ) ? array_slice($entities_toshow, $minRecord, $rowCount) : array_slice($entities_toshow, $minRecord);
-        $lastTaxname = '';
-        foreach($entities_toshow as $entity)
-        {
-            $id = $entity->getId();
-            $DateMaj = ($entity->getDateMaj() !== null) ?  $entity->getDateMaj()->format('Y-m-d H:i:s') : null;
-            $DateCre = ($entity->getDateCre() !== null) ?  $entity->getDateCre()->format('Y-m-d H:i:s') : null;
-            // Search DNA associated to a specimen
-            $query = $em->createQuery('SELECT adn.id FROM BbeesE3sBundle:Adn adn WHERE adn.individuFk = '.$id.'')->getResult();
-            $linkAdn = (count($query) > 0) ? $id : '';
-            // Search the slide associated to a specimen
-            $query = $em->createQuery('SELECT lame.id FROM BbeesE3sBundle:IndividuLame lame WHERE lame.individuFk = '.$id.'')->getResult();
-            $linkIndividulame = (count($query) > 0) ? $id : '';
-            // Search for the first identified taxon         
-            $query = $em->createQuery('SELECT ei.id, ei.dateIdentification, rt.taxname as taxname, voc.code as codeIdentification FROM BbeesE3sBundle:EspeceIdentifiee ei JOIN ei.referentielTaxonFk rt JOIN ei.critereIdentificationVocFk voc WHERE ei.individuFk = '.$id.' ORDER BY ei.id DESC')->getResult(); 
-            $lastTaxname = ($query[0]['taxname'] !== NULL) ? $query[0]['taxname'] : NULL;
-            $lastdateIdentification = ($query[0]['dateIdentification']  !== NULL) ? $query[0]['dateIdentification']->format('Y-m-d') : NULL; 
-            $codeIdentification = ($query[0]['codeIdentification'] !== NULL) ? $query[0]['codeIdentification'] : NULL;
-            // 
-            $tab_toshow[] = array("id" => $id, "individu.id" => $id, 
-             "station.codeStation" => $entity->getLotMaterielFk()->getCollecteFk()->getStationFk()->getCodeStation(),
-             "individu.codeIndTriMorpho" => $entity->getCodeIndTriMorpho(),
-             "individu.codeIndBiomol" => $entity->getCodeIndBiomol(),
-             "voc.code" => $entity->getTypeIndividuVocFk()->getCode(),  
-             "individu.numIndBiomol" => $entity->getNumIndBiomol(),
-             "individu.codeTube" => $entity->getCodeTube(),
-             "lastTaxname" => $lastTaxname,
-             "lastdateIdentification" => $lastdateIdentification ,
-             "codeIdentification" => $codeIdentification ,
-             "individu.dateCre" => $DateCre, "individu.dateMaj" => $DateMaj,
-             "userCreId" => $service->GetUserCreId($entity), "individu.userCre" => $service->GetUserCreUsername($entity) ,"individu.userMaj" => $service->GetUserMajUsername($entity),
-             "linkAdn" => $linkAdn, "linkIndividulame" => $linkIndividulame );
-        }     
+
+        foreach($entities_toshow as $key => $val){
+             $linkAdn = ($val['list_dna'] !== null) ? strval($val['id']) : '';
+             $linkIndividulame = ($val['list_specimen_slide'] !== null) ? strval($val['id']) : '';             
+             $tab_toshow[] = array("id" => $val['id'], "sp.id" => $val['id'],
+                "st.site_code" => $val['site_code'],
+                 "sp.specimen_molecular_code" => $val['specimen_molecular_code'],                
+                 "sp.specimen_morphological_code" => $val['specimen_morphological_code'],                 
+                 "voc_sp_specimen_type.code" => $val['voc_sp_specimen_type_code'],
+                 "sp.specimen_molecular_number" => $val['specimen_molecular_number'],
+                 "sp.tube_code" => $val['tube_code'],
+                "last_taxname_sp" => $val['last_taxname_sp'], 
+                 "last_date_identification_sp" => $val['last_date_identification_sp'],  
+                 "code_sp_identification_criterion" => $val['code_sp_identification_criterion'],
+                 "sp.date_of_creation" => $val['date_of_creation'], "sp.date_of_update" => $val['date_of_update'],
+                "creation_user_name" => $val['creation_user_name'], "user_cre.username" => $val['user_cre_username'] ,"user_maj.username" => $val['user_maj_username'],
+                "linkAdn" => $linkAdn, "linkIndividulame" => $linkIndividulame
+             );
+         }
+     
         // Ajax answer
         $response = new Response ();
         $response->setContent ( json_encode ( array (
@@ -166,7 +178,6 @@ class IndividuController extends Controller
 
         return $response;          
     }
-
 
     /**
      * Creates a new individu entity.

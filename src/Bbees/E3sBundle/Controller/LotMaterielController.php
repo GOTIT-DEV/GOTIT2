@@ -113,7 +113,7 @@ class LotMaterielController extends Controller
         lot.internal_biological_material_status,lot.sequencing_advice, lot.internal_biological_material_date, lot.date_of_creation, lot.date_of_update, voc_lot_identification_criterion.code as code_lot_identification_criterion,
 	lot.internal_biological_material_code, rt_lot.taxon_name as last_taxname_lot, ei_lot.identification_date as last_date_identification_lot,
         lot.creation_user_name, user_cre.username as user_cre_username , user_maj.username as user_maj_username,
-        string_agg(DISTINCT person.person_name , ' ; ') as list_person, string_agg(cast( ind.id as character varying) , ' ;') as list_specimen
+        string_agg(DISTINCT person.person_name , ' ; ') as list_person, string_agg(cast( sp.id as character varying) , ' ;') as list_specimen
 	FROM internal_biological_material lot 
                 LEFT JOIN user_db user_cre ON user_cre.id = lot.creation_user_name
                 LEFT JOIN user_db user_maj ON user_maj.id = lot.update_user_name
@@ -129,19 +129,17 @@ class LotMaterielController extends Controller
 				GROUP BY ei_loti.internal_biological_material_fk) ei_lot2 ON (ei_lot.id = ei_lot2.maxei_loti)
 			LEFT JOIN taxon rt_lot ON ei_lot.taxon_fk = rt_lot.id
                         LEFT JOIN vocabulary voc_lot_identification_criterion ON ei_lot.identification_criterion_voc_fk = voc_lot_identification_criterion.id
-		LEFT JOIN  specimen ind ON ind.internal_biological_material_fk = lot.id"
+		LEFT JOIN specimen sp ON sp.internal_biological_material_fk = lot.id"
         .$where." 
         GROUP BY lot.id, st.site_code, st.latitude, st.longitude, sampling.sample_code, country.country_name, municipality.municipality_code,
         lot.internal_biological_material_status,lot.sequencing_advice, lot.internal_biological_material_date, lot.date_of_creation, lot.date_of_update, voc_lot_identification_criterion.code ,
 	lot.internal_biological_material_code, rt_lot.taxon_name, ei_lot.identification_date,
         lot.creation_user_name, user_cre.username, user_maj.username" 
         ." ORDER BY ".$orderBy;
-        
-        // $rawSql .= $where;
+        // execute query and fill tab to show in the bootgrid list (see index.htm)
         $stmt = $em->getConnection()->prepare($rawSql);
         $stmt->bindValue('criteriaLower', strtolower($searchPhrase).'%');
         $stmt->execute();
-        // $stmt->fetchAll(\PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
         $entities_toshow = $stmt->fetchAll();
         $nb = count($entities_toshow);
         $entities_toshow = ($request->get('rowCount') > 0 ) ? array_slice($entities_toshow, $minRecord, $rowCount) : array_slice($entities_toshow, $minRecord);
@@ -159,45 +157,7 @@ class LotMaterielController extends Controller
                 "linkIndividu_codestation" => "%|".$val['site_code']."_%" 
              );
          }
-        
-       
-        $lastTaxname = '';
-        /*
-        foreach($entities_toshow as $entity)
-        {
-            $id = $entity->getId();
-            $codeStation = $entity->getCollecteFk()->getStationFk()->getCodeStation();
-            $DateLot = ($entity->getDateLotMateriel() !== null) ?  $entity->getDateLotMateriel()->format('Y-m-d') : null;
-            $DateMaj = ($entity->getDateMaj() !== null) ?  $entity->getDateMaj()->format('Y-m-d H:i:s') : null;
-            $DateCre = ($entity->getDateCre() !== null) ?  $entity->getDateCre()->format('Y-m-d H:i:s') : null;
-            // search for specimen associated to a material
-            $query = $em->createQuery('SELECT ind.id FROM BbeesE3sBundle:Individu ind WHERE ind.lotMaterielFk = '.$id.'')->getResult();
-            $linkIndividu = (count($query) > 0) ? $id : '';
-            // load the first identified taxon            
-            $query = $em->createQuery('SELECT ei.id, ei.dateIdentification, rt.taxname as taxname, voc.libelle as codeIdentification FROM BbeesE3sBundle:EspeceIdentifiee ei JOIN ei.referentielTaxonFk rt JOIN ei.critereIdentificationVocFk voc WHERE ei.lotMaterielFk = '.$id.' ORDER BY ei.id DESC')->getResult(); 
-            $lastTaxname = ($query[0]['taxname'] !== NULL) ? $query[0]['taxname'] : NULL;
-            $lastdateIdentification = ($query[0]['dateIdentification']  !== NULL) ? $query[0]['dateIdentification']->format('Y-m-d') : NULL;
-            $codeIdentification = ($query[0]['codeIdentification'] !== NULL) ? $query[0]['codeIdentification'] : NULL;
-            //  concatenated list of people
-            $query = $em->createQuery('SELECT p.nomPersonne as nom FROM BbeesE3sBundle:LotMaterielEstRealisePar lmerp JOIN lmerp.personneFk p WHERE lmerp.lotMaterielFk = '.$id.'')->getResult();            
-            $arrayListePersonne = array();
-            foreach($query as $taxon) {
-                 $arrayListePersonne[] = $taxon['nom'];
-            }
-            $listePersonne= implode(", ", $arrayListePersonne);
-            //
-            $tab_toshow[] = array("id" => $id, "lotMateriel.id" => $id, "lotMateriel.codeLotMateriel" => $entity->getCodeLotMateriel(),
-             "lotMateriel.commentaireConseilSqc" => $entity->getCommentaireConseilSqc(),"listePersonne" => $listePersonne, "collecte.codeCollecte" => $entity->getCollecteFk()->getCodeCollecte(),
-             "lotMateriel.dateLotMateriel" => $DateLot ,"lotMateriel.dateCre" => $DateCre, "lotMateriel.dateMaj" => $DateMaj,
-             "lastTaxname" => $lastTaxname, "lastdateIdentification" => $lastdateIdentification , "codeIdentification" => $codeIdentification ,
-             "pays.nomPays" => $entity->getCollecteFk()->getStationFk()->getpaysFk()->getNomPays(),
-             "lotMateriel.aFaire" => $entity->getAfaire(),   
-             "commune.codeCommune" => $entity->getCollecteFk()->getStationFk()->getCommuneFk()->getCodeCommune(),
-             "userCreId" => $service->GetUserCreId($entity), "lotMateriel.userCre" => $service->GetUserCreUsername($entity) ,"lotMateriel.userMaj" => $service->GetUserMajUsername($entity),
-             "linkIndividu" => $linkIndividu, "linkIndividu_codestation" => "%|".$codeStation."_%",);
-        }
-         */  
-        
+
         // Ajax answer
         $response = new Response ();
         $response->setContent ( json_encode ( array (
