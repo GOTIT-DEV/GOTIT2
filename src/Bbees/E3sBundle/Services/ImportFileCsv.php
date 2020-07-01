@@ -17,7 +17,7 @@
 
 namespace Bbees\E3sBundle\Services;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 
 
 /**
@@ -29,7 +29,7 @@ class ImportFileCsv
     
     private $entityManager;
     
-     public function __construct(EntityManager $manager) {
+     public function __construct(EntityManagerInterface $manager) {
         $this->entityManager = $manager ;
      }
        

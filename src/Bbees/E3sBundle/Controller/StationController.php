@@ -24,7 +24,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Bbees\E3sBundle\Services\GenericFunctionService;
+// use Bbees\E3sBundle\Services\GenericFunctionService;
+use Bbees\E3sBundle\Services\GenericFunctionE3s;
 
 /**
  * Station controller.
@@ -87,10 +88,10 @@ class StationController extends Controller
      *
      * @Route("/indexjson", name="station_indexjson", methods={"POST"})
      */
-    public function indexjsonAction(Request $request)
+    public function indexjsonAction(Request $request, GenericFunctionE3s $service)
     {   
         // load services
-        $service = $this->get('bbees_e3s.generic_function_e3s');
+        // $service = $this->get('bbees_e3s.generic_function_e3s');
         $em = $this->getDoctrine()->getManager();
         //
         $rowCount = ($request->get('rowCount')  !== NULL) ? $request->get('rowCount') : 10;

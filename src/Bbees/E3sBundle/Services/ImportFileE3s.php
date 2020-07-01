@@ -17,10 +17,10 @@
 
 namespace Bbees\E3sBundle\Services;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Bbees\E3sBundle\Services\ImportFileCsv;
 use Bbees\E3sBundle\Entity\Motu;
-use Symfony\Bundle\FrameworkBundle\Translation\Translator;
+use Symfony\Component\Translation\TranslatorInterface;
 
 
 /**
@@ -38,7 +38,7 @@ class ImportFileE3s
     * $manager : service manager service of Doctrine ( @doctrine.orm.entity_manager )
     * $importFileCsv : CSV file import service 
     */ 
-    public function __construct(EntityManager $manager,ImportFileCsv $importFileCsv, Translator $translator) {
+    public function __construct(EntityManagerInterface $manager,ImportFileCsv $importFileCsv, TranslatorInterface $translator) {
        $this->entityManager = $manager ;
        $this->importFileCsv = $importFileCsv ;
        $this->translator =   $translator;
