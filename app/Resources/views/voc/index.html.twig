@@ -30,7 +30,7 @@
                 {% set defaultLocale = app.request.getDefaultLocale() %}
                 {% if second_language != '' %}
                     {% if locale != defaultLocale %} 
-                        <th data-column-id="voc.libelleSecondLanguage" data-sortable="true" data-visible="true">{{'list.vocLibelleSecondLanguage'|trans}}</th>
+                        <th data-column-id="voc.libelleSecondLanguage" data-sortable="false" data-visible="true">{{'list.vocLibelleSecondLanguage'|trans}}</th>
                     {% endif %}
                 {% endif %}
                 <th data-column-id="voc.parent" data-sortable="true">{{'Parent'|trans}}</th> 

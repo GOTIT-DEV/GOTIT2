@@ -25,7 +25,9 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Bbees\E3sBundle\Services\ImportFileCsv;
-use Symfony\Bundle\FrameworkBundle\Translation\Translator;
+use Symfony\Component\Translation\TranslatorInterface; 
+use Bbees\E3sBundle\Services\ImportFileE3s; 
+use Symfony\Component\HttpKernel\KernelInterface;
 
 
 /**
@@ -46,12 +48,9 @@ class ImportFilesLotMaterielController extends Controller
      * @Route("/", name="importfileslotmateriel_index")
      *    
      */
-     public function indexAction(Request $request)
+     public function indexAction(Request $request, ImportFileE3s $importFileE3sService, TranslatorInterface $translator, ImportFileCsv $service, KernelInterface $kernel)
     {  
         $message = ""; 
-        // load the ImportFileE3s service
-        $importFileE3sService = $this->get('bbees_e3s.import_file_e3s');
-        $translator = $this->get('translator.default');
         //creation of the form with a drop-down list
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $user = $this->getUser();
@@ -91,8 +90,8 @@ class ImportFilesLotMaterielController extends Controller
             $nom_fichier_download = $form->get('fichier')->getData()->getClientOriginalName();
             $message = "Import : ".$nom_fichier_download." ( Template ".$this->type_csv.".csv )<br />";
             // test if the file imported match the good columns name of the template file
-            $pathToTemplate = $this->get('kernel')->getRootDir(). '/../web/template/'.$this->type_csv.'.csv';
-            $service = $this->get('bbees_e3s.import_file_csv');
+            $pathToTemplate = $kernel->getRootDir(). '/../web/template/'.$this->type_csv.'.csv';
+            // 
             $checkName = $translator->trans($service->checkNameCSVfile2Template($pathToTemplate , $fichier));
             $message .= $checkName;
             if($checkName  == ''){

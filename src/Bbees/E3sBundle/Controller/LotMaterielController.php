@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
-use Bbees\E3sBundle\Services\GenericFunctionService;
+use Bbees\E3sBundle\Services\GenericFunctionE3s;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
@@ -88,10 +88,9 @@ class LotMaterielController extends Controller
      *
      * @Route("/indexjson", name="lotmateriel_indexjson", methods={"POST"})
      */
-    public function indexjsonAction(Request $request)
+    public function indexjsonAction(Request $request, GenericFunctionE3s $service)
     {
-        // load services
-        $service = $this->get('bbees_e3s.generic_function_e3s');       
+        // load Doctrine Manager     
         $em = $this->getDoctrine()->getManager();
         //
         $rowCount = ($request->get('rowCount')  !== NULL) ? $request->get('rowCount') : 10;
@@ -172,98 +171,6 @@ class LotMaterielController extends Controller
 
         return $response;          
     }
-   
-    
-    /**
-     * Returns in json format a set of fields to display (tab_toshow) with the following criteria: 
-     * a) 1 search criterion ($ request-> get ('searchPhrase')) insensitive to the case and  applied to a field
-     * b) the number of lines to display ($ request-> get ('rowCount'))
-     * c) 1 sort criterion on a collone ($ request-> get ('sort'))
-     *
-     * @Route("/indexjson", name="lotmateriel_indexjson_backup", methods={"POST"})
-     */
-    public function indexjsonAction_backup(Request $request)
-    {
-        // load services
-        $service = $this->get('bbees_e3s.generic_function_e3s');       
-        $em = $this->getDoctrine()->getManager();
-        //
-        $rowCount = ($request->get('rowCount')  !== NULL) ? $request->get('rowCount') : 10;
-        $orderBy = ($request->get('sort')  !== NULL) ? $request->get('sort') : array('lotMateriel.dateMaj' => 'desc', 'lotMateriel.id' => 'desc');  
-        $minRecord = intval($request->get('current')-1)*$rowCount;
-        $maxRecord = $rowCount; 
-        // initializes the searchPhrase variable as appropriate and sets the condition according to the url idFk parameter
-        $where = 'LOWER(lotMateriel.codeLotMateriel) LIKE :criteriaLower';
-        $searchPhrase = $request->get('searchPhrase');
-        if ( $request->get('searchPatern') !== null && $request->get('searchPatern') !== '' && $searchPhrase == '') {
-            $searchPhrase = $request->get('searchPatern');
-        }
-        if ( $request->get('idFk') !== null && $request->get('idFk') !== '') {
-            $where .= ' AND lotMateriel.collecteFk = '.$request->get('idFk');
-        }
-        // Search for the list to show
-        $tab_toshow =[];
-        $entities_toshow = $em->getRepository("BbeesE3sBundle:LotMateriel")->createQueryBuilder('lotMateriel')
-            ->where($where)
-            ->setParameter('criteriaLower', strtolower($searchPhrase).'%')
-            ->leftJoin('BbeesE3sBundle:Collecte', 'collecte', 'WITH', 'lotMateriel.collecteFk = collecte.id')
-            ->leftJoin('BbeesE3sBundle:Station', 'station', 'WITH', 'collecte.stationFk = station.id')
-            ->leftJoin('BbeesE3sBundle:Pays', 'pays', 'WITH', 'station.paysFk = pays.id')
-            ->addOrderBy(array_keys($orderBy)[0], array_values($orderBy)[0])
-            ->getQuery()
-            ->getResult();
-        $nb = count($entities_toshow);
-        $entities_toshow = ($request->get('rowCount') > 0 ) ? array_slice($entities_toshow, $minRecord, $rowCount) : array_slice($entities_toshow, $minRecord);
-
-        $lastTaxname = '';
-        foreach($entities_toshow as $entity)
-        {
-            $id = $entity->getId();
-            $codeStation = $entity->getCollecteFk()->getStationFk()->getCodeStation();
-            $DateLot = ($entity->getDateLotMateriel() !== null) ?  $entity->getDateLotMateriel()->format('Y-m-d') : null;
-            $DateMaj = ($entity->getDateMaj() !== null) ?  $entity->getDateMaj()->format('Y-m-d H:i:s') : null;
-            $DateCre = ($entity->getDateCre() !== null) ?  $entity->getDateCre()->format('Y-m-d H:i:s') : null;
-            // search for specimen associated to a material
-            $query = $em->createQuery('SELECT ind.id FROM BbeesE3sBundle:Individu ind WHERE ind.lotMaterielFk = '.$id.'')->getResult();
-            $linkIndividu = (count($query) > 0) ? $id : '';
-            // load the first identified taxon            
-            $query = $em->createQuery('SELECT ei.id, ei.dateIdentification, rt.taxname as taxname, voc.libelle as codeIdentification FROM BbeesE3sBundle:EspeceIdentifiee ei JOIN ei.referentielTaxonFk rt JOIN ei.critereIdentificationVocFk voc WHERE ei.lotMaterielFk = '.$id.' ORDER BY ei.id DESC')->getResult(); 
-            $lastTaxname = ($query[0]['taxname'] !== NULL) ? $query[0]['taxname'] : NULL;
-            $lastdateIdentification = ($query[0]['dateIdentification']  !== NULL) ? $query[0]['dateIdentification']->format('Y-m-d') : NULL;
-            $codeIdentification = ($query[0]['codeIdentification'] !== NULL) ? $query[0]['codeIdentification'] : NULL;
-            //  concatenated list of people
-            $query = $em->createQuery('SELECT p.nomPersonne as nom FROM BbeesE3sBundle:LotMaterielEstRealisePar lmerp JOIN lmerp.personneFk p WHERE lmerp.lotMaterielFk = '.$id.'')->getResult();            
-            $arrayListePersonne = array();
-            foreach($query as $taxon) {
-                 $arrayListePersonne[] = $taxon['nom'];
-            }
-            $listePersonne= implode(", ", $arrayListePersonne);
-            //
-            $tab_toshow[] = array("id" => $id, "lotMateriel.id" => $id, "lotMateriel.codeLotMateriel" => $entity->getCodeLotMateriel(),
-             "lotMateriel.commentaireConseilSqc" => $entity->getCommentaireConseilSqc(),"listePersonne" => $listePersonne, "collecte.codeCollecte" => $entity->getCollecteFk()->getCodeCollecte(),
-             "lotMateriel.dateLotMateriel" => $DateLot ,"lotMateriel.dateCre" => $DateCre, "lotMateriel.dateMaj" => $DateMaj,
-             "lastTaxname" => $lastTaxname, "lastdateIdentification" => $lastdateIdentification , "codeIdentification" => $codeIdentification ,
-             "pays.nomPays" => $entity->getCollecteFk()->getStationFk()->getpaysFk()->getNomPays(),
-             "lotMateriel.aFaire" => $entity->getAfaire(),   
-             "commune.codeCommune" => $entity->getCollecteFk()->getStationFk()->getCommuneFk()->getCodeCommune(),
-             "userCreId" => $service->GetUserCreId($entity), "lotMateriel.userCre" => $service->GetUserCreUsername($entity) ,"lotMateriel.userMaj" => $service->GetUserMajUsername($entity),
-             "linkIndividu" => $linkIndividu, "linkIndividu_codestation" => "%|".$codeStation."_%",);
-        }     
-        // Ajax answer
-        $response = new Response ();
-        $response->setContent ( json_encode ( array (
-            "current"    => intval( $request->get('current') ), 
-            "rowCount"  => $rowCount,            
-            "rows"     => $tab_toshow, 
-            "searchPhrase" => $searchPhrase,
-            "total"    => $nb // total data array				
-            ) ) );
-        // If it is an Ajax request: returns the content in json format
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;          
-    }
-
 
     /**
      * Creates a new lotMateriel entity.
@@ -331,7 +238,7 @@ class LotMaterielController extends Controller
      * @Route("/{id}/edit", name="lotmateriel_edit", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
-    public function editAction(Request $request, LotMateriel $lotMateriel)
+    public function editAction(Request $request, LotMateriel $lotMateriel, GenericFunctionE3s $service)
     {
         //  access control for user type  : ROLE_COLLABORATION
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -340,7 +247,7 @@ class LotMaterielController extends Controller
                 $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'ACCESS DENIED');
         }
         // load service  generic_function_e3s
-        $service = $this->get('bbees_e3s.generic_function_e3s');
+        // 
         
         // store ArrayCollection       
         $compositionLotMateriels = $service->setArrayCollection('CompositionLotMateriels',$lotMateriel);

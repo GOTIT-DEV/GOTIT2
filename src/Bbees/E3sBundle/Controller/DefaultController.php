@@ -37,7 +37,6 @@ use Bbees\E3sBundle\Entity\SequenceAssembleeExt;
 use Bbees\E3sBundle\Entity\Motu;
 use Bbees\E3sBundle\Entity\Boite;
 use Bbees\E3sBundle\Entity\Source;
-use Bbees\E3sBundle\Services\GenericFunctionService;
 use Bbees\E3sBundle\Services\GenericFunctionE3s;
 
 class DefaultController extends Controller
@@ -49,10 +48,9 @@ class DefaultController extends Controller
      */
     public function indexAction(GenericFunctionE3s $service)
     {
-        // load services
-        //$service = $this->get('bbees_e3s.generic_function_e3s'); 
-        
+        // load Doctrine Manager
         $em = $this->getDoctrine()->getManager();
+        //
         $nbcollectes = $em->createQuery('SELECT COUNT(u.id) FROM BbeesE3sBundle:Collecte u')->getSingleScalarResult();
         $nbstations = $em->createQuery('SELECT COUNT(u.id) FROM BbeesE3sBundle:Station u')->getSingleScalarResult();
         $nbLotMateriel = $em->createQuery('SELECT COUNT(u.id) FROM BbeesE3sBundle:LotMateriel u')->getSingleScalarResult();

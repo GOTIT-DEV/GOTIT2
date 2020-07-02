@@ -24,7 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
-use Bbees\E3sBundle\Services\GenericFunctionService;
+use Bbees\E3sBundle\Services\GenericFunctionE3s;
 use Bbees\E3sBundle\Entity\Voc;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityRepository;
@@ -64,10 +64,9 @@ class BoiteController extends Controller
      *
      * @Route("/indexjson", name="boite_indexjson", methods={"POST"})
      */
-    public function indexjsonAction(Request $request)
+    public function indexjsonAction(Request $request, GenericFunctionE3s $service)
     {
-        // load services
-        $service = $this->get('bbees_e3s.generic_function_e3s');       
+        // load Doctrine Manager      
         $em = $this->getDoctrine()->getManager();
         //
         $rowCount = ($request->get('rowCount')  !== NULL) ? $request->get('rowCount') : 10;

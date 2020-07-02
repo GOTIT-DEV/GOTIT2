@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
-use Bbees\E3sBundle\Services\GenericFunctionService;
+use Bbees\E3sBundle\Services\GenericFunctionE3s;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
@@ -60,10 +60,9 @@ class IndividuLameController extends Controller
      *
      * @Route("/indexjson", name="individulame_indexjson", methods={"POST"})
      */
-    public function indexjsonAction(Request $request)
+    public function indexjsonAction(Request $request, GenericFunctionE3s $service)
     {
-        // load services
-        $service = $this->get('bbees_e3s.generic_function_e3s');       
+        // load Doctrine Manager      
         $em = $this->getDoctrine()->getManager();
         //
         $rowCount = ($request->get('rowCount')  !== NULL) ? $request->get('rowCount') : 10;
@@ -216,7 +215,7 @@ class IndividuLameController extends Controller
      * @Route("/{id}/edit", name="individulame_edit", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
-    public function editAction(Request $request, IndividuLame $individuLame)
+    public function editAction(Request $request, IndividuLame $individuLame, GenericFunctionE3s $service)
     {
         //  access control for user type  : ROLE_COLLABORATION
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -226,7 +225,7 @@ class IndividuLameController extends Controller
         }
         
         // load service  generic_function_e3s
-        $service = $this->get('bbees_e3s.generic_function_e3s');       
+        //        
         // store ArrayCollection       
         $individuLameEstRealisePars = $service->setArrayCollection('IndividuLameEstRealisePars',$individuLame);
         //

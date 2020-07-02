@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
-use Bbees\E3sBundle\Services\GenericFunctionService;
+use Bbees\E3sBundle\Services\GenericFunctionE3s;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
@@ -59,10 +59,9 @@ class LotMaterielExtController extends Controller
      *
      * @Route("/indexjson", name="lotmaterielext_indexjson", methods={"POST"})
      */
-    public function indexjsonAction(Request $request)
+    public function indexjsonAction(Request $request, GenericFunctionE3s $service)
     {
-        // load services
-        $service = $this->get('bbees_e3s.generic_function_e3s');       
+        // load Doctrine Manager     
         $em = $this->getDoctrine()->getManager();
         //
         $rowCount = ($request->get('rowCount')  !== NULL) ? $request->get('rowCount') : 10;
@@ -216,7 +215,7 @@ class LotMaterielExtController extends Controller
      * @Route("/{id}/edit", name="lotmaterielext_edit", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
-    public function editAction(Request $request, LotMaterielExt $lotMaterielExt)
+    public function editAction(Request $request, LotMaterielExt $lotMaterielExt, GenericFunctionE3s $service)
     {
         //  access control for user type  : ROLE_COLLABORATION
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -225,7 +224,7 @@ class LotMaterielExtController extends Controller
                 $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'ACCESS DENIED');
         }      
         // load service  generic_function_e3s
-        $service = $this->get('bbees_e3s.generic_function_e3s');        
+        //         
         // store ArrayCollection       
         $especeIdentifiees = $service->setArrayCollectionEmbed('EspeceIdentifiees','EstIdentifiePars',$lotMaterielExt);
         $lotMaterielExtEstReferenceDanss = $service->setArrayCollection('LotMaterielExtEstReferenceDanss',$lotMaterielExt);

@@ -22,8 +22,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Bbees\E3sBundle\Services\GenericFunctionService;
+use Bbees\E3sBundle\Services\GenericFunctionE3s;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Translation\TranslatorInterface; 
 
 /**
  * Voc controller.
@@ -59,10 +60,9 @@ class VocController extends Controller
      *
      * @Route("/indexjson", name="voc_indexjson", methods={"POST"})
      */
-    public function indexjsonAction(Request $request)
+    public function indexjsonAction(Request $request, GenericFunctionE3s $service, TranslatorInterface $translator)
     {
-        // load services
-        $service = $this->get('bbees_e3s.generic_function_e3s');       
+        // load Doctrine Manager      
         $em = $this->getDoctrine()->getManager();
         //
         $rowCount = ($request->get('rowCount')  !== NULL) ? $request->get('rowCount') : 10;
@@ -94,8 +94,8 @@ class VocController extends Controller
             $tab_toshow[] = array("id" => $id, "voc.id" => $id, 
              "voc.code" => $entity->getCode(),
              "voc.libelle" => $entity->getLibelle(),
-             "voc.libelleSecondLanguage" => $this->get('translator')->trans($entity->getLibelle()),
-             "voc.parent" => $this->get('translator')->trans('vocParent.'.$entity->getParent()),
+             "voc.libelleSecondLanguage" => $translator->trans($entity->getLibelle()),
+             "voc.parent" => $translator->trans('vocParent.'.$entity->getParent()),
              "voc.dateCre" => $DateCre, "voc.dateMaj" => $DateMaj,
              "userCreId" => $service->GetUserCreId($entity), "voc.userCre" => $service->GetUserCreUsername($entity) ,"voc.userMaj" => $service->GetUserMajUsername($entity),
              );

@@ -26,7 +26,6 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Bbees\E3sBundle\Services\ImportFileCsv;
-//use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\Translation\TranslatorInterface; 
 use Bbees\E3sBundle\Services\ImportFileE3s;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -53,10 +52,6 @@ class ImportFilesStationController extends Controller
      public function indexAction(Request $request, ImportFileE3s $importFileE3sService, TranslatorInterface $translator, ImportFileCsv $service, KernelInterface $kernel)
     {     
         $message = ''; 
-        // load the ImportFileE3s service
-        // $importFileE3sService = $this->get('bbees_e3s.import_file_e3s');
-        // $translator = $this->get('translator.default');
-        // 
         //creation of the form with a drop-down list
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $user = $this->getUser();
@@ -93,9 +88,8 @@ class ImportFilesStationController extends Controller
             $nom_fichier_download = $form->get('fichier')->getData()->getClientOriginalName();
             $message = "Import : ".$nom_fichier_download." ( Template ".$this->type_csv.".csv )<br />";
             // test if the file imported match the good columns name of the template file
-            //$pathToTemplate = $this->get('kernel')->getRootDir(). '/../web/template/'.$this->type_csv.'.csv';
             $pathToTemplate = $kernel->getRootDir(). '/../web/template/'.$this->type_csv.'.csv';
-            // $service = $this->get('bbees_e3s.import_file_csv');
+            // 
             $checkName = $translator->trans($service->checkNameCSVfile2Template($pathToTemplate , $fichier));
             $message .= $checkName;
             if($checkName  == ''){        

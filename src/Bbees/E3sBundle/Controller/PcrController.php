@@ -23,6 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Bbees\E3sBundle\Services\GenericFunctionE3s;
 
 /**
  * Pcr controller.
@@ -88,10 +89,9 @@ class PcrController extends Controller
      *
      * @Route("/indexjson", name="pcr_indexjson", methods={"POST"})
      */
-    public function indexjsonAction(Request $request)
+    public function indexjsonAction(Request $request, GenericFunctionE3s $service)
     {
-        // load services
-        $service = $this->get('bbees_e3s.generic_function_e3s');
+        // load Doctrine Manager
         $em = $this->getDoctrine()->getManager();
         //
         $rowCount = ($request->get('rowCount')  !== NULL) ? $request->get('rowCount') : 10;
@@ -233,7 +233,7 @@ class PcrController extends Controller
      * @Security("has_role('ROLE_COLLABORATION')")
      * 
      */
-    public function editAction(Request $request, Pcr $pcr)
+    public function editAction(Request $request, Pcr $pcr, GenericFunctionE3s $service)
     {
         //  access control for user type  : ROLE_COLLABORATION
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -242,7 +242,7 @@ class PcrController extends Controller
             $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'ACCESS DENIED');
         }
         // load service  generic_function_e3s
-        $service = $this->get('bbees_e3s.generic_function_e3s');
+        // 
         // store ArrayCollection       
         $pcrEstRealisePars = $service->setArrayCollection('PcrEstRealisePars', $pcr);
         //

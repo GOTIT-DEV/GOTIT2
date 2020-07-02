@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
-use Bbees\E3sBundle\Services\GenericFunctionService;
+use Bbees\E3sBundle\Services\GenericFunctionE3s;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
@@ -42,17 +42,13 @@ class CollecteController extends Controller
      *
      * @Route("/", name="collecte_index", methods={"GET", "POST"})
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
-
-        //var_dump($request->query->get('searchPatern'));         
-        
         $em = $this->getDoctrine()->getManager();
         $collectes = $em->getRepository('BbeesE3sBundle:Collecte')->findAll();
        
         return $this->render('collecte/index.html.twig', array( 
             'collectes' => $collectes,));                
-
      }
      
              
@@ -90,10 +86,9 @@ class CollecteController extends Controller
      *
      * @Route("/indexjson", name="collecte_indexjson", methods={"POST"})
      */
-    public function indexjsonAction(Request $request)
+    public function indexjsonAction(Request $request, GenericFunctionE3s $service)
     {
-        // load services
-        $service = $this->get('bbees_e3s.generic_function_e3s');
+        // load Doctrine Manager
         $em = $this->getDoctrine()->getManager();
         //
         $rowCount = ($request->get('rowCount')  !== NULL) ? $request->get('rowCount') : 10;
@@ -238,7 +233,7 @@ class CollecteController extends Controller
      * @Route("/{id}/edit", name="collecte_edit", methods={"GET", "POST"})
      * @Security("has_role('ROLE_COLLABORATION')")
      */
-    public function editAction(Request $request, Collecte $collecte)
+    public function editAction(Request $request, Collecte $collecte, GenericFunctionE3s $service)
     {
         //  access control for user type  : ROLE_COLLABORATION
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -248,7 +243,7 @@ class CollecteController extends Controller
         }
         
         // load service  generic_function_e3s
-        $service = $this->get('bbees_e3s.generic_function_e3s');
+        // 
 
         // store ArrayCollectionEstFinancePar       
         $originalAPourSamplingMethods = $service->setArrayCollection('APourSamplingMethods',$collecte);

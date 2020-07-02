@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
-use Bbees\E3sBundle\Services\GenericFunctionService;
+use Bbees\E3sBundle\Services\GenericFunctionE3s;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
@@ -44,7 +44,6 @@ class ChromatogrammeController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
         $chromatogrammes = $em->getRepository('BbeesE3sBundle:Chromatogramme')->findAll();
 
         return $this->render('chromatogramme/index.html.twig', array(
@@ -60,67 +59,79 @@ class ChromatogrammeController extends Controller
      *
      * @Route("/indexjson", name="chromatogramme_indexjson", methods={"POST"})
      */
-    public function indexjsonAction(Request $request)
+    public function indexjsonAction(Request $request, GenericFunctionE3s $service)
     {
-        // load services
-        $service = $this->get('bbees_e3s.generic_function_e3s');      
+        // load Doctrine Manager     
         $em = $this->getDoctrine()->getManager();
         //
         $rowCount = ($request->get('rowCount')  !== NULL) ? $request->get('rowCount') : 10;
-        $orderBy = ($request->get('sort')  !== NULL) ? $request->get('sort') : array('chromatogramme.dateMaj' => 'desc', 'chromatogramme.id' => 'desc');  
+        $orderBy = ($request->get('sort')  !== NULL) ? array_keys($request->get('sort'))[0]." ".array_values($request->get('sort'))[0] : "chromato.date_of_update DESC, chromato.id DESC"; 
         $minRecord = intval($request->get('current')-1)*$rowCount;
         $maxRecord = $rowCount; 
         // initializes the searchPhrase variable as appropriate and sets the condition according to the url idFk parameter
-        $where = 'LOWER(chromatogramme.codeChromato) LIKE :criteriaLower';
+        $where = 'LOWER(chromato.chromatogram_code) LIKE :criteriaLower';
         $searchPhrase = $request->get('searchPhrase');
         if ( $request->get('searchPatern') !== null && $request->get('searchPatern') !== '' && $searchPhrase == '') {
             $searchPhrase = $request->get('searchPatern');
         }
         if ( $request->get('idFk') !== null && $request->get('idFk') !== '') {
-            $where .= ' AND chromatogramme.pcrFk = '.$request->get('idFk');
+            $where .= ' AND chromato.pcr_fk = '.$request->get('idFk');
         }
-        // Search for the list to show EstAligneEtTraite
+                
+        // Search for the list to show
         $tab_toshow =[];
-        $entities_toshow = $em->getRepository("BbeesE3sBundle:Chromatogramme")->createQueryBuilder('chromatogramme')
-            ->where($where)
-            ->setParameter('criteriaLower', strtolower($searchPhrase).'%')
-            ->leftJoin('BbeesE3sBundle:Pcr', 'pcr', 'WITH', 'chromatogramme.pcrFk = pcr.id')
-            ->leftJoin('BbeesE3sBundle:Adn', 'adn', 'WITH', 'pcr.adnFk = adn.id')
-            ->leftJoin('BbeesE3sBundle:Individu', 'individu', 'WITH', 'adn.individuFk = individu.id')
-            ->leftJoin('BbeesE3sBundle:Voc', 'vocGene', 'WITH', 'pcr.geneVocFk = vocGene.id')
-            ->leftJoin('BbeesE3sBundle:Voc', 'vocQualiteChromato', 'WITH', 'chromatogramme.qualiteChromatoVocFk = vocQualiteChromato.id')
-            ->addOrderBy(array_keys($orderBy)[0], array_values($orderBy)[0])
-            ->getQuery()
-            ->getResult();
+        $rawSql = "SELECT  chromato.id, chromato.chromatogram_code, 
+            chromato.creation_user_name, chromato.date_of_creation, chromato.date_of_update,
+            sp.specimen_molecular_code, dna.dna_code, pcr.pcr_code, pcr.pcr_number,
+            voc_gene.code as code_voc_gene, voc_chromato_quality.code as code_voc_chromato_quality,
+            sq.internal_sequence_code as last_internal_sequence_code, 
+            sq.internal_sequence_creation_date as last_internal_sequence_creation_date,
+            sq.internal_sequence_alignment_code as last_internal_sequence_alignment_code, 
+            voc_statut_sqc_ass.code as last_internal_sequence_status_voc,
+            user_cre.username as user_cre_username , user_maj.username as user_maj_username
+            FROM  chromatogram chromato
+                LEFT JOIN user_db user_cre ON user_cre.id = chromato.creation_user_name
+                LEFT JOIN user_db user_maj ON user_maj.id = chromato.update_user_name 
+                LEFT JOIN vocabulary voc_chromato_quality ON chromato.chromato_quality_voc_fk = voc_chromato_quality.id
+                JOIN pcr ON chromato.pcr_fk = pcr.id
+                    LEFT JOIN vocabulary voc_gene ON pcr.gene_voc_fk = voc_gene.id 
+                    JOIN dna ON pcr.dna_fk = dna.id 
+                        JOIN specimen sp ON dna.specimen_fk = sp.id
+                LEFT JOIN chromatogram_is_processed_to eaet ON eaet.chromatogram_fk = chromato.id
+                INNER JOIN (SELECT MAX(eaeti.id) AS maxeaeti 
+                    FROM chromatogram_is_processed_to eaeti 
+                    GROUP BY eaeti.chromatogram_fk) eaet2 ON (eaet.id = eaet2.maxeaeti)
+                    LEFT JOIN internal_sequence sq ON eaet.internal_sequence_fk = sq.id
+                        LEFT JOIN vocabulary voc_statut_sqc_ass ON sq.internal_sequence_status_voc_fk = voc_statut_sqc_ass.id"
+        ." WHERE ".$where." ORDER BY ".$orderBy;
+        // execute query and fill tab to show in the bootgrid list (see index.htm)
+        $stmt = $em->getConnection()->prepare($rawSql);
+        $stmt->bindValue('criteriaLower', strtolower($searchPhrase).'%');
+        $stmt->execute();
+        $entities_toshow = $stmt->fetchAll();
         $nb = count($entities_toshow);
         $entities_toshow = ($request->get('rowCount') > 0 ) ? array_slice($entities_toshow, $minRecord, $rowCount) : array_slice($entities_toshow, $minRecord);
-        $lastTaxname = '';
-        foreach($entities_toshow as $entity)
-        {
-            $id = $entity->getId();
-            $DateMaj = ($entity->getDateMaj() !== null) ?  $entity->getDateMaj()->format('Y-m-d H:i:s') : null;
-            $DateCre = ($entity->getDateCre() !== null) ?  $entity->getDateCre()->format('Y-m-d H:i:s') : null;       
-            // search for sequences associated with the chromatogram
-            $query = $em->createQuery('SELECT eaet.id, sa.id as id_sqc_ass, sa.codeSqcAss as code_sqc_ass, voc.libelle as statut, sa.codeSqcAlignement as code_sqc_alignement, sa.dateCreationSqcAss as date_sqc_ass FROM BbeesE3sBundle:EstAligneEtTraite eaet JOIN eaet.sequenceAssembleeFk sa JOIN sa.statutSqcAssVocFk voc WHERE eaet.chromatogrammeFk = '.$id.' ORDER BY eaet.id DESC')->getResult();
-            $lastCodeSeqAss = (count($query) > 0) ? $query[0]['code_sqc_ass'] : '';
-            $lastCodeSeqAlignement = (count($query) > 0) ? $query[0]['code_sqc_alignement'] : '';
-            $lastStatutSeqAss = (count($query) > 0) ? $query[0]['statut'] : '';
-            $lastDateSeqAss = (count($query) > 0 && $query[0]['date_sqc_ass']!== null ) ? $query[0]['date_sqc_ass']->format('Y-m-d') : '';
-            $linkSqcAss = (count($query) > 0) ?  $id : '';
-            //
-            $tab_toshow[] = array("id" => $id, "chromatogramme.id" => $id, 
-             "individu.codeIndBiomol" => $entity->getPcrFk()->getAdnFk()->getIndividuFk()->getCodeIndBiomol(),
-             "adn.codeAdn" => $entity->getPcrFk()->getAdnFk()->getCodeAdn(),
-             "chromatogramme.codeChromato" => $entity->getCodeChromato(),
-             "vocGene.code" => $entity->getPcrFk()->getGeneVocFk()->getCode(), 
-             "pcr.codePcr" => $entity->getPcrFk()->getCodePcr(),  
-             "pcr.numPcr" => $entity->getPcrFk()->getNumPcr(), 
-             "vocQualiteChromato.code" => $entity->getQualiteChromatoVocFk()->getLibelle(),   
-             "chromatogramme.dateCre" => $DateCre, "chromatogramme.dateMaj" => $DateMaj,
-             "userCreId" => $service->GetUserCreId($entity), "chromatogramme.userCre" => $service->GetUserCreUsername($entity) ,"chromatogramme.userMaj" => $service->GetUserMajUsername($entity),
-             "lastCodeSeqAss" => $lastCodeSeqAss,"lastStatutSeqAss" => $lastStatutSeqAss,"lastCodeSeqAlignement" => $lastCodeSeqAlignement,"lastDateSeqAss" => $lastDateSeqAss,
-             "linkSequenceassemblee" => $linkSqcAss,);
-        }     
+
+        foreach($entities_toshow as $key => $val){
+             $linkSqcAss = ($val['last_internal_sequence_code'] !== null) ? strval($val['id']) : '';            
+             $tab_toshow[] = array("id" => $val['id'], "chromato.id" => $val['id'],
+                "sp.specimen_molecular_code" => $val['specimen_molecular_code'],                 
+                "dna.dna_code" => $val['dna_code'],                
+                "chromato.chromatogram_code" => $val['chromatogram_code'],
+                "code_voc_gene" => $val['code_voc_gene'],                  
+                "pcr.pcr_code" => $val['pcr_code'],  
+                "pcr.pcr_number" => $val['pcr_number'], 
+                "code_voc_chromato_quality" => $val['code_voc_chromato_quality'], 
+                "chromato.date_of_creation" => $val['date_of_creation'], "chromato.date_of_update" => $val['date_of_update'],
+                "creation_user_name" => $val['creation_user_name'], "user_cre.username" => $val['user_cre_username'] ,"user_maj.username" => $val['user_maj_username'],
+                "last_internal_sequence_code" => $val['last_internal_sequence_code'],
+                "last_internal_sequence_status_voc" => $val['last_internal_sequence_status_voc'],
+                "last_internal_sequence_alignment_code" => $val['last_internal_sequence_alignment_code'],
+                "last_internal_sequence_creation_date" => $val['last_internal_sequence_creation_date'],                
+                "linkSequenceassemblee" => $linkSqcAss
+             );
+         }
+         
         // Ajax answer
         $response = new Response ();
         $response->setContent ( json_encode ( array (
@@ -136,7 +147,6 @@ class ChromatogrammeController extends Controller
         return $response;          
     }
 
-    
     /**
      * Creates a new chromatogramme entity.
      *
