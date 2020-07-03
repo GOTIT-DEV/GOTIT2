@@ -6,7 +6,6 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\ColumnDiff;
 use Doctrine\DBAL\Schema\TableDiff;
 use function array_merge;
-use function func_get_args;
 use function is_array;
 
 /**
@@ -58,15 +57,17 @@ class SchemaAlterTableChangeColumnEventArgs extends SchemaEventArgs
     }
 
     /**
-     * Passing multiple SQL statements as an array is deprecated. Pass each statement as an individual argument instead.
-     *
      * @param string|string[] $sql
      *
      * @return \Doctrine\DBAL\Event\SchemaAlterTableChangeColumnEventArgs
      */
     public function addSql($sql)
     {
-        $this->sql = array_merge($this->sql, is_array($sql) ? $sql : func_get_args());
+        if (is_array($sql)) {
+            $this->sql = array_merge($this->sql, $sql);
+        } else {
+            $this->sql[] = $sql;
+        }
 
         return $this;
     }

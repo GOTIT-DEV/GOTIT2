@@ -43,9 +43,7 @@ class PhpEngine implements EngineInterface, \ArrayAccess
     private $evalParameters;
 
     /**
-     * @param TemplateNameParserInterface $parser  A TemplateNameParserInterface instance
-     * @param LoaderInterface             $loader  A loader instance
-     * @param HelperInterface[]           $helpers An array of helper instances
+     * @param HelperInterface[] $helpers An array of helper instances
      */
     public function __construct(TemplateNameParserInterface $parser, LoaderInterface $loader, array $helpers = [])
     {
@@ -120,8 +118,7 @@ class PhpEngine implements EngineInterface, \ArrayAccess
     /**
      * Evaluates a template.
      *
-     * @param Storage $template   The template to render
-     * @param array   $parameters An array of parameters to pass to the template
+     * @param array $parameters An array of parameters to pass to the template
      *
      * @return string|false The evaluated template, or false if the engine is unable to render the template
      *
@@ -134,10 +131,10 @@ class PhpEngine implements EngineInterface, \ArrayAccess
         unset($template, $parameters);
 
         if (isset($this->evalParameters['this'])) {
-            throw new \InvalidArgumentException('Invalid parameter (this)');
+            throw new \InvalidArgumentException('Invalid parameter (this).');
         }
         if (isset($this->evalParameters['view'])) {
-            throw new \InvalidArgumentException('Invalid parameter (view)');
+            throw new \InvalidArgumentException('Invalid parameter (view).');
         }
 
         // the view variable is exposed to the require file below
@@ -242,8 +239,7 @@ class PhpEngine implements EngineInterface, \ArrayAccess
     /**
      * Sets a helper.
      *
-     * @param HelperInterface $helper The helper instance
-     * @param string          $alias  An alias
+     * @param string $alias An alias
      */
     public function set(HelperInterface $helper, $alias = null)
     {
@@ -313,13 +309,13 @@ class PhpEngine implements EngineInterface, \ArrayAccess
         // the performance when the same value is escaped multiple times (e.g. loops)
         if (is_scalar($value)) {
             if (!isset(self::$escaperCache[$context][$value])) {
-                self::$escaperCache[$context][$value] = \call_user_func($this->getEscaper($context), $value);
+                self::$escaperCache[$context][$value] = $this->getEscaper($context)($value);
             }
 
             return self::$escaperCache[$context][$value];
         }
 
-        return \call_user_func($this->getEscaper($context), $value);
+        return $this->getEscaper($context)($value);
     }
 
     /**

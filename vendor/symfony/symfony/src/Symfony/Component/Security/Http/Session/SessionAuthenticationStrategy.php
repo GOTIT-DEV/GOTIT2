@@ -32,7 +32,7 @@ class SessionAuthenticationStrategy implements SessionAuthenticationStrategyInte
 
     private $strategy;
 
-    public function __construct($strategy)
+    public function __construct(string $strategy)
     {
         $this->strategy = $strategy;
     }
@@ -59,7 +59,7 @@ class SessionAuthenticationStrategy implements SessionAuthenticationStrategyInte
                 return;
 
             default:
-                throw new \RuntimeException(sprintf('Invalid session authentication strategy "%s"', $this->strategy));
+                throw new \RuntimeException(sprintf('Invalid session authentication strategy "%s".', $this->strategy));
         }
     }
 }

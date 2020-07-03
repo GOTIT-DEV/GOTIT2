@@ -29,8 +29,12 @@ use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\Security\Http\ParameterBagUtils;
 use Symfony\Component\Security\Http\Session\SessionAuthenticationStrategyInterface;
 
+@trigger_error(sprintf('The "%s" class is deprecated since Symfony 4.2, use Guard instead.', SimpleFormAuthenticationListener::class), E_USER_DEPRECATED);
+
 /**
  * @author Jordi Boggiano <j.boggiano@seld.be>
+ *
+ * @deprecated since Symfony 4.2, use Guard instead.
  */
 class SimpleFormAuthenticationListener extends AbstractAuthenticationListener
 {
@@ -38,23 +42,12 @@ class SimpleFormAuthenticationListener extends AbstractAuthenticationListener
     private $csrfTokenManager;
 
     /**
-     * @param TokenStorageInterface                 $tokenStorage          A TokenStorageInterface instance
-     * @param AuthenticationManagerInterface        $authenticationManager An AuthenticationManagerInterface instance
-     * @param HttpUtils                             $httpUtils             An HttpUtils instance
-     * @param string                                $providerKey
-     * @param array                                 $options               An array of options for the processing of a
-     *                                                                     successful, or failed authentication attempt
-     * @param LoggerInterface|null                  $logger                A LoggerInterface instance
-     * @param EventDispatcherInterface|null         $dispatcher            An EventDispatcherInterface instance
-     * @param CsrfTokenManagerInterface|null        $csrfTokenManager      A CsrfTokenManagerInterface instance
-     * @param SimpleFormAuthenticatorInterface|null $simpleAuthenticator   A SimpleFormAuthenticatorInterface instance
-     *
      * @throws \InvalidArgumentException In case no simple authenticator is provided
      */
-    public function __construct(TokenStorageInterface $tokenStorage, AuthenticationManagerInterface $authenticationManager, SessionAuthenticationStrategyInterface $sessionStrategy, HttpUtils $httpUtils, $providerKey, AuthenticationSuccessHandlerInterface $successHandler, AuthenticationFailureHandlerInterface $failureHandler, array $options = [], LoggerInterface $logger = null, EventDispatcherInterface $dispatcher = null, CsrfTokenManagerInterface $csrfTokenManager = null, SimpleFormAuthenticatorInterface $simpleAuthenticator = null)
+    public function __construct(TokenStorageInterface $tokenStorage, AuthenticationManagerInterface $authenticationManager, SessionAuthenticationStrategyInterface $sessionStrategy, HttpUtils $httpUtils, string $providerKey, AuthenticationSuccessHandlerInterface $successHandler, AuthenticationFailureHandlerInterface $failureHandler, array $options = [], LoggerInterface $logger = null, EventDispatcherInterface $dispatcher = null, CsrfTokenManagerInterface $csrfTokenManager = null, SimpleFormAuthenticatorInterface $simpleAuthenticator = null)
     {
         if (!$simpleAuthenticator) {
-            throw new \InvalidArgumentException('Missing simple authenticator');
+            throw new \InvalidArgumentException('Missing simple authenticator.');
         }
 
         $this->simpleAuthenticator = $simpleAuthenticator;

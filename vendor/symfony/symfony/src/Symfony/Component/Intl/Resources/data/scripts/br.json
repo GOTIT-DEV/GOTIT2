@@ -1,5 +1,4 @@
 {
-    "Version": "36",
     "Names": {
         "Adlm": "adlam",
         "Arab": "arabek",
@@ -87,7 +86,6 @@
         "Zsye": "fromlunioù",
         "Zsym": "arouezioù",
         "Zxxx": "anskrivet",
-        "Zyyy": "boutin",
-        "Zzzz": "skritur dianav"
+        "Zyyy": "boutin"
     }
 }

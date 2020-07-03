@@ -32,11 +32,6 @@ class ORMQueryBuilderLoader implements EntityLoaderInterface
      */
     private $queryBuilder;
 
-    /**
-     * Construct an ORM Query Builder Loader.
-     *
-     * @param QueryBuilder $queryBuilder The query builder for creating the query builder
-     */
     public function __construct(QueryBuilder $queryBuilder)
     {
         $this->queryBuilder = $queryBuilder;
@@ -62,7 +57,7 @@ class ORMQueryBuilderLoader implements EntityLoaderInterface
             $metadata = $this->queryBuilder->getEntityManager()->getClassMetadata(current($this->queryBuilder->getRootEntities()));
 
             foreach ($this->getEntities() as $entity) {
-                if (\in_array(current($metadata->getIdentifierValues($entity)), $values, true)) {
+                if (\in_array((string) current($metadata->getIdentifierValues($entity)), $values, true)) {
                     $choices[] = $entity;
                 }
             }

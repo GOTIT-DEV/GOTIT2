@@ -1,5 +1,4 @@
 {
-    "Version": "36",
     "Names": {
         "Arab": "árabe",
         "Armn": "armenio",
@@ -44,7 +43,6 @@
         "Zsye": "emojis",
         "Zsym": "símbolos",
         "Zxxx": "non escrito",
-        "Zyyy": "común",
-        "Zzzz": "sistema de escritura descoñecido"
+        "Zyyy": "común"
     }
 }

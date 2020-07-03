@@ -15,6 +15,7 @@ use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\HttpFoundation\Cookie;
 
 class RememberMeFactory implements SecurityFactoryInterface
 {
@@ -25,6 +26,7 @@ class RememberMeFactory implements SecurityFactoryInterface
         'domain' => null,
         'secure' => false,
         'httponly' => true,
+        'samesite' => null,
         'always_remember_me' => false,
         'remember_me_parameter' => '_remember_me',
     ];
@@ -139,12 +141,18 @@ class RememberMeFactory implements SecurityFactoryInterface
                 ->end()
                 ->prototype('scalar')->end()
             ->end()
-            ->scalarNode('catch_exceptions')->defaultTrue()->end()
+            ->booleanNode('catch_exceptions')->defaultTrue()->end()
         ;
 
         foreach ($this->options as $name => $value) {
-            if (\is_bool($value)) {
+            if ('secure' === $name) {
+                $builder->enumNode($name)->values([true, false, 'auto'])->defaultValue('auto' === $value ? null : $value);
+            } elseif ('samesite' === $name) {
+                $builder->enumNode($name)->values([null, Cookie::SAMESITE_LAX, Cookie::SAMESITE_STRICT, Cookie::SAMESITE_NONE])->defaultValue($value);
+            } elseif (\is_bool($value)) {
                 $builder->booleanNode($name)->defaultValue($value);
+            } elseif (\is_int($value)) {
+                $builder->integerNode($name)->defaultValue($value);
             } else {
                 $builder->scalarNode($name)->defaultValue($value);
             }

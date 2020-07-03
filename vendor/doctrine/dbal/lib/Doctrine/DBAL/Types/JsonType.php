@@ -69,7 +69,7 @@ class JsonType extends Type
      */
     public function getName()
     {
-        return Types::JSON;
+        return Type::JSON;
     }
 
     /**

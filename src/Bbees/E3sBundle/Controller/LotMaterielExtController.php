@@ -95,7 +95,7 @@ class LotMaterielExtController extends Controller
                 LEFT JOIN external_biological_material_is_processed_by ebmip ON ebmip.external_biological_material_fk = lot.id
                     LEFT JOIN person ON ebmip.person_fk = person.id
 		LEFT JOIN identified_species ei_lot ON ei_lot.external_biological_material_fk = lot.id
-			INNER JOIN (SELECT MAX(ei_loti.id) AS maxei_loti 
+			LEFT JOIN (SELECT MAX(ei_loti.id) AS maxei_loti 
 				FROM identified_species ei_loti 
 				GROUP BY ei_loti.external_biological_material_fk) ei_lot2 ON (ei_lot.id = ei_lot2.maxei_loti)
 			LEFT JOIN taxon rt_lot ON ei_lot.taxon_fk = rt_lot.id

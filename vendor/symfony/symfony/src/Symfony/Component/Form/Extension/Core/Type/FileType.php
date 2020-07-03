@@ -20,7 +20,8 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\Translation\TranslatorInterface as LegacyTranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class FileType extends AbstractType
 {
@@ -35,8 +36,14 @@ class FileType extends AbstractType
 
     private $translator;
 
-    public function __construct(TranslatorInterface $translator = null)
+    /**
+     * @param TranslatorInterface|null $translator
+     */
+    public function __construct($translator = null)
     {
+        if (null !== $translator && !$translator instanceof LegacyTranslatorInterface && !$translator instanceof TranslatorInterface) {
+            throw new \TypeError(sprintf('Argument 1 passed to "%s()" must be an instance of "%s", "%s" given.', __METHOD__, TranslatorInterface::class, \is_object($translator) ? \get_class($translator) : \gettype($translator)));
+        }
         $this->translator = $translator;
     }
 
@@ -141,7 +148,7 @@ class FileType extends AbstractType
         return 'file';
     }
 
-    private function getFileUploadError($errorCode)
+    private function getFileUploadError(int $errorCode)
     {
         $messageParameters = [];
 
@@ -171,10 +178,8 @@ class FileType extends AbstractType
      * Returns the maximum size of an uploaded file as configured in php.ini.
      *
      * This method should be kept in sync with Symfony\Component\HttpFoundation\File\UploadedFile::getMaxFilesize().
-     *
-     * @return int The maximum size of an uploaded file in bytes
      */
-    private static function getMaxFilesize()
+    private static function getMaxFilesize(): int
     {
         $iniMax = strtolower(ini_get('upload_max_filesize'));
 
@@ -210,7 +215,7 @@ class FileType extends AbstractType
      *
      * This method should be kept in sync with Symfony\Component\Validator\Constraints\FileValidator::factorizeSizes().
      */
-    private function factorizeSizes($size, $limit)
+    private function factorizeSizes(int $size, int $limit)
     {
         $coef = self::MIB_BYTES;
         $coefFactor = self::KIB_BYTES;
@@ -241,8 +246,8 @@ class FileType extends AbstractType
     /**
      * This method should be kept in sync with Symfony\Component\Validator\Constraints\FileValidator::moreDecimalsThan().
      */
-    private static function moreDecimalsThan($double, $numberOfDecimals)
+    private static function moreDecimalsThan(string $double, int $numberOfDecimals): bool
     {
-        return \strlen((string) $double) > \strlen(round($double, $numberOfDecimals));
+        return \strlen($double) > \strlen(round($double, $numberOfDecimals));
     }
 }

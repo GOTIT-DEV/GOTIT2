@@ -1,5 +1,4 @@
 {
-    "Version": "36",
     "Names": {
         "AD": "Andorra",
         "AE": "Emîrtiyên Erebî yên Yekbûyî",
@@ -90,7 +89,6 @@
         "HR": "Kroatya",
         "HT": "Haîtî",
         "HU": "Macaristan",
-        "IC": "Giravên Qenariyê",
         "ID": "Îndonezya",
         "IE": "Îrlenda",
         "IL": "Îsraêl",
@@ -129,7 +127,6 @@
         "MC": "Monako",
         "MD": "Moldova",
         "ME": "Montenegro",
-        "MF": "MF",
         "MG": "Madagaskar",
         "MH": "Giravên Marşal",
         "MK": "Makedonya",
@@ -224,7 +221,6 @@
         "VU": "Vanûatû",
         "WF": "Wallis û Futuna",
         "WS": "Samoa",
-        "XK": "Kosovo",
         "YE": "Yemen",
         "ZA": "Afrîkaya Başûr",
         "ZM": "Zambiya",

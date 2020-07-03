@@ -42,16 +42,13 @@ class DB2Connection implements Connection, ServerInfoAwareConnection
         $isPersistent = (isset($params['persistent']) && $params['persistent'] === true);
 
         if ($isPersistent) {
-            $conn = db2_pconnect($params['dbname'], $username, $password, $driverOptions);
+            $this->conn = db2_pconnect($params['dbname'], $username, $password, $driverOptions);
         } else {
-            $conn = db2_connect($params['dbname'], $username, $password, $driverOptions);
+            $this->conn = db2_connect($params['dbname'], $username, $password, $driverOptions);
         }
-
-        if ($conn === false) {
+        if (! $this->conn) {
             throw new DB2Exception(db2_conn_errormsg());
         }
-
-        $this->conn = $conn;
     }
 
     /**

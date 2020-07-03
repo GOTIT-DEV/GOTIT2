@@ -2,16 +2,14 @@
 
 namespace Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Platforms\DB2Platform;
 use Doctrine\DBAL\Types\Type;
 use const CASE_LOWER;
 use function array_change_key_case;
 use function is_resource;
-use function preg_match;
-use function str_replace;
 use function strpos;
 use function strtolower;
 use function substr;
+use function trim;
 
 /**
  * IBM Db2 Schema Manager.
@@ -43,17 +41,14 @@ class DB2SchemaManager extends AbstractSchemaManager
 
         $length    = null;
         $fixed     = null;
+        $unsigned  = false;
         $scale     = false;
         $precision = false;
 
         $default = null;
 
         if ($tableColumn['default'] !== null && $tableColumn['default'] !== 'NULL') {
-            $default = $tableColumn['default'];
-
-            if (preg_match('/^\'(.*)\'$/s', $default, $matches)) {
-                $default = str_replace("''", "'", $matches[1]);
-            }
+            $default = trim($tableColumn['default'], "'");
         }
 
         $type = $this->_platform->getDoctrineTypeMapping($tableColumn['typename']);
@@ -85,7 +80,7 @@ class DB2SchemaManager extends AbstractSchemaManager
 
         $options = [
             'length'        => $length,
-            'unsigned'      => false,
+            'unsigned'      => (bool) $unsigned,
             'fixed'         => (bool) $fixed,
             'default'       => $default,
             'autoincrement' => (bool) $tableColumn['autoincrement'],
@@ -184,9 +179,7 @@ class DB2SchemaManager extends AbstractSchemaManager
     {
         if ($def === 'C') {
             return 'CASCADE';
-        }
-
-        if ($def === 'N') {
+        } elseif ($def === 'N') {
             return 'SET NULL';
         }
 
@@ -209,19 +202,5 @@ class DB2SchemaManager extends AbstractSchemaManager
         }
 
         return new View($view['name'], $sql);
-    }
-
-    public function listTableDetails($tableName) : Table
-    {
-        $table = parent::listTableDetails($tableName);
-
-        /** @var DB2Platform $platform */
-        $platform = $this->_platform;
-        $sql      = $platform->getListTableCommentsSQL($tableName);
-
-        $tableOptions = $this->_conn->fetchAssoc($sql);
-        $table->addOption('comment', $tableOptions['REMARKS']);
-
-        return $table;
     }
 }

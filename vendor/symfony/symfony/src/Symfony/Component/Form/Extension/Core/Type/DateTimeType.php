@@ -14,6 +14,7 @@ namespace Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\DataTransformer\ArrayToPartsTransformer;
 use Symfony\Component\Form\Extension\Core\DataTransformer\DataTransformerChain;
+use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeImmutableToDateTimeTransformer;
 use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToArrayTransformer;
 use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToHtml5LocalDateTimeTransformer;
 use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToLocalizedStringTransformer;
@@ -107,7 +108,17 @@ class DateTimeType extends AbstractType
                 'invalid_message_parameters',
             ]));
 
-            if (isset($emptyData['date'])) {
+            if ($emptyData instanceof \Closure) {
+                $lazyEmptyData = static function ($option) use ($emptyData) {
+                    return static function (FormInterface $form) use ($emptyData, $option) {
+                        $emptyData = $emptyData($form->getParent());
+
+                        return isset($emptyData[$option]) ? $emptyData[$option] : '';
+                    };
+                };
+
+                $dateOptions['empty_data'] = $lazyEmptyData('date');
+            } elseif (isset($emptyData['date'])) {
                 $dateOptions['empty_data'] = $emptyData['date'];
             }
 
@@ -126,7 +137,9 @@ class DateTimeType extends AbstractType
                 'invalid_message_parameters',
             ]));
 
-            if (isset($emptyData['time'])) {
+            if ($emptyData instanceof \Closure) {
+                $timeOptions['empty_data'] = $lazyEmptyData('time');
+            } elseif (isset($emptyData['time'])) {
                 $timeOptions['empty_data'] = $emptyData['time'];
             }
 
@@ -139,8 +152,16 @@ class DateTimeType extends AbstractType
                 $dateOptions['widget'] = $options['date_widget'];
             }
 
+            if (null !== $options['date_label']) {
+                $dateOptions['label'] = $options['date_label'];
+            }
+
             if (null !== $options['time_widget']) {
                 $timeOptions['widget'] = $options['time_widget'];
+            }
+
+            if (null !== $options['time_label']) {
+                $timeOptions['label'] = $options['time_label'];
             }
 
             if (null !== $options['date_format']) {
@@ -149,6 +170,10 @@ class DateTimeType extends AbstractType
 
             $dateOptions['input'] = $timeOptions['input'] = 'array';
             $dateOptions['error_bubbling'] = $timeOptions['error_bubbling'] = true;
+
+            if (isset($dateOptions['format']) && DateType::HTML5_FORMAT !== $dateOptions['format']) {
+                $dateOptions['html5'] = false;
+            }
 
             $builder
                 ->addViewTransformer(new DataTransformerChain([
@@ -163,9 +188,11 @@ class DateTimeType extends AbstractType
             ;
         }
 
-        if ('string' === $options['input']) {
+        if ('datetime_immutable' === $options['input']) {
+            $builder->addModelTransformer(new DateTimeImmutableToDateTimeTransformer());
+        } elseif ('string' === $options['input']) {
             $builder->addModelTransformer(new ReversedTransformer(
-                new DateTimeToStringTransformer($options['model_timezone'], $options['model_timezone'])
+                new DateTimeToStringTransformer($options['model_timezone'], $options['model_timezone'], $options['input_format'])
             ));
         } elseif ('timestamp' === $options['input']) {
             $builder->addModelTransformer(new ReversedTransformer(
@@ -191,6 +218,14 @@ class DateTimeType extends AbstractType
         //  * the html5 is set to true
         if ($options['html5'] && 'single_text' === $options['widget'] && self::HTML5_FORMAT === $options['format']) {
             $view->vars['type'] = 'datetime-local';
+
+            // we need to force the browser to display the seconds by
+            // adding the HTML attribute step if not already defined.
+            // Otherwise the browser will not display and so not send the seconds
+            // therefore the value will always be considered as invalid.
+            if ($options['with_seconds'] && !isset($view->vars['attr']['step'])) {
+                $view->vars['attr']['step'] = 1;
+            }
         }
     }
 
@@ -205,12 +240,12 @@ class DateTimeType extends AbstractType
 
         // Defaults to the value of "widget"
         $dateWidget = function (Options $options) {
-            return $options['widget'];
+            return 'single_text' === $options['widget'] ? null : $options['widget'];
         };
 
         // Defaults to the value of "widget"
         $timeWidget = function (Options $options) {
-            return $options['widget'];
+            return 'single_text' === $options['widget'] ? null : $options['widget'];
         };
 
         $resolver->setDefaults([
@@ -235,9 +270,12 @@ class DateTimeType extends AbstractType
             // this option.
             'data_class' => null,
             'compound' => $compound,
+            'date_label' => null,
+            'time_label' => null,
             'empty_data' => function (Options $options) {
                 return $options['compound'] ? [] : '';
             },
+            'input_format' => 'Y-m-d H:i:s',
         ]);
 
         // Don't add some defaults in order to preserve the defaults
@@ -255,6 +293,7 @@ class DateTimeType extends AbstractType
 
         $resolver->setAllowedValues('input', [
             'datetime',
+            'datetime_immutable',
             'string',
             'timestamp',
             'array',
@@ -278,6 +317,41 @@ class DateTimeType extends AbstractType
             'text',
             'choice',
         ]);
+
+        $resolver->setAllowedTypes('input_format', 'string');
+
+        $resolver->setDeprecated('date_format', function (Options $options, $dateFormat) {
+            if (null !== $dateFormat && 'single_text' === $options['widget'] && self::HTML5_FORMAT === $options['format']) {
+                return sprintf('Using the "date_format" option of %s with an HTML5 date widget is deprecated since Symfony 4.3 and will lead to an exception in 5.0.', self::class);
+                //throw new LogicException(sprintf('Cannot use the "date_format" option of the "%s" with an HTML5 date.', self::class));
+            }
+
+            return '';
+        });
+        $resolver->setDeprecated('date_widget', function (Options $options, $dateWidget) {
+            if (null !== $dateWidget && 'single_text' === $options['widget']) {
+                return sprintf('Using the "date_widget" option of %s when the "widget" option is set to "single_text" is deprecated since Symfony 4.3 and will lead to an exception in 5.0.', self::class);
+                //throw new LogicException(sprintf('Cannot use the "date_widget" option of the "%s" when the "widget" option is set to "single_text".', self::class));
+            }
+
+            return '';
+        });
+        $resolver->setDeprecated('time_widget', function (Options $options, $timeWidget) {
+            if (null !== $timeWidget && 'single_text' === $options['widget']) {
+                return sprintf('Using the "time_widget" option of %s when the "widget" option is set to "single_text" is deprecated since Symfony 4.3 and will lead to an exception in 5.0.', self::class);
+                //throw new LogicException(sprintf('Cannot use the "time_widget" option of the "%s" when the "widget" option is set to "single_text".', self::class));
+            }
+
+            return '';
+        });
+        $resolver->setDeprecated('html5', function (Options $options, $html5) {
+            if ($html5 && self::HTML5_FORMAT !== $options['format']) {
+                return sprintf('Using a custom format when the "html5" option of %s is enabled is deprecated since Symfony 4.3 and will lead to an exception in 5.0.', self::class);
+                //throw new LogicException(sprintf('Cannot use the "format" option of "%s" when the "html5" option is disabled.', self::class));
+            }
+
+            return '';
+        });
     }
 
     /**

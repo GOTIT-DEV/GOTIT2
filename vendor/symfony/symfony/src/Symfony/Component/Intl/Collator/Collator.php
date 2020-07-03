@@ -33,7 +33,7 @@ use Symfony\Component\Intl\Locale\Locale;
  *
  * @internal
  */
-class Collator
+abstract class Collator
 {
     /* Attribute constants */
     const FRENCH_COLLATION = 0;
@@ -74,7 +74,7 @@ class Collator
      *
      * @throws MethodArgumentValueNotImplementedException When $locale different than "en" or null is passed
      */
-    public function __construct($locale)
+    public function __construct(?string $locale)
     {
         if ('en' !== $locale && null !== $locale) {
             throw new MethodArgumentValueNotImplementedException(__METHOD__, 'locale', $locale, 'Only the locale "en" is supported');
@@ -86,13 +86,13 @@ class Collator
      *
      * @param string|null $locale The locale code. The only currently supported locale is "en" (or null using the default locale, i.e. "en")
      *
-     * @return self
+     * @return static
      *
      * @throws MethodArgumentValueNotImplementedException When $locale different than "en" or null is passed
      */
     public static function create($locale)
     {
-        return new self($locale);
+        return new static($locale);
     }
 
     /**
@@ -109,9 +109,9 @@ class Collator
     public function asort(&$array, $sortFlag = self::SORT_REGULAR)
     {
         $intlToPlainFlagMap = [
-            self::SORT_REGULAR => \SORT_REGULAR,
-            self::SORT_NUMERIC => \SORT_NUMERIC,
-            self::SORT_STRING => \SORT_STRING,
+            self::SORT_REGULAR => SORT_REGULAR,
+            self::SORT_NUMERIC => SORT_NUMERIC,
+            self::SORT_STRING => SORT_STRING,
         ];
 
         $plainSortFlag = isset($intlToPlainFlagMap[$sortFlag]) ? $intlToPlainFlagMap[$sortFlag] : self::SORT_REGULAR;

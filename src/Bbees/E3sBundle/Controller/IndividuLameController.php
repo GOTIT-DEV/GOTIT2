@@ -76,7 +76,7 @@ class IndividuLameController extends Controller
             $searchPhrase = $request->get('searchPatern');
         }
         if ( $request->get('idFk') !== null && $request->get('idFk') !== '') {
-            $where .= ' AND ss.soecimen_fk = '.$request->get('idFk');
+            $where .= ' AND ss.specimen_fk = '.$request->get('idFk');
         }
 
         // Search for the list to show
@@ -99,7 +99,7 @@ class IndividuLameController extends Controller
                         LEFT JOIN municipality ON st.municipality_fk = municipality.id 
                 LEFT JOIN vocabulary voc_sp_specimen_type ON sp.specimen_type_voc_fk = voc_sp_specimen_type.id
 		LEFT JOIN identified_species ei_sp ON ei_sp.specimen_fk = sp.id
-			INNER JOIN (SELECT MAX(ei_spi.id) AS maxei_spi 
+			LEFT JOIN (SELECT MAX(ei_spi.id) AS maxei_spi 
 				FROM identified_species ei_spi 
 				GROUP BY ei_spi.specimen_fk) ei_sp2 ON (ei_sp.id = ei_sp2.maxei_spi)
 			LEFT JOIN taxon rt_sp ON ei_sp.taxon_fk = rt_sp.id

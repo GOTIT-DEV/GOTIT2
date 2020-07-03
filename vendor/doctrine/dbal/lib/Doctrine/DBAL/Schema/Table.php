@@ -18,6 +18,9 @@ use function strtolower;
  */
 class Table extends AbstractAsset
 {
+    /** @var string */
+    protected $_name = null;
+
     /** @var Column[] */
     protected $_columns = [];
 
@@ -97,8 +100,8 @@ class Table extends AbstractAsset
     /**
      * Sets the Primary Key.
      *
-     * @param string[]     $columnNames
-     * @param string|false $indexName
+     * @param string[]    $columnNames
+     * @param string|bool $indexName
      *
      * @return self
      */
@@ -218,7 +221,7 @@ class Table extends AbstractAsset
         if ($oldIndex->isPrimary()) {
             $this->dropPrimaryKey();
 
-            return $this->setPrimaryKey($oldIndex->getColumns(), $newIndexName ?? false);
+            return $this->setPrimaryKey($oldIndex->getColumns(), $newIndexName);
         }
 
         unset($this->_indexes[$oldIndexName]);
@@ -424,7 +427,7 @@ class Table extends AbstractAsset
 
     /**
      * @param string $name
-     * @param mixed  $value
+     * @param string $value
      *
      * @return self
      */
@@ -591,11 +594,9 @@ class Table extends AbstractAsset
      */
     public function getColumns()
     {
-        $primaryKey        = $this->getPrimaryKey();
         $primaryKeyColumns = [];
-
-        if ($primaryKey !== null) {
-            $primaryKeyColumns = $this->filterColumns($primaryKey->getColumns());
+        if ($this->hasPrimaryKey()) {
+            $primaryKeyColumns = $this->filterColumns($this->getPrimaryKey()->getColumns());
         }
 
         return array_merge($primaryKeyColumns, $this->getForeignKeyColumns(), $this->_columns);
@@ -612,7 +613,6 @@ class Table extends AbstractAsset
         foreach ($this->getForeignKeys() as $foreignKey) {
             $foreignKeyColumns = array_merge($foreignKeyColumns, $foreignKey->getColumns());
         }
-
         return $this->filterColumns($foreignKeyColumns);
     }
 
@@ -686,13 +686,10 @@ class Table extends AbstractAsset
      */
     public function getPrimaryKeyColumns()
     {
-        $primaryKey = $this->getPrimaryKey();
-
-        if ($primaryKey === null) {
+        if (! $this->hasPrimaryKey()) {
             throw new DBALException('Table ' . $this->getName() . ' has no primary key.');
         }
-
-        return $primaryKey->getColumns();
+        return $this->getPrimaryKey()->getColumns();
     }
 
     /**
@@ -828,29 +825,12 @@ class Table extends AbstractAsset
      *
      * Trims quotes and lowercases the given identifier.
      *
-     * @param string|null $identifier The identifier to normalize.
+     * @param string $identifier The identifier to normalize.
      *
      * @return string The normalized identifier.
      */
     private function normalizeIdentifier($identifier)
     {
-        if ($identifier === null) {
-            return '';
-        }
-
         return $this->trimQuotes(strtolower($identifier));
-    }
-
-    public function setComment(?string $comment) : self
-    {
-        // For keeping backward compatibility with MySQL in previous releases, table comments are stored as options.
-        $this->addOption('comment', $comment);
-
-        return $this;
-    }
-
-    public function getComment() : ?string
-    {
-        return $this->_options['comment'] ?? null;
     }
 }

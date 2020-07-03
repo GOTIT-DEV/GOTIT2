@@ -42,7 +42,7 @@ class ObjectType extends Type
 
         $value = is_resource($value) ? stream_get_contents($value) : $value;
 
-        set_error_handler(function (int $code, string $message) : bool {
+        set_error_handler(function (int $code, string $message) : void {
             throw ConversionException::conversionFailedUnserialization($this->getName(), $message);
         });
 
@@ -58,7 +58,7 @@ class ObjectType extends Type
      */
     public function getName()
     {
-        return Types::OBJECT;
+        return Type::OBJECT;
     }
 
     /**

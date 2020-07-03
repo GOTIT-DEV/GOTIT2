@@ -39,7 +39,7 @@ class DateTimeToLocalizedStringTransformer extends BaseDateTimeTransformer
      *
      * @throws UnexpectedTypeException If a format is not supported or if a timezone is not a string
      */
-    public function __construct($inputTimezone = null, $outputTimezone = null, $dateFormat = null, $timeFormat = null, $calendar = \IntlDateFormatter::GREGORIAN, $pattern = null)
+    public function __construct(string $inputTimezone = null, string $outputTimezone = null, int $dateFormat = null, int $timeFormat = null, int $calendar = \IntlDateFormatter::GREGORIAN, string $pattern = null)
     {
         parent::__construct($inputTimezone, $outputTimezone);
 
@@ -117,11 +117,16 @@ class DateTimeToLocalizedStringTransformer extends BaseDateTimeTransformer
         // date-only patterns require parsing to be done in UTC, as midnight might not exist in the local timezone due
         // to DST changes
         $dateOnly = $this->isPatternDateOnly();
+        $dateFormatter = $this->getIntlDateFormatter($dateOnly);
 
-        $timestamp = $this->getIntlDateFormatter($dateOnly)->parse($value);
+        try {
+            $timestamp = @$dateFormatter->parse($value);
+        } catch (\IntlException $e) {
+            throw new TransformationFailedException($e->getMessage(), $e->getCode(), $e);
+        }
 
         if (0 != intl_get_error_code()) {
-            throw new TransformationFailedException(intl_get_error_message());
+            throw new TransformationFailedException(intl_get_error_message(), intl_get_error_code());
         } elseif ($timestamp > 253402214400) {
             // This timestamp represents UTC midnight of 9999-12-31 to prevent 5+ digit years
             throw new TransformationFailedException('Years beyond 9999 are not supported.');

@@ -19,7 +19,7 @@ class DateIntervalType extends Type
      */
     public function getName()
     {
-        return Types::DATEINTERVAL;
+        return Type::DATEINTERVAL;
     }
 
     /**

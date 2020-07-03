@@ -121,9 +121,9 @@ class Connection extends \Doctrine\DBAL\Connection
      */
     public function query()
     {
-        $connection = $this->getWrappedConnection();
+        $this->connect();
 
-        $stmt = $connection->query(...func_get_args());
+        $stmt = $this->_conn->query(...func_get_args());
         $stmt = new Statement($stmt, $this);
         $stmt->setFetchMode($this->defaultFetchMode);
 

@@ -11,6 +11,8 @@
 
 namespace Symfony\Bundle\FrameworkBundle\Templating\Loader;
 
+@trigger_error('The '.TemplateLocator::class.' class is deprecated since version 4.3 and will be removed in 5.0; use Twig instead.', E_USER_DEPRECATED);
+
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Templating\TemplateReferenceInterface;
 
@@ -18,6 +20,8 @@ use Symfony\Component\Templating\TemplateReferenceInterface;
  * TemplateLocator locates templates in bundles.
  *
  * @author Fabien Potencier <fabien@symfony.com>
+ *
+ * @deprecated since version 4.3, to be removed in 5.0; use Twig instead.
  */
 class TemplateLocator implements FileLocatorInterface
 {
@@ -27,10 +31,9 @@ class TemplateLocator implements FileLocatorInterface
     private $cacheHits = [];
 
     /**
-     * @param FileLocatorInterface $locator  A FileLocatorInterface instance
-     * @param string               $cacheDir The cache path
+     * @param string $cacheDir The cache path
      */
-    public function __construct(FileLocatorInterface $locator, $cacheDir = null)
+    public function __construct(FileLocatorInterface $locator, string $cacheDir = null)
     {
         if (null !== $cacheDir && file_exists($cache = $cacheDir.'/templates.php')) {
             $this->cache = require $cache;
@@ -79,7 +82,7 @@ class TemplateLocator implements FileLocatorInterface
         try {
             return $this->cacheHits[$key] = $this->locator->locate($template->getPath(), $currentPath);
         } catch (\InvalidArgumentException $e) {
-            throw new \InvalidArgumentException(sprintf('Unable to find template "%s" : "%s".', $template, $e->getMessage()), 0, $e);
+            throw new \InvalidArgumentException(sprintf('Unable to find template "%s": ', $template).$e->getMessage(), 0, $e);
         }
     }
 }

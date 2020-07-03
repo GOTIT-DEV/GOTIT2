@@ -39,7 +39,7 @@ class BooleanType extends Type
      */
     public function getName()
     {
-        return Types::BOOLEAN;
+        return Type::BOOLEAN;
     }
 
     /**

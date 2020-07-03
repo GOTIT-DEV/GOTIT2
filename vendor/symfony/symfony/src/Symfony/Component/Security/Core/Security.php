@@ -48,6 +48,11 @@ class Security
             return null;
         }
 
+        if (!$user instanceof UserInterface) {
+            @trigger_error(sprintf('Accessing the user object "%s" that is not an instance of "%s" from "%s()" is deprecated since Symfony 4.2, use "getToken()->getUser()" instead.', \get_class($user), UserInterface::class, __METHOD__), E_USER_DEPRECATED);
+            //return null; // 5.0 behavior
+        }
+
         return $user;
     }
 
@@ -56,19 +61,14 @@ class Security
      *
      * @param mixed $attributes
      * @param mixed $subject
-     *
-     * @return bool
      */
-    public function isGranted($attributes, $subject = null)
+    public function isGranted($attributes, $subject = null): bool
     {
         return $this->container->get('security.authorization_checker')
             ->isGranted($attributes, $subject);
     }
 
-    /**
-     * @return TokenInterface|null
-     */
-    public function getToken()
+    public function getToken(): ?TokenInterface
     {
         return $this->container->get('security.token_storage')->getToken();
     }

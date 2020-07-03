@@ -1,5 +1,4 @@
 {
-    "Version": "36",
     "Names": {
         "Arab": "arabski",
         "Armi": "imperialno-aramejski",
@@ -15,7 +14,6 @@
         "Bugi": "buginski",
         "Buhd": "buhidski",
         "Cans": "poenotena zlogovna pisava kanadskih staroselcev",
-        "Cham": "Cham",
         "Cher": "čerokeški",
         "Cirt": "kirt",
         "Copt": "koptski",
@@ -122,7 +120,6 @@
         "Zsye": "čustvenček",
         "Zsym": "simboli",
         "Zxxx": "nenapisano",
-        "Zyyy": "splošno",
-        "Zzzz": "neznan ali neveljaven zapis"
+        "Zyyy": "splošno"
     }
 }

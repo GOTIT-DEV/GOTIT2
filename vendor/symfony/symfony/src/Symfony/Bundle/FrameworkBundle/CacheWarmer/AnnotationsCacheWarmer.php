@@ -31,13 +31,18 @@ class AnnotationsCacheWarmer extends AbstractPhpFileCacheWarmer
     private $debug;
 
     /**
-     * @param string                 $phpArrayFile The PHP file where annotations are cached
-     * @param CacheItemPoolInterface $fallbackPool The pool where runtime-discovered annotations are cached
-     * @param bool                   $debug        Run in debug mode
+     * @param string $phpArrayFile  The PHP file where annotations are cached
+     * @param string $excludeRegexp
+     * @param bool   $debug
      */
-    public function __construct(Reader $annotationReader, $phpArrayFile, CacheItemPoolInterface $fallbackPool, $excludeRegexp = null, $debug = false)
+    public function __construct(Reader $annotationReader, string $phpArrayFile, $excludeRegexp = null, $debug = false)
     {
-        parent::__construct($phpArrayFile, $fallbackPool);
+        if ($excludeRegexp instanceof CacheItemPoolInterface) {
+            @trigger_error(sprintf('The CacheItemPoolInterface $fallbackPool argument of "%s()" is deprecated since Symfony 4.2, you should not pass it anymore.', __METHOD__), E_USER_DEPRECATED);
+            $excludeRegexp = $debug;
+            $debug = 4 < \func_num_args() && func_get_arg(4);
+        }
+        parent::__construct($phpArrayFile);
         $this->annotationReader = $annotationReader;
         $this->excludeRegexp = $excludeRegexp;
         $this->debug = $debug;
@@ -71,7 +76,7 @@ class AnnotationsCacheWarmer extends AbstractPhpFileCacheWarmer
         return true;
     }
 
-    private function readAllComponents(Reader $reader, $class)
+    private function readAllComponents(Reader $reader, string $class)
     {
         $reflectionClass = new \ReflectionClass($class);
 

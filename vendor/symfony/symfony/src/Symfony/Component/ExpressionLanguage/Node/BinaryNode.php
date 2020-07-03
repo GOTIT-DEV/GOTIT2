@@ -33,7 +33,7 @@ class BinaryNode extends Node
         'not in' => '!in_array',
     ];
 
-    public function __construct($operator, Node $left, Node $right)
+    public function __construct(string $operator, Node $left, Node $right)
     {
         parent::__construct(
             ['left' => $left, 'right' => $right],
@@ -148,13 +148,13 @@ class BinaryNode extends Node
                 return $left * $right;
             case '/':
                 if (0 == $right) {
-                    throw new \DivisionByZeroError('Division by zero');
+                    throw new \DivisionByZeroError('Division by zero.');
                 }
 
                 return $left / $right;
             case '%':
                 if (0 == $right) {
-                    throw new \DivisionByZeroError('Modulo by zero');
+                    throw new \DivisionByZeroError('Modulo by zero.');
                 }
 
                 return $left % $right;

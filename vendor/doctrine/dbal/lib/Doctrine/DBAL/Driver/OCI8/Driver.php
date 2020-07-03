@@ -18,10 +18,10 @@ class Driver extends AbstractOracleDriver
     {
         try {
             return new OCI8Connection(
-                (string) $username,
-                (string) $password,
+                $username,
+                $password,
                 $this->_constructDsn($params),
-                $params['charset'] ?? '',
+                $params['charset'] ?? null,
                 $params['sessionMode'] ?? OCI_DEFAULT,
                 $params['persistent'] ?? false
             );
@@ -44,8 +44,6 @@ class Driver extends AbstractOracleDriver
 
     /**
      * {@inheritdoc}
-     *
-     * @deprecated
      */
     public function getName()
     {

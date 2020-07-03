@@ -10,7 +10,7 @@ use function array_merge;
  */
 class SchemaDiff
 {
-    /** @var Schema|null */
+    /** @var Schema */
     public $fromSchema;
 
     /**

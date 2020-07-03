@@ -49,8 +49,6 @@ class Driver extends \Doctrine\DBAL\Driver\PDOMySql\Driver
 
     /**
      * {@inheritdoc}
-     *
-     * @deprecated
      */
     public function getName()
     {

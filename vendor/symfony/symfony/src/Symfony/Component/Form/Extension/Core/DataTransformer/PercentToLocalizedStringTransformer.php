@@ -42,7 +42,7 @@ class PercentToLocalizedStringTransformer implements DataTransformerInterface
      *
      * @throws UnexpectedTypeException if the given value of type is unknown
      */
-    public function __construct($scale = null, $type = null)
+    public function __construct(int $scale = null, string $type = null)
     {
         if (null === $scale) {
             $scale = 0;
@@ -162,7 +162,7 @@ class PercentToLocalizedStringTransformer implements DataTransformerInterface
             $remainder = trim($remainder, " \t\n\r\0\x0b\xc2\xa0");
 
             if ('' !== $remainder) {
-                throw new TransformationFailedException(sprintf('The number contains unrecognized characters: "%s"', $remainder));
+                throw new TransformationFailedException(sprintf('The number contains unrecognized characters: "%s".', $remainder));
             }
         }
 

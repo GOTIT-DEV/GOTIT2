@@ -22,6 +22,7 @@ use Symfony\Component\Security\Core\Exception\CookieTheftException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Logout\LogoutHandlerInterface;
 use Symfony\Component\Security\Http\ParameterBagUtils;
 
@@ -38,19 +39,16 @@ abstract class AbstractRememberMeServices implements RememberMeServicesInterface
     protected $options = [
         'secure' => false,
         'httponly' => true,
+        'samesite' => null,
     ];
     private $providerKey;
     private $secret;
     private $userProviders;
 
     /**
-     * @param string          $secret
-     * @param string          $providerKey
-     * @param LoggerInterface $logger
-     *
      * @throws \InvalidArgumentException
      */
-    public function __construct(array $userProviders, $secret, $providerKey, array $options = [], LoggerInterface $logger = null)
+    public function __construct(array $userProviders, string $secret, string $providerKey, array $options = [], LoggerInterface $logger = null)
     {
         if (empty($secret)) {
             throw new \InvalidArgumentException('$secret must not be empty.');
@@ -92,12 +90,10 @@ abstract class AbstractRememberMeServices implements RememberMeServicesInterface
      * Implementation of RememberMeServicesInterface. Detects whether a remember-me
      * cookie was set, decodes it, and hands it to subclasses for further processing.
      *
-     * @return TokenInterface|null
-     *
      * @throws CookieTheftException
      * @throws \RuntimeException
      */
-    final public function autoLogin(Request $request)
+    final public function autoLogin(Request $request): ?TokenInterface
     {
         if (($cookie = $request->attributes->get(self::COOKIE_ATTR_NAME)) && null === $cookie->getValue()) {
             return null;
@@ -231,7 +227,7 @@ abstract class AbstractRememberMeServices implements RememberMeServicesInterface
      */
     abstract protected function onLoginSuccess(Request $request, Response $response, TokenInterface $token);
 
-    final protected function getUserProvider($class)
+    final protected function getUserProvider(string $class): UserProviderInterface
     {
         foreach ($this->userProviders as $provider) {
             if ($provider->supportsClass($class)) {
@@ -239,7 +235,7 @@ abstract class AbstractRememberMeServices implements RememberMeServicesInterface
             }
         }
 
-        throw new UnsupportedUserException(sprintf('There is no user provider that supports class "%s".', $class));
+        throw new UnsupportedUserException(sprintf('There is no user provider for user "%s". Shouldn\'t the "supportsClass()" method of your user provider return true for this classname?', $class));
     }
 
     /**
@@ -265,7 +261,7 @@ abstract class AbstractRememberMeServices implements RememberMeServicesInterface
     {
         foreach ($cookieParts as $cookiePart) {
             if (false !== strpos($cookiePart, self::COOKIE_DELIMITER)) {
-                throw new \InvalidArgumentException(sprintf('$cookieParts should not contain the cookie delimiter "%s"', self::COOKIE_DELIMITER));
+                throw new \InvalidArgumentException(sprintf('$cookieParts should not contain the cookie delimiter "%s".', self::COOKIE_DELIMITER));
             }
         }
 
@@ -281,7 +277,7 @@ abstract class AbstractRememberMeServices implements RememberMeServicesInterface
             $this->logger->debug('Clearing remember-me cookie.', ['name' => $this->options['name']]);
         }
 
-        $request->attributes->set(self::COOKIE_ATTR_NAME, new Cookie($this->options['name'], null, 1, $this->options['path'], $this->options['domain'], $this->options['secure'], $this->options['httponly']));
+        $request->attributes->set(self::COOKIE_ATTR_NAME, new Cookie($this->options['name'], null, 1, $this->options['path'], $this->options['domain'], $this->options['secure'] ?? $request->isSecure(), $this->options['httponly'], false, $this->options['samesite']));
     }
 
     /**

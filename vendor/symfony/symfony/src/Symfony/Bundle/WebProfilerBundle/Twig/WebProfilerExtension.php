@@ -11,7 +11,6 @@
 
 namespace Symfony\Bundle\WebProfilerBundle\Twig;
 
-use Symfony\Component\HttpKernel\DataCollector\Util\ValueExporter;
 use Symfony\Component\VarDumper\Cloner\Data;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Twig\Environment;
@@ -23,14 +22,11 @@ use Twig\TwigFunction;
  * Twig extension for the profiler.
  *
  * @author Fabien Potencier <fabien@symfony.com>
+ *
+ * @internal since Symfony 4.4
  */
 class WebProfilerExtension extends ProfilerExtension
 {
-    /**
-     * @var ValueExporter
-     */
-    private $valueExporter;
-
     /**
      * @var HtmlDumper
      */
@@ -52,11 +48,17 @@ class WebProfilerExtension extends ProfilerExtension
         $this->dumper->setOutput($this->output = fopen('php://memory', 'r+b'));
     }
 
+    /**
+     * @return void
+     */
     public function enter(Profile $profile)
     {
         ++$this->stackLevel;
     }
 
+    /**
+     * @return void
+     */
     public function leave(Profile $profile)
     {
         if (0 === --$this->stackLevel) {
@@ -66,15 +68,13 @@ class WebProfilerExtension extends ProfilerExtension
 
     /**
      * {@inheritdoc}
+     *
+     * @return TwigFunction[]
      */
     public function getFunctions()
     {
-        $profilerDump = function (Environment $env, $value, $maxDepth = 0) {
-            return $value instanceof Data ? $this->dumpData($env, $value, $maxDepth) : twig_escape_filter($env, $this->dumpValue($value));
-        };
-
         return [
-            new TwigFunction('profiler_dump', $profilerDump, ['is_safe' => ['html'], 'needs_environment' => true]),
+            new TwigFunction('profiler_dump', [$this, 'dumpData'], ['is_safe' => ['html'], 'needs_environment' => true]),
             new TwigFunction('profiler_dump_log', [$this, 'dumpLog'], ['is_safe' => ['html'], 'needs_environment' => true]),
         ];
     }
@@ -109,20 +109,6 @@ class WebProfilerExtension extends ProfilerExtension
         }
 
         return '<span class="dump-inline">'.strtr($message, $replacements).'</span>';
-    }
-
-    /**
-     * @deprecated since 3.2, to be removed in 4.0. Use the dumpData() method instead.
-     */
-    public function dumpValue($value)
-    {
-        @trigger_error(sprintf('The %s() method is deprecated since Symfony 3.2 and will be removed in 4.0. Use the dumpData() method instead.', __METHOD__), E_USER_DEPRECATED);
-
-        if (null === $this->valueExporter) {
-            $this->valueExporter = new ValueExporter();
-        }
-
-        return $this->valueExporter->exportValue($value);
     }
 
     /**

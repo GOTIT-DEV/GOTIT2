@@ -26,6 +26,8 @@ use Twig\Environment;
  * RouterController.
  *
  * @author Fabien Potencier <fabien@symfony.com>
+ *
+ * @internal since Symfony 4.4
  */
 class RouterController
 {
@@ -77,12 +79,8 @@ class RouterController
 
     /**
      * Returns the routing traces associated to the given request.
-     *
-     * @param string $method
-     *
-     * @return array
      */
-    private function getTraces(RequestDataCollector $request, $method)
+    private function getTraces(RequestDataCollector $request, string $method): array
     {
         $traceRequest = Request::create(
             $request->getPathInfo(),

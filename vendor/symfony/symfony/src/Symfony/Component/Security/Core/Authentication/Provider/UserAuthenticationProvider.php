@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Security\Core\Authentication\Provider;
 
+use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -33,13 +34,9 @@ abstract class UserAuthenticationProvider implements AuthenticationProviderInter
     private $providerKey;
 
     /**
-     * @param UserCheckerInterface $userChecker                An UserCheckerInterface interface
-     * @param string               $providerKey                A provider key
-     * @param bool                 $hideUserNotFoundExceptions Whether to hide user not found exception or not
-     *
      * @throws \InvalidArgumentException
      */
-    public function __construct(UserCheckerInterface $userChecker, $providerKey, $hideUserNotFoundExceptions = true)
+    public function __construct(UserCheckerInterface $userChecker, string $providerKey, bool $hideUserNotFoundExceptions = true)
     {
         if (empty($providerKey)) {
             throw new \InvalidArgumentException('$providerKey must not be empty.');
@@ -91,7 +88,12 @@ abstract class UserAuthenticationProvider implements AuthenticationProviderInter
             throw $e;
         }
 
-        $authenticatedToken = new UsernamePasswordToken($user, $token->getCredentials(), $this->providerKey, $this->getRoles($user, $token));
+        if ($token instanceof SwitchUserToken) {
+            $authenticatedToken = new SwitchUserToken($user, $token->getCredentials(), $this->providerKey, $this->getRoles($user, $token), $token->getOriginalToken());
+        } else {
+            $authenticatedToken = new UsernamePasswordToken($user, $token->getCredentials(), $this->providerKey, $this->getRoles($user, $token));
+        }
+
         $authenticatedToken->setAttributes($token->getAttributes());
 
         return $authenticatedToken;
@@ -107,14 +109,12 @@ abstract class UserAuthenticationProvider implements AuthenticationProviderInter
 
     /**
      * Retrieves roles from user and appends SwitchUserRole if original token contained one.
-     *
-     * @return array The user roles
      */
-    private function getRoles(UserInterface $user, TokenInterface $token)
+    private function getRoles(UserInterface $user, TokenInterface $token): array
     {
         $roles = $user->getRoles();
 
-        foreach ($token->getRoles() as $role) {
+        foreach ($token->getRoles(false) as $role) {
             if ($role instanceof SwitchUserRole) {
                 $roles[] = $role;
 
@@ -128,8 +128,7 @@ abstract class UserAuthenticationProvider implements AuthenticationProviderInter
     /**
      * Retrieves the user from an implementation-specific location.
      *
-     * @param string                $username The username to retrieve
-     * @param UsernamePasswordToken $token    The Token
+     * @param string $username The username to retrieve
      *
      * @return UserInterface The user
      *

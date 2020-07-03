@@ -31,7 +31,7 @@ final class CachePoolPruneCommand extends Command
     /**
      * @param iterable|PruneableInterface[] $pools
      */
-    public function __construct($pools)
+    public function __construct(iterable $pools)
     {
         parent::__construct();
 
@@ -57,7 +57,7 @@ EOF
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
@@ -67,5 +67,7 @@ EOF
         }
 
         $io->success('Successfully pruned cache pool(s).');
+
+        return 0;
     }
 }

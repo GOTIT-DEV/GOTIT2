@@ -25,8 +25,10 @@ class JsonDescriptor extends Descriptor
     {
         $data['builtin_form_types'] = $options['core_types'];
         $data['service_form_types'] = $options['service_types'];
-        $data['type_extensions'] = $options['extensions'];
-        $data['type_guessers'] = $options['guessers'];
+        if (!$options['show_deprecated']) {
+            $data['type_extensions'] = $options['extensions'];
+            $data['type_guessers'] = $options['guessers'];
+        }
 
         $this->writeData($data, $options);
     }
@@ -34,6 +36,10 @@ class JsonDescriptor extends Descriptor
     protected function describeResolvedFormType(ResolvedFormTypeInterface $resolvedFormType, array $options = [])
     {
         $this->collectOptions($resolvedFormType);
+
+        if ($options['show_deprecated']) {
+            $this->filterOptionsByDeprecated($resolvedFormType);
+        }
 
         $formOptions = [
             'own' => $this->ownOptions,
@@ -59,7 +65,14 @@ class JsonDescriptor extends Descriptor
     {
         $definition = $this->getOptionDefinition($optionsResolver, $options['option']);
 
-        $map = [
+        $map = [];
+        if ($definition['deprecated']) {
+            $map['deprecated'] = 'deprecated';
+            if (\is_string($definition['deprecationMessage'])) {
+                $map['deprecation_message'] = 'deprecationMessage';
+            }
+        }
+        $map += [
             'required' => 'required',
             'default' => 'default',
             'allowed_types' => 'allowedTypes',
@@ -74,7 +87,7 @@ class JsonDescriptor extends Descriptor
                 }
             }
         }
-        $data['has_normalizer'] = isset($definition['normalizer']);
+        $data['has_normalizer'] = isset($definition['normalizers']);
 
         $this->writeData($data, $options);
     }

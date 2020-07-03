@@ -19,8 +19,12 @@ use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
+@trigger_error(sprintf('The "%s" class is deprecated since Symfony 4.2, use Guard instead.', SimpleAuthenticationProvider::class), E_USER_DEPRECATED);
+
 /**
  * @author Jordi Boggiano <j.boggiano@seld.be>
+ *
+ * @deprecated since Symfony 4.2, use Guard instead.
  */
 class SimpleAuthenticationProvider implements AuthenticationProviderInterface
 {
@@ -29,7 +33,7 @@ class SimpleAuthenticationProvider implements AuthenticationProviderInterface
     private $providerKey;
     private $userChecker;
 
-    public function __construct(SimpleAuthenticatorInterface $simpleAuthenticator, UserProviderInterface $userProvider, $providerKey, UserCheckerInterface $userChecker = null)
+    public function __construct(SimpleAuthenticatorInterface $simpleAuthenticator, UserProviderInterface $userProvider, string $providerKey, UserCheckerInterface $userChecker = null)
     {
         $this->simpleAuthenticator = $simpleAuthenticator;
         $this->userProvider = $userProvider;

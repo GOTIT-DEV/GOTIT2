@@ -29,7 +29,7 @@ class DateTimeTzType extends Type implements PhpDateTimeMappingType
      */
     public function getName()
     {
-        return Types::DATETIMETZ_MUTABLE;
+        return Type::DATETIMETZ;
     }
 
     /**

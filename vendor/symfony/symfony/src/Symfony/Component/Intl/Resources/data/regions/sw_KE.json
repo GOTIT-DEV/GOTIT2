@@ -1,5 +1,4 @@
 {
-    "Version": "36",
     "Names": {
         "AF": "Afghanistani",
         "AI": "Anguila",
@@ -14,7 +13,6 @@
         "CV": "Kepuvede",
         "CY": "Saiprasi",
         "DK": "Denmaki",
-        "EA": "Keuta na Melilla",
         "EC": "Ekwado",
         "FM": "Mikronesia",
         "GA": "Gaboni",
@@ -65,8 +63,6 @@
         "VG": "Visiwa vya Virgin vya Uingereza",
         "VI": "Visiwa vya Virgin vya Marekani",
         "VN": "Vietnamu",
-        "XA": "Kiinitoni cha kigeni",
-        "XB": "Pseudo-Bidi",
         "YT": "Mayote"
     }
 }

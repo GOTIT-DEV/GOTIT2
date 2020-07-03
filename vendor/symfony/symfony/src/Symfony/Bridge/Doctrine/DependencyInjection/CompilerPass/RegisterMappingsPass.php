@@ -117,7 +117,7 @@ abstract class RegisterMappingsPass implements CompilerPassInterface
      *                                                      register alias
      * @param string[]             $aliasMap                Map of alias to namespace
      */
-    public function __construct($driver, array $namespaces, array $managerParameters, $driverPattern, $enabledParameter = false, $configurationPattern = '', $registerAliasMethodName = '', array $aliasMap = [])
+    public function __construct($driver, array $namespaces, array $managerParameters, string $driverPattern, $enabledParameter = false, string $configurationPattern = '', string $registerAliasMethodName = '', array $aliasMap = [])
     {
         $this->driver = $driver;
         $this->namespaces = $namespaces;
@@ -125,7 +125,7 @@ abstract class RegisterMappingsPass implements CompilerPassInterface
         $this->driverPattern = $driverPattern;
         $this->enabledParameter = $enabledParameter;
         if (\count($aliasMap) && (!$configurationPattern || !$registerAliasMethodName)) {
-            throw new \InvalidArgumentException('configurationPattern and registerAliasMethodName are required to register namespace alias');
+            throw new \InvalidArgumentException('configurationPattern and registerAliasMethodName are required to register namespace alias.');
         }
         $this->configurationPattern = $configurationPattern;
         $this->registerAliasMethodName = $registerAliasMethodName;
@@ -191,12 +191,10 @@ abstract class RegisterMappingsPass implements CompilerPassInterface
     /**
      * Get the service name from the pattern and the configured manager name.
      *
-     * @return string a service definition name
-     *
      * @throws InvalidArgumentException if none of the managerParameters has a
      *                                  non-empty value
      */
-    private function getConfigurationServiceName(ContainerBuilder $container)
+    private function getConfigurationServiceName(ContainerBuilder $container): string
     {
         return sprintf($this->configurationPattern, $this->getManagerName($container));
     }
@@ -207,11 +205,9 @@ abstract class RegisterMappingsPass implements CompilerPassInterface
      * The default implementation loops over the managerParameters and returns
      * the first non-empty parameter.
      *
-     * @return string The name of the active manager
-     *
      * @throws InvalidArgumentException if none of the managerParameters is found in the container
      */
-    private function getManagerName(ContainerBuilder $container)
+    private function getManagerName(ContainerBuilder $container): string
     {
         foreach ($this->managerParameters as $param) {
             if ($container->hasParameter($param)) {
@@ -222,7 +218,7 @@ abstract class RegisterMappingsPass implements CompilerPassInterface
             }
         }
 
-        throw new InvalidArgumentException(sprintf('Could not find the manager name parameter in the container. Tried the following parameter names: "%s"', implode('", "', $this->managerParameters)));
+        throw new InvalidArgumentException(sprintf('Could not find the manager name parameter in the container. Tried the following parameter names: "%s".', implode('", "', $this->managerParameters)));
     }
 
     /**

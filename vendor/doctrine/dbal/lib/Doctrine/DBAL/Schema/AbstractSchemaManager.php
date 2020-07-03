@@ -14,12 +14,10 @@ use function array_filter;
 use function array_intersect;
 use function array_map;
 use function array_values;
-use function assert;
 use function call_user_func_array;
 use function count;
 use function func_get_args;
 use function is_array;
-use function is_callable;
 use function preg_match;
 use function str_replace;
 use function strtolower;
@@ -82,11 +80,8 @@ abstract class AbstractSchemaManager
         unset($args[0]);
         $args = array_values($args);
 
-        $callback = [$this, $method];
-        assert(is_callable($callback));
-
         try {
-            return call_user_func_array($callback, $args);
+            return call_user_func_array([$this, $method], $args);
         } catch (Throwable $e) {
             return false;
         }
@@ -146,7 +141,7 @@ abstract class AbstractSchemaManager
      * this column definition does try to contain the 'primary' field for
      * the reason that it is not portable across different RDBMS. Use
      * {@see listTableIndexes($tableName)} to retrieve the primary key
-     * of a table. Where a RDBMS specifies more details, these are held
+     * of a table. We're a RDBMS specifies more details these are held
      * in the platformDetails array.
      *
      * @param string      $table    The name of the table.
@@ -188,9 +183,7 @@ abstract class AbstractSchemaManager
     /**
      * Returns true if all the given tables exist.
      *
-     * The usage of a string $tableNames is deprecated. Pass a one-element array instead.
-     *
-     * @param string|string[] $tableNames
+     * @param string[] $tableNames
      *
      * @return bool
      */
@@ -275,7 +268,7 @@ abstract class AbstractSchemaManager
         }
         $indexes = $this->listTableIndexes($tableName);
 
-        return new Table($tableName, $columns, $indexes, $foreignKeys);
+        return new Table($tableName, $columns, $indexes, $foreignKeys, false, []);
     }
 
     /**
@@ -685,8 +678,6 @@ abstract class AbstractSchemaManager
     }
 
     /**
-     * @deprecated
-     *
      * @param mixed[][] $functions
      *
      * @return mixed[][]
@@ -708,8 +699,6 @@ abstract class AbstractSchemaManager
     }
 
     /**
-     * @deprecated
-     *
      * @param mixed[] $function
      *
      * @return mixed
@@ -758,9 +747,14 @@ abstract class AbstractSchemaManager
     protected function _getPortableSequencesList($sequences)
     {
         $list = [];
-
         foreach ($sequences as $value) {
-            $list[] = $this->_getPortableSequenceDefinition($value);
+            $value = $this->_getPortableSequenceDefinition($value);
+
+            if (! $value) {
+                continue;
+            }
+
+            $list[] = $value;
         }
 
         return $list;
@@ -860,7 +854,7 @@ abstract class AbstractSchemaManager
                 $result[$keyName] = [
                     'name' => $indexName,
                     'columns' => [],
-                    'unique' => ! $tableIndex['non_unique'],
+                    'unique' => $tableIndex['non_unique'] ? false : true,
                     'primary' => $tableIndex['primary'],
                     'flags' => $tableIndex['flags'] ?? [],
                     'options' => $options,
@@ -953,9 +947,9 @@ abstract class AbstractSchemaManager
     }
 
     /**
-     * @param string[] $user
+     * @param mixed[] $user
      *
-     * @return string[]
+     * @return mixed[]
      */
     protected function _getPortableUserDefinition($user)
     {
@@ -1002,9 +996,14 @@ abstract class AbstractSchemaManager
     protected function _getPortableTableForeignKeysList($tableForeignKeys)
     {
         $list = [];
-
         foreach ($tableForeignKeys as $value) {
-            $list[] = $this->_getPortableTableForeignKeyDefinition($value);
+            $value = $this->_getPortableTableForeignKeyDefinition($value);
+
+            if (! $value) {
+                continue;
+            }
+
+            $list[] = $value;
         }
 
         return $list;
@@ -1104,32 +1103,28 @@ abstract class AbstractSchemaManager
      * Given a table comment this method tries to extract a typehint for Doctrine Type, or returns
      * the type given as default.
      *
-     * @param string|null $comment
-     * @param string      $currentType
+     * @param string $comment
+     * @param string $currentType
      *
      * @return string
      */
     public function extractDoctrineTypeFromComment($comment, $currentType)
     {
-        if ($comment !== null && preg_match('(\(DC2Type:(((?!\)).)+)\))', $comment, $match)) {
-            return $match[1];
+        if (preg_match('(\(DC2Type:(((?!\)).)+)\))', $comment, $match)) {
+            $currentType = $match[1];
         }
 
         return $currentType;
     }
 
     /**
-     * @param string|null $comment
-     * @param string|null $type
+     * @param string $comment
+     * @param string $type
      *
-     * @return string|null
+     * @return string
      */
     public function removeDoctrineTypeFromComment($comment, $type)
     {
-        if ($comment === null) {
-            return null;
-        }
-
         return str_replace('(DC2Type:' . $type . ')', '', $comment);
     }
 }

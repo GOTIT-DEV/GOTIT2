@@ -127,16 +127,16 @@ class DB2Statement implements IteratorAggregate, Statement
     }
 
     /**
-     * @param int   $position Parameter position
-     * @param mixed $variable
+     * @param int|string $parameter Parameter position or name
+     * @param mixed      $variable
      *
      * @throws DB2Exception
      */
-    private function bind($position, &$variable, int $parameterType, int $dataType) : void
+    private function bind($parameter, &$variable, int $parameterType, int $dataType) : void
     {
-        $this->bindParam[$position] =& $variable;
+        $this->bindParam[$parameter] =& $variable;
 
-        if (! db2_bind_param($this->stmt, $position, 'variable', $parameterType, $dataType)) {
+        if (! db2_bind_param($this->stmt, $parameter, 'variable', $parameterType, $dataType)) {
             throw new DB2Exception(db2_stmt_errormsg());
         }
     }
@@ -146,6 +146,10 @@ class DB2Statement implements IteratorAggregate, Statement
      */
     public function closeCursor()
     {
+        if (! $this->stmt) {
+            return false;
+        }
+
         $this->bindParam = [];
 
         if (! db2_free_result($this->stmt)) {
@@ -162,7 +166,11 @@ class DB2Statement implements IteratorAggregate, Statement
      */
     public function columnCount()
     {
-        return db2_num_fields($this->stmt) ?: 0;
+        if (! $this->stmt) {
+            return false;
+        }
+
+        return db2_num_fields($this->stmt);
     }
 
     /**
@@ -189,6 +197,10 @@ class DB2Statement implements IteratorAggregate, Statement
      */
     public function execute($params = null)
     {
+        if (! $this->stmt) {
+            return false;
+        }
+
         if ($params === null) {
             ksort($this->bindParam);
 

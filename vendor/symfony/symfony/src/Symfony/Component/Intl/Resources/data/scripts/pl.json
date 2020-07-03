@@ -1,7 +1,7 @@
 {
-    "Version": "36",
     "Names": {
         "Arab": "arabskie",
+        "Aran": "nastaliq",
         "Armi": "armi",
         "Armn": "ormiańskie",
         "Avst": "awestyjskie",
@@ -95,6 +95,7 @@
         "Phnx": "fenicki",
         "Plrd": "fonetyczny Pollard’a",
         "Prti": "partyjski inskrypcyjny",
+        "Qaag": "zawgyi",
         "Rjng": "rejang",
         "Roro": "rongorongo",
         "Runr": "runiczne",
@@ -133,7 +134,6 @@
         "Zsye": "emoji",
         "Zsym": "symbole",
         "Zxxx": "język bez systemu pisma",
-        "Zyyy": "wspólne",
-        "Zzzz": "nieznane pismo"
+        "Zyyy": "wspólne"
     }
 }

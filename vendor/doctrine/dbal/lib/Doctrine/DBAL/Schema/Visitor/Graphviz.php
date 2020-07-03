@@ -8,6 +8,8 @@ use Doctrine\DBAL\Schema\Table;
 use function current;
 use function file_put_contents;
 use function in_array;
+use function mt_rand;
+use function sha1;
 use function strtolower;
 
 /**
@@ -39,7 +41,7 @@ class Graphviz extends AbstractVisitor
      */
     public function acceptSchema(Schema $schema)
     {
-        $this->output  = 'digraph "' . $schema->getName() . '" {' . "\n";
+        $this->output  = 'digraph "' . sha1(mt_rand()) . '" {' . "\n";
         $this->output .= 'splines = true;' . "\n";
         $this->output .= 'overlap = false;' . "\n";
         $this->output .= 'outputorder=edgesfirst;' . "\n";
@@ -81,10 +83,7 @@ class Graphviz extends AbstractVisitor
             $label .= '<FONT COLOR="#2e3436" FACE="Helvetica" POINT-SIZE="12">' . $columnLabel . '</FONT>';
             $label .= '</TD><TD BORDER="0" ALIGN="LEFT" BGCOLOR="#eeeeec"><FONT COLOR="#2e3436" FACE="Helvetica" POINT-SIZE="10">' . strtolower($column->getType()) . '</FONT></TD>';
             $label .= '<TD BORDER="0" ALIGN="RIGHT" BGCOLOR="#eeeeec" PORT="col' . $column->getName() . '">';
-
-            $primaryKey = $table->getPrimaryKey();
-
-            if ($primaryKey !== null && in_array($column->getName(), $primaryKey->getColumns())) {
+            if ($table->hasPrimaryKey() && in_array($column->getName(), $table->getPrimaryKey()->getColumns())) {
                 $label .= "\xe2\x9c\xb7";
             }
             $label .= '</TD></TR>';

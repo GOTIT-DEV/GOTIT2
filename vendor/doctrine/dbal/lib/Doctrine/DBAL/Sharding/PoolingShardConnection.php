@@ -26,7 +26,7 @@ use function is_string;
  * - By default, the global shard is selected. If no global shard is configured
  *   an exception is thrown on access.
  * - Selecting a shard by distribution value delegates the mapping
- *   "distributionValue" => "client" to the ShardChoser interface.
+ *   "distributionValue" => "client" to the ShardChooser interface.
  * - An exception is thrown if trying to switch shards during an open
  *   transaction.
  *
@@ -53,7 +53,7 @@ class PoolingShardConnection extends Connection
     /** @var DriverConnection[] */
     private $activeConnections = [];
 
-    /** @var string|int|null */
+    /** @var int|null */
     private $activeShardId;
 
     /** @var mixed[] */
@@ -106,7 +106,7 @@ class PoolingShardConnection extends Connection
     /**
      * Get active shard id.
      *
-     * @return string|int|null
+     * @return int
      */
     public function getActiveShardId()
     {
@@ -164,7 +164,7 @@ class PoolingShardConnection extends Connection
     /**
      * Connects to a given shard.
      *
-     * @param string|int|null $shardId
+     * @param mixed $shardId
      *
      * @return bool
      *
@@ -184,15 +184,15 @@ class PoolingShardConnection extends Connection
             throw new ShardingException('Cannot switch shard when transaction is active.');
         }
 
-        $activeShardId = $this->activeShardId = (int) $shardId;
+        $this->activeShardId = (int) $shardId;
 
-        if (isset($this->activeConnections[$activeShardId])) {
-            $this->_conn = $this->activeConnections[$activeShardId];
+        if (isset($this->activeConnections[$this->activeShardId])) {
+            $this->_conn = $this->activeConnections[$this->activeShardId];
 
             return false;
         }
 
-        $this->_conn = $this->activeConnections[$activeShardId] = $this->connectTo($activeShardId);
+        $this->_conn = $this->activeConnections[$this->activeShardId] = $this->connectTo($this->activeShardId);
 
         if ($this->_eventManager->hasListeners(Events::postConnect)) {
             $eventArgs = new ConnectionEventArgs($this);
@@ -205,7 +205,7 @@ class PoolingShardConnection extends Connection
     /**
      * Connects to a specific connection.
      *
-     * @param string|int $shardId
+     * @param string $shardId
      *
      * @return \Doctrine\DBAL\Driver\Connection
      */
@@ -224,7 +224,7 @@ class PoolingShardConnection extends Connection
     }
 
     /**
-     * @param string|int|null $shardId
+     * @param string|null $shardId
      *
      * @return bool
      */

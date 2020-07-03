@@ -73,8 +73,6 @@ class Driver extends AbstractSQLiteDriver
 
     /**
      * {@inheritdoc}
-     *
-     * @deprecated
      */
     public function getName()
     {

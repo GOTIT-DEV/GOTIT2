@@ -1,6 +1,66 @@
 CHANGELOG
 =========
 
+4.4.0
+-----
+
+ * Added `anonymous: lazy` mode to firewalls to make them (not) start the session as late as possible
+ * Added `migrate_from` option to encoders configuration.
+ * Added new `argon2id` encoder, undeprecated the `bcrypt` and `argon2i` ones (using `auto` is still recommended by default.)
+ * Deprecated the usage of "query_string" without a "search_dn" and a "search_password" config key in Ldap factories.
+ * Marked the `SecurityDataCollector` class as `@final`.
+
+4.3.0
+-----
+
+ * Added new encoder types: `auto` (recommended), `native` and `sodium`
+ * The normalization of the cookie names configured in the `logout.delete_cookies`
+   option is deprecated and will be disabled in Symfony 5.0. This affects to cookies
+   with dashes in their names. For example, starting from Symfony 5.0, the `my-cookie`
+   name will delete `my-cookie` (with a dash) instead of `my_cookie` (with an underscore).
+
+4.2.0
+-----
+
+ * Using the `security.authentication.trust_resolver.anonymous_class` and
+   `security.authentication.trust_resolver.rememberme_class` parameters to define
+   the token classes is deprecated. To use custom tokens extend the existing
+   `Symfony\Component\Security\Core\Authentication\Token\AnonymousToken`.
+   or `Symfony\Component\Security\Core\Authentication\Token\RememberMeToken`.
+ * Added `Symfony\Bundle\SecurityBundle\DependencyInjection\Compiler\AddExpressionLanguageProvidersPass`
+ * Added `json_login_ldap` authentication provider to use LDAP authentication with a REST API.
+ * Made remember-me cookies inherit their default config from `framework.session.cookie_*`
+   and added an "auto" mode to their "secure" config option to make them secure on HTTPS automatically.
+ * Deprecated the `simple_form` and `simple_preauth` authentication listeners, use Guard instead.
+ * Deprecated the `SimpleFormFactory` and `SimplePreAuthenticationFactory` classes, use Guard instead.
+ * Added `port` in access_control
+ * Added individual voter decisions to the profiler
+
+4.1.0
+-----
+
+ * The `switch_user.stateless` firewall option is deprecated, use the `stateless` option instead.
+ * The `logout_on_user_change` firewall option is deprecated.
+ * deprecated `SecurityUserValueResolver`, use
+   `Symfony\Component\Security\Http\Controller\UserValueResolver` instead.
+
+4.0.0
+-----
+
+ * removed `FirewallContext::getContext()`
+ * made `FirewallMap::$container` and `::$map` private
+ * made the first `UserPasswordEncoderCommand::_construct()` argument mandatory
+ * `UserPasswordEncoderCommand` does not extend `ContainerAwareCommand` anymore
+ * removed support for voters that don't implement the `VoterInterface`
+ * removed HTTP digest authentication
+ * removed command `acl:set` along with `SetAclCommand` class
+ * removed command `init:acl` along with `InitAclCommand` class
+ * removed `acl` configuration key and related services, use symfony/acl-bundle instead
+ * removed auto picking the first registered provider when no configured provider on a firewall and ambiguous
+ * the firewall option `logout_on_user_change` is now always true, which will trigger a logout if the user changes
+   between requests
+ * the `switch_user.stateless` firewall option is `true` for stateless firewalls
+
 3.4.0
 -----
 

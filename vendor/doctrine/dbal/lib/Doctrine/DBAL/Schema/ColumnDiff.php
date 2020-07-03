@@ -18,7 +18,7 @@ class ColumnDiff
     /** @var string[] */
     public $changedProperties = [];
 
-    /** @var Column|null */
+    /** @var Column */
     public $fromColumn;
 
     /**

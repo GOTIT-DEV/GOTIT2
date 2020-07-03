@@ -80,7 +80,7 @@ class NativeRequestHandler implements RequestHandlerInterface
                 $form->submit(null, false);
 
                 $form->addError(new FormError(
-                    \call_user_func($form->getConfig()->getOption('upload_max_size_message')),
+                    $form->getConfig()->getOption('upload_max_size_message')(),
                     null,
                     ['{{ max }}' => $this->serverParams->getNormalizedIniPostMaxSize()]
                 ));
@@ -161,10 +161,8 @@ class NativeRequestHandler implements RequestHandlerInterface
 
     /**
      * Returns the method used to submit the request to the server.
-     *
-     * @return string The request method
      */
-    private static function getRequestMethod()
+    private static function getRequestMethod(): string
     {
         $method = isset($_SERVER['REQUEST_METHOD'])
             ? strtoupper($_SERVER['REQUEST_METHOD'])

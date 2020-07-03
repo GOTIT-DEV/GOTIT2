@@ -46,13 +46,13 @@ class DateIntervalToArrayTransformer implements DataTransformerInterface
      * @param string[] $fields The date fields
      * @param bool     $pad    Whether to use padding
      */
-    public function __construct(array $fields = null, $pad = false)
+    public function __construct(array $fields = null, bool $pad = false)
     {
         if (null === $fields) {
             $fields = ['years', 'months', 'days', 'hours', 'minutes', 'seconds', 'invert'];
         }
         $this->fields = $fields;
-        $this->pad = (bool) $pad;
+        $this->pad = $pad;
     }
 
     /**
@@ -129,14 +129,14 @@ class DateIntervalToArrayTransformer implements DataTransformerInterface
             }
         }
         if (\count($emptyFields) > 0) {
-            throw new TransformationFailedException(sprintf('The fields "%s" should not be empty', implode('", "', $emptyFields)));
+            throw new TransformationFailedException(sprintf('The fields "%s" should not be empty.', implode('", "', $emptyFields)));
         }
         if (isset($value['invert']) && !\is_bool($value['invert'])) {
-            throw new TransformationFailedException('The value of "invert" must be boolean');
+            throw new TransformationFailedException('The value of "invert" must be boolean.');
         }
         foreach (self::$availableFields as $field => $char) {
             if ('invert' !== $field && isset($value[$field]) && !ctype_digit((string) $value[$field])) {
-                throw new TransformationFailedException(sprintf('This amount of "%s" is invalid', $field));
+                throw new TransformationFailedException(sprintf('This amount of "%s" is invalid.', $field));
             }
         }
         try {

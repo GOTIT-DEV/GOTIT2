@@ -1,5 +1,4 @@
 {
-    "Version": "36",
     "Names": {
         "AM": "Arménia",
         "AX": "Alanda",
@@ -16,7 +15,6 @@
         "CZ": "Chéquia",
         "DJ": "Jibuti",
         "DM": "Domínica",
-        "EA": "Ceuta e Melilha",
         "EE": "Estónia",
         "EH": "Sara Ocidental",
         "FK": "Ilhas Malvinas (Falkland)",
@@ -58,8 +56,6 @@
         "UZ": "Usbequistão",
         "VI": "Ilhas Virgens dos EUA",
         "VN": "Vietname",
-        "XA": "pseudoacentos",
-        "XB": "pseudobidirecional",
         "YE": "Iémen",
         "YT": "Maiote",
         "ZW": "Zimbabué"

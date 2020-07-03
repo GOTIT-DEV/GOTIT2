@@ -11,12 +11,13 @@
 
 namespace Symfony\Bundle\FrameworkBundle\Command;
 
-use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\Compiler\ValidateEnvPlaceholdersPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -24,7 +25,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * @author Grégoire Pineau <lyrixx@lyrixx.info>
  *
- * @final since version 3.4
+ * @final
  */
 class ConfigDebugCommand extends AbstractConfigCommand
 {
@@ -62,7 +63,7 @@ EOF
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $errorIo = $io->getErrorStyle();
@@ -72,22 +73,26 @@ EOF
             $errorIo->comment('Provide the name of a bundle as the first argument of this command to dump its configuration. (e.g. <comment>debug:config FrameworkBundle</comment>)');
             $errorIo->comment('For dumping a specific option, add its path as the second argument of this command. (e.g. <comment>debug:config FrameworkBundle serializer</comment> to dump the <comment>framework.serializer</comment> configuration)');
 
-            return;
+            return 0;
         }
 
         $extension = $this->findExtension($name);
         $container = $this->compileContainer();
 
         $extensionAlias = $extension->getAlias();
-        $configs = $container->getExtensionConfig($extensionAlias);
-        $configuration = $extension->getConfiguration($configs, $container);
+        $extensionConfig = [];
+        foreach ($container->getCompilerPassConfig()->getPasses() as $pass) {
+            if ($pass instanceof ValidateEnvPlaceholdersPass) {
+                $extensionConfig = $pass->getExtensionConfig();
+                break;
+            }
+        }
 
-        $this->validateConfiguration($extension, $configuration);
+        if (!isset($extensionConfig[$extensionAlias])) {
+            throw new \LogicException(sprintf('The extension with alias "%s" does not have configuration.', $extensionAlias));
+        }
 
-        $configs = $container->resolveEnvPlaceholders($container->getParameterBag()->resolveValue($configs));
-
-        $processor = new Processor();
-        $config = $container->resolveEnvPlaceholders($container->getParameterBag()->resolveValue($processor->processConfiguration($configuration, $configs)));
+        $config = $container->resolveEnvPlaceholders($extensionConfig[$extensionAlias]);
 
         if (null === $path = $input->getArgument('path')) {
             $io->title(
@@ -96,7 +101,7 @@ EOF
 
             $io->writeln(Yaml::dump([$extensionAlias => $config], 10));
 
-            return;
+            return 0;
         }
 
         try {
@@ -110,9 +115,11 @@ EOF
         $io->title(sprintf('Current configuration for "%s.%s"', $extensionAlias, $path));
 
         $io->writeln(Yaml::dump($config, 10));
+
+        return 0;
     }
 
-    private function compileContainer()
+    private function compileContainer(): ContainerBuilder
     {
         $kernel = clone $this->getApplication()->getKernel();
         $kernel->boot();
@@ -128,19 +135,17 @@ EOF
     /**
      * Iterate over configuration until the last step of the given path.
      *
-     * @param array $config A bundle configuration
-     *
      * @throws LogicException If the configuration does not exist
      *
      * @return mixed
      */
-    private function getConfigForPath(array $config, $path, $alias)
+    private function getConfigForPath(array $config, string $path, string $alias)
     {
         $steps = explode('.', $path);
 
         foreach ($steps as $step) {
             if (!\array_key_exists($step, $config)) {
-                throw new LogicException(sprintf('Unable to find configuration for "%s.%s"', $alias, $path));
+                throw new LogicException(sprintf('Unable to find configuration for "%s.%s".', $alias, $path));
             }
 
             $config = $config[$step];

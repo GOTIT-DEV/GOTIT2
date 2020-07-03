@@ -2,7 +2,7 @@
 
 namespace Doctrine\DBAL\Platforms;
 
-use Doctrine\DBAL\Types\Types;
+use Doctrine\DBAL\Types\Type;
 use function sprintf;
 
 /**
@@ -53,7 +53,7 @@ class PostgreSQL92Platform extends PostgreSQL91Platform
     {
         parent::initializeDoctrineTypeMappings();
 
-        $this->doctrineTypeMapping['json'] = Types::JSON;
+        $this->doctrineTypeMapping['json'] = Type::JSON;
     }
 
     /**

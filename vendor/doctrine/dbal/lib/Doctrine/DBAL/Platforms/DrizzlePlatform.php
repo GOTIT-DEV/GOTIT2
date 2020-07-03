@@ -47,7 +47,9 @@ class DrizzlePlatform extends AbstractPlatform
      */
     public function getConcatExpression()
     {
-        return 'CONCAT(' . implode(', ', func_get_args()) . ')';
+        $args = func_get_args();
+
+        return 'CONCAT(' . implode(', ', (array) $args) . ')';
     }
 
     /**
@@ -478,10 +480,8 @@ class DrizzlePlatform extends AbstractPlatform
         $columnSql  = [];
         $queryParts = [];
 
-        $newName = $diff->getNewName();
-
-        if ($newName !== false) {
-            $queryParts[] = 'RENAME TO ' . $newName->getQuotedName($this);
+        if ($diff->newName !== false) {
+            $queryParts[] =  'RENAME TO ' . $diff->getNewName()->getQuotedName($this);
         }
 
         foreach ($diff->addedColumns as $column) {
@@ -576,7 +576,7 @@ class DrizzlePlatform extends AbstractPlatform
     {
         if (is_array($item)) {
             foreach ($item as $key => $value) {
-                if (! is_bool($value) && ! is_numeric($value)) {
+                if (! is_bool($value) && ! is_numeric($item)) {
                     continue;
                 }
 

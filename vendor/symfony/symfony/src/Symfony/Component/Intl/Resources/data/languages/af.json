@@ -1,5 +1,4 @@
 {
-    "Version": "36",
     "Names": {
         "aa": "Afar",
         "ab": "Abkasies",
@@ -17,7 +16,6 @@
         "an": "Aragonees",
         "anp": "Angika",
         "ar": "Arabies",
-        "ar_001": "Moderne Standaardarabies",
         "arc": "Aramees",
         "arn": "Mapuche",
         "arp": "Arapaho",
@@ -87,8 +85,6 @@
         "eka": "Ekajuk",
         "el": "Grieks",
         "en": "Engels",
-        "en_GB": "Engels (VK)",
-        "en_US": "Engels (VSA)",
         "eo": "Esperanto",
         "es": "Spaans",
         "et": "Estnies",
@@ -240,7 +236,6 @@
         "ms": "Maleis",
         "mt": "Maltees",
         "mua": "Mundang",
-        "mul": "Verskeie tale",
         "mus": "Kreek",
         "mwl": "Mirandees",
         "my": "Birmaans",
@@ -253,14 +248,12 @@
         "nb": "Boeknoors",
         "nd": "Noord-Ndebele",
         "nds": "Nederduits",
-        "nds_NL": "Nedersaksies",
         "ne": "Nepalees",
         "new": "Newari",
         "ng": "Ndonga",
         "nia": "Nias",
         "niu": "Niueaans",
         "nl": "Nederlands",
-        "nl_BE": "Vlaams",
         "nmg": "Kwasio",
         "nn": "Nuwe Noors",
         "nnh": "Ngiemboon",
@@ -296,7 +289,6 @@
         "rn": "Rundi",
         "ro": "Roemeens",
         "rof": "Rombo",
-        "root": "Root",
         "ru": "Russies",
         "rup": "Aromanies",
         "rw": "Rwandees",
@@ -372,7 +364,6 @@
         "ug": "Uighur",
         "uk": "Oekraïens",
         "umb": "Umbundu",
-        "und": "Onbekende taal",
         "ur": "Oerdoe",
         "uz": "Oezbeeks",
         "vai": "Vai",
@@ -399,7 +390,14 @@
         "zh": "Chinees",
         "zu": "Zoeloe",
         "zun": "Zuni",
-        "zxx": "Geen taalinhoud nie",
         "zza": "Zaza"
+    },
+    "LocalizedNames": {
+        "ar_001": "Moderne Standaardarabies",
+        "en_GB": "Engels (VK)",
+        "en_US": "Engels (VSA)",
+        "fa_AF": "Dari",
+        "nds_NL": "Nedersaksies",
+        "nl_BE": "Vlaams"
     }
 }

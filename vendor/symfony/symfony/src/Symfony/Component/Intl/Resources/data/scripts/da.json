@@ -1,8 +1,8 @@
 {
-    "Version": "36",
     "Names": {
         "Afak": "afaka",
         "Arab": "arabisk",
+        "Aran": "nastaliq",
         "Armi": "armi",
         "Armn": "armensk",
         "Avst": "avestansk",
@@ -113,6 +113,7 @@
         "Phnx": "fønikisk",
         "Plrd": "pollardtegn",
         "Prti": "prti",
+        "Qaag": "zawgyi",
         "Rjng": "rejang",
         "Roro": "rongo-rongo",
         "Runr": "runer",
@@ -160,7 +161,6 @@
         "Zsye": "emoji",
         "Zsym": "symboler",
         "Zxxx": "uden skriftsprog",
-        "Zyyy": "fælles",
-        "Zzzz": "ukendt skriftsprog"
+        "Zyyy": "fælles"
     }
 }

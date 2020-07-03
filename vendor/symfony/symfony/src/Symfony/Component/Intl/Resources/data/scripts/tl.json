@@ -1,5 +1,4 @@
 {
-    "Version": "36",
     "Names": {
         "Arab": "Arabic",
         "Armn": "Armenian",
@@ -13,7 +12,7 @@
         "Grek": "Greek",
         "Gujr": "Gujarati",
         "Guru": "Gurmukhi",
-        "Hanb": "Hanb",
+        "Hanb": "Han na may Bopomofo",
         "Hang": "Hangul",
         "Hani": "Han",
         "Hans": "Pinasimple",
@@ -43,7 +42,6 @@
         "Zsye": "Emoji",
         "Zsym": "Mga Simbolo",
         "Zxxx": "Hindi Nakasulat",
-        "Zyyy": "Karaniwan",
-        "Zzzz": "Hindi Kilalang Script"
+        "Zyyy": "Karaniwan"
     }
 }

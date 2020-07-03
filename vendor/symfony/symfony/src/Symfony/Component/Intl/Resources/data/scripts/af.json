@@ -1,5 +1,4 @@
 {
-    "Version": "36",
     "Names": {
         "Arab": "Arabies",
         "Armn": "Armeens",
@@ -43,7 +42,6 @@
         "Zsye": "Emoji",
         "Zsym": "Simbole",
         "Zxxx": "Ongeskrewe",
-        "Zyyy": "Gemeenskaplik",
-        "Zzzz": "Onbekende skryfstelsel"
+        "Zyyy": "Gemeenskaplik"
     }
 }

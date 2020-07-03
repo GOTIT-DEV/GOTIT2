@@ -108,8 +108,6 @@ class Driver extends AbstractPostgreSQLDriver
 
     /**
      * {@inheritdoc}
-     *
-     * @deprecated
      */
     public function getName()
     {

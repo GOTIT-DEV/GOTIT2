@@ -18,10 +18,8 @@ use PDO;
 use function array_keys;
 use function array_map;
 use function array_merge;
-use function assert;
 use function class_implements;
 use function in_array;
-use function is_string;
 use function is_subclass_of;
 use function parse_str;
 use function parse_url;
@@ -174,9 +172,7 @@ final class DriverManager
         // check for existing pdo object
         if (isset($params['pdo']) && ! $params['pdo'] instanceof PDO) {
             throw DBALException::invalidPdoInstance();
-        }
-
-        if (isset($params['pdo'])) {
+        } elseif (isset($params['pdo'])) {
             $params['pdo']->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $params['driver'] = 'pdo_' . $params['pdo']->getAttribute(PDO::ATTR_DRIVER_NAME);
         } else {
@@ -267,8 +263,6 @@ final class DriverManager
 
         // (pdo_)?sqlite3?:///... => (pdo_)?sqlite3?://localhost/... or else the URL will be invalid
         $url = preg_replace('#^((?:pdo_)?sqlite3?):///#', '$1://localhost/', $params['url']);
-        assert(is_string($url));
-
         $url = parse_url($url);
 
         if ($url === false) {
@@ -420,7 +414,6 @@ final class DriverManager
 
             // URL schemes must not contain underscores, but dashes are ok
             $driver = str_replace('-', '_', $url['scheme']);
-            assert(is_string($driver));
 
             // The requested driver from the URL scheme takes precedence over the
             // default driver from the connection parameters. If the driver is

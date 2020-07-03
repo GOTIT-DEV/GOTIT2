@@ -31,6 +31,7 @@ class SingleDatabaseSynchronizer extends AbstractSchemaSynchronizer
         return $createSchema->toSql($this->platform);
     }
 
+
     /**
      * {@inheritdoc}
      */
@@ -86,14 +87,11 @@ class SingleDatabaseSynchronizer extends AbstractSchemaSynchronizer
         }
 
         foreach ($dropSchema->getTables() as $table) {
-            $primaryKey = $table->getPrimaryKey();
-
-            if ($primaryKey === null) {
+            if (! $table->hasPrimaryKey()) {
                 continue;
             }
 
-            $columns = $primaryKey->getColumns();
-
+            $columns = $table->getPrimaryKey()->getColumns();
             if (count($columns) > 1) {
                 continue;
             }

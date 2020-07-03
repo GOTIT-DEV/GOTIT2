@@ -2,7 +2,7 @@
 
 namespace Doctrine\DBAL\Platforms;
 
-use Doctrine\DBAL\Types\Types;
+use Doctrine\DBAL\Types\Type;
 
 /**
  * Provides the behavior, features and SQL dialect of the MariaDB 10.2 (10.2.7 GA) database platform.
@@ -36,6 +36,6 @@ final class MariaDb1027Platform extends MySqlPlatform
     {
         parent::initializeDoctrineTypeMappings();
 
-        $this->doctrineTypeMapping['json'] = Types::JSON;
+        $this->doctrineTypeMapping['json'] = Type::JSON;
     }
 }

@@ -98,7 +98,7 @@ class ChromatogrammeController extends Controller
                     JOIN dna ON pcr.dna_fk = dna.id 
                         JOIN specimen sp ON dna.specimen_fk = sp.id
                 LEFT JOIN chromatogram_is_processed_to eaet ON eaet.chromatogram_fk = chromato.id
-                INNER JOIN (SELECT MAX(eaeti.id) AS maxeaeti 
+                LEFT JOIN (SELECT MAX(eaeti.id) AS maxeaeti 
                     FROM chromatogram_is_processed_to eaeti 
                     GROUP BY eaeti.chromatogram_fk) eaet2 ON (eaet.id = eaet2.maxeaeti)
                     LEFT JOIN internal_sequence sq ON eaet.internal_sequence_fk = sq.id

@@ -9,7 +9,6 @@ use Doctrine\DBAL\Schema\Synchronizer\AbstractSchemaSynchronizer;
 use Doctrine\DBAL\Schema\Synchronizer\SchemaSynchronizer;
 use Doctrine\DBAL\Schema\Synchronizer\SingleDatabaseSynchronizer;
 use Doctrine\DBAL\Types\Type;
-use Doctrine\DBAL\Types\Types;
 use RuntimeException;
 use function array_merge;
 
@@ -241,12 +240,12 @@ class SQLAzureFederationsSynchronizer extends AbstractSchemaSynchronizer
         $federationType = Type::getType($this->shardManager->getDistributionType());
 
         switch ($federationType->getName()) {
-            case Types::GUID:
+            case Type::GUID:
                 $defaultValue = '00000000-0000-0000-0000-000000000000';
                 break;
-            case Types::INTEGER:
-            case Types::SMALLINT:
-            case Types::BIGINT:
+            case Type::INTEGER:
+            case Type::SMALLINT:
+            case Type::BIGINT:
                 $defaultValue = '0';
                 break;
             default:

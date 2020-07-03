@@ -16,7 +16,7 @@ class VarDateTimeImmutableType extends VarDateTimeType
      */
     public function getName()
     {
-        return Types::DATETIME_IMMUTABLE;
+        return Type::DATETIME_IMMUTABLE;
     }
 
     /**

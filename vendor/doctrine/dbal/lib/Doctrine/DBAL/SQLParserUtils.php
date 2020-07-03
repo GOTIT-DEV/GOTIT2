@@ -24,93 +24,49 @@ use function substr;
  */
 class SQLParserUtils
 {
-    /**#@+
-     *
-     * @deprecated Will be removed as internal implementation details.
-     */
     public const POSITIONAL_TOKEN = '\?';
     public const NAMED_TOKEN      = '(?<!:):[a-zA-Z_][a-zA-Z0-9_]*';
+
     // Quote characters within string literals can be preceded by a backslash.
     public const ESCAPED_SINGLE_QUOTED_TEXT   = "(?:'(?:\\\\\\\\)+'|'(?:[^'\\\\]|\\\\'?|'')*')";
     public const ESCAPED_DOUBLE_QUOTED_TEXT   = '(?:"(?:\\\\\\\\)+"|"(?:[^"\\\\]|\\\\"?)*")';
     public const ESCAPED_BACKTICK_QUOTED_TEXT = '(?:`(?:\\\\\\\\)+`|`(?:[^`\\\\]|\\\\`?)*`)';
-    /**#@-*/
-
     private const ESCAPED_BRACKET_QUOTED_TEXT = '(?<!\b(?i:ARRAY))\[(?:[^\]])*\]';
 
     /**
      * Gets an array of the placeholders in an sql statements as keys and their positions in the query string.
      *
-     * For a statement with positional parameters, returns a zero-indexed list of placeholder position.
-     * For a statement with named parameters, returns a map of placeholder positions to their parameter names.
-     *
-     * @deprecated Will be removed as internal implementation detail.
+     * Returns an integer => integer pair (indexed from zero) for a positional statement
+     * and a string => int[] pair for a named statement.
      *
      * @param string $statement
      * @param bool   $isPositional
      *
-     * @return int[]|string[]
+     * @return int[]
      */
     public static function getPlaceholderPositions($statement, $isPositional = true)
     {
-        return $isPositional
-            ? self::getPositionalPlaceholderPositions($statement)
-            : self::getNamedPlaceholderPositions($statement);
-    }
-
-    /**
-     * Returns a zero-indexed list of placeholder position.
-     *
-     * @return int[]
-     */
-    private static function getPositionalPlaceholderPositions(string $statement) : array
-    {
-        return self::collectPlaceholders(
-            $statement,
-            '?',
-            self::POSITIONAL_TOKEN,
-            static function (string $_, int $placeholderPosition, int $fragmentPosition, array &$carry) : void {
-                $carry[] = $placeholderPosition + $fragmentPosition;
-            }
-        );
-    }
-
-    /**
-     * Returns a map of placeholder positions to their parameter names.
-     *
-     * @return string[]
-     */
-    private static function getNamedPlaceholderPositions(string $statement) : array
-    {
-        return self::collectPlaceholders(
-            $statement,
-            ':',
-            self::NAMED_TOKEN,
-            static function (string $placeholder, int $placeholderPosition, int $fragmentPosition, array &$carry) : void {
-                $carry[$placeholderPosition + $fragmentPosition] = substr($placeholder, 1);
-            }
-        );
-    }
-
-    /**
-     * @return mixed[]
-     */
-    private static function collectPlaceholders(string $statement, string $match, string $token, callable $collector) : array
-    {
+        $match = $isPositional ? '?' : ':';
         if (strpos($statement, $match) === false) {
             return [];
         }
 
-        $carry = [];
+        $token    = $isPositional ? self::POSITIONAL_TOKEN : self::NAMED_TOKEN;
+        $paramMap = [];
 
         foreach (self::getUnquotedStatementFragments($statement) as $fragment) {
             preg_match_all('/' . $token . '/', $fragment[0], $matches, PREG_OFFSET_CAPTURE);
             foreach ($matches[0] as $placeholder) {
-                $collector($placeholder[0], $placeholder[1], $fragment[1], $carry);
+                if ($isPositional) {
+                    $paramMap[] = $placeholder[1] + $fragment[1];
+                } else {
+                    $pos            = $placeholder[1] + $fragment[1];
+                    $paramMap[$pos] = substr($placeholder[0], 1, strlen($placeholder[0]));
+                }
             }
         }
 
-        return $carry;
+        return $paramMap;
     }
 
     /**
@@ -153,13 +109,13 @@ class SQLParserUtils
             return [$query, $params, $types];
         }
 
+        $paramPos = self::getPlaceholderPositions($query, $isPositional);
+
         if ($isPositional) {
             $paramOffset = 0;
             $queryOffset = 0;
             $params      = array_values($params);
             $types       = array_values($types);
-
-            $paramPos = self::getPositionalPlaceholderPositions($query);
 
             foreach ($paramPos as $needle => $needlePos) {
                 if (! isset($arrayPositions[$needle])) {
@@ -199,8 +155,6 @@ class SQLParserUtils
         $queryOffset = 0;
         $typesOrd    = [];
         $paramsOrd   = [];
-
-        $paramPos = self::getNamedPlaceholderPositions($query);
 
         foreach ($paramPos as $pos => $paramName) {
             $paramLen = strlen($paramName) + 1;

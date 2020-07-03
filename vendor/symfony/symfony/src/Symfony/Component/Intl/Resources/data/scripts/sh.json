@@ -1,5 +1,4 @@
 {
-    "Version": "36",
     "Names": {
         "Arab": "arapsko pismo",
         "Armi": "imperijsko aramejsko pismo",
@@ -132,7 +131,6 @@
         "Zsye": "emodži",
         "Zsym": "simboli",
         "Zxxx": "nepisani jezik",
-        "Zyyy": "zajedničko pismo",
-        "Zzzz": "nepoznato pismo"
+        "Zyyy": "zajedničko pismo"
     }
 }

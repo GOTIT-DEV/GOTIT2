@@ -11,7 +11,7 @@
 
 namespace Symfony\Bundle\SecurityBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
@@ -23,28 +23,23 @@ use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Encoder\SelfSaltingEncoderInterface;
-use Symfony\Component\Security\Core\User\User;
 
 /**
  * Encode a user's password.
  *
  * @author Sarah Khalil <mkhalil.sarah@gmail.com>
  *
- * @final since version 3.4
+ * @final
  */
-class UserPasswordEncoderCommand extends ContainerAwareCommand
+class UserPasswordEncoderCommand extends Command
 {
     protected static $defaultName = 'security:encode-password';
 
     private $encoderFactory;
     private $userClasses;
 
-    public function __construct(EncoderFactoryInterface $encoderFactory = null, array $userClasses = [])
+    public function __construct(EncoderFactoryInterface $encoderFactory, array $userClasses = [])
     {
-        if (null === $encoderFactory) {
-            @trigger_error(sprintf('Passing null as the first argument of "%s()" is deprecated since Symfony 3.3 and support for it will be removed in 4.0. If the command was registered by convention, make it a service instead.', __METHOD__), E_USER_DEPRECATED);
-        }
-
         $this->encoderFactory = $encoderFactory;
         $this->userClasses = $userClasses;
 
@@ -75,7 +70,7 @@ Suppose that you have the following security configuration in your application:
 security:
     encoders:
         Symfony\Component\Security\Core\User\User: plaintext
-        App\Entity\User: bcrypt
+        App\Entity\User: auto
 </comment>
 
 If you execute the command non-interactively, the first available configured
@@ -87,16 +82,16 @@ generated to encode the password:
 Pass the full user class path as the second argument to encode passwords for
 your own entities:
 
-  <info>php %command.full_name% --no-interaction [password] App\Entity\User</info>
+  <info>php %command.full_name% --no-interaction [password] 'App\Entity\User'</info>
 
 Executing the command interactively allows you to generate a random salt for
 encoding the password:
 
-  <info>php %command.full_name% [password] App\Entity\User</info>
+  <info>php %command.full_name% [password] 'App\Entity\User'</info>
 
 In case your encoder doesn't require a salt, add the <comment>empty-salt</comment> option:
 
-  <info>php %command.full_name% --empty-salt [password] App\Entity\User</info>
+  <info>php %command.full_name% --empty-salt [password] 'App\Entity\User'</info>
 
 EOF
             )
@@ -106,7 +101,7 @@ EOF
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $errorIo = $output instanceof ConsoleOutputInterface ? new SymfonyStyle($input, $output->getErrorOutput()) : $io;
@@ -117,8 +112,7 @@ EOF
         $userClass = $this->getUserClass($input, $io);
         $emptySalt = $input->getOption('empty-salt');
 
-        $encoderFactory = $this->encoderFactory ?: $this->getContainer()->get('security.encoder_factory');
-        $encoder = $encoderFactory->getEncoder($userClass);
+        $encoder = $this->encoderFactory->getEncoder($userClass);
         $saltlessWithoutEmptySalt = !$emptySalt && $encoder instanceof SelfSaltingEncoderInterface;
 
         if ($saltlessWithoutEmptySalt) {
@@ -169,15 +163,13 @@ EOF
 
         $errorIo->success('Password encoding succeeded');
 
-        return null;
+        return 0;
     }
 
     /**
      * Create the password question to ask the user for the password to be encoded.
-     *
-     * @return Question
      */
-    private function createPasswordQuestion()
+    private function createPasswordQuestion(): Question
     {
         $passwordQuestion = new Question('Type in your password to be encoded');
 
@@ -190,23 +182,18 @@ EOF
         })->setHidden(true)->setMaxAttempts(20);
     }
 
-    private function generateSalt()
+    private function generateSalt(): string
     {
         return base64_encode(random_bytes(30));
     }
 
-    private function getUserClass(InputInterface $input, SymfonyStyle $io)
+    private function getUserClass(InputInterface $input, SymfonyStyle $io): string
     {
         if (null !== $userClass = $input->getArgument('user-class')) {
             return $userClass;
         }
 
         if (empty($this->userClasses)) {
-            if (null === $this->encoderFactory) {
-                // BC to be removed and simply keep the exception whenever there is no configured user classes in 4.0
-                return User::class;
-            }
-
             throw new RuntimeException('There are no configured encoders for the "security" extension.');
         }
 

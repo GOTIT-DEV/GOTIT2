@@ -54,7 +54,7 @@ class SimpleArrayType extends Type
      */
     public function getName()
     {
-        return Types::SIMPLE_ARRAY;
+        return Type::SIMPLE_ARRAY;
     }
 
     /**

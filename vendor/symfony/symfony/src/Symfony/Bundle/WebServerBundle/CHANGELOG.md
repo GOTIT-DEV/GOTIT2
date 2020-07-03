@@ -1,6 +1,16 @@
 CHANGELOG
 =========
 
+4.4.0
+-----
+
+ * The bundle is deprecated and will be removed in 5.0.
+
+4.2.0
+-----
+
+ * Added ability to display the current hostname address if available when binding to 0.0.0.0
+
 3.4.0
 -----
 

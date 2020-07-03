@@ -16,7 +16,7 @@ class TimeType extends Type
      */
     public function getName()
     {
-        return Types::TIME_MUTABLE;
+        return Type::TIME;
     }
 
     /**
