@@ -364,7 +364,10 @@ class SpeciesQueryService
             JOIN sampling co ON co.id = sext.sampling_fk OR co.id=lm.sampling_fk
             JOIN site sta ON co.site_fk = sta.id
             WHERE v1.code='COI' OR v2.code='COI'
-            AND statut.code IN ('SHORT', 'VALIDEE')";
+            AND (
+              statut.code = 'SHORT' OR 
+              statut.code LIKE 'VALID%'
+            )";
     } else {
       $station_subquery = "SELECT DISTINCT
              eid.taxon_fk, lm.id as lm_id,
@@ -433,7 +436,10 @@ class SpeciesQueryService
             JOIN site sta ON co.site_fk = sta.id
             -- COI constraint
             WHERE v1.code='COI' OR v2.code='COI'
-            AND statut.code IN ('SHORT', 'VALIDEE')";
+            AND (
+              statut.code = 'SHORT' OR 
+              statut.code LIKE 'VALID%'
+            )";
     } else {
       $station_subquery = "SELECT DISTINCT
              eid.taxon_fk,
