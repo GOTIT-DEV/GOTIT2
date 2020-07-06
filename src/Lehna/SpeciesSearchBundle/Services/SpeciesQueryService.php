@@ -326,11 +326,7 @@ class SpeciesQueryService
     }
 
     $query = $query->distinct()->getQuery();
-
-    dump($query->getSQL());
-
     $res = $query->getArrayResult();
-    dump($res);
 
     # fusion des résultats séquences internes/externes
     foreach ($res as $key => $row) {
