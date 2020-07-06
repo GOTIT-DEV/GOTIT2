@@ -17,7 +17,7 @@
 
 namespace Bbees\E3sBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -37,7 +37,7 @@ use Bbees\E3sBundle\Services\GenericFunctionE3s;
 * @Security("has_role('ROLE_COLLABORATION')")
 * @author Philippe Grison  <philippe.grison@mnhn.fr>
 */
-class ImportFilesChromatogrammeController extends Controller
+class ImportFilesChromatogrammeController extends AbstractController
 {
      /**
      * @var string

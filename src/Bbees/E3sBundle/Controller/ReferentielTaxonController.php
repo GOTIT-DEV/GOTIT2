@@ -18,7 +18,7 @@
 namespace Bbees\E3sBundle\Controller;
 
 use Bbees\E3sBundle\Entity\ReferentielTaxon;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -33,7 +33,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
  * @Security("has_role('ROLE_INVITED')")
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
-class ReferentielTaxonController extends Controller
+class ReferentielTaxonController extends AbstractController
 {
     /**
      * Lists all referentielTaxon entities.

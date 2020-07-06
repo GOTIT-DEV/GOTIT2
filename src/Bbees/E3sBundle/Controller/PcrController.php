@@ -18,7 +18,7 @@
 namespace Bbees\E3sBundle\Controller;
 
 use Bbees\E3sBundle\Entity\Pcr;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -33,7 +33,7 @@ use Bbees\E3sBundle\Services\GenericFunctionE3s;
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  * 
  */
-class PcrController extends Controller
+class PcrController extends AbstractController
 {
     const MAX_RESULTS_TYPEAHEAD   = 20;
     

@@ -18,7 +18,7 @@
 namespace Bbees\E3sBundle\Controller;
 
 use Bbees\E3sBundle\Entity\Station;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,7 +33,7 @@ use Bbees\E3sBundle\Services\GenericFunctionE3s;
  * @Security("has_role('ROLE_INVITED')")
  * @author Philippe Grison  <philippe.grison@mnhn.fr>
  */
-class StationController extends Controller
+class StationController extends AbstractController
 {
     const MAX_RESULTS_TYPEAHEAD   = 20;
         

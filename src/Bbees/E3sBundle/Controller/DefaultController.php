@@ -17,7 +17,7 @@
 
 namespace Bbees\E3sBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,7 +39,7 @@ use Bbees\E3sBundle\Entity\Boite;
 use Bbees\E3sBundle\Entity\Source;
 use Bbees\E3sBundle\Services\GenericFunctionE3s;
 
-class DefaultController extends Controller
+class DefaultController extends AbstractController
 {
     /**
      * @Route("/", name="default_index")

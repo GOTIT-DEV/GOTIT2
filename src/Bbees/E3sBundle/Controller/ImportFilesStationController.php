@@ -17,7 +17,7 @@
 
 namespace Bbees\E3sBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -38,7 +38,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 * @Security("has_role('ROLE_PROJECT')")
 * @author Philippe Grison  <philippe.grison@mnhn.fr>
 */
-class ImportFilesStationController extends Controller 
+class ImportFilesStationController extends AbstractController 
 {
      /**
      * @var string
