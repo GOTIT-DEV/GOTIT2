@@ -44,3 +44,5 @@
 /var/cache
 /app/Resources/views/base.html.twig.bup
 .idea
+/app/config/parameters.yml.goti2-dev_localhost
+/app/config/config_test.yml
