@@ -26,7 +26,7 @@ const columns = [
   }, {
     data: 'code',
     render: (data, type, row) => {
-      let route = row.type_seq ?
+      let route = row.seq_type ?
         'sequenceassembleeext_show' :
         'sequenceassemblee_show'
       return linkify(route, { col: 'id' })(data, type, row)
