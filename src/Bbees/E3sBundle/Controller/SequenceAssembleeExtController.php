@@ -91,7 +91,11 @@ class SequenceAssembleeExtController extends AbstractController
         sq.external_sequence_primary_taxon, sq.external_sequence_specimen_number, sq.external_sequence_accession_number,
         voc_gene.code as voc_external_sequence_gene_code, voc_status.code as voc_external_sequence_status_code, voc_date_precision.vocabulary_title as voc_date_precision_title,
         sq.creation_user_name, user_cre.username as user_cre_username , user_maj.username as user_maj_username,
-        string_agg(DISTINCT source.source_title , ' ; ') as list_source, count(motu_number.id) motu
+        string_agg(DISTINCT source.source_title , ' ; ') as list_source,
+        CASE 
+            WHEN (count(motu_number.id)=0) THEN 0
+            WHEN (count(motu_number.id)>0) THEN 1
+        END motu_flag
 	FROM external_sequence sq 
                 LEFT JOIN user_db user_cre ON user_cre.id = sq.creation_user_name
                 LEFT JOIN user_db user_maj ON user_maj.id = sq.update_user_name
@@ -106,7 +110,7 @@ class SequenceAssembleeExtController extends AbstractController
                 LEFT JOIN vocabulary voc_date_precision ON sq.date_precision_voc_fk = voc_date_precision.id
                 LEFT JOIN motu_number ON motu_number.external_sequence_fk = sq.id
 		LEFT JOIN identified_species ei_sq ON ei_sq.external_sequence_fk = sq.id
-			LEFT JOIN (SELECT MAX(ei_sqi.id) AS maxei_sqi 
+			INNER JOIN (SELECT MAX(ei_sqi.id) AS maxei_sqi 
 				FROM identified_species ei_sqi 
 				GROUP BY ei_sqi.external_sequence_fk) ei_sq2 ON (ei_sq.id = ei_sq2.maxei_sqi)
 			LEFT JOIN taxon rt_sq ON ei_sq.taxon_fk = rt_sq.id
@@ -145,7 +149,7 @@ class SequenceAssembleeExtController extends AbstractController
                 "last_date_identification_sq" => $val['last_date_identification_sq'],
                 "voc_sq_identification_criterion.code" => $val['code_sq_identification_criterion'],
                 "list_source" => $val['list_source'],
-                "motu" => $val['motu'],
+                "motu_flag" => $val['motu_flag'],
                 "country.country_name" => $val['country_name'],
                 "municipality.municipality_code" => $val['municipality_code'],
                 "creation_user_name" => $val['creation_user_name'], "user_cre.username" => $val['user_cre_username'] ,"user_maj.username" => $val['user_maj_username']
@@ -167,106 +171,6 @@ class SequenceAssembleeExtController extends AbstractController
         return $response;          
     } 
 
-    
-    /**
-     * Returns in json format a set of fields to display (tab_toshow) with the following criteria: 
-     * a) 1 search criterion ($ request-> get ('searchPhrase')) insensitive to the case and  applied to a field
-     * b) the number of lines to display ($ request-> get ('rowCount'))
-     * c) 1 sort criterion on a collone ($ request-> get ('sort'))
-     *
-     * @Route("/indexjson", name="sequenceassembleeext_indexjson_backup", methods={"POST"})
-     */
-    public function indexjsonAction_backup(Request $request, GenericFunctionE3s $service, TranslatorInterface $translator)
-    {
-        // load Doctrine Manager          
-        $em = $this->getDoctrine()->getManager();
-        //
-        $rowCount = ($request->get('rowCount')  !== NULL) ? $request->get('rowCount') : 10;
-        $orderBy = ($request->get('sort')  !== NULL) ? $request->get('sort') : array('sequenceAssembleeExt.dateMaj' => 'desc', 'sequenceAssembleeExt.id' => 'desc');  
-        $minRecord = intval($request->get('current')-1)*$rowCount;
-        $maxRecord = $rowCount; 
-        // initializes the searchPhrase variable as appropriate and sets the condition according to the url idFk parameter
-        $where = 'LOWER(sequenceAssembleeExt.codeSqcAssExt) LIKE :criteriaLower';
-        $searchPhrase = $request->get('searchPhrase');
-        if ( $request->get('searchPatern') !== null && $request->get('searchPatern') !== '' && $searchPhrase == '') {
-            $searchPhrase = $request->get('searchPatern');
-        }
-        if ( $request->get('idFk') !== null && $request->get('idFk') !== '') {
-            $where .= ' AND sequenceAssembleeExt.collecteFk = '.$request->get('idFk');
-        }
-        // Search for the list to show EstAligneEtTraite
-        $tab_toshow =[];
-        $entities_toshow = $em->getRepository("BbeesE3sBundle:SequenceAssembleeExt")->createQueryBuilder('sequenceAssembleeExt')
-            ->where($where)
-            ->setParameter('criteriaLower', strtolower($searchPhrase).'%')
-            ->leftJoin('BbeesE3sBundle:Voc', 'vocStatutSqcAss', 'WITH', 'sequenceAssembleeExt.statutSqcAssVocFk = vocStatutSqcAss.id')
-            ->leftJoin('BbeesE3sBundle:Voc', 'vocGene', 'WITH', 'sequenceAssembleeExt.geneVocFk = vocGene.id')
-            ->leftJoin('BbeesE3sBundle:Collecte', 'collecte', 'WITH', 'sequenceAssembleeExt.collecteFk = collecte.id')
-            ->addOrderBy(array_keys($orderBy)[0], array_values($orderBy)[0])
-            ->getQuery()
-            ->getResult();
-        $nb = count($entities_toshow);
-        $entities_toshow = ($request->get('rowCount') > 0 ) ? array_slice($entities_toshow, $minRecord, $rowCount) : array_slice($entities_toshow, $minRecord);
-        $lastTaxname = '';
-        foreach($entities_toshow as $entity)
-        {
-            $id = $entity->getId();
-            $dateCreationSqcAssExt = ($entity->getdateCreationSqcAssExt() !== null) ?  $entity->getdateCreationSqcAssExt()->format('Y-m-d') : null;
-            $DateMaj = ($entity->getDateMaj() !== null) ?  $entity->getDateMaj()->format('Y-m-d H:i:s') : null;
-            $DateCre = ($entity->getDateCre() !== null) ?  $entity->getDateCre()->format('Y-m-d H:i:s') : null;       
-            // load the first identified taxon            
-            $query = $em->createQuery('SELECT ei.id, ei.dateIdentification, rt.taxname as taxname, voc.code as codeIdentification FROM BbeesE3sBundle:EspeceIdentifiee ei JOIN ei.referentielTaxonFk rt JOIN ei.critereIdentificationVocFk voc WHERE ei.sequenceAssembleeExtFk = '.$id.' ORDER BY ei.id DESC')->getResult(); 
-            $lastTaxname = ($query[0]['taxname'] !== NULL) ? $query[0]['taxname'] : NULL;
-            $lastdateIdentification = ($query[0]['dateIdentification']  !== NULL) ? $query[0]['dateIdentification']->format('Y-m-d') : NULL; 
-            $codeIdentification = ($query[0]['codeIdentification'] !== NULL) ? $query[0]['codeIdentification'] : NULL;
-            // search for motu associated to a sequence
-            $query = $em->createQuery('SELECT a.id FROM BbeesE3sBundle:Assigne a JOIN a.sequenceAssembleeExtFk sqc  WHERE a.sequenceAssembleeExtFk = '.$id.' ')->getResult();
-            $motuAssigne = (count($query) > 0) ? 1 : 0;
-            // search for sources associated to a sequence
-            $query = $em->createQuery('SELECT s.codeSource as source FROM BbeesE3sBundle:SqcExtEstReferenceDans seerd JOIN seerd.sourceFk s WHERE seerd.sequenceAssembleeExtFk = '.$id.'')->getResult();            
-            $arrayListeSource = array();
-            foreach($query as $taxon) {
-                 $arrayListeSource[] = $taxon['source'];
-            }
-            $listSource = implode(", ", $arrayListeSource);
-            //
-            $tab_toshow[] = array("id" => $id, "sequenceAssembleeExt.id" => $id, 
-             "sequenceAssembleeExt.codeSqcAssExtAlignement" => $entity->getCodeSqcAssExtAlignement(),
-             "sequenceAssembleeExt.codeSqcAssExt" => $entity->getCodeSqcAssExt(),
-             "sequenceAssembleeExt.accessionNumberSqcAssExt" => $entity->getAccessionNumberSqcAssExt(),
-             "vocGene.code" => $entity->getGeneVocFk()->getCode(), 
-             "vocDatePrecision.libelle" => $translator->trans($entity->getDatePrecisionVocFk()->getLibelle()), 
-             "vocStatutSqcAss.code" => $entity->getStatutSqcAssVocFk()->getCode(),                 
-             "sequenceAssembleeExt.dateCreationSqcAssExt" => $dateCreationSqcAssExt,  
-             "sequenceAssembleeExt.taxonOrigineSqcAssExt" => $entity->getTaxonOrigineSqcAssExt(),
-             "sequenceAssembleeExt.numIndividuSqcAssExt" => $entity->getNumIndividuSqcAssExt(),
-             "vocStatutSqcAss.code"  => $entity->getStatutSqcAssVocFk()->getCode(),
-             "collecte.codeCollecte" => $entity->getCollecteFk()->getCodeCollecte(),
-             "lastTaxname" => $lastTaxname,   
-             "lastdateIdentification" => $lastdateIdentification ,
-             "codeIdentification" => $codeIdentification ,
-             "listSource" => $listSource, 
-             "motuAssigne" => $motuAssigne ,
-             "sequenceAssembleeExt.dateCre" => $DateCre, "sequenceAssembleeExt.dateMaj" => $DateMaj,  
-             "userCreId" => $service->GetUserCreId($entity), "sequenceAssembleeExt.userCre" => $service->GetUserCreUsername($entity) ,"sequenceAssembleeExt.userMaj" => $service->GetUserMajUsername($entity),
-            );
-        }    
-        // Ajax answer
-        $response = new Response ();
-        $response->setContent ( json_encode ( array (
-            "current"    => intval( $request->get('current') ), 
-            "rowCount"  => $rowCount,            
-            "rows"     => $tab_toshow, 
-            "searchPhrase" => $searchPhrase,
-            "total"    => $nb // total data array				
-            ) ) );
-        // If it is an Ajax request: returns the content in json format
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;          
-    } 
-
-    
     /**
      * Creates a new sequenceAssembleeExt entity.
      *
