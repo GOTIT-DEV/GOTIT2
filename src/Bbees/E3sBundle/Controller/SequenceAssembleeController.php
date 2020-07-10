@@ -67,7 +67,7 @@ class SequenceAssembleeController extends AbstractController
         ));
     }
 
-     /**
+    /**
      * Returns in json format a set of fields to display (tab_toshow) with the following criteria: 
      * a) 1 search criterion ($ request-> get ('searchPhrase')) insensitive to the case and  applied to a field
      * b) the number of lines to display ($ request-> get ('rowCount'))
@@ -81,87 +81,99 @@ class SequenceAssembleeController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         //
         $rowCount = ($request->get('rowCount')  !== NULL) ? $request->get('rowCount') : 10;
-        $orderBy = ($request->get('sort')  !== NULL) ? $request->get('sort') : array('sequenceAssemblee.dateMaj' => 'desc', 'sequenceAssemblee.id' => 'desc');  
+        $orderBy = ($request->get('sort')  !== NULL) ? array_keys($request->get('sort'))[0]." ".array_values($request->get('sort'))[0] : "sq.date_of_update DESC, sq.id DESC";  
         $minRecord = intval($request->get('current')-1)*$rowCount;
         $maxRecord = $rowCount; 
         // initializes the searchPhrase variable as appropriate and sets the condition according to the url idFk parameter
-        $where = 'LOWER(sequenceAssemblee.codeSqcAss) LIKE :criteriaLower';
+        $where = 'LOWER(sq.internal_sequence_code) LIKE :criteriaLower';
+        $having = ' ';
         $searchPhrase = $request->get('searchPhrase');
         if ( $request->get('searchPatern') !== null && $request->get('searchPatern') !== '' && $searchPhrase == '') {
             $searchPhrase = $request->get('searchPatern');
         }
         if ( $request->get('idFk') !== null && $request->get('idFk') !== '') {
-            $where .= ' AND chromatogramme.id = '.$request->get('idFk');
+            $where .= ' AND chromato.id = '.$request->get('idFk');
         }
-        // Search for the list to show EstAligneEtTraite
+        if ( $request->get('idFk') !== null && $request->get('idFk') !== '') {
+            // $having .= ' HAVING '. $request->get('idFk').' = ANY(array_agg(chromato.id))';
+             // $having .= " HAVING string_agg(DISTINCT cast( chromato.id as character varying) , ';') LIKE '%". $request->get('idFk')."%' ";
+        }
+
+        // Search for the list to show
         $tab_toshow =[];
-        $entities_toshow = $em->getRepository("BbeesE3sBundle:SequenceAssemblee")->createQueryBuilder('sequenceAssemblee')
-            ->where($where)
-            ->setParameter('criteriaLower', strtolower($searchPhrase).'%')
-            ->leftJoin('BbeesE3sBundle:Voc', 'vocStatutSqcAss', 'WITH', 'sequenceAssemblee.statutSqcAssVocFk = vocStatutSqcAss.id')
-            ->leftJoin('BbeesE3sBundle:EstAligneEtTraite', 'eaet', 'WITH', 'eaet.sequenceAssembleeFk = sequenceAssemblee.id') 
-            ->leftJoin('BbeesE3sBundle:Chromatogramme', 'chromatogramme', 'WITH', 'eaet.chromatogrammeFk = chromatogramme.id')
-            ->leftJoin('BbeesE3sBundle:Pcr', 'pcr', 'WITH', 'chromatogramme.pcrFk = pcr.id')
-            ->leftJoin('BbeesE3sBundle:Voc', 'vocGene', 'WITH', 'pcr.geneVocFk = vocGene.id')
-            ->leftJoin('BbeesE3sBundle:Adn', 'adn', 'WITH', 'pcr.adnFk = adn.id')
-            ->leftJoin('BbeesE3sBundle:Individu', 'individu', 'WITH', 'adn.individuFk = individu.id')
-            ->groupBy('sequenceAssemblee.id')
-            ->addGroupBy('vocStatutSqcAss.code')
-            ->addGroupBy('sequenceAssemblee.codeSqcAlignement')
-            ->addGroupBy('sequenceAssemblee.dateCreationSqcAss')
-            ->addGroupBy('sequenceAssemblee.dateCre')
-            ->addGroupBy('sequenceAssemblee.dateMaj')
-            ->addGroupBy('individu.codeIndBiomol')
-            ->addGroupBy('vocGene.code')
-            ->addOrderBy(array_keys($orderBy)[0], array_values($orderBy)[0])
-            ->getQuery()
-            ->getResult();
+        $rawSql =   "SELECT  sq.id, sq.internal_sequence_code, sq.internal_sequence_creation_date,
+            sq.creation_user_name, sq.date_of_creation, sq.date_of_update,
+            voc_internal_sequence_status.code as code_voc_internal_sequence_status,
+            sq.internal_sequence_creation_date, sq.internal_sequence_alignment_code, sq.internal_sequence_accession_number,
+            rt_sq.taxon_name as last_taxname_sq, ei_sq.identification_date as last_date_identification_sq, voc_sq_identification_criterion.code as code_sq_identification_criterion,            
+            user_cre.username as user_cre_username, user_maj.username as user_maj_username,
+            voc_gene.code as voc_internal_sequence_gene_code, 
+            string_agg(DISTINCT sp.specimen_molecular_code , ' ;') as list_specimen_molecular_code,
+            string_agg(DISTINCT source.source_title , ' ; ') as list_source,
+            string_agg(DISTINCT cast( chromato.id as character varying) , ';') as list_chromato ,
+            CASE 
+                WHEN (count(motu_number.id)=0) THEN 0
+                WHEN (count(motu_number.id)>0) THEN 1
+            END motu_flag
+            FROM  internal_sequence sq
+                LEFT JOIN user_db user_cre ON user_cre.id = sq.creation_user_name
+                LEFT JOIN user_db user_maj ON user_maj.id = sq.update_user_name 
+                LEFT JOIN vocabulary voc_internal_sequence_status ON sq.internal_sequence_status_voc_fk = voc_internal_sequence_status.id
+                LEFT JOIN internal_sequence_is_published_in isip ON isip.internal_sequence_fk = sq.id
+                    LEFT JOIN source ON isip.source_fk = source.id
+                LEFT JOIN motu_number ON motu_number.internal_sequence_fk = sq.id
+                LEFT JOIN chromatogram_is_processed_to eaet ON eaet.internal_sequence_fk = sq.id  
+                LEFT JOIN chromatogram chromato ON eaet.chromatogram_fk = chromato.id
+                JOIN pcr ON chromato.pcr_fk = pcr.id
+                    LEFT JOIN vocabulary voc_gene ON pcr.gene_voc_fk = voc_gene.id 
+                    JOIN dna ON pcr.dna_fk = dna.id 
+                        JOIN specimen sp ON dna.specimen_fk = sp.id
+                    LEFT JOIN identified_species ei_sq ON ei_sq.internal_sequence_fk = sq.id
+                    INNER JOIN (SELECT MAX(ei_sqi.id) AS maxei_sqi 
+				FROM identified_species ei_sqi 
+				GROUP BY ei_sqi.internal_sequence_fk) ei_sq2 ON (ei_sq.id = ei_sq2.maxei_sqi)
+			LEFT JOIN taxon rt_sq ON ei_sq.taxon_fk = rt_sq.id
+                        LEFT JOIN vocabulary voc_sq_identification_criterion ON ei_sq.identification_criterion_voc_fk = voc_sq_identification_criterion.id"
+        ." WHERE ".$where."
+        GROUP BY sq.id, sq.internal_sequence_code, internal_sequence_creation_date,
+            sq.creation_user_name, sq.date_of_creation, sq.date_of_update,
+            voc_internal_sequence_status.code,
+            sq.internal_sequence_creation_date, sq.internal_sequence_alignment_code, sq.internal_sequence_accession_number,
+            rt_sq.taxon_name, ei_sq.identification_date, voc_sq_identification_criterion.code,            
+            user_cre.username, user_maj.username,
+            voc_gene.code" 
+        .$having
+        ." ORDER BY ".$orderBy;
+        // execute query and fill tab to show in the bootgrid list (see index.htm)
+        $stmt = $em->getConnection()->prepare($rawSql);
+        $stmt->bindValue('criteriaLower', strtolower($searchPhrase).'%');
+        $stmt->execute();
+        $entities_toshow = $stmt->fetchAll();
         $nb = count($entities_toshow);
-        $entities_toshow = ($request->get('rowCount') > 0 ) ? array_slice($entities_toshow, $minRecord, $rowCount) : array_slice($entities_toshow, $minRecord); 
-        $lastTaxname = '';
-        foreach($entities_toshow as $entity)
-        {
-            $id = $entity->getId();
-            $DateCreationSqcAss = ($entity->getDateCreationSqcAss() !== null) ?  $entity->getDateCreationSqcAss()->format('Y-m-d') : null;
-            $DateMaj = ($entity->getDateMaj() !== null) ?  $entity->getDateMaj()->format('Y-m-d H:i:s') : null;
-            $DateCre = ($entity->getDateCre() !== null) ?  $entity->getDateCre()->format('Y-m-d H:i:s') : null;       
-            // Search for the number of sequence associated to a chromatogram
-            $query = $em->createQuery('SELECT eaet.id, voc.libelle as gene, individu.codeIndBiomol as code_ind_biomol FROM BbeesE3sBundle:EstAligneEtTraite eaet JOIN eaet.chromatogrammeFk chromato JOIN chromato.pcrFk pcr JOIN pcr.geneVocFk voc JOIN pcr.adnFk adn JOIN adn.individuFk individu WHERE eaet.sequenceAssembleeFk = '.$id.' ORDER BY eaet.id DESC')->getResult();
-            $geneSeqAss = (count($query) > 0) ? $query[0]['gene'] : '';
-            $codeIndBiomol = (count($query) > 0) ? $query[0]['code_ind_biomol'] : '';
-            // search for motu associated to a sequence
-            $query = $em->createQuery('SELECT a.id FROM BbeesE3sBundle:Assigne a JOIN a.sequenceAssembleeFk sqc  WHERE a.sequenceAssembleeFk = '.$id.' ')->getResult();
-            $motuAssigne = (count($query) > 0) ? 1 : 0;
-            // load the first identified taxon            
-            $query = $em->createQuery('SELECT ei.id, ei.dateIdentification, rt.taxname as taxname, voc.code as codeIdentification FROM BbeesE3sBundle:EspeceIdentifiee ei JOIN ei.referentielTaxonFk rt JOIN ei.critereIdentificationVocFk voc WHERE ei.sequenceAssembleeFk = '.$id.' ORDER BY ei.id DESC')->getResult(); 
-            $lastTaxname = ($query[0]['taxname'] !== NULL) ? $query[0]['taxname'] : NULL;
-            $lastdateIdentification = ($query[0]['dateIdentification']  !== NULL) ? $query[0]['dateIdentification']->format('Y-m-d') : NULL; 
-            $codeIdentification = ($query[0]['codeIdentification'] !== NULL) ? $query[0]['codeIdentification'] : NULL;
-            // Search for sousrces associated to a sequence
-            $query = $em->createQuery('SELECT s.codeSource as source FROM BbeesE3sBundle:SqcEstPublieDans sepd JOIN sepd.sourceFk s WHERE sepd.sequenceAssembleeFk = '.$id.'')->getResult();            
-            $arrayListeSource = array();
-            foreach($query as $taxon) {
-                 $arrayListeSource[] = $taxon['source'];
-            }
-            $listSource = implode(", ", $arrayListeSource);
-            //
-            $tab_toshow[] = array("id" => $id, "sequenceAssemblee.id" => $id, 
-             "individu.codeIndBiomol" => $codeIndBiomol,
-             "sequenceAssemblee.codeSqcAlignement" => $entity->getCodeSqcAlignement(),
-             "sequenceAssemblee.codeSqcAss" => $entity->getCodeSqcAss(),
-             "sequenceAssemblee.accessionNumber" => $entity->getAccessionNumber(),
-             "vocGene.code" => $geneSeqAss, 
-             "vocStatutSqcAss.code" => $entity->getStatutSqcAssVocFk()->getCode(),                 
-             "sequenceAssemblee.dateCreationSqcAss" => $DateCreationSqcAss,   
-             "lastTaxname" => $lastTaxname,  
-             "listSource" => $listSource, 
-             "lastdateIdentification" => $lastdateIdentification ,
-             "codeIdentification" => $codeIdentification ,
-             "motuAssigne" => $motuAssigne ,   
-             "sequenceAssemblee.dateCre" => $DateCre, "sequenceAssemblee.dateMaj" => $DateMaj, 
-             "userCreId" => $service->GetUserCreId($entity), "sequenceAssemblee.userCre" => $service->GetUserCreUsername($entity) ,"sequenceAssemblee.userMaj" => $service->GetUserMajUsername($entity),
+        $entities_toshow = ($request->get('rowCount') > 0 ) ? array_slice($entities_toshow, $minRecord, $rowCount) : array_slice($entities_toshow, $minRecord);
+
+        foreach($entities_toshow as $key => $val){
+             $tab_toshow[] = array("id" => $val['id'], "sq.id" => $val['id'],
+                "internal_sequence_code" => $val['internal_sequence_code'],
+                "internal_sequence_alignment_code" => $val['internal_sequence_alignment_code'],
+                "internal_sequence_accession_number" => $val['internal_sequence_accession_number'],
+                "voc_internal_sequence_gene_code" => $val['voc_internal_sequence_gene_code'],
+                "voc_internal_sequence_status.code" => $val['code_voc_internal_sequence_status'],
+                "sq.internal_sequence_creation_date" => $val['internal_sequence_creation_date'],
+                "list_specimen_molecular_code" => $val['list_specimen_molecular_code'],
+                "list_source" => $val['list_source'],
+                "list_chromato" => $val['list_chromato'],
+                "internal_sequence_creation_date" => $val['internal_sequence_creation_date'],
+                "sq.date_of_creation" => $val['date_of_creation'],
+                "sq.date_of_update" => $val['date_of_update'],                 
+                "last_taxname_sq" => $val['last_taxname_sq'],
+                "last_date_identification_sq" => $val['last_date_identification_sq'],
+                "code_sq_identification_criterion" => $val['code_sq_identification_criterion'],                
+                "motu_flag" => $val['motu_flag'],
+                "creation_user_name" => $val['creation_user_name'], "user_cre.username" => $val['user_cre_username'] ,"user_maj.username" => $val['user_maj_username']
              );
-        }     
+         }
+        
         // Ajax answer
         $response = new Response ();
         $response->setContent ( json_encode ( array (
@@ -176,14 +188,15 @@ class SequenceAssembleeController extends AbstractController
 
         return $response;          
     } 
-
+    
+    
      /**
      * Returns in json format a set of fields to display (tab_toshow) with the following criteria: 
      * a) 1 search criterion ($ request-> get ('searchPhrase')) insensitive to the case and  applied to a field
      * b) the number of lines to display ($ request-> get ('rowCount'))
      * c) 1 sort criterion on a collone ($ request-> get ('sort'))
      *
-     * @Route("/indexjson", name="sequenceassemblee_indexjson_backup", methods={"POST"})
+     * @Route("/indexjson_backup", name="sequenceassemblee_indexjson_backup", methods={"POST"})
      */
     public function indexjsonAction_backup(Request $request, GenericFunctionE3s $service)
     {

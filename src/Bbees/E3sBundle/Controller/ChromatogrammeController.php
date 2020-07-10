@@ -84,10 +84,10 @@ class ChromatogrammeController extends AbstractController
             chromato.creation_user_name, chromato.date_of_creation, chromato.date_of_update,
             sp.specimen_molecular_code, dna.dna_code, pcr.pcr_code, pcr.pcr_number,
             voc_gene.code as code_voc_gene, voc_chromato_quality.code as code_voc_chromato_quality,
-            sq.internal_sequence_code as last_internal_sequence_code, 
-            sq.internal_sequence_creation_date as last_internal_sequence_creation_date,
-            sq.internal_sequence_alignment_code as last_internal_sequence_alignment_code, 
-            voc_statut_sqc_ass.code as last_internal_sequence_status_voc,
+            array_agg(sq.internal_sequence_code ORDER BY sq.id DESC)  last_internal_sequence_code, 
+            array_agg(sq.internal_sequence_creation_date ORDER BY sq.id DESC) last_internal_sequence_creation_date,
+            array_agg(sq.internal_sequence_alignment_code ORDER BY sq.id DESC) last_internal_sequence_alignment_code, 
+            array_agg(voc_statut_sqc_ass.code ORDER BY sq.id DESC) last_internal_sequence_status_voc,
             user_cre.username as user_cre_username , user_maj.username as user_maj_username
             FROM  chromatogram chromato
                 LEFT JOIN user_db user_cre ON user_cre.id = chromato.creation_user_name
@@ -103,7 +103,12 @@ class ChromatogrammeController extends AbstractController
                     GROUP BY eaeti.chromatogram_fk) eaet2 ON (eaet.id = eaet2.maxeaeti)
                     LEFT JOIN internal_sequence sq ON eaet.internal_sequence_fk = sq.id
                         LEFT JOIN vocabulary voc_statut_sqc_ass ON sq.internal_sequence_status_voc_fk = voc_statut_sqc_ass.id"
-        ." WHERE ".$where." ORDER BY ".$orderBy;
+        ." WHERE ".$where."
+        GROUP BY chromato.id, chromato.creation_user_name, chromato.date_of_creation, chromato.date_of_update,
+            sp.specimen_molecular_code, dna.dna_code, pcr.pcr_code, pcr.pcr_number,
+            voc_gene.code, voc_chromato_quality.code,
+            user_cre.username, user_maj.username"
+        . " ORDER BY ".$orderBy;
         // execute query and fill tab to show in the bootgrid list (see index.htm)
         $stmt = $em->getConnection()->prepare($rawSql);
         $stmt->bindValue('criteriaLower', strtolower($searchPhrase).'%');
@@ -113,7 +118,7 @@ class ChromatogrammeController extends AbstractController
         $entities_toshow = ($request->get('rowCount') > 0 ) ? array_slice($entities_toshow, $minRecord, $rowCount) : array_slice($entities_toshow, $minRecord);
 
         foreach($entities_toshow as $key => $val){
-             $linkSqcAss = ($val['last_internal_sequence_code'] !== null) ? strval($val['id']) : '';            
+             $linkSqcAss = (explode(",", rtrim(ltrim($val['last_internal_sequence_code'], "{"), "}"))[0] !== 'NULL') ? strval($val['id']) : '';            
              $tab_toshow[] = array("id" => $val['id'], "chromato.id" => $val['id'],
                 "sp.specimen_molecular_code" => $val['specimen_molecular_code'],                 
                 "dna.dna_code" => $val['dna_code'],                
@@ -124,10 +129,10 @@ class ChromatogrammeController extends AbstractController
                 "code_voc_chromato_quality" => $val['code_voc_chromato_quality'], 
                 "chromato.date_of_creation" => $val['date_of_creation'], "chromato.date_of_update" => $val['date_of_update'],
                 "creation_user_name" => $val['creation_user_name'], "user_cre.username" => $val['user_cre_username'] ,"user_maj.username" => $val['user_maj_username'],
-                "last_internal_sequence_code" => $val['last_internal_sequence_code'],
-                "last_internal_sequence_status_voc" => $val['last_internal_sequence_status_voc'],
-                "last_internal_sequence_alignment_code" => $val['last_internal_sequence_alignment_code'],
-                "last_internal_sequence_creation_date" => $val['last_internal_sequence_creation_date'],                
+                "last_internal_sequence_code" => explode(",", rtrim(ltrim($val['last_internal_sequence_code'], "{"), "}"))[0],
+                "last_internal_sequence_status_voc" => explode(",", rtrim(ltrim($val['last_internal_sequence_status_voc'], "{"), "}"))[0],
+                "last_internal_sequence_alignment_code" => explode(",", rtrim(ltrim($val['last_internal_sequence_alignment_code'], "{"), "}"))[0],
+                "last_internal_sequence_creation_date" => explode(",", rtrim(ltrim($val['last_internal_sequence_creation_date'], "{"), "}"))[0],                
                 "linkSequenceassemblee" => $linkSqcAss
              );
          }
