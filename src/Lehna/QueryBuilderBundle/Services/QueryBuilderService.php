@@ -144,7 +144,7 @@ class QueryBuilderService
     if (array_key_exists("joins", $data)) { // If there are join blocks in the query
       $joins = $data["joins"];
       foreach ($joins as $j) {
-        if (count($j) == 7) {
+        if (count($j) == 8) {
           $adjTable = $j["adjacent_table"];
           $joinsFields = $j["fields"];
           $resultsTab[$adjTable] = $joinsFields; // Adding the selected fields for each join block
@@ -213,48 +213,20 @@ class QueryBuilderService
       if (strlen($data["joins"] >= 1)) {
         $joins = $data["joins"];
         foreach ($joins as $j) { // For each block added
-          $joinDqlParts = $query->getDQLParts()['join'];
-          $fromDqlParts = $query->getDQLParts()['from'][0];
-          $aliasATAlreadyExists = false;
-          $aliasFTAlreadyExists = false;
-          $aliasAT = 1; // Creating Aliases to avoid issue with already defined tables
-          $aliasFT = 1;
-          foreach ($joinDqlParts as $joinsDql) {
-            foreach ($joinsDql as $joinDql) {
-              if ($joinDql->getAlias() === $j["adjacent_table"]) {
-                $aliasATAlreadyExists = true;
-              }
-            }
-          }
-          if ($fromDqlParts->getAlias() === $j["formerTable"]) {
-            $aliasFTAlreadyExists = true;
-          }
-          if ($aliasATAlreadyExists === true or $j["adjacent_table"] == $initial["initialTable"]) {
-            $adjTableAlias = $j["adjacent_table"] . $aliasAT;
-            $formerTable = $j["formerTable"] . $aliasFT;
-            $adjTable = $j["adjacent_table"];
-            $aliasFT += 1;
-            $aliasAT += 1;
-          } else {
-            $adjTableAlias = $j["adjacent_table"];
-            $adjTable = $j["adjacent_table"];
-            $formerTable = $j["formerTable"];
-          }
-          if ($aliasFTAlreadyExists === true and $j["formerTable"] != $initial["initialTable"]) {
-            $formerTable = $j["formerTable"] . $aliasFT;
-            $aliasFT += 1;
-          } else $formerTable = $j["formerTable"];
+          $formerTable = $j["formerTable"];
+          $adjTable = $j["adjacent_table"];
           $jointype = $j["join"];
           $srcField = $j["sourceField"];
           $tgtField = $j["targetField"];
+          $alias = $j["alias"];
 
-          if (count($j) == 7) { // If the user chooses to return some fields.
+          if (count($j) == 8) { // If the user chooses to return some fields.
             $newFields = $j["fields"];
             foreach ($newFields as $newValue) {
               $query = $query->addSelect($adjTable . "." . $newValue);
             };
           }
-          $query = $this->makeJoin($joins, $query, $formerTable, $jointype, $adjTable, $adjTableAlias, $srcField, $tgtField);
+          $query = $this->makeJoin($joins, $query, $formerTable, $jointype, $adjTable, $srcField, $tgtField, $alias);
 
           if ($j["constraints"] != "") { // If the user chooses to apply constraints on some fields in the JOIN part. 
             $constraints = $j["constraints"]["rules"];
@@ -420,12 +392,12 @@ class QueryBuilderService
    * @return mixed $query : the query with the JOIN added
    * 
    */
-  private function makeJoin($joins, $query, $formerTable, $jointype, $adjTable, $adjTableAlias, $srcField, $tgtField)
+  private function makeJoin($joins, $query, $formerTable, $jointype, $adjTable, $srcField, $tgtField, $alias)
   {
     if ($jointype == "Inner Join") {
-      $query = $query->innerJoin('BbeesE3sBundle:' . $adjTable, $adjTableAlias, 'WITH', $formerTable . '.' . $srcField . " = " . $adjTableAlias . '.' . $tgtField);
+      $query = $query->innerJoin('BbeesE3sBundle:' . $adjTable, $alias, 'WITH', $formerTable . '.' . $srcField . " = " . $alias . '.' . $tgtField);
     } elseif ($jointype == "Left Join") {
-      $query = $query->leftJoin('BbeesE3sBundle:' . $adjTable, $adjTableAlias, 'WITH', $formerTable . '.' . $srcField . " = " . $adjTableAlias . '.' . $tgtField);
+      $query = $query->leftJoin('BbeesE3sBundle:' . $adjTable, $alias, 'WITH', $formerTable . '.' . $srcField . " = " . $alias . '.' . $tgtField);
     }
 
     return $query;
