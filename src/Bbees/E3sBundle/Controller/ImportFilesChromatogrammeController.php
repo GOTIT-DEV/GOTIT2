@@ -28,7 +28,6 @@ use Bbees\E3sBundle\Services\ImportFileCsv;
 use Symfony\Component\Translation\TranslatorInterface; 
 use Bbees\E3sBundle\Services\ImportFileE3s; 
 use Symfony\Component\HttpKernel\KernelInterface;
-use Bbees\E3sBundle\Services\GenericFunctionE3s;
 
 /**
 * ImportIndividu controller.
@@ -48,7 +47,7 @@ class ImportFilesChromatogrammeController extends AbstractController
      * @Route("/", name="importfileschromatogramme_index")
      *    
      */
-     public function indexAction(Request $request, GenericFunctionE3s $importFileE3sService, TranslatorInterface $translator)
+     public function indexAction(Request $request, ImportFileE3s $importFileE3sService, TranslatorInterface $translator,  ImportFileCsv $service, KernelInterface $kernel)
     {    
         $message = ""; 
         //creation of the form with a drop-down list

@@ -46,3 +46,4 @@
 .idea
 /app/config/parameters.yml.goti2-dev_localhost
 /app/config/config_test.yml
+/app/Resources/views/sequenceassemblee/index_bup.html.twig
