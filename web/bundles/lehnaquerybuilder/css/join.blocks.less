@@ -110,13 +110,18 @@ div#join-panel {
     grid-template-rows: auto auto;
     grid-template-areas:
       "messages messages ."
-      "join-selected-fields  . join-checked-constraints"
+      "join-selected-fields  input-alias join-checked-constraints"
       "toggled-constraints toggled-constraints reset-constraints";
 
     div#join-selected-fields {
       grid-area: join-selected-fields;
       justify-self: start;
       width: 100%;
+    }
+
+    div#input-alias {
+      grid-area: input-alias;
+      justify-self: start;
     }
 
     div#join-checked-constraints {
@@ -142,7 +147,8 @@ div#join-panel {
       grid-template-rows: auto auto;
       grid-template-areas:
       "messages messages"
-      "join-selected-fields join-checked-constraints"
+      "join-selected-fields input-alias"
+      "join-checked-constraints join-checked-constraints"
       "toggled-constraints toggled-constraints"
       "reset-constraints reset-constraints";
 
@@ -161,4 +167,9 @@ div#join-panel {
   border-color: #00ffff;
   border-style: solid;
   border-width: 8px;
+}
+
+input#alias {
+  width: 220px;
+  height: 34px;
 }

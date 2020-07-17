@@ -7,6 +7,8 @@
  * Authors : Thierno Diallo, Maud Ferrer and Elsa Mendes.
  */
 
+let table_count = {};
+
 /**
  * Initializing the dropdown containing all tables
  * @param {Oject} init_data
@@ -101,6 +103,15 @@ export function initFirstFields(init_data) {
     // $("#initial-fields").multiselect("selectAll", false);
     // $("#initial-fields").multiselect("updateButtonText");
 
+    let first_table = document.getElementById("initial-table");
+    let init_table = first_table.options[first_table.selectedIndex].value;
+
+    if (Object.keys(table_count).length > 0) {
+      table_count = {};
+      table_count[init_table] = 1;
+    } else table_count[init_table] = 1;
+
+
     // Enables the plus button to add a join block when the first table is chosen (Disabled by default)
     document.getElementById("add-join").disabled = false;
     document.getElementById("submit-button").disabled = false;
@@ -175,10 +186,11 @@ function addJoin(block_id) {
 function getAvailableTables() {
 
   let initial_table = document.getElementById("initial-table").value;
-  let available_tables = $(".adjacent-tables").get()
-    .map(elt => elt.value)
+  let available_tables = $("input#alias").get()
+    .map(elt =>  elt.value)
     .filter(value => value !== "")
     .concat([initial_table])
+
 
   // Making sure we don't have any blank line added to the dropdown
   for (let i = 0; i < available_tables.length; i++) {
@@ -189,7 +201,6 @@ function getAvailableTables() {
 
   // Remove duplicates
 
-  console.log(available_tables);
   return [...new Set(available_tables)].sort();
 }
 
@@ -252,6 +263,14 @@ export function initJoinBlock(joinType, init_data) {
       let target_table = event.target.value;
       let table_data = init_data[target_table];
 
+      // Update the table_count object with chosen table
+      if (table_count.hasOwnProperty(target_table)) { // If the table is in the object
+        table_count[target_table] += 1;
+      } else {
+        table_count[target_table] = 1;
+      }
+      newBlock.find("input#alias").val(target_table+"_"+table_count[target_table]);
+
       // Init query-builder with the fields of the selected table and adequate filters
       newBlock.find(".collapsed-query-builder")
         .queryBuilder("setFilters", true, table_data.filters);
@@ -309,9 +328,9 @@ export function initJoinBlock(joinType, init_data) {
 
     // Init the dropdown containing all the previously chosen tables
     let table_options = getAvailableTables().map(
-      table => $("<option></option>").attr("value", table).text(table)
+      table => $("<option></option>").attr("value", table).text(table.split("_").shift() + ' | ' + table)
     )
-    console.log(table_options);
+
     newBlock.find("#former-table").empty()
       .append(...table_options)
       .selectpicker("refresh")
@@ -355,7 +374,7 @@ export function initJoinBlock(joinType, init_data) {
         let suppressedJoinId = newBlock.find(".form-block").prevObject[0].id;
         $.each(blockList, (item) => {
           if (blockList[item].id > suppressedJoinId) {
-            console.log("ok")
+
             document.getElementById(blockList[item].id).className += " highlight-div";
             // $(item).addClass(" highlight-div");
           }
@@ -407,6 +426,7 @@ export function get_form_block_data(init_data) {
       let formerT = block.find("#former-table").val();
       let idJoin = block.find("#join-type").val();
       let selectedFields = block.find(".table-selects option:selected");
+      let alias = block.find("input#alias").val();
       let fields = [];
       selectedFields.each(function () {
         fields.push($(this).val());
@@ -444,6 +464,7 @@ export function get_form_block_data(init_data) {
         join: idJoin,
         adjacent_table: adj_table,
         sourceField: sourceField,
+        alias: alias,
         targetField: targetField,
         constraints: constraintsTable2,
         fields: fields,
