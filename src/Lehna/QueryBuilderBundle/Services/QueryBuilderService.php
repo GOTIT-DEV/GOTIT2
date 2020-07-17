@@ -145,9 +145,9 @@ class QueryBuilderService
       $joins = $data["joins"];
       foreach ($joins as $j) {
         if (count($j) == 8) {
-          $adjTable = $j["adjacent_table"];
+          $alias = $j["alias"];
           $joinsFields = $j["fields"];
-          $resultsTab[$adjTable] = $joinsFields; // Adding the selected fields for each join block
+          $resultsTab[$alias] = $joinsFields; // Adding the selected fields for each join block
         }
       }
     }
@@ -223,7 +223,7 @@ class QueryBuilderService
           if (count($j) == 8) { // If the user chooses to return some fields.
             $newFields = $j["fields"];
             foreach ($newFields as $newValue) {
-              $query = $query->addSelect($adjTable . "." . $newValue);
+              $query = $query->addSelect($alias . "." . $newValue);
             };
           }
           $query = $this->makeJoin($joins, $query, $formerTable, $jointype, $adjTable, $srcField, $tgtField, $alias);
@@ -231,7 +231,7 @@ class QueryBuilderService
           if ($j["constraints"] != "") { // If the user chooses to apply constraints on some fields in the JOIN part. 
             $constraints = $j["constraints"]["rules"];
             $condition = $j["constraints"]["condition"];
-            $table = $j["adjacent_table"];
+            $table = $j["alias"];
             $query = $this->constraintsOfLevel($constraints, $query, $data, $table, $condition);
           }
         }
@@ -250,7 +250,6 @@ class QueryBuilderService
    */
   private function getConstraints($constraints, $data, $query, $table, $condition)
   {
-
     $field = $constraints["field"];
     $operator = $constraints["operator"];
     $value = $constraints["value"];

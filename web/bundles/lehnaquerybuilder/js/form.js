@@ -14,6 +14,7 @@ let table_count = {};
  * @param {Oject} init_data
  */
 export function initFirstTable(init_data) {
+  console.log(init_data)
 
   // Making sure we have a list of tables sorted by alphabetical order
   let sorted_table_list = Object.keys(init_data).sort()
@@ -156,7 +157,7 @@ function addJoin(block_id) {
   newBlock.find(".reset").click((_) => {
     let target = $(this).data("target");
     $(target).queryBuilder("reset");
-  });
+  }); 
 
   // Init switchobox buttons
   $("[data-toggle='toggle']").bootstrapToggle("destroy");
@@ -326,7 +327,7 @@ export function initJoinBlock(joinType, init_data) {
       });;
 
 
-    // Init the dropdown containing all the previously chosen tables
+    // Init the dropdown containing all the previously chosen tables, with the alias as the value and making sure the user can choose the alias he wants
     let table_options = getAvailableTables().map(
       table => $("<option></option>").attr("value", table).text(table.split("_").shift() + ' | ' + table)
     )
