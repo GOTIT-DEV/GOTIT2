@@ -278,6 +278,8 @@ export function initJoinBlock(joinType, init_data) {
       .parent()
       .tooltip({ title: "Select the Fields (none selected by default)" });
 
+    let prev = newBlock.find(".adjacent-tables")[0].value;
+
     // When the user selects an adjacent table
     newBlock
       .find(".adjacent-tables")
@@ -285,13 +287,41 @@ export function initJoinBlock(joinType, init_data) {
         let target_table = event.target.value;
         let table_data = init_data[target_table];
 
-        // Update the table_count object with chosen table
-        if (table_count.hasOwnProperty(target_table)) {
-          // If the table is in the object
-          table_count[target_table] += 1;
+        if (prev === "") {
+          // Update the table_count object with chosen table
+          if (table_count.hasOwnProperty(target_table)) {
+            // If the table is in the object
+            table_count[target_table] += 1;
+          } else {
+            table_count[target_table] = 1;
+          }
         } else {
-          table_count[target_table] = 1;
+          if (table_count.hasOwnProperty(prev) && table_count[prev] > 1) {
+            // If the table is in the object
+            table_count[prev] -= 1;
+            if (table_count.hasOwnProperty(target_table)) {
+              // If the table is in the object
+              table_count[target_table] += 1;
+            } else {
+              table_count[target_table] = 1;
+            }
+          } else if (
+            (table_count.hasOwnProperty(prev) && table_count[prev] === 1) ||
+            !table_count.hasOwnProperty(prev)
+          ) {
+            delete table_count[prev];
+            console.log(table_count.prev);
+            if (table_count.hasOwnProperty(target_table)) {
+              // If the table is in the object
+              table_count[target_table] += 1;
+            } else {
+              table_count[target_table] = 1;
+            }
+          }
         }
+        prev = target_table;
+        console.log(table_count);
+
         newBlock
           .find("input.alias")
           .val(target_table + "_" + table_count[target_table]);
