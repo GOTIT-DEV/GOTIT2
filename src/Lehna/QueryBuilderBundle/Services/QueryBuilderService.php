@@ -138,9 +138,9 @@ class QueryBuilderService
    */
   public function getSelectFields($data)
   {
-    $initialTable = $data["initial"]["initialTable"];
+    $initialTableAlias = $data["initial"]["initialAlias"];
     $initialFields = $data["initial"]["initialFields"];
-    $resultsTab = [$initialTable => $initialFields]; // Init the array with the first fields
+    $resultsTab = [$initialTableAlias => $initialFields]; // Init the array with the first fields
     if (array_key_exists("joins", $data)) { // If there are join blocks in the query
       $joins = $data["joins"];
       foreach ($joins as $j) {
@@ -165,7 +165,7 @@ class QueryBuilderService
    * 
    * Warning : doesn't work properly when clicking ond the 'add-group' on the form.    
    */
-  private function constraintsOfLevel($level, $query, $data, $table, $condition)
+  private function constraintsOfLevel($level, $query, $data, $table, $initAlias, $condition)
   {
 
     if (strlen($level == 1)) { // If we are on the first level, we can use the 'simple' function to get the constraints. 
@@ -175,7 +175,7 @@ class QueryBuilderService
         if (count($r) == 6) { // If there are no more constraints after, we use the 'simple' function. 
           $query = $this->getConstraints($r, $data, $query, $table, $condition);
         } elseif (count($r) == 2) { // If there are multiple constraints, we call this function on itself. 
-          $query = $this->constraintsOfLevel($r["rules"], $query, $data, $table, $r["condition"]);
+          $query = $this->constraintsOfLevel($r["rules"], $query, $data, $table, $initAlias, $r["condition"]);
         }
       }
     }
@@ -197,23 +197,29 @@ class QueryBuilderService
 
     $initial = $data["initial"];
     $table = $initial["initialTable"];
-    $query = $query->from('BbeesE3sBundle:' . $table, $table); // Adding the initial table to the query
+    $initAlias = $initial["initialAlias"];
+    $query = $query->from('BbeesE3sBundle:' . $table, $initAlias); // Adding the initial table to the query
+    $table = $initAlias;
     $fields = $initial["initialFields"];
     foreach ($fields as $value) {
-      $query = $query->addSelect($table . "." . $value . " AS " . $table . "_" . $value); // Adding every field selected for the initial table
+      $query = $query->addSelect($initAlias . "." . $value . " AS " . $initAlias . "_" . $value); // Adding every field selected for the initial table
     };
 
     if ($initial["constraintsTable1"] != "") { // If the user decided to add some constraints
       $condition = $initial["constraintsTable1"]["condition"];
       $constraints = $initial["constraintsTable1"]["rules"];
-      $query = $this->constraintsOfLevel($constraints, $query, $data, $table, $condition); // Adding the constraints to the query
+      $query = $this->constraintsOfLevel($constraints, $query, $data, $table, $initAlias, $condition); // Adding the constraints to the query
     }
 
     if (count($data) > 1) { // If the user decided to make some joins
       if (strlen($data["joins"] >= 1)) {
         $joins = $data["joins"];
         foreach ($joins as $j) { // For each block added
-          $formerTable = $j["formerTable"];
+          if ($j == $joins[0]) {
+            $formerTable = $initAlias;
+          } else {
+            $formerTable = $j["formerTable"];
+          }
           $adjTable = $j["adjacent_table"];
           $jointype = $j["join"];
           $srcField = $j["sourceField"];
@@ -232,7 +238,7 @@ class QueryBuilderService
             $constraints = $j["constraints"]["rules"];
             $condition = $j["constraints"]["condition"];
             $table = $j["alias"];
-            $query = $this->constraintsOfLevel($constraints, $query, $data, $table, $condition);
+            $query = $this->constraintsOfLevel($constraints, $query, $data, $table, $initAlias, $condition);
           }
         }
       }
