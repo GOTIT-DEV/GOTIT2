@@ -144,7 +144,7 @@ class QueryBuilderService
     if (array_key_exists("joins", $data)) { // If there are join blocks in the query
       $joins = $data["joins"];
       foreach ($joins as $j) {
-        if (count($j) == 8) {
+        if (count($j) == 9) {
           $alias = $j["alias"];
           $joinsFields = $j["fields"];
           $resultsTab[$alias] = $joinsFields; // Adding the selected fields for each join block
@@ -218,7 +218,7 @@ class QueryBuilderService
           if ($j == $joins[0]) {
             $formerTable = $initAlias;
           } else {
-            $formerTable = $j["formerTable"];
+            $formerTable = $j["formerTableAlias"];
           }
           $adjTable = $j["adjacent_table"];
           $jointype = $j["join"];
@@ -226,7 +226,7 @@ class QueryBuilderService
           $tgtField = $j["targetField"];
           $alias = $j["alias"];
 
-          if (count($j) == 8) { // If the user chooses to return some fields.
+          if (count($j) == 9) { // If the user chooses to return some fields.
             $newFields = $j["fields"];
             foreach ($newFields as $newValue) {
               $query = $query->addSelect($alias . "." . $newValue . " AS " . $alias . "_" . $newValue);

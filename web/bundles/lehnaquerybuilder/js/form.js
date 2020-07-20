@@ -132,7 +132,6 @@ export function initFirstFields(init_data) {
       );
     }
 
-
     // Enables the plus button to add a join block when the first table is chosen (Disabled by default)
     document.getElementById("add-join").disabled = false;
     document.getElementById("submit-button").disabled = false;
@@ -319,7 +318,10 @@ export function initJoinBlock(joinType, init_data) {
           .selectpicker("refresh");
 
         // Initialize join path selection if necessary
-        let formerTable = newBlock.find("#former-table").val();
+        let formerTableObject = newBlock.find("#former-table");
+        let formerTable = formerTableObject[0].options[
+          formerTableObject[0].selectedIndex
+        ].getAttribute("data-table");
         let relationsFromTo = init_data[formerTable].relations[target_table];
 
         if (relationsFromTo.length > 1) {
@@ -367,6 +369,9 @@ export function initJoinBlock(joinType, init_data) {
         .attr("value", table)
         .text(table.split("_").shift() + " | " + table)
     );
+    table_options.forEach((elt) => {
+      elt[0].setAttribute("data-table", elt[0].value.split("_").shift());
+    });
 
     newBlock
       .find("#former-table")
@@ -375,7 +380,9 @@ export function initJoinBlock(joinType, init_data) {
       .selectpicker("refresh")
       // When you select or change the value of the previous table you want to select
       .change((event) => {
-        let target_table = event.target.value;
+        let target_table = event.target.options[
+          event.target.selectedIndex
+        ].getAttribute("data-table");
         let table_data = init_data[target_table];
 
         // Making sure we have a list of adjacent tables sorted by alphabetical order
@@ -470,7 +477,11 @@ export function get_form_block_data(init_data) {
     .map(function () {
       let block = $(this);
       let adj_table = block.find("#adjacent-tables").val();
-      let formerT = block.find("#former-table").val();
+      let formerTabAlias = block.find("#former-table").val();
+      let formerTObj = block.find("#former-table");
+      let formerT = formerTObj[0].options[
+        formerTObj[0].selectedIndex
+      ].getAttribute("data-table");
       let idJoin = block.find("#join-type").val();
       let selectedFields = block.find(".table-selects option:selected");
       let alias = block.find("input.alias").val();
@@ -508,6 +519,7 @@ export function get_form_block_data(init_data) {
 
       return {
         formerTable: formerT,
+        formerTableAlias: formerTabAlias,
         join: idJoin,
         adjacent_table: adj_table,
         sourceField: sourceField,
