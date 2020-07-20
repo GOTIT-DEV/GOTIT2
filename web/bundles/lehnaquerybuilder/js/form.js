@@ -52,9 +52,8 @@ export function initFirstQueryBuilder() {
   });
 
   // Init the reset button for this query builder
-  $(".reset").click((_) => {
-    let target = $(this).data("target");
-    $(target).queryBuilder("reset");
+  $("#initial-cc-reset").click((_) => {
+    $("#initial-query-builder").queryBuilder("reset");
   });
 }
 
@@ -154,8 +153,9 @@ function addJoin(block_id) {
   });
 
   // Reset button
-  newBlock.find(".reset").click((_) => {
+  newBlock.find("#join-cc-reset").click((_) => {
     let target = $(this).data("target");
+    console.log(target)
     $(target).queryBuilder("reset");
   }); 
 
@@ -187,7 +187,7 @@ function addJoin(block_id) {
 function getAvailableTables() {
 
   let initial_table = document.getElementById("initial-table").value;
-  let available_tables = $("input#alias").get()
+  let available_tables = $("input.alias").get()
     .map(elt =>  elt.value)
     .filter(value => value !== "")
     .concat([initial_table])
@@ -270,7 +270,7 @@ export function initJoinBlock(joinType, init_data) {
       } else {
         table_count[target_table] = 1;
       }
-      newBlock.find("input#alias").val(target_table+"_"+table_count[target_table]);
+      newBlock.find("input.alias").val(target_table+"_"+table_count[target_table]);
 
       // Init query-builder with the fields of the selected table and adequate filters
       newBlock.find(".collapsed-query-builder")
@@ -362,6 +362,9 @@ export function initJoinBlock(joinType, init_data) {
     newBlock.find(".remove")
       .tooltip()
       .click((_) => {
+        let joinAlias = newBlock.find("input.alias").val();
+        $(`option[value=${joinAlias}]`).remove();
+        $(".selectpicker").selectpicker("refresh");
         newBlock.find(".form-block").remove();
         if (newBlock.find(".highlight-div")) {
           newBlock.removeClass(" highlight-div");
@@ -427,7 +430,7 @@ export function get_form_block_data(init_data) {
       let formerT = block.find("#former-table").val();
       let idJoin = block.find("#join-type").val();
       let selectedFields = block.find(".table-selects option:selected");
-      let alias = block.find("input#alias").val();
+      let alias = block.find("input.alias").val();
       let fields = [];
       selectedFields.each(function () {
         fields.push($(this).val());

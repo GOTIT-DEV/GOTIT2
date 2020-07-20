@@ -200,7 +200,7 @@ class QueryBuilderService
     $query = $query->from('BbeesE3sBundle:' . $table, $table); // Adding the initial table to the query
     $fields = $initial["initialFields"];
     foreach ($fields as $value) {
-      $query = $query->addSelect($table . "." . $value); // Adding every field selected for the initial table
+      $query = $query->addSelect($table . "." . $value . " AS " . $table . "_" . $value); // Adding every field selected for the initial table
     };
 
     if ($initial["constraintsTable1"] != "") { // If the user decided to add some constraints
@@ -223,7 +223,7 @@ class QueryBuilderService
           if (count($j) == 8) { // If the user chooses to return some fields.
             $newFields = $j["fields"];
             foreach ($newFields as $newValue) {
-              $query = $query->addSelect($alias . "." . $newValue);
+              $query = $query->addSelect($alias . "." . $newValue . " AS " . $alias . "_" . $newValue);
             };
           }
           $query = $this->makeJoin($joins, $query, $formerTable, $jointype, $adjTable, $srcField, $tgtField, $alias);
