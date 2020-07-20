@@ -65,7 +65,7 @@ class EspeceIdentifieeEmbedType extends AbstractType
                    'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('voc')
                                 ->where('voc.parent LIKE :parent')
-                                ->setParameter('parent', 'typeMaterial')
+                                ->setParameter('parent', 'typeMateriel')
                                 ->orderBy('voc.id', 'ASC');
                         }, 
                     'choice_translation_domain' => true, 'choice_label' => 'libelle', 'multiple' => false, 'expanded' => true, 'label_attr' => array('class' => 'radio-inline'), 'required' => true,)
