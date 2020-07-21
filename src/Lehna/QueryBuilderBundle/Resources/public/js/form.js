@@ -78,7 +78,9 @@ export function initFirstFields(init_data) {
     $("#initial-query-builder").queryBuilder(
       "setFilters",
       true,
-      table_data.filters
+      table_data.filters.filter(
+        (field) => !(field.label.endsWith("Cre") || field.label.endsWith("Maj"))
+      )
     );
 
     // Init list of fields ( without the dateCre, userCre, dateMaj, userMaj)
@@ -101,11 +103,6 @@ export function initFirstFields(init_data) {
       // Init the tooltip for the initial table dropdown
       .parent()
       .tooltip({ title: "Select the Fields (all selected by default)" });
-
-    // Making sure the dropdown works
-    // $("#initial-fields").multiselect("rebuild");
-    // $("#initial-fields").multiselect("selectAll", false);
-    // $("#initial-fields").multiselect("updateButtonText");
 
     let first_table = document.getElementById("initial-table");
     let init_table = first_table.options[first_table.selectedIndex].value;
@@ -131,6 +128,27 @@ export function initFirstFields(init_data) {
         initial_alias
       );
     }
+
+    let rulesList = document.getElementsByClassName("rules-list");
+    console.log(rulesList);
+    $('select[name ="initial-query-builder_rule_0_filter"]').change(
+      function () {
+        let fieldVal = $(
+          'select[name ="initial-query-builder_rule_0_filter"]'
+        )[0].value;
+        let arrayFieldVal = init_data[target_table].filters.filter(
+          (field) => field.label === fieldVal
+        );
+        let fieldType = arrayFieldVal[0].type;
+        if (fieldType === "date") {
+          let test = $(
+            "input[name='initial-query-builder_rule_0_value_0']"
+          ).val("");
+          Inputmask("9999/99/99", { placeholder: "YYYY-MM-DD" }).mask(test);
+          console.log(test);
+        }
+      }
+    );
 
     // Enables the plus button to add a join block when the first table is chosen (Disabled by default)
     document.getElementById("add-join").disabled = false;
@@ -310,7 +328,6 @@ export function initJoinBlock(joinType, init_data) {
             !table_count.hasOwnProperty(prev)
           ) {
             delete table_count[prev];
-            console.log(table_count.prev);
             if (table_count.hasOwnProperty(target_table)) {
               // If the table is in the object
               table_count[target_table] += 1;
@@ -320,16 +337,20 @@ export function initJoinBlock(joinType, init_data) {
           }
         }
         prev = target_table;
-        console.log(table_count);
 
         newBlock
           .find("input.alias")
           .val(target_table + "_" + table_count[target_table]);
 
         // Init query-builder with the fields of the selected table and adequate filters
-        newBlock
-          .find(".collapsed-query-builder")
-          .queryBuilder("setFilters", true, table_data.filters);
+        newBlock.find(".collapsed-query-builder").queryBuilder(
+          "setFilters",
+          true,
+          table_data.filters.filter(
+            (field) =>
+              !(field.label.endsWith("Cre") || field.label.endsWith("Maj"))
+          )
+        );
 
         // Init dropdown containing the fields related to the chosen adjacent table
         let items = table_data.filters
