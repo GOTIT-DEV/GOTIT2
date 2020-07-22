@@ -7,6 +7,8 @@
  * Authors : Thierno Diallo, Maud Ferrer and Elsa Mendes.
  */
 
+import "./plugins.js";
+
 let table_count = {};
 
 /**
@@ -36,7 +38,7 @@ export function initFirstTable(init_data) {
 export function initFirstQueryBuilder() {
   // Init the query builder for the initial block
   $("#initial-query-builder").queryBuilder({
-    plugins: ["bt-tooltip-errors"],
+    plugins: ["bt-tooltip-errors", "date-inputmask"],
     filters: [
       {
         id: "empty",
@@ -73,6 +75,10 @@ export function initFirstFields(init_data) {
   document.getElementById("initial-table").onchange = function (event) {
     let target_table = event.target.value;
     let table_data = init_data[target_table];
+
+    let filters = table_data.filters.filter(
+      (field) => !(field.label.endsWith("Cre") || field.label.endsWith("Maj"))
+    );
 
     // Init query-builder with fields and filters
     $("#initial-query-builder").queryBuilder(
@@ -129,27 +135,6 @@ export function initFirstFields(init_data) {
       );
     }
 
-    let rulesList = document.getElementsByClassName("rules-list");
-    console.log(rulesList);
-    $('select[name ="initial-query-builder_rule_0_filter"]').change(
-      function () {
-        let fieldVal = $(
-          'select[name ="initial-query-builder_rule_0_filter"]'
-        )[0].value;
-        let arrayFieldVal = init_data[target_table].filters.filter(
-          (field) => field.label === fieldVal
-        );
-        let fieldType = arrayFieldVal[0].type;
-        if (fieldType === "date") {
-          let test = $(
-            "input[name='initial-query-builder_rule_0_value_0']"
-          ).val("");
-          Inputmask("9999/99/99", { placeholder: "YYYY-MM-DD" }).mask(test);
-          console.log(test);
-        }
-      }
-    );
-
     // Enables the plus button to add a join block when the first table is chosen (Disabled by default)
     document.getElementById("add-join").disabled = false;
     document.getElementById("submit-button").disabled = false;
@@ -175,7 +160,7 @@ function addJoin(block_id) {
 
   // Query builder initialization for join blocks
   newBlock.find(".collapsed-query-builder").queryBuilder({
-    plugins: ["bt-tooltip-errors"],
+    plugins: ["bt-tooltip-errors", "date-inputmask"],
     filters: [
       {
         id: "empty",
@@ -195,7 +180,7 @@ function addJoin(block_id) {
     $(target).queryBuilder("reset");
   });
 
-  // Init switchobox buttons
+  // Init switchbox buttons
   $("[data-toggle='toggle']").bootstrapToggle("destroy");
   $("[data-toggle='toggle']").bootstrapToggle();
   $("[data-toggle='tooltip']").tooltip();
