@@ -9,7 +9,7 @@
 
 import "./plugins.js";
 
-let table_count = {};
+let table_count = {}; // Object to keep track of the number of times is used to generate aliases dynamically
 
 /**
  * Initializing the dropdown containing all tables
@@ -74,11 +74,7 @@ export function initFirstFields(init_data) {
   // What occurs when you choose a table and/or change it
   document.getElementById("initial-table").onchange = function (event) {
     let target_table = event.target.value;
-    let table_data = init_data[target_table];
-
-    let filters = table_data.filters.filter(
-      (field) => !(field.label.endsWith("Cre") || field.label.endsWith("Maj"))
-    );
+    let table_data = init_data[target_table]; // Getting the fields of the chosen table from the init file
 
     // Init query-builder with fields and filters
     $("#initial-query-builder").queryBuilder(
@@ -86,10 +82,10 @@ export function initFirstFields(init_data) {
       true,
       table_data.filters.filter(
         (field) => !(field.label.endsWith("Cre") || field.label.endsWith("Maj"))
-      )
+      ) // We don't want the fields UserMaj, UserCre, DateMaj and DateCre
     );
 
-    // Init list of fields ( without the dateCre, userCre, dateMaj, userMaj)
+    // Init list of fields ( without dateCre, userCre, dateMaj, userMaj)
     let items = table_data.filters
       .filter(
         (field) => !(field.label.endsWith("Cre") || field.label.endsWith("Maj"))
@@ -106,36 +102,27 @@ export function initFirstFields(init_data) {
       .empty()
       .append(...items)
       .selectpicker("refresh")
-      // Init the tooltip for the initial table dropdown
-      .parent()
+      .parent() // Init the tooltip for the initial table dropdown on the parent element
       .tooltip({ title: "Select the Fields (all selected by default)" });
 
+    // Creating an alias for the initial table, keeping track of it with updated table_count
     let first_table = document.getElementById("initial-table");
     let init_table = first_table.options[first_table.selectedIndex].value;
-
     let initial_alias = "";
     if (Object.keys(table_count).length > 0) {
-      table_count = {};
+      // If we already have a chosen table in the object
+      table_count = {}; // We re-init table_count and the alias
       initial_alias = "";
-      first_table.options[first_table.selectedIndex].removeAttribute(
-        "data-initalias"
-      );
-      table_count[init_table] = 1;
+      table_count[init_table] = 1; // We update table_count with the new currently chosen table, and we create the alias
       initial_alias = init_table + "_" + 1;
-      first_table.options[first_table.selectedIndex].setAttribute(
-        "data-initalias",
-        initial_alias
-      );
     } else {
+      // If table_count is empty, we directly fill it and create the alias
       table_count[init_table] = 1;
       initial_alias = init_table + "_" + 1;
-      first_table.options[first_table.selectedIndex].setAttribute(
-        "data-initalias",
-        initial_alias
-      );
     }
+    document.getElementById("init-alias").value = initial_alias; // We set the value of the input text to the alias
 
-    // Enables the plus button to add a join block when the first table is chosen (Disabled by default)
+    // Enables the plus button to add a join block and the submit button when the first table is chosen (Disabled by default)
     document.getElementById("add-join").disabled = false;
     document.getElementById("submit-button").disabled = false;
   };
@@ -155,7 +142,7 @@ function addJoin(block_id) {
   // Pushing the new block to the div containing all the blocks
   $("#add-constraints").append(newBlock);
 
-  // creating the new block
+  // Creating the new block
   newBlock = $("#form-block-" + block_id);
 
   // Query builder initialization for join blocks
@@ -204,15 +191,14 @@ function addJoin(block_id) {
  * @return {Set}
  */
 function getAvailableTables() {
-  let table1 = document.getElementById("initial-table");
-  let initialAlias = table1.options[table1.selectedIndex].getAttribute(
-    "data-initalias"
-  );
+  let initialAlias = document.getElementById("init-alias").value;
+
+  // Creating an Array with all the previously chosen tables (using the aliases since we can choose one table multiple times)
   let available_tables = $("input.alias")
     .get()
     .map((elt) => elt.value)
     .filter((value) => value !== "")
-    .concat([initialAlias]);
+    .concat([initialAlias]); // We add the initial table
 
   // Making sure we don't have any blank line added to the dropdown
   for (let i = 0; i < available_tables.length; i++) {
@@ -221,8 +207,7 @@ function getAvailableTables() {
     }
   }
 
-  // Remove duplicates
-
+  // Remove duplicate
   return [...new Set(available_tables)].sort();
 }
 
@@ -284,7 +269,7 @@ export function initJoinBlock(joinType, init_data) {
       .parent()
       .tooltip({ title: "Select the Fields (none selected by default)" });
 
-    let prev = newBlock.find(".adjacent-tables")[0].value;
+    let prev = newBlock.find(".adjacent-tables")[0].value; // Creating prev to keep track of changes between adjacent tables
 
     // When the user selects an adjacent table
     newBlock
@@ -294,41 +279,45 @@ export function initJoinBlock(joinType, init_data) {
         let table_data = init_data[target_table];
 
         if (prev === "") {
+          // If we select an adjacent table for the first time
           // Update the table_count object with chosen table
           if (table_count.hasOwnProperty(target_table)) {
-            // If the table is in the object
+            // If the table is already in the object, we increment its value
             table_count[target_table] += 1;
           } else {
+            // If not, we create it
             table_count[target_table] = 1;
           }
         } else {
+          // If we choose a new table
           if (table_count.hasOwnProperty(prev) && table_count[prev] > 1) {
             // If the table is in the object
-            table_count[prev] -= 1;
+            table_count[prev] -= 1; // We decrement the value of the previously seelcted adj table
             if (table_count.hasOwnProperty(target_table)) {
-              // If the table is in the object
+              // If the currently selected table is in the object
               table_count[target_table] += 1;
             } else {
               table_count[target_table] = 1;
             }
           } else if (
+            // If the previously selected table has been chosen only once, or never
             (table_count.hasOwnProperty(prev) && table_count[prev] === 1) ||
             !table_count.hasOwnProperty(prev)
           ) {
-            delete table_count[prev];
+            delete table_count[prev]; // We completetly remove the property if it has been seen once
             if (table_count.hasOwnProperty(target_table)) {
-              // If the table is in the object
+              // If the currently selected table is in the object
               table_count[target_table] += 1;
             } else {
               table_count[target_table] = 1;
             }
           }
         }
-        prev = target_table;
+        prev = target_table; // We set the previously chosen adj table to the currently chosen one
 
         newBlock
           .find("input.alias")
-          .val(target_table + "_" + table_count[target_table]);
+          .val(target_table + "_" + table_count[target_table]); // We set the value of the input text to the alias
 
         // Init query-builder with the fields of the selected table and adequate filters
         newBlock.find(".collapsed-query-builder").queryBuilder(
@@ -389,7 +378,7 @@ export function initJoinBlock(joinType, init_data) {
             });
 
           newBlock.find("#join-source-fields").show();
-        } else newBlock.find("#join-source-fields").hide();
+        } else newBlock.find("#join-source-fields").hide(); // No need to show the menu if not necessary
 
         // Making sure the buttons are enabled after an adjacent table is chosen
         document.getElementById("add-join").disabled = false;
@@ -480,13 +469,12 @@ export function initJoinBlock(joinType, init_data) {
  * @return {Object}
  */
 export function get_form_initial() {
+  // Geetting the initial table and the matching alias
   let table1 = document.getElementById("initial-table");
   let initialTable = table1.options[table1.selectedIndex].value;
-  let initialAlias = table1.options[table1.selectedIndex].getAttribute(
-    "data-initalias"
-  );
+  let initialAlias = document.getElementById("init-alias").value;
 
-  // Constraints
+  // If the user used Constraints
   if ($("#initial-constraints-switchbox").is(":checked") == true) {
     var constraintsTable1 = $(".collapsed-query-builder")
       .eq(0)
@@ -495,7 +483,7 @@ export function get_form_initial() {
     var constraintsTable1 = null;
   }
 
-  // Checked inputs
+  // Getting the selected fields
   let fieldsSelected = $("#initial-fields").find("option:selected");
   let initialFields = [];
   fieldsSelected.each(function () {

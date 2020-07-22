@@ -33,13 +33,18 @@ div#initial-panel {
     grid-template-rows: auto auto;
     grid-template-areas:
       "messages messages ."
-      "initial-selected-fields . initial-checked-constraints"
+      "initial-selected-fields init-input-alias initial-checked-constraints"
       "toggled-constraints toggled-constraints initial-reset-constraints";
 
     div#initial-selected-fields {
       grid-area: initial-selected-fields;
       justify-self: start;
       width: 100%;
+    }
+
+    div.input-alias {
+      grid-area: init-input-alias;
+      justify-self: start;
     }
 
     div#initial-checked-constraints {
@@ -64,12 +69,12 @@ div#initial-panel {
       grid-template-columns: 1fr;
       grid-template-rows: auto auto auto auto;
       grid-template-areas:
-      "messages messages"
-      "initial-selected-fields initial-checked-constraints"
-      "toggled-constraints toggled-constraints"
-      "initial-reset-constraints initial-reset-constraints";
+        "messages messages"
+        "initial-selected-fields initial-checked-constraints"
+        "toggled-constraints toggled-constraints"
+        "initial-reset-constraints initial-reset-constraints";
 
-      >button {
+      > button {
         justify-self: center;
       }
 
