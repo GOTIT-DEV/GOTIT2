@@ -219,12 +219,15 @@ function addJoin(block_id) {
  * @return {Set}
  */
 function getAvailableTables() {
-  let initial_table = document.getElementById("initial-table").value;
+  let table1 = document.getElementById("initial-table");
+  let initialAlias = table1.options[table1.selectedIndex].getAttribute(
+    "data-initalias"
+  );
   let available_tables = $("input.alias")
     .get()
     .map((elt) => elt.value)
     .filter((value) => value !== "")
-    .concat([initial_table]);
+    .concat([initialAlias]);
 
   // Making sure we don't have any blank line added to the dropdown
   for (let i = 0; i < available_tables.length; i++) {
