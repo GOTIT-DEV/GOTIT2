@@ -260,8 +260,11 @@ class QueryBuilderService
     $operator = $constraints["operator"];
     $value = $constraints["value"];
     $tableField = $table . "." . $field;
-    if ((preg_match('#^date#', $field) === 1)) {
+    if ((preg_match('#^date#', $field) === 1) && ($field !== "dateMaj" && $field !== "dateCre")) {
       $value = \DateTime::createFromFormat("Y-m-d", $value)->format("Y-m-d");
+      $value = "'" . $value . "'";
+    } else if ($field === "dateMaj" || $field === "dateCre") {
+      $value = \DateTime::createFromFormat("Y-m-d H:i:s", $value)->format("Y-m-d H:i:s");
       $value = "'" . $value . "'";
     }
 

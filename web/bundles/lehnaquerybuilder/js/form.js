@@ -80,22 +80,16 @@ export function initFirstFields(init_data) {
     $("#initial-query-builder").queryBuilder(
       "setFilters",
       true,
-      table_data.filters.filter(
-        (field) => !(field.label.endsWith("Cre") || field.label.endsWith("Maj"))
-      ) // We don't want the fields UserMaj, UserCre, DateMaj and DateCre
+      table_data.filters
     );
 
-    // Init list of fields ( without dateCre, userCre, dateMaj, userMaj)
-    let items = table_data.filters
-      .filter(
-        (field) => !(field.label.endsWith("Cre") || field.label.endsWith("Maj"))
-      )
-      .map((item) =>
-        $("<option></option>")
-          .attr("value", item.label)
-          .attr("selected", true)
-          .text(item.label)
-      );
+    // Init list of fields
+    let items = table_data.filters.map((item) =>
+      $("<option></option>")
+        .attr("value", item.label)
+        .attr("selected", true)
+        .text(item.label)
+    );
 
     // Init the dropdown containing the initial fields related to the chosen table
     $("#initial-fields")
@@ -320,24 +314,14 @@ export function initJoinBlock(joinType, init_data) {
           .val(target_table + "_" + table_count[target_table]); // We set the value of the input text to the alias
 
         // Init query-builder with the fields of the selected table and adequate filters
-        newBlock.find(".collapsed-query-builder").queryBuilder(
-          "setFilters",
-          true,
-          table_data.filters.filter(
-            (field) =>
-              !(field.label.endsWith("Cre") || field.label.endsWith("Maj"))
-          )
-        );
+        newBlock
+          .find(".collapsed-query-builder")
+          .queryBuilder("setFilters", true, table_data.filters);
 
         // Init dropdown containing the fields related to the chosen adjacent table
-        let items = table_data.filters
-          .filter(
-            (field) =>
-              !(field.label.endsWith("Cre") || field.label.endsWith("Maj"))
-          )
-          .map((item) =>
-            $("<option></option>").attr("value", item.label).text(item.label)
-          );
+        let items = table_data.filters.map((item) =>
+          $("<option></option>").attr("value", item.label).text(item.label)
+        );
         newBlock
           .find("select.table-selects")
           .empty()
