@@ -88,10 +88,10 @@ class ChromatogrammeController extends AbstractController
             array_agg(sq.internal_sequence_creation_date ORDER BY sq.id DESC) last_internal_sequence_creation_date,
             array_agg(sq.internal_sequence_alignment_code ORDER BY sq.id DESC) last_internal_sequence_alignment_code, 
             array_agg(voc_statut_sqc_ass.code ORDER BY sq.id DESC) last_internal_sequence_status_voc,
-            user_cre.username as user_cre_username , user_maj.username as user_maj_username
+            user_cre.user_name as user_cre_username , user_maj.user_name as user_maj_username
             FROM  chromatogram chromato
-                LEFT JOIN user_db user_cre ON user_cre.id = chromato.creation_user_name
-                LEFT JOIN user_db user_maj ON user_maj.id = chromato.update_user_name 
+                LEFT JOIN  user_db user_cre ON user_cre.id = chromato.creation_user_name
+                LEFT JOIN  user_db user_maj ON user_maj.id = chromato.update_user_name 
                 LEFT JOIN vocabulary voc_chromato_quality ON chromato.chromato_quality_voc_fk = voc_chromato_quality.id
                 JOIN pcr ON chromato.pcr_fk = pcr.id
                     LEFT JOIN vocabulary voc_gene ON pcr.gene_voc_fk = voc_gene.id 
@@ -107,7 +107,7 @@ class ChromatogrammeController extends AbstractController
         GROUP BY chromato.id, chromato.creation_user_name, chromato.date_of_creation, chromato.date_of_update,
             sp.specimen_molecular_code, dna.dna_code, pcr.pcr_code, pcr.pcr_number,
             voc_gene.code, voc_chromato_quality.code,
-            user_cre.username, user_maj.username"
+            user_cre.user_name, user_maj.user_name"
         . " ORDER BY ".$orderBy;
         // execute query and fill tab to show in the bootgrid list (see index.htm)
         $stmt = $em->getConnection()->prepare($rawSql);

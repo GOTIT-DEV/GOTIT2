@@ -1,4 +1,4 @@
-﻿ALTER TABLE lot_materiel_ext RENAME COLUMN collecte_fk TO sampling_fk ; ALTER TABLE sequence_assemblee_ext RENAME COLUMN collecte_fk TO sampling_fk ; ALTER TABLE lot_materiel RENAME COLUMN collecte_fk TO sampling_fk ;
+ALTER TABLE lot_materiel_ext RENAME COLUMN collecte_fk TO sampling_fk ; ALTER TABLE sequence_assemblee_ext RENAME COLUMN collecte_fk TO sampling_fk ; ALTER TABLE lot_materiel RENAME COLUMN collecte_fk TO sampling_fk ;
 ALTER TABLE a_cibler RENAME COLUMN collecte_fk TO sampling_fk ;
 ALTER TABLE a_pour_sampling_method RENAME COLUMN collecte_fk TO sampling_fk ; ALTER TABLE a_pour_fixateur RENAME COLUMN collecte_fk TO sampling_fk ;
 ALTER TABLE est_finance_par RENAME COLUMN collecte_fk TO sampling_fk ; ALTER TABLE est_effectue_par RENAME COLUMN collecte_fk TO sampling_fk ;
@@ -86,19 +86,21 @@ ALTER TABLE lot_materiel RENAME COLUMN boite_fk TO storage_box_fk ; ALTER TABLE 
 ALTER TABLE adn RENAME TO dna ;
 ALTER SEQUENCE adn_id_seq RENAME TO dna_id_seq ;
 
-# Internationalisatio n de la table adn_est_realise_par
+-- Internationalisatio n de la table adn_est_realise_par
 
-# modification des noms de colonnes de la table adn ; adn_fk , personne_fk ALTER TABLE adn_est_realise_par RENAME COLUMN adn_fk TO dna_fk ;
+-- modification des noms de colonnes de la table adn ; adn_fk , personne_fk 
+ALTER TABLE adn_est_realise_par RENAME COLUMN adn_fk TO dna_fk ;
 ALTER TABLE adn_est_realise_par RENAME COLUMN personne_fk TO person_fk ;
 
-# modification des noms de colonnes ( adn_fk , personne_fk )à de autres tables de la bdd ALTER TABLE pcr RENAME COLUMN adn_fk TO dna_fk ;
+-- modification des noms de colonnes ( adn_fk , personne_fk )à de autres tables de la bdd 
+ALTER TABLE pcr RENAME COLUMN adn_fk TO dna_fk ;
 ALTER TABLE lot_materiel_ext_est_realise_par RENAME COLUMN personne_fk TO person_fk ; ALTER TABLE sqc_ext_est_realise_par RENAME COLUMN personne_fk TO person_fk ;
 ALTER TABLE sequence_assemblee_est_realise_par RENAME COLUMN personne_fk TO person_fk ; ALTER TABLE source_a_ete_integre_par RENAME COLUMN personne_fk TO person_fk ;
 ALTER TABLE motu_est_genere_par RENAME COLUMN personne_fk TO person_fk ; ALTER TABLE est_identifie_par RENAME COLUMN personne_fk TO person_fk ;
 ALTER TABLE individu_lame_est_realise_par RENAME COLUMN personne_fk TO person_fk ; ALTER TABLE est_effectue_par RENAME COLUMN personne_fk TO person_fk ;
 ALTER TABLE lot_materiel_est_realise_par RENAME COLUMN personne_fk TO person_fk ; ALTER TABLE pcr_est_realise_par RENAME COLUMN personne_fk TO person_fk ;
 
-# modification du nom de la table adn et de la sequence de l'id auto ALTER TABLE adn_est_realise_par RENAME TO dna_is_extracted_by ;
+ALTER TABLE adn_est_realise_par RENAME TO dna_is_extracted_by ;
 ALTER SEQUENCE adn_est_realise_par_id_seq RENAME TO dna_is_extracted_by_id_seq ;
 
 -- Internationalisation de la table assigne
@@ -113,7 +115,7 @@ ALTER TABLE sqc_ext_est_reference_dans RENAME COLUMN sequence_assemblee_ext_fk T
 ALTER TABLE espece_identifiee RENAME COLUMN sequence_assemblee_ext_fk TO external_sequence_fk ; ALTER TABLE espece_identifiee RENAME COLUMN sequence_assemblee_fk TO internal_sequence_fk ; ALTER TABLE sqc_est_publie_dans RENAME COLUMN sequence_assemblee_fk TO internal_sequence_fk ; ALTER TABLE sequence_assemblee_est_realise_par RENAME COLUMN sequence_assemblee_fk TO internal_sequence_fk ;
 
 
--- modification du nom de la table adn et de la sequence de l'id auto ALTER TABLE assigne RENAME TO motu_number ;
+ALTER TABLE assigne RENAME TO motu_number ;
 ALTER SEQUENCE assigne_id_seq RENAME TO motu_number_id_seq ;
 
 -- Internationalisation de la table boite
@@ -126,7 +128,7 @@ ALTER TABLE boite RENAME COLUMN type_collection_voc_fk TO collection_type_voc_fk
 -- modification des noms de colonnes (  ) dans les autres tables de la bdd
 
 
--- modification du nom de la table adn et de la sequence de l'id auto ALTER TABLE boite RENAME TO storage_box ;
+ALTER TABLE boite RENAME TO storage_box ;
 ALTER SEQUENCE boite_id_seq RENAME TO storage_box_id_seq ;
 
 -- Internationalisation de la table chromatogramme
@@ -136,23 +138,24 @@ ALTER TABLE chromatogramme RENAME COLUMN code_chromato TO chromatogram_code ; AL
 ALTER TABLE chromatogramme RENAME COLUMN commentaire_chromato TO chromatogram_comments ; ALTER TABLE chromatogramme RENAME COLUMN primer_chromato_voc_fk TO chromato_primer_voc_fk ; ALTER TABLE chromatogramme RENAME COLUMN qualite_chromato_voc_fk TO chromato_quality_voc_fk ; ALTER TABLE chromatogramme RENAME COLUMN etablissement_fk TO institution_fk ;
 
 
--- modification des noms de colonnes modifiées existantes dans les autres tables de la bdd ALTER TABLE personne RENAME COLUMN etablissement_fk TO institution_fk ;
+-- modification des noms de colonnes modifiées existantes dans les autres tables de la bdd 
+ALTER TABLE personne RENAME COLUMN etablissement_fk TO institution_fk ;
 
 
--- modification du nom de la table et de la sequence de l'id auto ALTER TABLE chromatogramme RENAME TO chromatogram ;
+ALTER TABLE chromatogramme RENAME TO chromatogram ;
 ALTER SEQUENCE chromatogramme_id_seq RENAME TO chromatogram_id_seq ;
 
 -- Internationalisation de la table collecte
 
 -- modification des noms de colonnes;
-ALTER TABLE collecte RENAME COLUMN code_collecte TO sample_code ;
+ALTER TABLE collecte RENAME COLUMN code_collecte TO sample_code ; ALTER TABLE collecte RENAME COLUMN date_collecte TO sampling_date ;
 ALTER TABLE collecte RENAME COLUMN duree_echantillonnage_mn TO sampling_duration ; ALTER TABLE collecte RENAME COLUMN temperature_c TO temperature ;
 ALTER TABLE collecte RENAME COLUMN conductivite_micro_sie_cm TO specific_conductance ; ALTER TABLE collecte RENAME COLUMN a_faire TO sample_status ;
 ALTER TABLE collecte RENAME COLUMN commentaire_collecte TO sampling_comments ; ALTER TABLE collecte RENAME COLUMN leg_voc_fk TO donation_voc_fk ;
 ALTER TABLE collecte RENAME COLUMN station_fk TO site_fk ;
 
 
--- modification du nom de la table adn et de la sequence de l'id auto ALTER TABLE collecte RENAME TO sampling ;
+ALTER TABLE collecte RENAME TO sampling ;
 ALTER SEQUENCE collecte_id_seq RENAME TO sampling_id_seq ;
 
 -- Internationalisation de la table commune
@@ -161,10 +164,9 @@ ALTER SEQUENCE collecte_id_seq RENAME TO sampling_id_seq ;
 ALTER TABLE commune RENAME COLUMN code_commune TO municipality_code ; ALTER TABLE commune RENAME COLUMN nom_commune TO municipality_name ; ALTER TABLE commune RENAME COLUMN nom_region TO region_name ;
 ALTER TABLE commune RENAME COLUMN pays_fk TO country_fk ;
 
--- modification des noms de colonnes modifiées existantes dans les autres tables de la bdd ALTER TABLE station RENAME COLUMN pays_fk TO country_fk ;
-
-
--- modification du nom de la table et de la sequence de l'id auto ALTER TABLE commune RENAME TO municipality ;
+-- modification des noms de colonnes modifiées existantes dans les autres tables de la bdd 
+ALTER TABLE station RENAME COLUMN pays_fk TO country_fk ;
+ALTER TABLE commune RENAME TO municipality ;
 ALTER SEQUENCE commune_id_seq RENAME TO municipality_id_seq ;
 
 -- Internationalisation de la table composition_lot_materiel
@@ -180,7 +182,8 @@ ALTER TABLE individu RENAME COLUMN type_individu_voc_fk TO specimen_type_voc_fk 
 ALTER TABLE espece_identifiee RENAME COLUMN lot_materiel_fk TO internal_biological_material_fk ; ALTER TABLE lot_est_publie_dans RENAME COLUMN lot_materiel_fk TO internal_biological_material_fk ; ALTER TABLE lot_materiel_est_realise_par RENAME COLUMN lot_materiel_fk TO internal_biological_material_fk ;
 
 -- modification du nom de la table et de la sequence de l'id auto
-ALTER TABLE composition_lot_materiel RENAME TO composition_of_internal_biological_material ; ALTER SEQUENCE composition_lot_materiel_id_seq RENAME TO composition_of_internal_biological_material_id_seq ;
+ALTER TABLE composition_lot_materiel RENAME TO composition_of_internal_biological_material ; 
+ALTER SEQUENCE composition_lot_materiel_id_seq RENAME TO composition_of_internal_biological_material_id_seq ;
 
 -- Internationalisation de la table espece_identifiee
 
@@ -190,11 +193,12 @@ ALTER TABLE espece_identifiee RENAME COLUMN commentaire_esp_id TO identified_spe
 ALTER TABLE espece_identifiee RENAME COLUMN lot_materiel_ext_fk TO external_biological_material_fk ;
 
 
--- modification des noms de colonnes modifiées existantes dans les autres tables de la bdd ALTER TABLE lot_materiel_ext_est_realise_par RENAME COLUMN lot_materiel_ext_fk TO external_biological_material_fk ;
+-- modification des noms de colonnes modifiées existantes dans les autres tables de la bdd 
+ALTER TABLE lot_materiel_ext_est_realise_par RENAME COLUMN lot_materiel_ext_fk TO external_biological_material_fk ;
 ALTER TABLE lot_materiel_ext_est_reference_dans RENAME COLUMN lot_materiel_ext_fk TO external_biological_material_fk ;
 
 
--- modification du nom de la table et de la sequence de l'id auto ALTER TABLE espece_identifiee RENAME TO identified_species ;
+ALTER TABLE espece_identifiee RENAME TO identified_species ;
 ALTER SEQUENCE espece_identifiee_id_seq RENAME TO identified_species_id_seq ;
 
 -- Internationalisation de la table est_aligne_et_traite
@@ -258,7 +262,7 @@ ALTER TABLE etablissement RENAME COLUMN commentaire_etablissement TO institution
 -- modification des noms de colonnes modifiées existantes dans les autres tables de la bdd
 
 
--- modification du nom de la table et de la sequence de l'id auto ALTER TABLE etablissement RENAME TO institution ;
+ALTER TABLE etablissement RENAME TO institution ;
 ALTER SEQUENCE etablissement_id_seq RENAME TO institution_id_seq ;
 
 -- Internationalisation de la table individu
@@ -271,7 +275,7 @@ ALTER TABLE individu RENAME COLUMN num_ind_biomol TO specimen_molecular_number ;
 -- modification des noms de colonnes modifiées existantes dans les autres tables de la bdd
 
 
--- modification du nom de la table et de la sequence de l'id auto ALTER TABLE individu RENAME TO specimen ;
+ALTER TABLE individu RENAME TO specimen ;
 ALTER SEQUENCE individu_id_seq RENAME TO specimen_id_seq ;
 
 -- Internationalisation de la table individu_lame
@@ -284,7 +288,7 @@ ALTER TABLE individu_lame RENAME COLUMN nom_dossier_photos TO photo_folder_name 
 -- modification des noms de colonnes modifiées existantes dans les autres tables de la bdd
 
 
--- modification du nom de la table et de la sequence de l'id auto ALTER TABLE individu_lame RENAME TO specimen_slide ;
+ALTER TABLE individu_lame RENAME TO specimen_slide ;
 ALTER SEQUENCE individu_lame_id_seq RENAME TO specimen_slide_id_seq ;
 
 -- Internationalisation de la table individu_lame_est_realise_par
@@ -316,6 +320,7 @@ ALTER TABLE lot_est_publie_dans RENAME TO internal_biological_material_is_publis
 -- modification des noms de colonnes;
 ALTER TABLE lot_materiel RENAME COLUMN code_lot_materiel TO internal_biological_material_code ; ALTER TABLE lot_materiel RENAME COLUMN date_lot_materiel TO internal_biological_material_date ; ALTER TABLE lot_materiel RENAME COLUMN commentaire_conseil_sqc TO sequencing_advice ; ALTER TABLE lot_materiel RENAME COLUMN commentaire_lot_materiel TO internal_biological_material_comments ;
 ALTER TABLE lot_materiel RENAME COLUMN a_faire TO internal_biological_material_status ;
+ALTER TABLE lot_materiel RENAME COLUMN yeux_voc_fk TO eyes_voc_fk ;
 
 
 -- modification des noms de colonnes modifiées existantes dans les autres tables de la bdd
@@ -345,8 +350,6 @@ ALTER TABLE lot_materiel_ext RENAME COLUMN commentaire_lot_materiel_ext TO exter
 ALTER TABLE lot_materiel_ext RENAME COLUMN commentaire_nb_individus TO number_of_specimens_comments ;
 ALTER TABLE lot_materiel_ext RENAME COLUMN nb_individus_voc_fk TO number_of_specimens_voc_fk ; ALTER TABLE lot_materiel_ext RENAME COLUMN yeux_voc_fk TO eyes_voc_fk ;
 
-
--- modification des noms de colonnes modifiées existantes dans les autres tables de la bdd ALTER TABLE lot_materiel RENAME COLUMN yeux_voc_fk TO eyes_voc_fk ;
 
 
 -- modification du nom de la table et de la sequence de l'id auto
@@ -389,7 +392,7 @@ ALTER TABLE motu RENAME COLUMN commentaire_motu TO motu_comments ; ALTER TABLE m
 -- Internationalisation de la table motu_est_genere_par
 
 -- modification des noms de colonnes;
-ALTER TABLE motu_est_genere_par RENAME COLUMN motu_fk TO motu_fk ;
+-- ALTER TABLE motu_est_genere_par RENAME COLUMN motu_fk TO motu_fk ;
 
 
 -- modification des noms de colonnes modifiées existantes dans les autres tables de la bdd
@@ -408,7 +411,7 @@ ALTER TABLE pays RENAME COLUMN code_pays TO country_code ; ALTER TABLE pays RENA
 -- modification des noms de colonnes modifiées existantes dans les autres tables de la bdd
 
 
--- modification du nom de la table et de la sequence de l'id auto ALTER TABLE pays RENAME TO country ;
+ALTER TABLE pays RENAME TO country ;
 ALTER SEQUENCE pays_id_seq RENAME TO country_id_seq ;
 
 -- Internationalisation de la table pcr
@@ -429,7 +432,7 @@ ALTER TABLE pcr RENAME COLUMN primer_pcr_start_voc_fk TO forward_primer_voc_fk ;
 
 -- modification des noms de colonnes modifiées existantes dans les autres tables de la bdd
 
--- modification du nom de la table et de la sequence de l'id auto ALTER TABLE pcr_est_realise_par RENAME TO pcr_is_done_by ;
+ALTER TABLE pcr_est_realise_par RENAME TO pcr_is_done_by ;
 ALTER SEQUENCE pcr_est_realise_par_id_seq RENAME TO pcr_is_done_by_id_seq ;
 
 -- Internationalisation de la table personne
@@ -440,7 +443,7 @@ ALTER TABLE personne RENAME COLUMN commentaire_personne TO person_comments ;
 
 -- modification des noms de colonnes modifiées existantes dans les autres tables de la bdd
 
--- modification du nom de la table et de la sequence de l'id auto ALTER TABLE personne RENAME TO person ;
+ALTER TABLE personne RENAME TO person ;
 ALTER SEQUENCE personne_id_seq RENAME TO person_id_seq ;
 
 -- Internationalisation de la table programme
@@ -453,20 +456,20 @@ ALTER TABLE programme RENAME COLUMN commentaire_programme TO program_comments ;
 
 -- modification des noms de colonnes modifiées existantes dans les autres tables de la bdd
 
--- modification du nom de la table et de la sequence de l'id auto ALTER TABLE programme RENAME TO program ;
+ALTER TABLE programme RENAME TO program ;
 ALTER SEQUENCE programme_id_seq RENAME TO program_id_seq ;
 
 -- Internationalisation de la table referentiel_taxon
 
 -- modification des noms de colonnes;
-ALTER TABLE referentiel_taxon RENAME COLUMN taxname TO taxon_name ; ALTER TABLE referentiel_taxon RENAME COLUMN rank TO taxon_rank ; ALTER TABLE referentiel_taxon RENAME COLUMN ordre TO "order" ;
+ALTER TABLE referentiel_taxon RENAME COLUMN taxname TO taxon_name ; ALTER TABLE referentiel_taxon RENAME COLUMN rank TO taxon_rank ; ALTER TABLE referentiel_taxon RENAME COLUMN ordre TO "taxon_order" ;
 ALTER TABLE referentiel_taxon RENAME COLUMN validity TO taxon_validity ; ALTER TABLE referentiel_taxon RENAME COLUMN code_taxon TO taxon_code ;
 ALTER TABLE referentiel_taxon RENAME COLUMN commentaire_ref TO taxon_comments ; ALTER TABLE referentiel_taxon RENAME COLUMN taxname_ref TO taxon_synonym ;
 
 
 -- modification des noms de colonnes modifiées existantes dans les autres tables de la bdd
 
--- modification du nom de la table et de la sequence de l'id auto ALTER TABLE referentiel_taxon RENAME TO taxon ;
+ALTER TABLE referentiel_taxon RENAME TO taxon ;
 ALTER SEQUENCE referentiel_taxon_id_seq RENAME TO taxon_id_seq ;
 
 -- Internationalisation de la table sequence_assemblee
@@ -563,20 +566,22 @@ ALTER TABLE sqc_ext_est_reference_dans RENAME TO external_sequence_is_published_
 -- Internationalisation de la table sqc_ext_est_reference_dans
 ALTER TABLE station RENAME COLUMN code_station TO site_code ; ALTER TABLE station RENAME COLUMN nom_station TO site_name ; ALTER TABLE station RENAME COLUMN lat_deg_dec TO latitude ; ALTER TABLE station RENAME COLUMN long_deg_dec TO longitude ; ALTER TABLE station RENAME COLUMN altitude_m TO elevation ;
 ALTER TABLE station RENAME COLUMN info_localisation TO location_info ; ALTER TABLE station RENAME COLUMN info_description TO site_description ; ALTER TABLE station RENAME COLUMN commentaire_station TO site_comments ; ALTER TABLE station RENAME COLUMN commune_fk TO municipality_fk ;
-ALTER TABLE station RENAME COLUMN point_acces_voc_fk TO access_point_voc_fk ; ALTER TABLE station RENAME COLUMN habitat_type_voc_fk TO habitat_type_voc_fk ;
+ALTER TABLE station RENAME COLUMN point_acces_voc_fk TO access_point_voc_fk ; 
+-- ALTER TABLE station RENAME COLUMN habitat_type_voc_fk TO habitat_type_voc_fk ;
 ALTER TABLE station RENAME COLUMN precision_lat_long_voc_fk TO coordinate_precision_voc_fk ;
 
 
 -- modification des noms de colonnes modifiées existantes dans les autres tables de la bdd
 
 
--- modification du nom de la table et de la sequence de l'id auto ALTER TABLE station RENAME TO site ;
+ALTER TABLE station RENAME TO site ;
 ALTER SEQUENCE station_id_seq RENAME TO site_id_seq ;
 
 -- Internationalisation de la table user_db
 ALTER TABLE user_db RENAME COLUMN username TO user_name ; ALTER TABLE user_db RENAME COLUMN password TO user_password ; ALTER TABLE user_db RENAME COLUMN role TO user_role ;
 ALTER TABLE user_db RENAME COLUMN name TO user_full_name ; ALTER TABLE user_db RENAME COLUMN email TO user_email ;
-ALTER TABLE user_db RENAME COLUMN institution TO user_institution ; ALTER TABLE user_db RENAME COLUMN commentaire_user TO user_comments ; ALTER TABLE user_db RENAME COLUMN salt TO salt ;
+ALTER TABLE user_db RENAME COLUMN institution TO user_institution ; ALTER TABLE user_db RENAME COLUMN commentaire_user TO user_comments ; 
+-- ALTER TABLE user_db RENAME COLUMN salt TO salt ;
 ALTER TABLE user_db RENAME COLUMN is_active TO user_is_active ;
 
 
@@ -592,13 +597,9 @@ ALTER TABLE voc RENAME COLUMN libelle TO vocabulary_title ; ALTER TABLE voc RENA
 -- modification des noms de colonnes modifiées existantes dans les autres tables de la bdd
 
 
--- modification du nom de la table et de la sequence de l'id auto ALTER TABLE voc RENAME TO vocabulary ;
+ALTER TABLE voc RENAME TO vocabulary ;
 ALTER SEQUENCE voc_id_seq RENAME TO vocabulary_id_seq ;
 
--- Internationalisation de la table user_db
-
--- modification des noms de colonnes;
-ALTER TABLE user_db RENAME COLUMN commentaire_user TO user_comments;
 
 
 ---------------------------------------------------------------------------------
@@ -756,11 +757,11 @@ ALTER TABLE vocabulary RENAME CONSTRAINT cp_voc_cle_primaire  TO pk_vocabulary ;
 ALTER TABLE chromatogram RENAME CONSTRAINT cu_chromatogramme_cle_primaire  TO uk_chromatogram__chromatogram_code ;
 ALTER TABLE country RENAME CONSTRAINT cu_pays_cle_primaire  TO uk_country__country_code ;
 ALTER TABLE dna RENAME CONSTRAINT cu_adn_cle_primaire  TO uk_dna__dna_code ;
-ALTER TABLE external_biological_material RENAME CONSTRAINT cu_lot_materiel_ext_code_lot_materiel_ext  TO uk_external_biological_material__external_biological_material_code ;
+ALTER TABLE external_biological_material RENAME CONSTRAINT cu_lot_materiel_ext_code_lot_materiel_ext  TO uk_external_biological_material__external_biological_material_c ;
 ALTER TABLE external_sequence RENAME CONSTRAINT cu_sequence_assemblee_ext_code_sqc_ass_ext_alignement  TO uk_external_sequence__external_sequence_alignment_code ;
 ALTER TABLE external_sequence RENAME CONSTRAINT cu_sequence_assemblee_ext_cle_primaire  TO uk_external_sequence__external_sequence_code ;
 ALTER TABLE institution RENAME CONSTRAINT cu_etablissement_cle_primaire  TO uk_institution__institution_name ;
-ALTER TABLE internal_biological_material RENAME CONSTRAINT cu_lot_materiel_cle_primaire  TO uk_internal_biological_material__internal_biological_material_code ;
+ALTER TABLE internal_biological_material RENAME CONSTRAINT cu_lot_materiel_cle_primaire  TO uk_internal_biological_material__internal_biological_material_c;
 ALTER TABLE internal_sequence RENAME CONSTRAINT cu_sequence_assemblee_cle_primaire  TO uk_internal_sequence__internal_sequence_code ;
 ALTER TABLE internal_sequence RENAME CONSTRAINT cu_sequence_assemblee_code_sqc_alignement  TO uk_internal_sequence__internal_sequence_alignment_code ;
 ALTER TABLE municipality RENAME CONSTRAINT cu_commune_cle_primaire  TO uk_municipality__municipality_code ;

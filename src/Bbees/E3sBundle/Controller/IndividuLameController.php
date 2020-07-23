@@ -86,7 +86,7 @@ class IndividuLameController extends AbstractController
         rt_sp.taxon_name as last_taxname_sp, ei_sp.identification_date as last_date_identification_sp, voc_sp_identification_criterion.code as code_sp_identification_criterion,
         voc_sp_specimen_type.code as voc_sp_specimen_type_code, lot.internal_biological_material_code,
         ss.creation_user_name, ss.date_of_creation, ss.date_of_update,
-        user_cre.username as user_cre_username , user_maj.username as user_maj_username      
+        user_cre.user_name as user_cre_username , user_maj.user_name as user_maj_username      
 	FROM specimen_slide ss
                 LEFT JOIN user_db user_cre ON user_cre.id = ss.creation_user_name
                 LEFT JOIN user_db user_maj ON user_maj.id = ss.update_user_name 

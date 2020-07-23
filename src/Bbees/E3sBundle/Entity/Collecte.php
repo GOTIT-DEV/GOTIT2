@@ -49,7 +49,7 @@ class Collecte
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_collecte", type="date", nullable=true)
+     * @ORM\Column(name="sampling_date", type="date", nullable=true)
      */
     private $dateCollecte;
 
