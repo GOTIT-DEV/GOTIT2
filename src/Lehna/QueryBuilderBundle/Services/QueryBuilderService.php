@@ -62,7 +62,7 @@ class QueryBuilderService
 
     foreach ($relations as $sourceEntity => $targets) {
       foreach ($targets as $targetEntity => $data) {
-        $reverse_relation = function($d) use ($sourceEntity) {
+        $reverse_relation = function ($d) use ($sourceEntity) {
           return [
             "entity" => $sourceEntity,
             "from" => $d["to"],
@@ -165,18 +165,80 @@ class QueryBuilderService
    * 
    * Warning : doesn't work properly when clicking ond the 'add-group' on the form.    
    */
-  private function constraintsOfLevel($level, $query, $data, $table, $initAlias, $condition)
+  private function constraintsOfLevel($level, $query, $data, $table, $alias, $condition)
   {
 
     if (strlen($level == 1)) { // If we are on the first level, we can use the 'simple' function to get the constraints. 
-      $query = $this->getConstraints($constraints, $data, $query, $table, $condition);
+      $query = $this->getConstraints($constraints, $data, $query, $alias, $condition);
     } elseif (strlen($level > 1)) { // If we are on a deeper level : 
       foreach ($level as $r) {
         if (count($r) == 6) { // If there are no more constraints after, we use the 'simple' function. 
-          $query = $this->getConstraints($r, $data, $query, $table, $condition);
+          $query = $this->getConstraints($r, $data, $query, $alias, $condition);
         } elseif (count($r) == 2) { // If there are multiple constraints, we call this function on itself. 
-          $query = $this->constraintsOfLevel($r["rules"], $query, $data, $table, $initAlias, $r["condition"]);
+          $query = $this->constraintsOfLevel($r["rules"], $query, $data, $table, $alias, $r["condition"]);
         }
+      }
+    }
+
+    return $query;
+  }
+
+
+  /**
+   * Get the full first block of querybuilder.
+   * 
+   * @param mixed $data, $initial, $query : the full array containing the info in the form, the current state of the query.
+   * @return mixed $query : the query with the added chosen table, the fields and the constraints if the user choses to apply some constraints
+   * 
+   * Warning : by default, all fields are checked for the first table, please keep at least one field selected.   
+   */
+  public function getFirstBlock($initial, $query)
+  {
+    $firstTable = $initial["initialTable"];
+    $initAlias = $initial["initialAlias"];
+    $query = $query->from('BbeesE3sBundle:' . $firstTable, $initAlias); // Adding the initial table to the query
+    $firstFields = $initial["initialFields"];
+    foreach ($firstFields as $value) {
+      $query = $query->addSelect($initAlias . "." . $value . " AS " . $initAlias . "_" . $value); // Adding every field selected for the initial table
+    };
+    if ($initial["constraintsTable1"] != "") {
+      $condition = $initial["constraintsTable1"]["condition"];
+      $constraints = $initial["constraintsTable1"]["rules"];
+      $query = $this->constraintsOfLevel($constraints, $query, $initial, $firstTable, $initAlias, $condition); // Adding the constraints to the query
+    }
+
+    return $query;
+  }
+
+
+  /**
+   * Get the info contained in each block of JOIN. 
+   * 
+   * @param mixed $joins, query : the info contained on each block in the form, the current state of the query.
+   * @return mixed $query : the query with the added chosen table, the fields and the constraints if the user choses to apply some constraints
+   * 
+   * Warning : by default, no fields are checked for the chsoen adjacent table, the user is free to keep it that way or choose some fields to return.   
+   */
+  public function getJoinsBlocks($joins, $query)
+  {
+    foreach ($joins as $j) {
+      $formerTableAlias = $j["formerTableAlias"];
+      $jointype = $j["join"];
+      $adjTable = $j["adjacent_table"];
+      $joinAlias = $j["alias"];
+      $srcField = $j["sourceField"];
+      $tgtField = $j["targetField"];
+      if (count($j) == 9) { // If the user chooses to return some fields.
+        $newFields = $j["fields"];
+        foreach ($newFields as $newValue) {
+          $query = $query->addSelect($joinAlias . "." . $newValue . " AS " . $joinAlias . "_" . $newValue);;
+        };
+      }
+      $query = $this->makeJoin($joins, $query, $formerTableAlias, $jointype, $adjTable, $srcField, $tgtField, $joinAlias);
+      if ($j["constraints"] != "") { // If the user chooses to apply constraints on some fields in the JOIN part. 
+        $newConstraints = $j["constraints"]["rules"];
+        $newCondition = $j["constraints"]["condition"];
+        $query = $this->constraintsOfLevel($newConstraints, $query, $joins, $adjTable, $joinAlias, $newCondition);
       }
     }
 
@@ -192,7 +254,7 @@ class QueryBuilderService
    * 
    * Warning : by default, all fields are checked for the first table, please keep at least one box checked.   
    */
-  public function getBlocks($data, $query)
+  /* public function getBlocks($data, $query)
   {
 
     $initial = $data["initial"];
@@ -245,7 +307,7 @@ class QueryBuilderService
     }
     return $query;
   }
-
+ */
 
   /**
    * Get the first constraints (simple function that is used on each constraint). 
@@ -400,12 +462,12 @@ class QueryBuilderService
    * @return mixed $query : the query with the JOIN added
    * 
    */
-  private function makeJoin($joins, $query, $formerTable, $jointype, $adjTable, $srcField, $tgtField, $alias)
+  private function makeJoin($joins, $query, $formerTableAlias, $jointype, $adjTable, $srcField, $tgtField, $alias)
   {
     if ($jointype == "Inner Join") {
-      $query = $query->innerJoin('BbeesE3sBundle:' . $adjTable, $alias, 'WITH', $formerTable . '.' . $srcField . " = " . $alias . '.' . $tgtField);
+      $query = $query->innerJoin('BbeesE3sBundle:' . $adjTable, $alias, 'WITH', $formerTableAlias . '.' . $srcField . " = " . $alias . '.' . $tgtField);
     } elseif ($jointype == "Left Join") {
-      $query = $query->leftJoin('BbeesE3sBundle:' . $adjTable, $alias, 'WITH', $formerTable . '.' . $srcField . " = " . $alias . '.' . $tgtField);
+      $query = $query->leftJoin('BbeesE3sBundle:' . $adjTable, $alias, 'WITH', $formerTableAlias . '.' . $srcField . " = " . $alias . '.' . $tgtField);
     }
 
     return $query;

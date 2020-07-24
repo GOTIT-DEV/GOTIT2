@@ -54,7 +54,19 @@ class QueryBuilderController extends Controller
     $selectedFields = $service->getSelectFields($data);
     $em = $this->getDoctrine()->getManager();
     $qb = $em->createQueryBuilder();
-    $query = $service->getBlocks($data, $qb); // Getting the info of the blocks 
+
+    $initial = $data["initial"];
+    $query = $service->getFirstBlock($initial, $qb); // Getting the info of the first block. 
+
+    // If $data is longer than 1, it means there are one or more JOIN(s) in the query.
+    if (count($data) > 1) {
+      if (strlen($data["joins"] >= 1)) {
+        $joins = $data["joins"];
+        $query = $service->getJoinsBlocks($joins, $query); // Getting the info on each block containing a JOIN. 
+      }
+    }
+
+    // $query = $service->getBlocks($data, $qb); // Getting the info of the blocks 
     $q = $query->getQuery();
     $dqlresults = $q->getDql();
     $sqlresults = $q->getSql();

@@ -38,7 +38,7 @@ export function initFirstTable(init_data) {
 export function initFirstQueryBuilder() {
   // Init the query builder for the initial block
   $("#initial-query-builder").queryBuilder({
-    plugins: ["bt-tooltip-errors", "date-inputmask"],
+    plugins: ["bt-tooltip-errors", "bt-selectpicker", "date-inputmask"],
     filters: [
       {
         id: "empty",
@@ -141,7 +141,7 @@ function addJoin(block_id) {
 
   // Query builder initialization for join blocks
   newBlock.find(".collapsed-query-builder").queryBuilder({
-    plugins: ["bt-tooltip-errors", "date-inputmask"],
+    plugins: ["bt-tooltip-errors", "bt-selectpicker", "date-inputmask"],
     filters: [
       {
         id: "empty",
