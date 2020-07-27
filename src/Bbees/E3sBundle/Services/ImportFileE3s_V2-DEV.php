@@ -1543,7 +1543,7 @@ class ImportFileE3s
                             $dataColCsv = NULL; 
                         }
                     }
-                    if ($ColCsv == 'sampling.date_collecte' ) {
+                    if ($ColCsv == 'sampling.sampling_date' ) {
                         if ($dataColCsv != ''){
                             $eventDate = date_create_from_format('d/m/Y', $dataColCsv);
                             if (!$eventDate) {

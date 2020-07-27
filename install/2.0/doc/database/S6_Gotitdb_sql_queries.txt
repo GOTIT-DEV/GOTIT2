@@ -81,7 +81,7 @@ $$;
 
 -- (2) Execute the SQL Query  
 SELECT internal_biological_material.internal_biological_material_code, voc_pigmentation.code as code_pigmentation, voc_yeux.code as code_eye, storage_box.box_code as code_box, rt.taxon_name, voc_critere_identification.code as code_identification,
-site.site_code, site.latitude, site.longitude, voc_habitat_type.code as code_habitat, voc_point_acces.code as code_point_acces, sampling.date_collecte, 
+site.site_code, site.latitude, site.longitude, voc_habitat_type.code as code_habitat, voc_point_acces.code as code_point_acces, sampling.sampling_date, 
 composition_of_internal_biological_material.internal_biological_material_composition_comments, compt_nb_total_specimens(composition_of_internal_biological_material.internal_biological_material_fk) as nb_tot_specimens, composition_of_internal_biological_material.number_of_specimens as nb_BOV
 	FROM composition_of_internal_biological_material  
     	JOIN vocabulary voc_type_specimen ON voc_type_specimen.id = composition_of_internal_biological_material.specimen_type_voc_fk
