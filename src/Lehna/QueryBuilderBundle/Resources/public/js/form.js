@@ -464,7 +464,7 @@ export function get_form_initial() {
       .eq(0)
       .queryBuilder("getRules");
   } else {
-    var constraintsTable1 = null;
+    var constraintsTable1 = {};
   }
 
   // Getting the selected fields
@@ -474,7 +474,12 @@ export function get_form_initial() {
     initialFields.push($(this).val());
   });
 
-  return { initialTable, initialAlias, constraintsTable1, initialFields };
+  return {
+    initialTable,
+    initialAlias,
+    rules: constraintsTable1,
+    initialFields,
+  };
 }
 
 /**
@@ -525,7 +530,7 @@ export function get_form_block_data(init_data) {
           .find(".collapsed-query-builder")
           .queryBuilder("getRules");
       } else {
-        var constraintsTable2 = null;
+        var constraintsTable2 = {};
       }
 
       return {
@@ -536,7 +541,7 @@ export function get_form_block_data(init_data) {
         sourceField: sourceField,
         alias: alias,
         targetField: targetField,
-        constraints: constraintsTable2,
+        rules: constraintsTable2,
         fields: fields,
       };
     })
