@@ -107,15 +107,6 @@ class QueryBuilderService
     return $query;
   }
 
-
-  /*  if ((preg_match('#^date#', $field) === 1) && ($field !== "dateMaj" && $field !== "dateCre")) {
-    $value = \DateTime::createFromFormat("Y-m-d", $value)->format("Y-m-d");
-    $value = "'" . $value . "'";
-  } else if ($field === "dateMaj" || $field === "dateCre") {
-    $value = \DateTime::createFromFormat("Y-m-d H:i:s", $value)->format("Y-m-d H:i:s");
-    $value = "'" . $value . "'";
-  } */
-
   /**
    * Parse each rule contained in a group. 
    * 
@@ -127,12 +118,20 @@ class QueryBuilderService
   {
     // If we are on a rule, we create the constraint
     if (array_key_exists("operator", $rule)) {
-
-      // Check if field type is a date or datetime
-      if ((preg_match('#^date#', $rule["field"]) === 1) && ($rule["field"] !== "dateMaj" && $rule["field"] !== "dateCre")) {
-        $value = \DateTime::createFromFormat("Y-m-d", $rule["value"])->format("Y-m-d");
-      } else if ($rule["field"] === "dateMaj" || $rule["field"] === "dateCre") {
-        $value = \DateTime::createFromFormat("Y-m-d H:i:s", $rule["value"])->format("Y-m-d H:i:s");
+      // Check if field type is a date or datetime, and if the rule["value"] is an array longer than 1 and if operator is different from null/not null
+      if ((preg_match('#^date#', $rule["field"]) === 1) && ($rule["field"] !== "dateMaj" && $rule["field"] !== "dateCre") && ($rule["operator"] !== "is_null" && $rule["operator"] !== "is_not_null")) {
+        if (count($rule["value"]) > 1) {
+          $value0 = \DateTime::createFromFormat("Y-m-d", $rule["value"][0])->format("Y-m-d");
+          $value1 = \DateTime::createFromFormat("Y-m-d", $rule["value"][1])->format("Y-m-d");
+        } else $value = \DateTime::createFromFormat("Y-m-d", $rule["value"])->format("Y-m-d");
+      } else if (($rule["field"] === "dateMaj" || $rule["field"] === "dateCre") && ($rule["operator"] !== "is_null" && $rule["operator"] !== "is_not_null")) {
+        if (count($rule["value"]) > 1) {
+          $value0 = \DateTime::createFromFormat("Y-m-d H:i:s", $rule["value"][0])->format("Y-m-d H:i:s");
+          $value1 = \DateTime::createFromFormat("Y-m-d H:i:s", $rule["value"][1])->format("Y-m-d H:i:s");
+        } else $value = \DateTime::createFromFormat("Y-m-d H:i:s", $rule["value"])->format("Y-m-d H:i:s");
+      } else if ($rule["value"] !== "" && $rule["value"] > 1) {
+        $value0 = $rule["value"][0];
+        $value1 = $rule["value"][1];
       } else $value = $rule["value"];
 
       // Find the right operator
@@ -153,35 +152,33 @@ class QueryBuilderService
       } else if ($rule["operator"] === "greater_or_equal") {
         return $qb->expr()->gte($tableAlias . "." . $rule["field"], "'" . $value . "'");
       } else if ($rule["operator"] === "between") {
-        return $qb->expr()->between($tableAlias . "." . $rule["field"], $value[0], $value[1]);
+        return $qb->expr()->between($tableAlias . "." . $rule["field"], "'" . $value0 . "'", "'" . $value1 . "'");
       } else if ($rule["operator"] === "not_between") {
-        return $qb->expr()->not($qb->expr()->between($tableAlias . "." . $rule["field"], $value[0], $value[1]));
+        return $qb->expr()->not($qb->expr()->between($tableAlias . "." . $rule["field"], "'" . $value0 . "'", "'" . $value1 . "'"));
       } else if ($rule["operator"] === "is_null") {
         return $qb->expr()->isNull($tableAlias . "." . $rule["field"]);
       } else if ($rule["operator"] === "is_not_null") {
         return $qb->expr()->not($qb->expr()->isNull($tableAlias . "." . $rule["field"]));
       } else if ($rule["operator"] === "begins_with") {
-        return $qb->expr()->like($tableAlias . "." . $rule["field"], "'" . $value . "%" . "'" );
+        return $qb->expr()->like($tableAlias . "." . $rule["field"], "'" . $value . "%" . "'");
       } else if ($rule["operator"] === "not_begins_with") {
-        return $qb->expr()->not($qb->expr()->like($tableAlias . "." . $rule["field"], "'" . $value . "%" . "'" ));
+        return $qb->expr()->not($qb->expr()->like($tableAlias . "." . $rule["field"], "'" . $value . "%" . "'"));
       } else if ($rule["operator"] === "contains") {
-        return $qb->expr()->like($tableAlias . "." . $rule["field"], "'" . "%" . $value . "%" . "'" );
+        return $qb->expr()->like($tableAlias . "." . $rule["field"], "'" . "%" . $value . "%" . "'");
       } else if ($rule["operator"] === "not_contains") {
-        return $qb->expr()->not($qb->expr()->like($tableAlias . "." . $rule["field"], "'" . "%" . $value . "%" . "'" ));
+        return $qb->expr()->not($qb->expr()->like($tableAlias . "." . $rule["field"], "'" . "%" . $value . "%" . "'"));
       } else if ($rule["operator"] === "ends_with") {
-        return $qb->expr()->like($tableAlias . "." . $rule["field"], "'" . "%" . $value . "'" );
+        return $qb->expr()->like($tableAlias . "." . $rule["field"], "'" . "%" . $value . "'");
       } else if ($rule["operator"] === "not_ends_with") {
-        return $qb->expr()->not($qb->expr()->like($tableAlias . "." . $rule["field"], "'" . "%" . $value . "'" ));
+        return $qb->expr()->not($qb->expr()->like($tableAlias . "." . $rule["field"], "'" . "%" . $value . "'"));
       } else if ($rule["operator"] === "is_empty") {
         return $qb->expr()->eq($tableAlias . "." . $rule["field"], "''");
       } else if ($rule["operator"] === "is_not_empty") {
         return $qb->expr()->not($qb->expr()->eq($tableAlias . "." . $rule["field"], "''"));
-      }
-      else {
+      } else {
         throw new InvalidArgumentException("Querybuilder : Unknown operator " . $rule['operator']);
       }
 
-      // ... operators
       // If we are on a new group, we parse it with the dedicated function
     } else if (array_key_exists("condition", $rule)) {
       return $this->parseGroup($rule, $qb, $tableAlias);
