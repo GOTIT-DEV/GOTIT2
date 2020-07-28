@@ -1,4 +1,4 @@
-# GOTIT2 : Gene, Occurence and Taxa in Integrative Taxonomy - v2.0 of GOTIT
+# GOTIT2 : Gene, Occurence and Taxa in Integrative Taxonomy - v2 of GOTIT
 
 A Symfony project updated on September 2020 : Publish Version 2.0.0
 
