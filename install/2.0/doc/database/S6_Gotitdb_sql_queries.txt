@@ -147,7 +147,7 @@ SELECT   st.site_code, st.latitude, st.longitude,
 									FROM identified_species ei_sqc_assi 
 									GROUP BY ei_sqc_assi.internal_sequence_fk) ei_sqc_ass2 ON (ei_sqc_ass.id = ei_sqc_ass2.maxei_sqc_assi)
 							LEFT JOIN taxon rt_sqc_ass ON ei_sqc_ass.taxon_fk = rt_sqc_ass.id
-WHERE  voc_statut_sqc_ass.code = 'VALIDEE'
+WHERE  voc_statut_sqc_ass.code = 'VALID%'
 GROUP BY st.site_code, st.latitude, st.longitude,
 	lot.internal_biological_material_code, rt_lot.taxon_name, ei_lot.identification_date, 
    	ind.specimen_morphological_code, ind.specimen_molecular_code, ind.specimen_molecular_code, rt_ind.taxon_name, ei_ind.identification_date,

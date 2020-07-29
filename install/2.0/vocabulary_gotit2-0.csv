@@ -37,4 +37,4 @@ ADN;type box of dna LABEL;typeBoite;! DON’T CHANGE THE CODE : ADN
 type collection CODE-1;type collection LABEL-1;typeCollection;
 specimen type CODE-1;specimen type LABEL-1;typeIndividu;
 vision CODE-1;vision LABEL-1;yeux;
-NO-TYPE;No type;typeMaterial;
+type material CODE-1;type material LABEL-1;typeMateriel;

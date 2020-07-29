@@ -1,4 +1,4 @@
-TEMPLATE MODIFICATIONS GOTIT 1.1 -> 2.0
+TEMPLATES CHANGES GOTIT 1.1 -> 2.0
 > new column espece_identifiee.type_materiel_voc_fk(voc.code) in :
 specimen
 internal_sequence
