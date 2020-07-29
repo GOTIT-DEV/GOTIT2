@@ -71,6 +71,7 @@ export function initFirstFields(init_data) {
     width: "75%",
   });
 
+
   // What occurs when you choose a table and/or change it
   document.getElementById("initial-table").onchange = function (event) {
     let target_table = event.target.value;
@@ -103,6 +104,7 @@ export function initFirstFields(init_data) {
     let first_table = document.getElementById("initial-table");
     let init_table = first_table.options[first_table.selectedIndex].value;
     let initial_alias = "";
+
     if (Object.keys(table_count).length > 0) {
       // If we already have a chosen table in the object
       table_count = {}; // We re-init table_count and the alias
@@ -115,6 +117,7 @@ export function initFirstFields(init_data) {
       initial_alias = init_table + "_" + 1;
     }
     document.getElementById("init-alias").value = initial_alias; // We set the value of the input text to the alias
+    document.getElementById("init-alias").setAttribute("data-table", init_table);
 
     // Enables the plus button to add a join block and the submit button when the first table is chosen (Disabled by default)
     document.getElementById("add-join").disabled = false;
@@ -185,24 +188,35 @@ function addJoin(block_id) {
  * @return {Set}
  */
 function getAvailableTables() {
-  let initialAlias = document.getElementById("init-alias").value;
+  let initialAliasElt = $("#init-alias")
+  let initial = {
+    alias: initialAliasElt.val(), 
+    table: initialAliasElt.data('table')
+    }
 
   // Creating an Array with all the previously chosen tables (using the aliases since we can choose one table multiple times)
   let available_tables = $("input.alias")
     .get()
-    .map((elt) => elt.value)
-    .filter((value) => value !== "")
-    .concat([initialAlias]); // We add the initial table
+    .map((elt) => {
+      return {
+        alias: elt.value,
+        table: $(elt).data("table")
+      }
+    })
+    .concat([initial]) // We add the initial table
+  let uniqueAliases = new Set(available_tables.map(t => t.alias))
+    
+  return available_tables
+    .filter((t) => {
+      if (uniqueAliases.has(t.alias)) {
+        uniqueAliases.delete(t.alias)
+        return t.table !== "" && t.table !== undefined
+      } else {
+        return false
+      }
+    })
+    .sort((a,b) => a.table - b.table)
 
-  // Making sure we don't have any blank line added to the dropdown
-  for (let i = 0; i < available_tables.length; i++) {
-    if (available_tables[i] === undefined) {
-      available_tables.splice(i, 1);
-    }
-  }
-
-  // Remove duplicate
-  return [...new Set(available_tables)].sort();
 }
 
 let new_block_id = 0;
@@ -212,11 +226,6 @@ let new_block_id = 0;
  * @param {Object} init_data containing all the data in the form
  */
 export function initJoinBlock(joinType, init_data) {
-  //This solution leads to an error with join type being removed from query
-  /* let join_options = joinType.map(
-    join => $("<option></option>").attr("value", join).text(join)
-  )
-  console.log(join_options); */
 
   // After each time the user clicks on the add join button
   document.getElementById("add-join").onclick = function () {
@@ -225,15 +234,6 @@ export function initJoinBlock(joinType, init_data) {
 
     // Adding a block of query
     let newBlock = addJoin(new_block_id);
-
-    //This solution leads to an error with join type being removed from query
-    /* // Filling the menu containing the possible joins
-    newBlock.find("#join-type").empty()
-      .append(...join_options)
-      // Making sure the dropdown is initialized correctly
-      .selectpicker("refresh")
-      // Init tooltip
-      .parent().tooltip({ title: "Choose a JOIN Type" }); */
 
     // Init the JOIN Type dropdown
     newBlock.find("#join-type").empty().prop("selectedIndex", 0);
@@ -312,6 +312,7 @@ export function initJoinBlock(joinType, init_data) {
         newBlock
           .find("input.alias")
           .val(target_table + "_" + table_count[target_table]); // We set the value of the input text to the alias
+        newBlock.find("input.alias").attr("data-table", target_table);
 
         // Init query-builder with the fields of the selected table and adequate filters
         newBlock
@@ -376,14 +377,12 @@ export function initJoinBlock(joinType, init_data) {
       });
 
     // Init the dropdown containing all the previously chosen tables, with the alias as the value and making sure the user can choose the alias he wants
-    let table_options = getAvailableTables().map((table) =>
+    let table_options = getAvailableTables().map((t) =>
       $("<option></option>")
-        .attr("value", table)
-        .text(table.split("_").shift() + " | " + table)
+        .attr("value", t.alias)
+        .attr('data-table', t.table)
+        .text(t.table + " | " + t.alias)
     );
-    table_options.forEach((elt) => {
-      elt[0].setAttribute("data-table", elt[0].value.split("_").shift());
-    });
 
     newBlock
       .find("#former-table")
@@ -433,7 +432,7 @@ export function initJoinBlock(joinType, init_data) {
 
         // The alert is there to guide the user on why there are highlighted blocks
         alert(
-          "Removed Join Block Successfully!\nBe warned : you might need to make changes in the higlighted blocks!"
+          "Removed Join Block Successfully!\nBe warned : you might need to make changes in the highlighted blocks!"
         );
         let blockList = document.getElementsByClassName("form-block-id");
         let suppressedJoinId = newBlock.find(".form-block").prevObject[0].id;
@@ -549,7 +548,7 @@ export function get_form_block_data(init_data) {
       };
     })
     .toArray();
-  
+
   // Checks that all blocks are validated
   if (data.some(block => block.rules === null))
     return null;
