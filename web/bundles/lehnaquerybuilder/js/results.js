@@ -22,6 +22,9 @@ export function initResults(data) {
     let data_initial = get_form_initial();
     let data_join_blocks = get_form_block_data(data);
 
+    if ([data_initial, data_join_blocks].some(data => data === null))
+      return false
+
     // Formatting the data
     let jsonData = { initial: data_initial, joins: data_join_blocks};
 

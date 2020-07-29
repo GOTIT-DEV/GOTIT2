@@ -118,65 +118,86 @@ class QueryBuilderService
   {
     // If we are on a rule, we create the constraint
     if (array_key_exists("operator", $rule)) {
-      // Check if field type is a date or datetime, and if the rule["value"] is an array longer than 1 and if operator is different from null/not null
-      if ((preg_match('#^date#', $rule["field"]) === 1) && ($rule["field"] !== "dateMaj" && $rule["field"] !== "dateCre") && ($rule["operator"] !== "is_null" && $rule["operator"] !== "is_not_null")) {
-        if (count($rule["value"]) > 1) {
-          $value0 = \DateTime::createFromFormat("Y-m-d", $rule["value"][0])->format("Y-m-d");
-          $value1 = \DateTime::createFromFormat("Y-m-d", $rule["value"][1])->format("Y-m-d");
-        } else $value = \DateTime::createFromFormat("Y-m-d", $rule["value"])->format("Y-m-d");
-      } else if (($rule["field"] === "dateMaj" || $rule["field"] === "dateCre") && ($rule["operator"] !== "is_null" && $rule["operator"] !== "is_not_null")) {
-        if (count($rule["value"]) > 1) {
-          $value0 = \DateTime::createFromFormat("Y-m-d H:i:s", $rule["value"][0])->format("Y-m-d H:i:s");
-          $value1 = \DateTime::createFromFormat("Y-m-d H:i:s", $rule["value"][1])->format("Y-m-d H:i:s");
-        } else $value = \DateTime::createFromFormat("Y-m-d H:i:s", $rule["value"])->format("Y-m-d H:i:s");
-      } else if ($rule["value"] !== "" && $rule["value"] > 1) {
-        $value0 = $rule["value"][0];
-        $value1 = $rule["value"][1];
-      } else $value = $rule["value"];
+      $value = $rule['value'];
+      if (in_array($rule["operator"], ["between", "not_between", "in", "not_in"])) {
+        $value = array_map(function ($v) use ($rule) {
+          $v = trim($v);
+          if (in_array($rule['operator'], ['between', 'not_between'])) {
+            return "'" . $v . "'";
+          } else {
+            return $v;
+          }
+        }, $value);
+      } else {
+        $value = trim($value);
+        if (in_array($rule["operator"], ['begins_with', 'not_begins_with', 'contains', 'not_contains'])) {
+          $value = $value . "%";
+        }
+        if (in_array($rule["operator"], ['ends_with', 'not_ends_with', 'contains', 'not_contains'])) {
+          $value = '%' . $value;
+        }
+        $value = "'" . $value . "'";
+      }
+      $column = $tableAlias . "." . $rule["field"];
 
       // Find the right operator
-      if ($rule["operator"] === "equal") {
-        return $qb->expr()->eq($tableAlias . "." . $rule["field"], "'" . $value . "'");
-      } else if ($rule["operator"] === "not_equal") {
-        return $qb->expr()->neq($tableAlias . "." . $rule["field"], "'" . $value . "'");
-      } else if ($rule["operator"] === "in") {
-        return $qb->expr()->in($tableAlias . "." . $rule["field"], "'" . $value . "'");
-      } else if ($rule["operator"] === "not_in") {
-        return $qb->expr()->notIn($tableAlias . "." . $rule["field"], "'" . $value . "'");
-      } else if ($rule["operator"] === "less") {
-        return $qb->expr()->lt($tableAlias . "." . $rule["field"], "'" . $value . "'");
-      } else if ($rule["operator"] === "less_or_equal") {
-        return $qb->expr()->lte($tableAlias . "." . $rule["field"], "'" . $value . "'");
-      } else if ($rule["operator"] === "greater") {
-        return $qb->expr()->gt($tableAlias . "." . $rule["field"], "'" . $value . "'");
-      } else if ($rule["operator"] === "greater_or_equal") {
-        return $qb->expr()->gte($tableAlias . "." . $rule["field"], "'" . $value . "'");
-      } else if ($rule["operator"] === "between") {
-        return $qb->expr()->between($tableAlias . "." . $rule["field"], "'" . $value0 . "'", "'" . $value1 . "'");
-      } else if ($rule["operator"] === "not_between") {
-        return $qb->expr()->not($qb->expr()->between($tableAlias . "." . $rule["field"], "'" . $value0 . "'", "'" . $value1 . "'"));
-      } else if ($rule["operator"] === "is_null") {
-        return $qb->expr()->isNull($tableAlias . "." . $rule["field"]);
-      } else if ($rule["operator"] === "is_not_null") {
-        return $qb->expr()->not($qb->expr()->isNull($tableAlias . "." . $rule["field"]));
-      } else if ($rule["operator"] === "begins_with") {
-        return $qb->expr()->like($tableAlias . "." . $rule["field"], "'" . $value . "%" . "'");
-      } else if ($rule["operator"] === "not_begins_with") {
-        return $qb->expr()->not($qb->expr()->like($tableAlias . "." . $rule["field"], "'" . $value . "%" . "'"));
-      } else if ($rule["operator"] === "contains") {
-        return $qb->expr()->like($tableAlias . "." . $rule["field"], "'" . "%" . $value . "%" . "'");
-      } else if ($rule["operator"] === "not_contains") {
-        return $qb->expr()->not($qb->expr()->like($tableAlias . "." . $rule["field"], "'" . "%" . $value . "%" . "'"));
-      } else if ($rule["operator"] === "ends_with") {
-        return $qb->expr()->like($tableAlias . "." . $rule["field"], "'" . "%" . $value . "'");
-      } else if ($rule["operator"] === "not_ends_with") {
-        return $qb->expr()->not($qb->expr()->like($tableAlias . "." . $rule["field"], "'" . "%" . $value . "'"));
-      } else if ($rule["operator"] === "is_empty") {
-        return $qb->expr()->eq($tableAlias . "." . $rule["field"], "''");
-      } else if ($rule["operator"] === "is_not_empty") {
-        return $qb->expr()->not($qb->expr()->eq($tableAlias . "." . $rule["field"], "''"));
-      } else {
-        throw new InvalidArgumentException("Querybuilder : Unknown operator " . $rule['operator']);
+      switch ($rule["operator"]) {
+        case 'equal':
+          return $qb->expr()->eq($column, $value);
+          break;
+        case 'not_equal':
+          return $qb->expr()->neq($column,  $value);
+          break;
+        case 'in':
+          return $qb->expr()->in($column,  $value);
+          break;
+        case 'not_in':
+          return $qb->expr()->notIn($column, $value);
+          break;
+        case 'less':
+          return $qb->expr()->lt($column,  $value);
+          break;
+        case 'less_or_equal':
+          return $qb->expr()->lte($column,  $value);
+          break;
+        case 'greater':
+          return $qb->expr()->gt($column,  $value);
+          break;
+        case 'greater_or_equal':
+          return $qb->expr()->gte($column,  $value);
+          break;
+        case 'between':
+          return $qb->expr()->between($column,  ...$value);
+          break;
+        case 'not_between':
+          return $qb->expr()->not($qb->expr()->between($column,  ...$value));
+          break;
+        case 'is_null':
+          return $qb->expr()->isNull($column);
+          break;
+        case 'is_not_null':
+          return $qb->expr()->not($qb->expr()->isNull($column));
+          break;
+        case 'begins_with':
+        case 'ends_with':
+        case 'contains':
+          return $qb->expr()->like($column,  $value);
+          break;
+        case 'not_begins_with':
+        case 'not contains':
+        case 'not_ends_with':
+          return $qb->expr()->not($qb->expr()->like($column,  $value));
+          break;
+        case 'is_empty':
+          return $qb->expr()->eq($column, "''");
+          break;
+        case 'is_not_empty':
+          return $qb->expr()->not($qb->expr()->eq($column, "''"));
+          break;
+
+        default:
+          throw new InvalidArgumentException("Querybuilder : Unknown operator " . $rule['operator']);
+          break;
       }
 
       // If we are on a new group, we parse it with the dedicated function

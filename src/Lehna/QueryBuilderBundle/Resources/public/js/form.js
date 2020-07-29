@@ -467,6 +467,9 @@ export function get_form_initial() {
     var constraintsTable1 = {};
   }
 
+  if (constraintsTable1 === null)
+    return null
+
   // Getting the selected fields
   let fieldsSelected = $("#initial-fields").find("option:selected");
   let initialFields = [];
@@ -546,6 +549,10 @@ export function get_form_block_data(init_data) {
       };
     })
     .toArray();
+  
+  // Checks that all blocks are validated
+  if (data.some(block => block.rules === null))
+    return null;
 
   return data;
 }

@@ -1,3 +1,4 @@
+
 $.fn.queryBuilder.define(
   "date-inputmask",
   function (options) {

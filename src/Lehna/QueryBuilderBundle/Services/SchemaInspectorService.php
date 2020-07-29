@@ -93,7 +93,8 @@ class SchemaInspectorService
       return [
         "id" => $field['fieldName'],
         "label" => $field['fieldName'],
-        "type" => $this->convert_field_type($field['type'])
+        "type" => $this->convert_field_type($field['type']),
+        "value_separator" => ","
       ];
     };
     $entity = $metadata->getName();
