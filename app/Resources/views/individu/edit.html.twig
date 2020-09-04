@@ -219,13 +219,17 @@
         }
         selectedTypeahead = 1;
         // set auto-generated code if needed
+        {% if action == 'new'  %}
         setCodeIndTriMorpho({"codeTube" : "{{'Code tube'|trans}}", "RefTaxonSelected":"{{'Choose a Taxon'|trans}}"});
+        {% endif %}
     }
     ).bind('typeahead:close', function(ev, item) {
         if (selectedTypeahead == 0) { /* if there is no Typeahead selected value fields are reinitialized */
            $('input.typeahead').val( "{{codeLotMateriel}}" ) ;
            $('#bbees_e3sbundle_individu_lotmaterielId').val( {{idLotMateriel}} ) ;
+           {% if action == 'new'  %}
            setCodeIndTriMorpho({"codeTube" : "{{'Code tube'|trans}}", "RefTaxonSelected":"{{'Choose a Taxon'|trans}}"});
+           {% endif %}
         }
         var $this = $(this);
         if ($.trim($this.val())==='') {

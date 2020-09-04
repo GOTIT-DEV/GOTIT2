@@ -234,14 +234,18 @@
             $collecte.val(item.id);
         }
         selectedTypeahead = 1;
-        // set auto-generated code if needed
-        setCodeSqcAssExt( {"statut" : "{{'Choose a statut'|trans}}", "RefTaxonSelected" : "{{'Choose a Taxon'|trans}}", "numIndividu" : "{{'Num individu sqc ass ext'|trans}}", "accessionNumber" : "{{'Accession number sqc ass ext'|trans}}" });
+        // set auto-generated code if it's the create mode
+        {% if action == 'new'  %} 
+            setCodeSqcAssExt( {"statut" : "{{'Choose a statut'|trans}}", "RefTaxonSelected" : "{{'Choose a Taxon'|trans}}", "numIndividu" : "{{'Num individu sqc ass ext'|trans}}", "accessionNumber" : "{{'Accession number sqc ass ext'|trans}}" });
+        {% endif %} 
     }
     ).bind('typeahead:close', function(ev, item) {
         if (selectedTypeahead == 0) { /* if there is no Typeahead selected value fields are reinitialized */
             $('input.typeahead').val( "{{codeCollecte}}" ) ;
             $('#bbees_e3sbundle_sequenceassembleeext_collecteId').val( {{idCollecte}} ) ;
-            setCodeSqcAssExt( {"statut" : "{{'Choose a statut'|trans}}", "RefTaxonSelected" : "{{'Choose a Taxon'|trans}}", "numIndividu" : "{{'Num individu sqc ass ext'|trans}}", "accessionNumber" : "{{'Accession number sqc ass ext'|trans}}" });
+            {% if action == 'new'  %} 
+                setCodeSqcAssExt( {"statut" : "{{'Choose a statut'|trans}}", "RefTaxonSelected" : "{{'Choose a Taxon'|trans}}", "numIndividu" : "{{'Num individu sqc ass ext'|trans}}", "accessionNumber" : "{{'Accession number sqc ass ext'|trans}}" });
+            {% endif %} 
             }
         var $this = $(this);
         if ($.trim($this.val())==='') {

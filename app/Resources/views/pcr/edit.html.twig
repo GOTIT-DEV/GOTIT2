@@ -194,14 +194,18 @@
         if ($adn.length===1) {
             $adn.val(item.id);
         }
+        {% if action == 'new'  %} 
         setCodePcr({"numPcr" : "{{'Num pcr'|trans}}"});
+        {% endif %}
         selectedTypeahead = 1;
     }
     ).bind('typeahead:close', function(ev, item) {
         if (selectedTypeahead == 0) { /* if there is no Typeahead selected value fields are reinitialized */
            $('input.typeahead').val( "{{codeAdn}}" ) ;
            $('#bbees_e3sbundle_pcr_adnId').val( {{idAdn}} ) ;
+           {% if action == 'new'  %} 
            setCodePcr({"numPcr" : "{{'Num pcr'|trans}}"});
+           {% endif %}
         }
         var $this = $(this);
         if ($.trim($this.val())==='') {

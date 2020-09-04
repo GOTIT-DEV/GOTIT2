@@ -80,6 +80,32 @@ class IndividuController extends AbstractController
     }
     
     /**
+     * @Route("/search_by_codeindmorpho/{q}", requirements={"q"=".+"}, name="individu_search_by_codeindmorpho")
+     */
+    public function searchByCodeIndmorphoAction($q)
+    {
+        $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
+        $qb->select('ind.id, ind.codeIndTriMorpho as code')
+            ->from('BbeesE3sBundle:Individu', 'ind');
+        $query = explode(' ', strtolower(trim(urldecode($q))));
+        $and = [];
+        for($i=0; $i<count($query); $i++) {
+            $and[] = '(LOWER(ind.codeIndTriMorpho) like :q'.$i.')';
+        }
+        $qb->where(implode(' and ', $and));
+        for($i=0; $i<count($query); $i++) {
+            $qb->setParameter('q'.$i, $query[$i].'%');
+        }
+        $qb->addOrderBy('code', 'ASC');
+        $qb->setMaxResults(self::MAX_RESULTS_TYPEAHEAD);
+        $results = $qb->getQuery()->getResult();       
+        // Ajax answer
+        return $this->json(
+            $results
+        );
+    }
+    
+    /**
      * Returns in json format a set of fields to display (tab_toshow) with the following criteria: 
      * a) 1 search criterion ($ request-> get ('searchPhrase')) insensitive to the case and  applied to a field
      * b) the number of lines to display ($ request-> get ('rowCount'))

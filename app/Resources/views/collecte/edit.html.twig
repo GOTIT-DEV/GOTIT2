@@ -229,13 +229,17 @@
         }
         selectedTypeahead = 1;
        // set auto-generated code if needed
-        setCodeCollecte({"INCONNU" : "{{'INCONNU'|trans}}", "ANNEE" : "{{'ANNEE'|trans}}","MOIS" : "{{'MOIS'|trans}}","JOUR" : "{{'JOUR'|trans}}","NOT KNOWN" : "{{'NOT KNOWN'|trans}}","YEAR" : "{{'YEAR'|trans}}","MONTH" : "{{'MONTH'|trans}}","DAY" : "{{'DAY'|trans}}" });       
+       {% if action == 'new'  %}
+        setCodeCollecte({"INCONNU" : "{{'INCONNU'|trans}}", "ANNEE" : "{{'ANNEE'|trans}}","MOIS" : "{{'MOIS'|trans}}","JOUR" : "{{'JOUR'|trans}}","NOT KNOWN" : "{{'NOT KNOWN'|trans}}","YEAR" : "{{'YEAR'|trans}}","MONTH" : "{{'MONTH'|trans}}","DAY" : "{{'DAY'|trans}}" });  
+       {% endif %}
     }
     ).bind('typeahead:close', function(ev, item) {
         if (selectedTypeahead == 0) { /* if there is no Typeahead selected value fields are reinitialized */
             $('input.typeahead').val( "{{codeStation}}" ) ;
             $('#bbees_e3sbundle_collecte_stationId').val( {{idStation}} ) ;
-            setCodeCollecte({"INCONNU" : "{{'INCONNU'|trans}}", "ANNEE" : "{{'ANNEE'|trans}}","MOIS" : "{{'MOIS'|trans}}","JOUR" : "{{'JOUR'|trans}}","NOT KNOWN" : "{{'NOT KNOWN'|trans}}","YEAR" : "{{'YEAR'|trans}}","MONTH" : "{{'MONTH'|trans}}","DAY" : "{{'DAY'|trans}}" });       
+            {% if action == 'new'  %}
+            setCodeCollecte({"INCONNU" : "{{'INCONNU'|trans}}", "ANNEE" : "{{'ANNEE'|trans}}","MOIS" : "{{'MOIS'|trans}}","JOUR" : "{{'JOUR'|trans}}","NOT KNOWN" : "{{'NOT KNOWN'|trans}}","YEAR" : "{{'YEAR'|trans}}","MONTH" : "{{'MONTH'|trans}}","DAY" : "{{'DAY'|trans}}" }); 
+            {% endif %}
         }
         var $this = $(this);
         if ($.trim($this.val())==='') {

@@ -193,13 +193,17 @@ $(document).ready(function(){
         }
         selectedTypeahead = 1;
         // set auto-generated code if needed
+        {% if action == 'new'  %}
         setCodeLotExt({"RefTaxonSelected" : "{{'RefTaxonSelected'|trans}}"});
+        {% endif %}
     }
     ).bind('typeahead:close', function(ev, item) {
         if (selectedTypeahead == 0) { /* if there is no Typeahead selected value fields are reinitialized */
             $('input.typeahead').val( "{{codeCollecte}}" ) ;
             $('#bbees_e3sbundle_lotmaterielext_collecteId').val( {{idCollecte}} ) ;
+            {% if action == 'new'  %}
             setCodeLotExt({"RefTaxonSelected" : "{{'RefTaxonSelected'|trans}}"});
+            {% endif %}
             }
         var $this = $(this);
         if ($.trim($this.val())==='') {

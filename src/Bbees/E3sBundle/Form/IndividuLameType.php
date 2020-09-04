@@ -35,7 +35,7 @@ class IndividuLameType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('individuTypeahead', null, ['mapped' => false, 'attr' => ['class' => 'typeahead typeahead-individu', 'data-target_id' => "bbees_e3sbundle_individulame_individuId", 'name' => "where", 'placeholder' => "Individu typeahead placeholder",  "maxlength" => "255"], 'required' => true, ])
+        $builder->add('individuTypeahead', null, ['mapped' => false, 'attr' => ['class' => 'typeahead typeahead-individu', 'data-target_id' => "bbees_e3sbundle_individulame_individuId", 'name' => "where", 'placeholder' => "Individu codeIndTriMorpho typeahead placeholder",  "maxlength" => "255"], 'required' => true, ])
                 ->add('individuId', HiddenType::class, array( 'mapped' => false, 'required' => true, ))
                 ->add('codeLameColl')
                 ->add('libelleLame')
