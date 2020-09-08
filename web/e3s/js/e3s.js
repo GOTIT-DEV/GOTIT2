@@ -246,18 +246,24 @@ function addCategoryForExistingRecordEmbed2(index, $container, deleteBouton = tr
 
 //  function to add a embeded form
 function addCategoryForNewRecord(index, $container, select_id, select_name) {
-  // Dans le contenu de l'attribut « data-prototype », 
-  // - on supprime les labels
-  // - on modifie le texte "__name__" qu'il contient par le numéro du champ
-  //var $prototype = $($container.attr('data-prototype').replace(/__name__label__/g, 'APourSamplingMethod :' + (index+1)).replace(/__name__/g, index));
-  var $prototype = $($container.attr('data-prototype').replace('<label class="col-sm-2 control-label required">__name__label__</label>', '').replace(/__name__/g, index)
-    .replace('</select>', '><option value="' + select_id + '" selected="selected">' + select_name + '</option></select>'));
-  // We add to the prototype a link to delete 
-  addDeleteLink($prototype);
-  // Add the modified prototype to the end of the <div> tag
-  $container.append($prototype);
-  // Finally, we increment the counter so that the next addition is done with another number
-  return index++;
+  var testValueSelected = $container.find('select[id*="_0_"] option:selected').val(); 
+  if (testValueSelected != '') {
+    // case where there is at least one selection : add a new selected record with a delete button to clear the selection if neeeded
+    var $prototype = $($container.attr('data-prototype').replace('<label class="col-sm-2 control-label required">__name__label__</label>', '').replace(/__name__/g, index)
+      .replace('</select>', '><option value="' + select_id + '" selected="selected">' + select_name + '</option></select>'));
+    // We add to the prototype a link to delete 
+    addDeleteLink($prototype);
+    // Add the modified prototype to the end of the <div> tag
+    $container.append($prototype);
+    // Finally, we increment the counter so that the next addition is done with another number
+    index++;
+  } else {
+    // case where there is no selection done  : the new record is filled as the first selected element 
+    $container.find('select[id*="_0_"] option:selected').val(select_id);
+    $container.find('select[id*="_0_"] option:selected').text(select_name);
+    //var $newRecordSelected = '<option value="' + select_id + '" selected="selected">' + select_name + '</option>';
+  }
+  return index;
 }
 
 

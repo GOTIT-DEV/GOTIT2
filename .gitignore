@@ -47,3 +47,7 @@
 /app/config/parameters.yml.goti2-dev_localhost
 /app/config/config_test.yml
 /app/Resources/views/sequenceassemblee/index_bup.html.twig
+/src/Bbees/E3sBundle/Resources/translations/help.en.bup.yml
+/src/Bbees/E3sBundle/Resources/translations/help.fr.bup.yml
+/src/Bbees/E3sBundle/Resources/translations/messages.en.bup.yml
+/src/Bbees/E3sBundle/Resources/translations/messages.fr.bup.yml
