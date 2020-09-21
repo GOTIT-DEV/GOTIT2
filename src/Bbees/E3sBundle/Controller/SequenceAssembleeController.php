@@ -30,6 +30,7 @@ use Bbees\E3sBundle\Entity\Individu;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
@@ -202,16 +203,20 @@ class SequenceAssembleeController extends AbstractController
 
         // management of the form GeneIndbiomolForm
         $this->geneVocFk = ($request->get('geneVocFk')!== null && $request->get('geneVocFk') != '') ? $request->get('geneVocFk') : null ;
-        $this->individuFk = ($request->get('individuFk')!== null && $request->get('individuFk') != '') ? $request->get('individuFk') : null ;
+        if ( $request->get('individuId')!== null ) { // case with a typehaed autocomplete field for specimen choice
+            $this->individuFk = ($request->get('individuId')!== null && $request->get('individuId') != '') ? $request->get('individuId')->getData() : null ;
+        } else { // case with a selected list for specimen choice
+            $this->individuFk = ($request->get('individuFk')!== null && $request->get('individuFk') != '') ? $request->get('individuFk') : null ;  
+        }     
         $form_gene_indbiomol = $this->createGeneIndbiomolForm($sequenceAssemblee, $this->geneVocFk, $this->individuFk );
         $form_gene_indbiomol->handleRequest($request); 
         if ($form_gene_indbiomol->isSubmitted() && $form_gene_indbiomol->isValid()) { 
             $this->geneVocFk = $form_gene_indbiomol->get('geneVocFk')->getData()->getId();
-            $this->individuFk = $form_gene_indbiomol->get('individuFk')->getData()->getId();
+            $this->individuFk = $form_gene_indbiomol->get('individuId')->getData();
             $sequenceAssemblee->setGeneVocFk($form_gene_indbiomol->get('geneVocFk')->getData()->getId());
-            $sequenceAssemblee->setIndividuFk($form_gene_indbiomol->get('individuFk')->getData()->getId());
+            $sequenceAssemblee->setIndividuFk($this->individuFk);
         } 
-        // case where the idFk url parameter is not null 
+        // case where the idFk url parameter is not null : when we create a new sequence from a chromatogram
         if ( $request->get('idFk') !== null && $request->get('idFk') !== '') {
             $where = ' chromatogramme.id = '.$request->get('idFk');
             // Search for the list to show EstAligneEtTraite
@@ -242,7 +247,7 @@ class SequenceAssembleeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($sequenceAssemblee);
-            // on initialise le code sqcAlignement : setCodeSqcAlignement($codeSqcAlignement)
+            // initialization of the code sqcAlignement : setCodeSqcAlignement($codeSqcAlignement)
             $CodeSqcAlignement = $this->createCodeSqcAlignement($sequenceAssemblee);
             $sequenceAssemblee->setCodeSqcAlignement($CodeSqcAlignement);
             $em->persist($sequenceAssemblee);
@@ -419,17 +424,8 @@ class SequenceAssembleeController extends AbstractController
                                         ->orderBy('voc.libelle', 'ASC');
                             }, 
                         'choice_label' => 'libelle', 'multiple' => false, 'expanded' => false,'placeholder' => 'Choose a gene')) 
-                     ->add('individuFk',EntityType::class, array('class' => 'BbeesE3sBundle:Individu',
-                             'query_builder' => function (EntityRepository $er) {
-                                return $er->createQueryBuilder('ind')
-                                   ->join('BbeesE3sBundle:Adn', 'adn', 'WITH', 'adn.individuFk=ind.id')
-                                   ->join('BbeesE3sBundle:Pcr', 'pcr', 'WITH', 'pcr.adnFk=adn.id')
-                                   ->join('BbeesE3sBundle:Chromatogramme', 'chromato', 'WITH', 'chromato.pcrFk=pcr.id')
-                                   ->where('ind.codeIndBiomol IS NOT NULL')
-                                   ->distinct()
-                                   ->orderBy('ind.codeIndBiomol', 'ASC');
-                            }, 
-                             'placeholder' => 'Choose an individu', 'choice_label' => 'code_ind_biomol', 'multiple' => false, 'expanded' => false))
+                    ->add('individuTypeahead', null, ['mapped' => false, 'attr' => ['class' => 'typeahead typeahead-individu', 'data-target_id' => "form_individuId", 'name' => "where", 'placeholder' => "Individu typeahead placeholder",  "maxlength" => "255"], 'required' => true, ])
+                    ->add('individuId', HiddenType::class, array( 'mapped' => false, 'required' => true, ))
                     ->add('buton.Valid', SubmitType::class, array('label' => 'buton.Valid', 'attr' => array('class' => 'btn btn-round btn-success')))
                     ->getForm()
             ;

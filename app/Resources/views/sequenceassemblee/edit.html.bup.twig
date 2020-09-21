@@ -3,23 +3,6 @@
 
 {# EDIT : INTERNAL SEQUENCE #}
 
-
-
-{#  Typehead : initialisation of typeahead EntityRelationalId field  #} 
-{% set route = app.request.attributes.get('_route') %}
-{% set action = route|split('_')[1] %}
-{% set codeIndBiomol = '' %}
-{% set idIndividu = '' %}
-
-{% if app.request.query.get('idFk') is defined  and action == 'new'  %}
-    {#  case of a new record with  a preselected relational entity #} 
-    {% set idIndividu = individuFk %}
-    {% if app.request.query.get('idFk') is not empty %}
-            {% set codeIndBiomol = '' %}
-    {% endif %}       
-{% endif %}
-
-
 {% block body %}
     
 
@@ -105,7 +88,6 @@
 <script type="text/javascript">  
 // Form actions
     $(document).ready(function(){
-
         // features of date & date_precision fields 
         var message = {"INCONNU":"{{'alert.datePrecisionINCONNU'|trans}}", "ANNEE":"{{'alert.datePrecisionANNEE'|trans}}","MOIS":"{{'alert.datePrecisionMOIS'|trans}}","JOUR":"{{'alert.datePrecisionJOUR'|trans}}", "BAD-FORMAT-DATE":"{{'alert.BadFormatDate'|trans}}"};
         $('#bbees_e3sbundle_sequenceassemblee_dateCreationSqcAss').change(function (e) { 
@@ -202,84 +184,6 @@
         {% endif %}   
 
     });
-</script>
-
-<script>
-//// Typeahead 
-// Constructing the suggestion engine
-        
-    var geneSelected = $('#form_geneVocFk option:selected').text();
-    var geneSelectedValue = $('#form_geneVocFk option:selected').val();
-    if (geneSelectedValue == '') geneSelectedValue = 0;
-    $('#form_geneVocFk').change(function (e) {
-        var geneSelectedValue = $('#form_geneVocFk option:selected').val();
-        window.location.reload();
-        $('#form_geneVocFk option:selected').val(geneSelectedValue);
-    });   
-    
-    var individus = new Bloodhound({
-        datumTokenizer: Bloodhound.tokenizers.whitespace,
-        queryTokenizer: Bloodhound.tokenizers.whitespace,
-        remote: {
-           url : '{{ path("individu_search_with_gene", { 'q':"QUERY", 'gene':"GENE_SELECTED_VALUE"} ) |replace({"QUERY": "%QUERY"}) }}',
-           // url: 'http://datahost/e3s-www/e3s-GOTIT2-0/web/app_dev.php/fr/individu/search_with_gene/',
-           wildcard: '%QUERY',
-           replace: function (url, query) {
-                    //alert('geneSelectedValue : ' + geneSelectedValue);
-                    return url.replace("%QUERY", query).replace("GENE_SELECTED_VALUE", geneSelectedValue) ;
-            }
-        }
-    });
-
-    // Initializing the typeahead
-    var selectedTypeahead = 0; /* flag to know if there is a Typeahead selected value  */
-    $('input.typeahead').val( "{{codeIndBiomol}}" );
-    $('#form_individuId').val( {{idIndividu}} );
-    $('.typeahead-individu').typeahead(
-        {
-            hint: true,
-            highlight: true, /* Enable substring highlighting */
-            minLength: 1 /* Specify minimum characters required for showing result */
-        },
-        {
-            name: 'individus',
-            source: individus,
-            displayKey: "code",
-            limit: 40
-        }
-    ).on('keyup', this, function (event) {
-        selectedTypeahead = 0;
-        var geneSelected = $('#form_geneVocFk option:selected').text();
-        var geneSelectedValue = $('#form_geneVocFk option:selected').val();
-        if (geneSelectedValue == '') geneSelectedValue = 0;
-    }
-    ).bind('typeahead:select', function(ev, item) {
-        var $this = $(this);
-        var codeTypeaheadSelect = item.code;
-        var idTypeaheadSelect = item.id;
-        //alert(item.code);
-        $('#'+$this.attr('data-target_id')).val(item.id);
-        $individu = $this.parents('.form-group').find('input.form[individuId]');
-        if ($individu.length===1) {
-            $individu.val(item.id);
-        }
-        selectedTypeahead = 1;
-    }
-    ).bind('typeahead:close', function(ev, item) {
-        if (selectedTypeahead == 0) { /* if there is no Typeahead selected value fields are reinitialized */
-           $('input.typeahead').val( "{{codeIndBiomol}}" ) ;
-           $('#form_individuId').val( {{idIndividu}} ) ;
-        }
-        var $this = $(this);
-        if ($.trim($this.val())==='') {
-            $this.val('');
-            $individu = $this.parents('.form-group').find('input.form[individuId]');
-            if ($individu.length===1) {
-                $individu.val('');
-            }
-        }
-    }
-    );
 </script>
 
 {% endblock %}

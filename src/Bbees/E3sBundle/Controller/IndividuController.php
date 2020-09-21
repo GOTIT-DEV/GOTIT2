@@ -80,6 +80,30 @@ class IndividuController extends AbstractController
     }
     
     /**
+     * @Route("/search_with_gene/{q}/{gene}", name="individu_search_with_gene")
+     */
+    public function searchWithGeneAction($q, int $gene)
+    {
+        $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
+        $qb->select('ind.id, ind.codeIndBiomol as code')
+            ->from('BbeesE3sBundle:Individu', 'ind')
+            ->leftJoin('BbeesE3sBundle:Adn', 'adn', 'WITH', 'adn.individuFk = ind.id')
+            ->leftJoin('BbeesE3sBundle:Pcr', 'pcr', 'WITH', 'pcr.adnFk = adn.id')
+            ->leftJoin('BbeesE3sBundle:Voc', 'vocgene', 'WITH', 'pcr.geneVocFk = vocgene.id');
+        $qb->where(' LOWER(ind.codeIndBiomol) like :searchcode  AND vocgene.id = :idvocgene ');
+        $qb->setParameter('searchcode', strtolower($q).'%');
+        $qb->setParameter('idvocgene', (int)$gene);
+        //$qb->andwhere('vocgene.id = :idvocgene ');
+        $qb->addOrderBy('code', 'ASC');
+        $qb->setMaxResults(self::MAX_RESULTS_TYPEAHEAD);
+        $results = $qb->getQuery()->getResult();       
+        // Ajax answer
+        return $this->json(
+            $results
+        );
+    }
+    
+    /**
      * @Route("/search_by_codeindmorpho/{q}", requirements={"q"=".+"}, name="individu_search_by_codeindmorpho")
      */
     public function searchByCodeIndmorphoAction($q)

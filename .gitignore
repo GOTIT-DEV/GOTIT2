@@ -51,3 +51,6 @@
 /src/Bbees/E3sBundle/Resources/translations/help.fr.bup.yml
 /src/Bbees/E3sBundle/Resources/translations/messages.en.bup.yml
 /src/Bbees/E3sBundle/Resources/translations/messages.fr.bup.yml
+/bupfile
+/bupfile/IndividuController_bup.php
+/bupfile/SequenceAssembleeController_bup.php

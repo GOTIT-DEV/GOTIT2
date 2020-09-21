@@ -129,7 +129,6 @@ ALTER SEQUENCE boite_id_seq RENAME TO storage_box_id_seq ;
 
 -- Internationalization of the table chromatogramme
 
- code_chromato, num_yas, commentaire_chromato, primer_chromato_voc_fk, qualite_chromato_voc_fk, etablissement_fk
 ALTER TABLE chromatogramme RENAME COLUMN code_chromato TO chromatogram_code ; ALTER TABLE chromatogramme RENAME COLUMN num_yas TO chromatogram_number ;
 ALTER TABLE chromatogramme RENAME COLUMN commentaire_chromato TO chromatogram_comments ; ALTER TABLE chromatogramme RENAME COLUMN primer_chromato_voc_fk TO chromato_primer_voc_fk ; ALTER TABLE chromatogramme RENAME COLUMN qualite_chromato_voc_fk TO chromato_quality_voc_fk ; ALTER TABLE chromatogramme RENAME COLUMN etablissement_fk TO institution_fk ;
 
@@ -240,7 +239,7 @@ ALTER SEQUENCE individu_lame_id_seq RENAME TO specimen_slide_id_seq ;
 
 ALTER TABLE individu_lame_est_realise_par RENAME COLUMN individu_lame_fk TO specimen_slide_fk ;
 
-LTER TABLE individu_lame_est_realise_par RENAME TO slide_is_mounted_by ;
+ALTER TABLE individu_lame_est_realise_par RENAME TO slide_is_mounted_by ;
 ALTER SEQUENCE individu_lame_est_realise_par_id_seq RENAME TO slide_is_mounted_by_id_seq ;
 
 -- Internationalization of the table lot_est_publie_dans
