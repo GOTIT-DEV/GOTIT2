@@ -93,6 +93,7 @@ class IndividuController extends AbstractController
         $qb->where(' LOWER(ind.codeIndBiomol) like :searchcode  AND vocgene.id = :idvocgene ');
         $qb->setParameter('searchcode', strtolower($q).'%');
         $qb->setParameter('idvocgene', (int)$gene);
+        $qb->distinct();
         //$qb->andwhere('vocgene.id = :idvocgene ');
         $qb->addOrderBy('code', 'ASC');
         $qb->setMaxResults(self::MAX_RESULTS_TYPEAHEAD);
