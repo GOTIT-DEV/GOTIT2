@@ -15,6 +15,17 @@ jobs:
                 php: ['7.1', '7.4']
 
         services:
+            ldap:
+                image: bitnami/openldap
+                ports:
+                    - 3389:3389
+                env:
+                    LDAP_ADMIN_USERNAME: admin
+                    LDAP_ADMIN_PASSWORD: symfony
+                    LDAP_ROOT: dc=symfony,dc=com
+                    LDAP_PORT_NUMBER: 3389
+                    LDAP_USERS: a
+                    LDAP_PASSWORDS: a
             redis:
                 image: redis:6.0.0
                 ports:
@@ -29,9 +40,16 @@ jobs:
                     - 7004:7004
                     - 7005:7005
                     - 7006:7006
-                    - 7007:7007
                 env:
-                    STANDALONE: true
+                    STANDALONE: 1
+            redis-sentinel:
+                image: bitnami/redis-sentinel:6.0
+                ports:
+                    - 26379:26379
+                env:
+                    REDIS_MASTER_HOST: redis
+                    REDIS_MASTER_SET: redis_sentinel
+                    REDIS_SENTINEL_QUORUM: 1
             memcached:
                 image: memcached:1.6.5
                 ports:
@@ -49,17 +67,21 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     coverage: "none"
-                    extensions: "memcached,redis,xsl"
+                    extensions: "memcached,redis,xsl,ldap"
                     ini-values: "memory_limit=-1"
                     php-version: "${{ matrix.php }}"
-                    tools: flex
+
+            -   name: Load fixtures
+                uses: docker://bitnami/openldap
+                with:
+                  entrypoint: /bin/bash
+                  args: -c "(ldapwhoami -h localhost:3389 -D cn=admin,dc=symfony,dc=com -w symfony||sleep 5) && ldapadd -h ldap:3389 -D cn=admin,dc=symfony,dc=com -w symfony -f src/Symfony/Component/Ldap/Tests/Fixtures/data/fixtures.ldif && ldapdelete -h ldap:3389 -D cn=admin,dc=symfony,dc=com -w symfony cn=a,ou=users,dc=symfony,dc=com"
 
             -   name: Configure composer
                 run: |
-                    ([ -d ~/.composer ] || mkdir ~/.composer) && cp .github/composer-config.json ~/.composer/config.json
-                    SYMFONY_VERSION=$(cat composer.json | grep '^ *\"dev-master\". *\"[1-9]' | grep -o '[0-9.]*')
-                    echo "::set-env name=SYMFONY_VERSION::$SYMFONY_VERSION"
-                    echo "::set-env name=COMPOSER_ROOT_VERSION::$SYMFONY_VERSION.x-dev"
+                    COMPOSER_HOME="$(composer config home)"
+                    ([ -d "$COMPOSER_HOME" ] || mkdir "$COMPOSER_HOME") && cp .github/composer-config.json "$COMPOSER_HOME/config.json"
+                    echo "COMPOSER_ROOT_VERSION=$(grep branch-version composer.json | grep -o '[0-9.x]*').x-dev" >> $GITHUB_ENV
 
             -   name: Determine composer cache directory
                 id: composer-cache
@@ -82,19 +104,23 @@ jobs:
                     echo "::endgroup::"
 
             -   name: Run tests
-                run: ./phpunit --group integration
+                run: ./phpunit --group integration -v
                 env:
                     REDIS_HOST: localhost
                     REDIS_CLUSTER_HOSTS: 'localhost:7000 localhost:7001 localhost:7002 localhost:7003 localhost:7004 localhost:7005'
+                    REDIS_SENTINEL_HOSTS: 'localhost:26379'
+                    REDIS_SENTINEL_SERVICE: redis_sentinel
                     MESSENGER_REDIS_DSN: redis://127.0.0.1:7006/messages
                     MESSENGER_AMQP_DSN: amqp://localhost/%2f/messages
                     MEMCACHED_HOST: localhost
+                    LDAP_HOST: localhost
+                    LDAP_PORT: 3389
 
             -   name: Run HTTP push tests
                 if: matrix.php == '7.4'
                 run: |
                     [ -d .phpunit ] && mv .phpunit .phpunit.bak
                     wget -q https://github.com/symfony/binary-utils/releases/download/v0.1/vulcain_0.1.3_Linux_x86_64.tar.gz -O - | tar xz && mv vulcain /usr/local/bin
-                    docker run --rm -e COMPOSER_ROOT_VERSION -e SYMFONY_VERSION -v $(pwd):/app -v $(which composer):/usr/local/bin/composer -v /usr/local/bin/vulcain:/usr/local/bin/vulcain -w /app php:7.4-alpine ./phpunit src/Symfony/Component/HttpClient/Tests/CurlHttpClientTest.php --filter testHttp2Push
+                    docker run --rm -e COMPOSER_ROOT_VERSION -v $(pwd):/app -v $(which composer):/usr/local/bin/composer -v /usr/local/bin/vulcain:/usr/local/bin/vulcain -w /app php:7.4-alpine ./phpunit src/Symfony/Component/HttpClient/Tests/CurlHttpClientTest.php --filter testHttp2Push
                     sudo rm -rf .phpunit
                     [ -d .phpunit.bak ] && mv .phpunit.bak .phpunit

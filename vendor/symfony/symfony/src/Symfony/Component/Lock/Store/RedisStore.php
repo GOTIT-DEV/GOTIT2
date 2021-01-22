@@ -33,13 +33,13 @@ class RedisStore implements StoreInterface
     private $initialTtl;
 
     /**
-     * @param \Redis|\RedisArray|\RedisCluster|\Predis\ClientInterface $redisClient
-     * @param float                                                    $initialTtl  the expiration delay of locks in seconds
+     * @param \Redis|\RedisArray|\RedisCluster|RedisProxy|RedisClusterProxy|\Predis\ClientInterface $redisClient
+     * @param float                                                                                 $initialTtl  the expiration delay of locks in seconds
      */
     public function __construct($redisClient, float $initialTtl = 300.0)
     {
-        if (!$redisClient instanceof \Redis && !$redisClient instanceof \RedisArray && !$redisClient instanceof \RedisCluster && !$redisClient instanceof \Predis\ClientInterface && !$redisClient instanceof RedisProxy) {
-            throw new InvalidArgumentException(sprintf('"%s()" expects parameter 1 to be Redis, RedisArray, RedisCluster or Predis\ClientInterface, "%s" given.', __METHOD__, \is_object($redisClient) ? \get_class($redisClient) : \gettype($redisClient)));
+        if (!$redisClient instanceof \Redis && !$redisClient instanceof \RedisArray && !$redisClient instanceof \RedisCluster && !$redisClient instanceof \Predis\ClientInterface && !$redisClient instanceof RedisProxy && !$redisClient instanceof RedisClusterProxy) {
+            throw new InvalidArgumentException(sprintf('"%s()" expects parameter 1 to be Redis, RedisArray, RedisCluster, RedisProxy, RedisClusterProxy or Predis\ClientInterface, "%s" given.', __METHOD__, \is_object($redisClient) ? \get_class($redisClient) : \gettype($redisClient)));
         }
 
         if ($initialTtl <= 0) {
@@ -80,7 +80,7 @@ class RedisStore implements StoreInterface
      */
     public function waitAndSave(Key $key)
     {
-        @trigger_error(sprintf('%s() is deprecated since Symfony 4.4 and will be removed in Symfony 5.0.', __METHOD__), E_USER_DEPRECATED);
+        @trigger_error(sprintf('%s() is deprecated since Symfony 4.4 and will be removed in Symfony 5.0.', __METHOD__), \E_USER_DEPRECATED);
         throw new NotSupportedException(sprintf('The store "%s" does not support blocking locks.', static::class));
     }
 

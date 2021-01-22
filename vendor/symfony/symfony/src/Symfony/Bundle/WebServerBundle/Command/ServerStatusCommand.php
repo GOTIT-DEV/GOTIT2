@@ -74,13 +74,13 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        @trigger_error('Using the WebserverBundle is deprecated since Symfony 4.4. The new Symfony local server has more features, you can use it instead.', E_USER_DEPRECATED);
+        @trigger_error('Using the WebserverBundle is deprecated since Symfony 4.4. The new Symfony local server has more features, you can use it instead.', \E_USER_DEPRECATED);
 
         $io = new SymfonyStyle($input, $output instanceof ConsoleOutputInterface ? $output->getErrorOutput() : $output);
         $server = new WebServer($this->pidFileDirectory);
         if ($filter = $input->getOption('filter')) {
             if ($server->isRunning($input->getOption('pidfile'))) {
-                list($host, $port) = explode(':', $address = $server->getAddress($input->getOption('pidfile')));
+                [$host, $port] = explode(':', $address = $server->getAddress($input->getOption('pidfile')));
                 if ('address' === $filter) {
                     $output->write($address);
                 } elseif ('host' === $filter) {

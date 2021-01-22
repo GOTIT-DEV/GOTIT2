@@ -13,6 +13,8 @@ namespace Symfony\Bridge\PhpUnit\DeprecationErrorHandler;
 
 use PHPUnit\Util\Test;
 use Symfony\Bridge\PhpUnit\Legacy\SymfonyTestsListenerFor;
+use Symfony\Component\Debug\DebugClassLoader as LegacyDebugClassLoader;
+use Symfony\Component\ErrorHandler\DebugClassLoader;
 
 /**
  * @internal
@@ -39,7 +41,7 @@ class Deprecation
 
     /**
      * @var string[] Absolute paths to source or tests of the project, cache
-     *               directories exlcuded because it is based on autoloading
+     *               directories excluded because it is based on autoloading
      *               rules and cache systems typically do not use those
      */
     private static $internalPaths = [];
@@ -53,6 +55,18 @@ class Deprecation
     public function __construct($message, array $trace, $file)
     {
         $this->trace = $trace;
+
+        if ('trigger_error' === (isset($trace[1]['function']) ? $trace[1]['function'] : null)
+            && (DebugClassLoader::class === ($class = (isset($trace[2]['class']) ? $trace[2]['class'] : null)) || LegacyDebugClassLoader::class === $class)
+            && 'checkClass' === (isset($trace[2]['function']) ? $trace[2]['function'] : null)
+            && null !== ($extraFile = (isset($trace[2]['args'][1]) ? $trace[2]['args'][1] : null))
+            && '' !== $extraFile
+            && false !== $extraFile = realpath($extraFile)
+        ) {
+            $this->getOriginalFilesStack();
+            array_splice($this->originalFilesStack, 2, 1, $extraFile);
+        }
+
         $this->message = $message;
         $i = \count($trace);
         while (1 < $i && $this->lineShouldBeSkipped($trace[--$i])) {
@@ -62,7 +76,9 @@ class Deprecation
         $this->triggeringFile = $file;
         if (isset($line['object']) || isset($line['class'])) {
             if (isset($line['class']) && 0 === strpos($line['class'], SymfonyTestsListenerFor::class)) {
+                set_error_handler(function () {});
                 $parsedMsg = unserialize($this->message);
+                restore_error_handler();
                 $this->message = $parsedMsg['deprecation'];
                 $this->originClass = $parsedMsg['class'];
                 $this->originMethod = $parsedMsg['method'];
@@ -141,6 +157,10 @@ class Deprecation
     public function isLegacy()
     {
         $class = $this->originatingClass();
+        if ((new \ReflectionClass($class))->isInternal()) {
+            return false;
+        }
+
         $method = $this->originatingMethod();
 
         return 0 === strpos($method, 'testLegacy')
@@ -264,7 +284,10 @@ class Deprecation
                     if (file_exists($v.'/composer/installed.json')) {
                         self::$vendors[] = $v;
                         $loader = require $v.'/autoload.php';
-                        $paths = self::getSourcePathsFromPrefixes(array_merge($loader->getPrefixes(), $loader->getPrefixesPsr4()));
+                        $paths = self::addSourcePathsFromPrefixes(
+                            array_merge($loader->getPrefixes(), $loader->getPrefixesPsr4()),
+                            $paths
+                        );
                     }
                 }
             }
@@ -280,15 +303,17 @@ class Deprecation
         return self::$vendors;
     }
 
-    private static function getSourcePathsFromPrefixes(array $prefixesByNamespace)
+    private static function addSourcePathsFromPrefixes(array $prefixesByNamespace, array $paths)
     {
         foreach ($prefixesByNamespace as $prefixes) {
             foreach ($prefixes as $prefix) {
                 if (false !== realpath($prefix)) {
-                    yield realpath($prefix);
+                    $paths[] = realpath($prefix);
                 }
             }
         }
+
+        return $paths;
     }
 
     /**

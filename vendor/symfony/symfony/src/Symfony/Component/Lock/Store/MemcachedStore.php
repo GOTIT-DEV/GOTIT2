@@ -76,7 +76,7 @@ class MemcachedStore implements StoreInterface
      */
     public function waitAndSave(Key $key)
     {
-        @trigger_error(sprintf('%s() is deprecated since Symfony 4.4 and will be removed in Symfony 5.0.', __METHOD__), E_USER_DEPRECATED);
+        @trigger_error(sprintf('%s() is deprecated since Symfony 4.4 and will be removed in Symfony 5.0.', __METHOD__), \E_USER_DEPRECATED);
         throw new NotSupportedException(sprintf('The store "%s" does not support blocking locks.', static::class));
     }
 
@@ -94,7 +94,7 @@ class MemcachedStore implements StoreInterface
 
         $token = $this->getUniqueToken($key);
 
-        list($value, $cas) = $this->getValueAndCas($key);
+        [$value, $cas] = $this->getValueAndCas($key);
 
         $key->reduceLifetime($ttl);
         // Could happens when we ask a putOff after a timeout but in luck nobody steal the lock
@@ -126,7 +126,7 @@ class MemcachedStore implements StoreInterface
     {
         $token = $this->getUniqueToken($key);
 
-        list($value, $cas) = $this->getValueAndCas($key);
+        [$value, $cas] = $this->getValueAndCas($key);
 
         if ($value !== $token) {
             // we are not the owner of the lock. Nothing to do.

@@ -30,7 +30,7 @@ class Registry
      */
     public function add(Workflow $workflow, $supportStrategy)
     {
-        @trigger_error(sprintf('The "%s()" method is deprecated since Symfony 4.1. Use addWorkflow() instead.', __METHOD__), E_USER_DEPRECATED);
+        @trigger_error(sprintf('The "%s()" method is deprecated since Symfony 4.1. Use addWorkflow() instead.', __METHOD__), \E_USER_DEPRECATED);
         $this->workflows[] = [$workflow, $supportStrategy];
     }
 
@@ -49,7 +49,7 @@ class Registry
     {
         $matched = [];
 
-        foreach ($this->workflows as list($workflow, $supportStrategy)) {
+        foreach ($this->workflows as [$workflow, $supportStrategy]) {
             if ($this->supports($workflow, $supportStrategy, $subject, $workflowName)) {
                 $matched[] = $workflow;
             }
@@ -78,7 +78,7 @@ class Registry
     public function all($subject): array
     {
         $matched = [];
-        foreach ($this->workflows as list($workflow, $supportStrategy)) {
+        foreach ($this->workflows as [$workflow, $supportStrategy]) {
             if ($supportStrategy->supports($workflow, $subject)) {
                 $matched[] = $workflow;
             }

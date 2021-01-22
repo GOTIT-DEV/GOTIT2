@@ -13,8 +13,8 @@ namespace Symfony\Component\Lock\Store;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Driver\Result;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\Schema;
 use Symfony\Component\Lock\Exception\InvalidArgumentException;
 use Symfony\Component\Lock\Exception\InvalidTtlException;
@@ -127,7 +127,7 @@ class PdoStore implements StoreInterface
 
         try {
             $stmt->execute();
-        } catch (DBALException $e) {
+        } catch (DBALException | Exception $e) {
             // the lock is already acquired. It could be us. Let's try to put off.
             $this->putOffExpiration($key, $this->initialTtl);
         } catch (\PDOException $e) {
@@ -135,7 +135,7 @@ class PdoStore implements StoreInterface
             $this->putOffExpiration($key, $this->initialTtl);
         }
 
-        if ($this->gcProbability > 0 && (1.0 === $this->gcProbability || (random_int(0, PHP_INT_MAX) / PHP_INT_MAX) <= $this->gcProbability)) {
+        if ($this->gcProbability > 0 && (1.0 === $this->gcProbability || (random_int(0, \PHP_INT_MAX) / \PHP_INT_MAX) <= $this->gcProbability)) {
             $this->prune();
         }
 
@@ -147,7 +147,7 @@ class PdoStore implements StoreInterface
      */
     public function waitAndSave(Key $key)
     {
-        @trigger_error(sprintf('%s() is deprecated since Symfony 4.4 and will be removed in Symfony 5.0.', __METHOD__), E_USER_DEPRECATED);
+        @trigger_error(sprintf('%s() is deprecated since Symfony 4.4 and will be removed in Symfony 5.0.', __METHOD__), \E_USER_DEPRECATED);
         throw new NotSupportedException(sprintf('The store "%s" does not supports blocking locks.', __METHOD__));
     }
 
@@ -172,7 +172,7 @@ class PdoStore implements StoreInterface
         $result = $stmt->execute();
 
         // If this method is called twice in the same second, the row wouldn't be updated. We have to call exists to know if we are the owner
-        if (!($result instanceof Result ? $result : $stmt)->rowCount() && !$this->exists($key)) {
+        if (!(\is_object($result) ? $result : $stmt)->rowCount() && !$this->exists($key)) {
             throw new LockConflictedException();
         }
 
@@ -204,7 +204,7 @@ class PdoStore implements StoreInterface
         $stmt->bindValue(':token', $this->getUniqueToken($key));
         $result = $stmt->execute();
 
-        return (bool) ($result instanceof Result ? $result->fetchOne() : $stmt->fetchColumn());
+        return (bool) (\is_object($result) ? $result->fetchOne() : $stmt->fetchColumn());
     }
 
     /**
@@ -250,6 +250,7 @@ class PdoStore implements StoreInterface
      *
      * @throws \PDOException    When the table already exists
      * @throws DBALException    When the table already exists
+     * @throws Exception        When the table already exists
      * @throws \DomainException When an unsupported PDO driver is used
      */
     public function createTable(): void
@@ -267,7 +268,11 @@ class PdoStore implements StoreInterface
             $table->setPrimaryKey([$this->idCol]);
 
             foreach ($schema->toSql($conn->getDatabasePlatform()) as $sql) {
-                $conn->exec($sql);
+                if (method_exists($conn, 'executeStatement')) {
+                    $conn->executeStatement($sql);
+                } else {
+                    $conn->exec($sql);
+                }
             }
 
             return;
@@ -293,7 +298,11 @@ class PdoStore implements StoreInterface
                 throw new \DomainException(sprintf('Creating the lock table is currently not implemented for PDO driver "%s".', $driver));
         }
 
-        $conn->exec($sql);
+        if (method_exists($conn, 'executeStatement')) {
+            $conn->executeStatement($sql);
+        } else {
+            $conn->exec($sql);
+        }
     }
 
     /**
@@ -303,7 +312,12 @@ class PdoStore implements StoreInterface
     {
         $sql = "DELETE FROM $this->table WHERE $this->expirationCol <= {$this->getCurrentTimestampStatement()}";
 
-        $this->getConnection()->exec($sql);
+        $conn = $this->getConnection();
+        if (method_exists($conn, 'executeStatement')) {
+            $conn->executeStatement($sql);
+        } else {
+            $conn->exec($sql);
+        }
     }
 
     private function getDriver(): string
@@ -316,25 +330,34 @@ class PdoStore implements StoreInterface
         if ($con instanceof \PDO) {
             $this->driver = $con->getAttribute(\PDO::ATTR_DRIVER_NAME);
         } else {
-            switch ($this->driver = $con->getDriver()->getName()) {
-                case 'mysqli':
-                    throw new NotSupportedException(sprintf('The store "%s" does not support the mysqli driver, use pdo_mysql instead.', static::class));
-                case 'pdo_mysql':
-                case 'drizzle_pdo_mysql':
+            $driver = $con->getDriver();
+
+            switch (true) {
+                case $driver instanceof \Doctrine\DBAL\Driver\Mysqli\Driver:
+                    throw new \LogicException(sprintf('The adapter "%s" does not support the mysqli driver, use pdo_mysql instead.', static::class));
+                case $driver instanceof \Doctrine\DBAL\Driver\AbstractMySQLDriver:
                     $this->driver = 'mysql';
                     break;
-                case 'pdo_sqlite':
+                case $driver instanceof \Doctrine\DBAL\Driver\PDOSqlite\Driver:
+                case $driver instanceof \Doctrine\DBAL\Driver\PDO\SQLite\Driver:
                     $this->driver = 'sqlite';
                     break;
-                case 'pdo_pgsql':
+                case $driver instanceof \Doctrine\DBAL\Driver\PDOPgSql\Driver:
+                case $driver instanceof \Doctrine\DBAL\Driver\PDO\PgSQL\Driver:
                     $this->driver = 'pgsql';
                     break;
-                case 'oci8':
-                case 'pdo_oracle':
+                case $driver instanceof \Doctrine\DBAL\Driver\OCI8\Driver:
+                case $driver instanceof \Doctrine\DBAL\Driver\PDOOracle\Driver:
+                case $driver instanceof \Doctrine\DBAL\Driver\PDO\OCI\Driver:
                     $this->driver = 'oci';
                     break;
-                case 'pdo_sqlsrv':
+                case $driver instanceof \Doctrine\DBAL\Driver\SQLSrv\Driver:
+                case $driver instanceof \Doctrine\DBAL\Driver\PDOSqlsrv\Driver:
+                case $driver instanceof \Doctrine\DBAL\Driver\PDO\SQLSrv\Driver:
                     $this->driver = 'sqlsrv';
+                    break;
+                default:
+                    $this->driver = \get_class($driver);
                     break;
             }
         }

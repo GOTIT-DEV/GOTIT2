@@ -835,6 +835,18 @@ abstract class HttpClientTestCase extends TestCase
         }
     }
 
+    public function testGetEncodedContentAfterDestruct()
+    {
+        $client = $this->getHttpClient(__FUNCTION__);
+
+        try {
+            $client->request('GET', 'http://localhost:8057/404-gzipped');
+            $this->fail(ClientExceptionInterface::class.' expected');
+        } catch (ClientExceptionInterface $e) {
+            $this->assertSame('some text', $e->getResponse()->getContent(false));
+        }
+    }
+
     public function testProxy()
     {
         $client = $this->getHttpClient(__FUNCTION__);
@@ -844,7 +856,7 @@ abstract class HttpClientTestCase extends TestCase
 
         $body = $response->toArray();
         $this->assertSame('localhost:8057', $body['HTTP_HOST']);
-        $this->assertRegexp('#^http://(localhost|127\.0\.0\.1):8057/$#', $body['REQUEST_URI']);
+        $this->assertMatchesRegularExpression('#^http://(localhost|127\.0\.0\.1):8057/$#', $body['REQUEST_URI']);
 
         $response = $client->request('GET', 'http://localhost:8057/', [
             'proxy' => 'http://foo:b%3Dar@localhost:8057',

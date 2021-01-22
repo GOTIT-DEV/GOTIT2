@@ -124,6 +124,8 @@ final class DoctrineHelper
             }
         }
 
+        sort($entities);
+
         return $entities;
     }
 
@@ -224,7 +226,7 @@ final class DoctrineHelper
 
     public function getPotentialTableName(string $className): string
     {
-        $entityManager = $this->registry->getManager();
+        $entityManager = $this->getRegistry()->getManager();
 
         if (!$entityManager instanceof EntityManagerInterface) {
             throw new \RuntimeException('ObjectManager is not an EntityManagerInterface.');

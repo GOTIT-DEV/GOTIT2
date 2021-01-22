@@ -10,8 +10,10 @@ use Doctrine\DBAL\FetchMode;
 use InvalidArgumentException;
 use IteratorAggregate;
 use PDO;
+
 use function array_merge;
 use function array_values;
+use function assert;
 use function reset;
 
 /**
@@ -41,7 +43,7 @@ class ResultCacheStatement implements IteratorAggregate, ResultStatement
     /** @var int */
     private $lifetime;
 
-    /** @var Statement */
+    /** @var ResultStatement */
     private $statement;
 
     /**
@@ -62,7 +64,7 @@ class ResultCacheStatement implements IteratorAggregate, ResultStatement
      * @param string $realKey
      * @param int    $lifetime
      */
-    public function __construct(Statement $stmt, Cache $resultCache, $cacheKey, $realKey, $lifetime)
+    public function __construct(ResultStatement $stmt, Cache $resultCache, $cacheKey, $realKey, $lifetime)
     {
         $this->statement   = $stmt;
         $this->resultCache = $resultCache;
@@ -85,6 +87,7 @@ class ResultCacheStatement implements IteratorAggregate, ResultStatement
         if (! $data) {
             $data = [];
         }
+
         $data[$this->realKey] = $this->data;
 
         $this->resultCache->save($this->cacheKey, $data, $this->lifetime);
@@ -204,6 +207,8 @@ class ResultCacheStatement implements IteratorAggregate, ResultStatement
      */
     public function rowCount()
     {
+        assert($this->statement instanceof Statement);
+
         return $this->statement->rowCount();
     }
 }

@@ -12,6 +12,7 @@
 namespace Symfony\Component\PropertyInfo\Extractor;
 
 use phpDocumentor\Reflection\DocBlock;
+use phpDocumentor\Reflection\DocBlock\Tags\InvalidTag;
 use phpDocumentor\Reflection\DocBlockFactory;
 use phpDocumentor\Reflection\DocBlockFactoryInterface;
 use phpDocumentor\Reflection\Types\Context;
@@ -30,9 +31,9 @@ use Symfony\Component\PropertyInfo\Util\PhpDocTypeHelper;
  */
 class PhpDocExtractor implements PropertyDescriptionExtractorInterface, PropertyTypeExtractorInterface
 {
-    const PROPERTY = 0;
-    const ACCESSOR = 1;
-    const MUTATOR = 2;
+    public const PROPERTY = 0;
+    public const ACCESSOR = 1;
+    public const MUTATOR = 2;
 
     /**
      * @var DocBlock[]
@@ -76,7 +77,7 @@ class PhpDocExtractor implements PropertyDescriptionExtractorInterface, Property
     public function getShortDescription($class, $property, array $context = []): ?string
     {
         /** @var $docBlock DocBlock */
-        list($docBlock) = $this->getDocBlock($class, $property);
+        [$docBlock] = $this->getDocBlock($class, $property);
         if (!$docBlock) {
             return null;
         }
@@ -88,10 +89,12 @@ class PhpDocExtractor implements PropertyDescriptionExtractorInterface, Property
         }
 
         foreach ($docBlock->getTagsByName('var') as $var) {
-            $varDescription = $var->getDescription()->render();
+            if ($var && !$var instanceof InvalidTag) {
+                $varDescription = $var->getDescription()->render();
 
-            if (!empty($varDescription)) {
-                return $varDescription;
+                if (!empty($varDescription)) {
+                    return $varDescription;
+                }
             }
         }
 
@@ -104,7 +107,7 @@ class PhpDocExtractor implements PropertyDescriptionExtractorInterface, Property
     public function getLongDescription($class, $property, array $context = []): ?string
     {
         /** @var $docBlock DocBlock */
-        list($docBlock) = $this->getDocBlock($class, $property);
+        [$docBlock] = $this->getDocBlock($class, $property);
         if (!$docBlock) {
             return null;
         }
@@ -120,7 +123,7 @@ class PhpDocExtractor implements PropertyDescriptionExtractorInterface, Property
     public function getTypes($class, $property, array $context = []): ?array
     {
         /** @var $docBlock DocBlock */
-        list($docBlock, $source, $prefix) = $this->getDocBlock($class, $property);
+        [$docBlock, $source, $prefix] = $this->getDocBlock($class, $property);
         if (!$docBlock) {
             return null;
         }
@@ -142,7 +145,7 @@ class PhpDocExtractor implements PropertyDescriptionExtractorInterface, Property
         $types = [];
         /** @var DocBlock\Tags\Var_|DocBlock\Tags\Return_|DocBlock\Tags\Param $tag */
         foreach ($docBlock->getTagsByName($tag) as $tag) {
-            if ($tag && null !== $tag->getType()) {
+            if ($tag && !$tag instanceof InvalidTag && null !== $tag->getType()) {
                 $types = array_merge($types, $this->phpDocTypeHelper->getTypes($tag->getType()));
             }
         }
@@ -173,11 +176,11 @@ class PhpDocExtractor implements PropertyDescriptionExtractorInterface, Property
                 $data = [$docBlock, self::PROPERTY, null];
                 break;
 
-            case list($docBlock) = $this->getDocBlockFromMethod($class, $ucFirstProperty, self::ACCESSOR):
+            case [$docBlock] = $this->getDocBlockFromMethod($class, $ucFirstProperty, self::ACCESSOR):
                 $data = [$docBlock, self::ACCESSOR, null];
                 break;
 
-            case list($docBlock, $prefix) = $this->getDocBlockFromMethod($class, $ucFirstProperty, self::MUTATOR):
+            case [$docBlock, $prefix] = $this->getDocBlockFromMethod($class, $ucFirstProperty, self::MUTATOR):
                 $data = [$docBlock, self::MUTATOR, $prefix];
                 break;
 
