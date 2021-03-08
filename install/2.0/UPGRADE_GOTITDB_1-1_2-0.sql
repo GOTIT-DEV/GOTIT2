@@ -608,7 +608,7 @@ ALTER TABLE vocabulary RENAME CONSTRAINT cu_voc_cle_primaire TO uk_vocabulary__p
 
 -- add field type_material_voc_fk in identified_species
 -- add default values
-INSERT INTO vocabulary (code, vocabulary_title, parent, voc_comments, date_of_creation, date_of_update, creation_user_name, update_user_name) VALUES ('NO_TYPE', 'NO TYPE', 'typeMaterial', '', CURRENT_TIMESTAMP(0), CURRENT_TIMESTAMP(0), 1, 1);
+INSERT INTO vocabulary (code, vocabulary_title, parent, voc_comments, date_of_creation, date_of_update, creation_user_name, update_user_name) VALUES ('NO_TYPE', 'NO TYPE', 'typeMateriel', '', CURRENT_TIMESTAMP(0), CURRENT_TIMESTAMP(0), 1, 1);
 -- Changes in table identified_species
 ALTER TABLE identified_species ADD type_material_voc_fk BIGINT; 
 ALTER TABLE identified_species ADD CONSTRAINT FK_801C3911B669F53D FOREIGN KEY (type_material_voc_fk) REFERENCES vocabulary (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
@@ -624,6 +624,3 @@ $$ LANGUAGE plpgsql;
 
 -- add field taxon_full_name in taxon
 ALTER TABLE taxon ADD taxon_full_name CHARACTER VARYING(255) ;
-
-   
-
